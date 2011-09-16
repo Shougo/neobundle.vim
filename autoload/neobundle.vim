@@ -25,11 +25,11 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-command! -nargs=+ Bundle
-      \ call neovundle#config#bundle(<args>)
+command! -nargs=+ NeoBundle
+      \ call neobundle#config#bundle(<args>)
 
-command! -nargs=? -bang BundleInstall
-      \ call neovundle#installer#install('!' == '<bang>', <q-args>)
+command! -nargs=? -bang NeoBundleInstall
+      \ call neobundle#installer#install('!' == '<bang>', <q-args>)
 
 augroup neobundle
   autocmd!
@@ -37,11 +37,11 @@ augroup neobundle
 augroup END
 
 
-function! neovundle#rc(...)
+function! neobundle#rc(...)
   let s:neobundle_dir = expand(get(a:000, 0, '~/.vim/bundle'))
-  call neovundle#config#init()
+  call neobundle#config#init()
 endfunction
 
-function! neovundle#get_neobundle_dir()
+function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
 endfunction

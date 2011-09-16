@@ -25,18 +25,18 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-let s:V = vital#of('neovundle')
+let s:V = vital#of('neobundle')
 
 if !exists('s:neobundles')
   let s:neobundles = {}
 endif
 
-function! neovundle#config#init()
+function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
   let s:neobundles = {}
 endfunction
 
-function! neovundle#config#get_neobundles()
+function! neobundle#config#get_neobundles()
   return s:neobundles
 endfunction
 
@@ -50,8 +50,8 @@ function! vundle#config#bundle(arg, ...)
   call s:rtp_add(bundle.rtpath)
 endfunction
 
-function! s:rtp_rm_all()
-  call filter(values(s:neo_bundles), 's:rtp_rm(v:val.rtpath())')
+function! s:rtp_rm_all_bundles()
+  call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath())')
 endfunction
 
 function! s:rtp_rm(dir)
@@ -103,7 +103,7 @@ endfunction
 let s:bundle_base = {}
 
 function! s:bundle_base.path()
-  return s:expand_path(neovundle#get_neobundle_dir().'/'.self.name)
+  return s:expand_path(neobundle#get_neobundle_dir().'/'.self.name)
 endfunction
 
 function! s:bundle_base.rtpath()

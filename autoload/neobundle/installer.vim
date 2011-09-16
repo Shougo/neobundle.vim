@@ -25,8 +25,8 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-" Create vital module for neovundle
-let s:V = vital#of('neovundle')
+" Create vital module for neobundle
+let s:V = vital#of('neobundle')
 
 " Wrapper function of system()
 function! s:system(...)
@@ -37,8 +37,8 @@ function! s:get_last_status(...)
   return call(s:V.get_last_status,a:000,s:V)
 endfunction
 
-function! neovundle#installer#install(bang, ...) abort
-  let bundle_dir = neovundle#get_neobundle_dir()
+function! neobundle#installer#install(bang, ...) abort
+  let bundle_dir = neobundle#get_neobundle_dir()
   if !isdirectory(bundle_dir)
     call mkdir(bundle_dir, 'p')
   endif
@@ -57,7 +57,7 @@ function! neovundle#installer#install(bang, ...) abort
   call vundle#installer#helptags(bundles)
 endf
 
-function! neovundle#installer#helptags(bundles) abort
+function! neobundle#installer#helptags(bundles) abort
   let help_dirs = filter(values(bundle_dirs), 'v:val.has_doc()')
   call map(values(help_dirs), 'v:val.helptags()')
   if !empty(help_dirs)
