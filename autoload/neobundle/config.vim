@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Sep 2011.
+" Last Modified: 18 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,8 +42,8 @@ endfunction
 
 function! neobundle#config#bundle(arg, ...)
   let bundle = s:init_bundle(a:arg, a:000)
-  let path = bundle.path()
-  let rtpath = bundle.rtpath()
+  let path = bundle.path
+  let rtpath = bundle.rtpath
   if has_key(s:neobundles, path)
     call s:rtp_rm(rtpath)
   endif
@@ -53,7 +53,7 @@ function! neobundle#config#bundle(arg, ...)
 endfunction
 
 function! s:rtp_rm_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath())')
+  call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath)')
 endfunction
 
 function! s:rtp_rm(dir)
@@ -69,6 +69,12 @@ endfunction
 function! s:init_bundle(name, opts)
   let bundle = extend(s:parse_options(a:opts),
         \ s:parse_name(substitute(a:name,"['".'"]\+','','g')))
+  let bundle.path = s:expand_path(
+        \ neobundle#get_neobundle_dir().'/'.bundle.name)
+  let bundle.rtpath = has_key(bundle, 'rtp') ?
+        \ s:expand_path(bundle.path.'/'.bundle.rtp)
+        \ : bundle.path
+
   return extend(copy(s:bundle_base), bundle)
 endfunction
 
@@ -102,23 +108,14 @@ function! s:parse_name(arg)
   return { 'name': name, 'uri': uri }
 endfunction
 
-let s:bundle_base = {}
-
-function! s:bundle_base.path()
-  return s:expand_path(neobundle#get_neobundle_dir().'/'.self.name)
-endfunction
-
-function! s:bundle_base.rtpath()
-  return has_key(self, 'rtp') ?
-        \ s:expand_path(self.path().'/'.self.rtp) : self.path()
-endfunction
-
 function! s:expand_path(path)
   return simplify(expand(a:path))
 endfunction
 
+let s:bundle_base = {}
+
 function! s:bundle_base.has_doc()
-  let rtpath = self.rtpath()
+  let rtpath = self.rtpath
   return isdirectory(rtpath.'/doc')
   \   && (!filereadable(rtpath.'/doc/tags') || filewritable(rtpath.'/doc/tags'))
   \   && (glob(rtpath.'/doc/*.txt') != '' || glob(rtpath.'/doc/*.??x') != '')
@@ -126,9 +123,9 @@ endfunction
 
 function! s:bundle_base.helptags()
   try
-    helptags `=self.rtpath() . '/doc/'`
+    helptags `=self.rtpath . '/doc/'`
   catch
-    call s:V.print_error('Error generating helptags in '.self.rtpath())
+    call s:V.print_error('Error generating helptags in '.self.rtpath)
     call s:V.print_error(v:exception . ' ' . v:throwpoint)
   endtry
 endfunction

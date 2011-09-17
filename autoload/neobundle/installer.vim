@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Sep 2011.
+" Last Modified: 18 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,7 +37,7 @@ function! s:get_last_status(...)
   return call(s:V.get_last_status,a:000,s:V)
 endfunction
 
-function! neobundle#installer#install(bang, ...) abort
+function! neobundle#installer#install(bang, ...)
   let bundle_dir = neobundle#get_neobundle_dir()
   if !isdirectory(bundle_dir)
     call mkdir(bundle_dir, 'p')
@@ -54,32 +54,32 @@ function! neobundle#installer#install(bang, ...) abort
   \      ['no new bundles installed'] :
   \      map(installed, 'v:val.name')),"\n"))
 
-  call vundle#installer#helptags(bundles)
+  call neobundle#installer#helptags(bundles)
 endf
 
-function! neobundle#installer#helptags(bundles) abort
-  let help_dirs = filter(values(bundle_dirs), 'v:val.has_doc()')
-  call map(values(help_dirs), 'v:val.helptags()')
+function! neobundle#installer#helptags(bundles)
+  let help_dirs = filter(a:bundles, 'v:val.has_doc()')
+  call map(help_dirs, 'v:val.helptags()')
   if !empty(help_dirs)
     call s:log('Helptags: done. '.len(help_dirs).' bundles processed')
   endif
   return help_dirs
 endfunction
 
-function! s:sync(bang, bundle, number, max) abort
+function! s:sync(bang, bundle, number, max)
   let cwd = getcwd()
-  let git_dir = expand(a:bundle.path().'/.git/')
+  let git_dir = expand(a:bundle.path.'/.git/')
   if isdirectory(git_dir)
     if !(a:bang) | return 0 | endif
     let cmd = 'git pull'
     "cd to bundle path"
-    let path = a:bundle.path()
+    let path = a:bundle.path
     lcd `=path`
 
     call s:log(printf('(%d/%d): %s', a:number, a:max, path))
     redraw
   else
-    let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path()
+    let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
 
     call s:log(printf('(%d/%d): %s', a:number, a:max, cmd))
     redraw
@@ -97,7 +97,7 @@ function! s:sync(bang, bundle, number, max) abort
     return 0
   endif
 
-  if l:result =~ '.*fatal:'
+  if l:result =~ 'fatal:'
     call s:V.print_error('Module ' . a:bundle.name . ' doesn''t exists')
     return 0
   endif
@@ -105,7 +105,7 @@ function! s:sync(bang, bundle, number, max) abort
   return 1
 endfunction
 
-function! s:install(bang, bundles) abort
+function! s:install(bang, bundles)
   let i = 1
   let _ = []
   let max = len(a:bundles)
@@ -123,5 +123,9 @@ endfunction
 
 " TODO: make it pause after output in console mode
 function! s:log(msg)
-  echo a:msg
+  if &filetype == 'unite'
+    call unite#print_message(a:msg)
+  else
+    echo a:msg
+  endif
 endfunction

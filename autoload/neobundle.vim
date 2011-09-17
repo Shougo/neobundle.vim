@@ -25,6 +25,8 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
+let s:V = vital#of('neobundle')
+
 command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(<args>)
 
@@ -36,7 +38,6 @@ augroup neobundle
   autocmd Syntax  vim syntax keyword vimCommand NeoBundle
 augroup END
 
-
 function! neobundle#rc(...)
   let s:neobundle_dir = expand(get(a:000, 0, '~/.vim/bundle'))
   call neobundle#config#init()
@@ -44,4 +45,8 @@ endfunction
 
 function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
+endfunction
+
+function! neobundle#has_vimproc()
+  return s:V.has_vimproc()
 endfunction
