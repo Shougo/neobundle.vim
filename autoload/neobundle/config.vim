@@ -37,17 +37,19 @@ function! neobundle#config#init()
 endfunction
 
 function! neobundle#config#get_neobundles()
-  return s:neobundles
+  return values(s:neobundles)
 endfunction
 
-function! vundle#config#bundle(arg, ...)
+function! neobundle#config#bundle(arg, ...)
   let bundle = s:init_bundle(a:arg, a:000)
-  if has_key(s:neobundles, bundle.path)
-    call s:rtp_rm(bundle.rtpath)
+  let path = bundle.path()
+  let rtpath = bundle.rtpath()
+  if has_key(s:neobundles, path)
+    call s:rtp_rm(rtpath)
   endif
 
-  let s:neobundles[bundle.path] = bundle
-  call s:rtp_add(bundle.rtpath)
+  let s:neobundles[path] = bundle
+  call s:rtp_add(rtpath)
 endfunction
 
 function! s:rtp_rm_all_bundles()

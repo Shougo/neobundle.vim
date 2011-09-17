@@ -44,7 +44,7 @@ function! neobundle#installer#install(bang, ...) abort
   endif
 
   let bundles = (a:1 == '') ?
-        \ s:reload_bundles() :
+        \ neobundle#config#get_neobundles() :
         \ map(copy(a:000), 'vundle#config#init_bundle(v:val, {})')
 
   let installed = s:install(a:bang, bundles)
@@ -98,7 +98,7 @@ function! s:sync(bang, bundle, number, max) abort
   endif
 
   if l:result =~ '.*fatal:'
-    call s:V.print_error('Module '.a:bundle.name.' doesn't exists')
+    call s:V.print_error('Module ' . a:bundle.name . ' doesn''t exists')
     return 0
   endif
 
@@ -111,7 +111,10 @@ function! s:install(bang, bundles) abort
   let max = len(a:bundles)
 
   for bundle in a:bundles
-    call add(_, s:sync(a:bang, bundle, i, max))
+    if s:sync(a:bang, bundle, i, max)
+      call add(_, bundle)
+    endif
+
     let i += 1
   endfor
 
