@@ -1,0 +1,203 @@
+*neobundle.txt*	Ultimate Vim package manager
+
+Version: 0.1
+Author : Shougo <Shougo.Matsu at gmail.com>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+CONTENTS					*neobundle-contents*
+
+Introduction		|neobundle-introduction|
+Usage			|neobundle-usage|
+Install			|neobundle-install|
+Interface		|neobundle-interface|
+  Commands		  |neobundle-commands|
+Configulation Examples	|neobundle-examples|
+Unite sources		|neobundle-unite-sources|
+Changelog		|neobundle-changelog|
+
+==============================================================================
+INTRODUCTION					*neobundle-introduction*
+
+*neobundle.vim* is ultimate Vim package manager.
+This plugin is based on Vundle.vim(https://github.com/gmarik/vundle).
+But some features is added.
+For example:
+ * Use vimproc when vimproc is intalled.
+ * unite.vim interface.
+
+==============================================================================
+USAGE						*neobundle-usage*
+
+	In case when you run with files and buffers as the source
+>
+	:neobundle file buffer
+<
+
+	In case when you run with the initial input value foo
+>
+	:neobundle -input=foo file
+<
+
+The neobundle you started splits the window horizontally as default, opening on
+the top of the Vim.  For example,
+>
+	:neobundle file
+<
+lists up the files of the current directory.  You may choose one of the
+candidates by moving j or k, and typing Enter opens the candidate in a new
+buffer.  That's the default action for candidates of which kind is file.  You
+may also select an action with <Tab> on a candidate.  See also |neobundle-action|
+about the actions.
+
+You can narrow down the candidates with a keyword.  After opening a neobundle
+window, the cursor goes on the right side of > in the 2nd line by typing i.
+Then you can input a keyword to narrow down the candidates.  Each single
+characters you type narrows down the candidates.  You also can use a wild
+card * as an arbitrary character sequence.  For example
+>
+	*hisa
+<
+matches hisa, ujihisa, or ujihisahisa.  Furthermore, two consequence wild cards
+matches directory recursively.  For example
+>
+	**/foo
+<
+matches bar/foo or buzz/bar/foo.  Note that you should consider using
+|file_rec| that will be described bellow in most cases.
+
+You may specify multiple keywords to narrow down, separating by spaces.
+>
+	foo bar
+<
+That matches candidates that match both foo and bar.
+
+You may specify negative conditions with !.
+>
+	foo !bar
+<
+That matches foo but candidates that match bar will be rejected.
+
+	You may add wild cards automatically with / if you specify files on
+	-buffer-name option.  That's handy in case you select file with neobundle.
+>
+	:neobundle -buffer-name=files file
+<
+See also |neobundle_default_key_mappings| for other actions.
+
+Screencast is available. Thanks ujihisa!
+http://www.ustream.tv/recorded/11240673
+
+==============================================================================
+INSTALL						*neobundle-install*
+
+In first, git clone from repository.
+>
+	git clone git@github.com:Shougo/neobundle.vim.git
+<
+
+And path to repository directory.
+>
+	set runtimepath+='path to neobundle directory'
+<
+After, refer to setting examples:
+|neobundle-examples|
+
+To update, run this command.
+>
+	:NeoBundleInstall!
+<
+This plugin setting is compatible with Vundle.vim :-)
+
+==============================================================================
+INTERFACE					*neobundle-interface*
+
+------------------------------------------------------------------------------
+COMMANDS 					*neobundle-commands*
+
+:NeoBundle {repository}				*:Neobundle*
+		Configure neobundle.
+
+		Examples:
+>
+		NeoBundle 'git_repository_uri'
+		NeoBundle 'script_name'
+		NeoBundle 'tpope/vim-fugitive'
+		NeoBundle ''http://github.com/tpope/vim-fugitive.git
+<
+:NeoBundleInstall [{repository}]			*:NeoBundleInstall*
+		Install {repository} plugins.
+		If {repository} is ommited, all configured plugin is installed.
+
+:NeoBundleInstall! [{options}] {sources}		*:NeoBundleInstall!*
+		Install and update {repository} plugins.
+		If {repository} is ommited, all configured plugin is installed
+		and updated.
+
+:NeoBundleClean [{bang}]				*:NeoBundleWithCurrentDir*
+		Remove not configured plugins. If {bang} is added, force remove
+		plugins.
+
+==============================================================================
+EXAMPLES					*neobundle-examples*
+>
+	if has('vim_starting')
+	  set runtimepath+='path to neobundle directory'
+	
+	  filetype off
+	
+	  call neobundle#rc(expand('~/.bundle'))
+	
+	  filetype plugin on
+	  filetype indent on
+	endif
+
+	NeoBundle 'git://github.com/Shougo/clang_complete.git'
+	NeoBundle 'git://github.com/Shougo/echodoc.git'
+	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+	NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
+	NeoBundle 'git://github.com/Shougo/unite.vim.git'
+	NeoBundle 'git://github.com/Shougo/vim-vcs.git'
+	NeoBundle 'git://github.com/Shougo/vimfiler.git'
+	NeoBundle 'git://github.com/Shougo/vimshell.git'
+	NeoBundle 'git://github.com/Shougo/vinarise.git'
+>
+==============================================================================
+UNITE SOURCES						*neobundle-unite-sources*
+
+Here let me explain about a source for |unite| provided in neobundle.
+
+							*neobundle-unite-source-neobundle-install*
+neobundle/install
+		Install configured plugins.
+		If argment is bang(!), install and update all plugins.
+
+		Example:
+>
+		:Unite neobundle/install:!
+<
+==============================================================================
+CHANGELOG					*neobundle-changelog*
+
+2011-09-18
+- Added documentation.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:
