@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Sep 2011.
+" Last Modified: 18 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,6 +33,12 @@ command! -nargs=+ NeoBundle
 command! -nargs=? -bang NeoBundleInstall
       \ call neobundle#installer#install('!' == '<bang>', <q-args>)
 
+command! -nargs=? -bang NeoBundleClean
+      \ call neobundle#installer#clean('!' == '<bang>')
+
+command! -nargs=0 NeoBundleDocs
+      \ call neobundle#installer#helptags(neobundle#config#get_neobundles())
+
 augroup neobundle
   autocmd!
   autocmd Syntax  vim syntax keyword vimCommand NeoBundle
@@ -50,3 +56,4 @@ endfunction
 function! neobundle#has_vimproc()
   return s:V.has_vimproc()
 endfunction
+

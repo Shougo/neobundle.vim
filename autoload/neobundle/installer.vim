@@ -66,6 +66,24 @@ function! neobundle#installer#helptags(bundles)
   return help_dirs
 endfunction
 
+function! neobundle#installer#clean(bang)
+  let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
+  let all_dirs = split(globpath(neobundle#get_neobundle_dir(), '*'), "\n")
+  let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
+
+  if empty(x_dirs)
+    call s:log("All clean!")
+    return
+  end
+
+  if a:bang || input('Are you sure you want to remove '
+        \        .len(x_dirs).' bundles? [ y/n ]:') =~? 'y'
+    let cmd = (has('win32') || has('win64')) ?
+    \           'rmdir /S /Q' : 'rm -rf'
+    call s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+  endif
+endfunction
+
 function! s:sync(bang, bundle, number, max)
   let cwd = getcwd()
   let git_dir = expand(a:bundle.path.'/.git/')
