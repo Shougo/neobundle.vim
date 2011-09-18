@@ -115,6 +115,11 @@ function! s:sync(bundle, context)
   let git_dir = expand(a:bundle.path.'/.git/')
   if isdirectory(git_dir)
     if a:context.source__bang != '!'
+      call unite#print_message(printf('[neobundle/install] (%0'
+            \ .len(a:context.source__max_bundles).'d/%d): Skipped',
+            \ a:context.source__number+1,
+            \ a:context.source__max_bundles))
+      let a:context.source__number += 1
       return 0
     endif
 
