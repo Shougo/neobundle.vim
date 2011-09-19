@@ -198,6 +198,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-09-19
 - Refactored local variable names.
+- Fixed installer.
 
 2011-09-18
 - Added documentation.

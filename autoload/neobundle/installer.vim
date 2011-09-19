@@ -45,7 +45,7 @@ function! neobundle#installer#install(bang, ...)
 
   let bundles = (a:1 == '') ?
         \ neobundle#config#get_neobundles() :
-        \ map(copy(a:000), 'vundle#config#init_bundle(v:val, {})')
+        \ map(copy(a:000), 'neobundle#config#init(v:val, {})')
 
   let installed = s:install(a:bang, bundles)
   redraw!
