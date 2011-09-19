@@ -196,6 +196,9 @@ neobundle/install
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-09-19
+- Refactored local variable names.
+
 2011-09-18
 - Added documentation.
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,7 +103,7 @@ function! s:sync(bang, bundle, number, max)
     redraw
   endif
 
-  let l:result = s:system(cmd)
+  let result = s:system(cmd)
   echo ''
   redraw
 
@@ -111,11 +111,11 @@ function! s:sync(bang, bundle, number, max)
     lcd `=cwd`
   endif
 
-  if l:result =~# 'up-to-date'
+  if result =~# 'up-to-date'
     return 0
   endif
 
-  if l:result =~ 'fatal:'
+  if result =~ 'fatal:'
     call s:V.print_error('Module ' . a:bundle.name . ' doesn''t exists')
     return 0
   endif
