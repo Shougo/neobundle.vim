@@ -196,6 +196,9 @@ neobundle/install
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-09-24
+- Fixed parse name.
+
 2011-09-19
 - Refactored local variable names.
 - Fixed installer.
