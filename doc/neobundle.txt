@@ -140,7 +140,11 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
 		NeoBundle 'tpope/vim-fugitive'
-		NeoBundle ''http://github.com/tpope/vim-fugitive.git
+		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
+		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
+		NeoBundle 'muttator', {'type' : 'nosync'}
+		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 <
 :NeoBundleInstall [{repository}]			*:NeoBundleInstall*
 		Install {repository} plugins.
@@ -195,6 +199,9 @@ neobundle/install
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-09-25
+- Supported Subversion and Mercurial.
 
 2011-09-24
 - Fixed parse name.

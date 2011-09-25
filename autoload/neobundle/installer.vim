@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 25 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,11 +85,22 @@ function! neobundle#installer#clean(bang)
 endfunction
 
 function! s:sync(bang, bundle, number, max)
+  if a:bundle.type == 'nosync' | return 'todate' | endif
+
   let cwd = getcwd()
-  let git_dir = expand(a:bundle.path.'/.git/')
-  if isdirectory(git_dir)
+  let repo_dir = expand(a:bundle.path().'/.'.a:bundle.type.'/')
+  if isdirectory(repo_dir)
     if !(a:bang) | return 0 | endif
-    let cmd = 'git pull'
+    if a:bundle.type == 'svn'
+      let cmd = 'svn up'
+    elseif a:bundle.type == 'hg'
+      let cmd = 'hg pull && hg up'
+    elseif a:bundle.type == 'git'
+      let cmd = 'git pull'
+    else
+      let cmd = 'unknown'
+    endif
+
     "cd to bundle path"
     let path = a:bundle.path
     lcd `=path`
@@ -97,7 +108,15 @@ function! s:sync(bang, bundle, number, max)
     call s:log(printf('(%d/%d): %s', a:number, a:max, path))
     redraw
   else
-    let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
+    if a:bundle.type == 'svn'
+      let cmd = 'svn checkout '.a:bundle.uri.' '.a:bundle.path()
+    elseif a:bundle.type == 'hg'
+      let cmd = 'hg clone '.a:bundle.uri.' '.a:bundle.path()
+    elseif a:bundle.type == 'git'
+      let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
+    else
+      let cmd = ''
+    endif
 
     call s:log(printf('(%d/%d): %s', a:number, a:max, cmd))
     redraw

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Sep 2011.
+" Last Modified: 25 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,17 +95,26 @@ function! s:parse_name(arg)
   if a:arg =~ '^\s*\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
     let uri = 'https://github.com/'.split(a:arg, ':')[-1]
     let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
+    let type = 'git'
   elseif a:arg =~ '^\s*\(git@\|git://\)\S\+'
-        \   || a:arg =~ '\(file\|https\?\)://'
+        \   || a:arg =~ '\(file\|https\?\|svn\)://'
         \   || a:arg =~ '\.git\s*$'
     let uri = a:arg
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
+    if uri =~? 'svn'
+      let type = 'svn'
+    elseif uri =~? 'hg' || uri =~? 'https\?://bitbucket'
+      let type = 'hg'
+    else
+      let type = 'git'
+    endif
   else
     let name = a:arg
     let uri  = 'https://github.com/vim-scripts/'.name.'.git'
+    let type = 'git'
   endif
 
-  return { 'name': name, 'uri': uri }
+  return { 'name': name, 'uri': uri, 'type' : type }
 endfunction
 
 function! s:expand_path(path)
