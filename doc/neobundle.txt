@@ -40,7 +40,7 @@ INTRODUCTION					*neobundle-introduction*
 This plugin is based on Vundle.vim(https://github.com/gmarik/vundle).
 But some features is added.
 For example:
- * Use vimproc when vimproc is intalled.
+ * Use vimproc when vimproc is installed.
  * unite.vim interface.
 
 ==============================================================================
