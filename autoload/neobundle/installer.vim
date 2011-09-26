@@ -88,7 +88,7 @@ function! s:sync(bang, bundle, number, max)
   if a:bundle.type == 'nosync' | return 'todate' | endif
 
   let cwd = getcwd()
-  let repo_dir = expand(a:bundle.path().'/.'.a:bundle.type.'/')
+  let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
   if isdirectory(repo_dir)
     if !(a:bang) | return 0 | endif
     if a:bundle.type == 'svn'
