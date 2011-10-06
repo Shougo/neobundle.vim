@@ -145,7 +145,13 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'muttator', {'type' : 'nosync'}
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+<
+		Revision lock is supported.
+		Note: Restore revision lock is manually. Or set to revision
+		"master".
+>
 		NeoBundle 'Shougo/vimshell', '3787e5'
+		NeoBundle 'Shougo/vimshell', 'master'
 <
 :NeoBundleInstall [{repository}]			*:NeoBundleInstall*
 		Install {repository} plugins.
