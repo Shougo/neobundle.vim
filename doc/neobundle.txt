@@ -132,7 +132,7 @@ INTERFACE					*neobundle-interface*
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository}				*:Neobundle*
+:NeoBundle {repository} [{revision}]		*:Neobundle*
 		Configure neobundle.
 
 		Examples:
@@ -145,6 +145,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'muttator', {'type' : 'nosync'}
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+		NeoBundle 'Shougo/vimshell', '3787e5'
 <
 :NeoBundleInstall [{repository}]			*:NeoBundleInstall*
 		Install {repository} plugins.
@@ -199,6 +200,9 @@ neobundle/install
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-10-06
+- Supported revision.
 
 2011-09-25
 - Supported Subversion and Mercurial.

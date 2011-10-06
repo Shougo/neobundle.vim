@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Sep 2011.
+" Last Modified: 06 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,6 +120,24 @@ function! s:sync(bang, bundle, number, max)
 
     call s:log(printf('(%d/%d): %s', a:number, a:max, cmd))
     redraw
+  endif
+
+  let rev = get(a:bundle, 'rev', '')
+  if rev != ''
+    let cmd .= '&&'
+
+    " Lock revision.
+    if a:bundle.type == 'svn'
+      let cmd .= 'svn up'
+    elseif a:bundle.type == 'hg'
+      let cmd .= 'hg pull && hg up'
+    elseif a:bundle.type == 'git'
+      let cmd .= 'git pull'
+    else
+      let cmd .= 'unknown'
+    endif
+
+    let cmd .= ' ' . rev
   endif
 
   let result = s:system(cmd)
