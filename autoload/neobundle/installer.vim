@@ -109,9 +109,9 @@ function! s:sync(bang, bundle, number, max)
     redraw
   else
     if a:bundle.type == 'svn'
-      let cmd = 'svn checkout '.a:bundle.uri.' '.a:bundle.path()
+      let cmd = 'svn checkout '.a:bundle.uri.' '.a:bundle.path
     elseif a:bundle.type == 'hg'
-      let cmd = 'hg clone '.a:bundle.uri.' '.a:bundle.path()
+      let cmd = 'hg clone '.a:bundle.uri.' '.a:bundle.path
     elseif a:bundle.type == 'git'
       let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
     else
