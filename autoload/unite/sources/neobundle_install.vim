@@ -45,7 +45,7 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__bang = get(a:args, 0, '')
   let a:context.source__number = 0
   let a:context.source__max_bundles =
-        \ len(neobundle#config#get_neobundles())
+        \ len(a:context.source__bundles)
   let a:context.source__process = {}
   let a:context.source__output = ''
 endfunction"}}}
