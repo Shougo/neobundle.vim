@@ -201,14 +201,13 @@ neobundle/install
 		If argment is bang(!), install and update all plugins.
 
 		Source arguments:
-		1. bang.
-		2. bundle name.
+		bundle names.
 
 		Example:
 >
 		:Unite neobundle/install:!
-		:Unite neobundle/install:!:neocomplcache
-		:Unite neobundle/install:!:unite.vim
+		:Unite neobundle/install:neocomplcache
+		:Unite neobundle/install:neocomplcache:unite.vim
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*

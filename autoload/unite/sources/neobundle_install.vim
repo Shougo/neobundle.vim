@@ -38,11 +38,11 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context)"{{{
-  let bundle_name = get(a:args, 1, '')
-  let a:context.source__bundles = (bundle_name == '') ?
-        \ neobundle#config#get_neobundles() : s:search_bundles(bundle_name)
+  let bundle_names = filter(copy(a:args), 'v:val != "!"')
+  let a:context.source__bundles = empty(bundle_names) ?
+        \ neobundle#config#get_neobundles() : s:search_bundles(bundle_names)
   let a:context.source__synced_bundles = []
-  let a:context.source__bang = get(a:args, 0, '')
+  let a:context.source__bang = index(a:args, '!') >= 0
   let a:context.source__number = 0
   let a:context.source__max_bundles =
         \ len(a:context.source__bundles)
@@ -56,6 +56,10 @@ function! s:source.hooks.on_close(args, context)"{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
+  if empty(a:context.source__bundles)
+    let a:context.is_async = 0
+    call unite#print_message('[neobundle/install] Bundles not found.')
+  endif
   return []
 endfunction"}}}
 
@@ -115,7 +119,7 @@ function! s:sync(bundle, context)
   let cwd = getcwd()
   let git_dir = expand(a:bundle.path.'/.git/')
   if isdirectory(git_dir)
-    if a:context.source__bang != '!'
+    if !a:context.source__bang
       call unite#print_message(printf('[neobundle/install] (%0'
             \ .len(a:context.source__max_bundles).'d/%d): Skipped',
             \ a:context.source__number+1,
@@ -149,14 +153,15 @@ function! s:sync(bundle, context)
   endif
 endfunction
 
-function! s:search_bundles(bundle_name)
+function! s:search_bundles(bundle_names)
+  let bundles = []
   for bundle in neobundle#config#get_neobundles()
-    if bundle.name ==# a:bundle_name
-      return [bundle]
+    if index(a:bundle_names, bundle.name) >= 0
+      call add(bundles, bundle)
     endif
   endfor
 
-  return []
+  return bundles
 endfunction
 
 let &cpo = s:save_cpo
