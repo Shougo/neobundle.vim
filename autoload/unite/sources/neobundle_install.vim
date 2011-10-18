@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2011.
+" Last Modified: 18 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,33 +64,65 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context)"{{{
-  if empty(a:context.source__process)
-    if a:context.source__number < a:context.source__max_bundles
-      call s:sync(
-            \ a:context.source__bundles[a:context.source__number],
-            \ a:context)
-    else
-      if empty(a:context.source__synced_bundles)
-        call unite#print_message(
-              \ '[neobundle/install] No new bundles installed.')
-      else
-        call unite#print_message(
-              \ ['[neobundle/install] Installed bundles:']
-              \ + map(copy(a:context.source__synced_bundles),
-              \        'v:val.name'))
-        call neobundle#installer#helptags(
-              \ a:context.source__synced_bundles)
-      endif
-
-      let a:context.is_async = 0
-
-      " Finish.
-      call unite#print_message('[neobundle/install] Completed.')
-    endif
-
+  if !empty(a:context.source__process)
+    call s:check_output(a:context)
     return []
   endif
 
+  if a:context.source__number < a:context.source__max_bundles
+    call s:sync(
+          \ a:context.source__bundles[a:context.source__number],
+          \ a:context)
+    return []
+  endif
+
+  if empty(a:context.source__synced_bundles)
+    let messages = ['[neobundle/install] No new bundles installed.']
+  else
+    let messages = ['[neobundle/install] Installed bundles:']
+          \ + map(copy(a:context.source__synced_bundles),
+          \        'v:val.name')
+  endif
+
+  call unite#print_message(messages)
+  call neobundle#installer#helptags(
+        \ a:context.source__synced_bundles)
+
+  let a:context.is_async = 0
+
+  " Finish.
+  call unite#print_message('[neobundle/install] Completed.')
+  return []
+endfunction"}}}
+
+function! s:sync(bundle, context)
+  let cwd = getcwd()
+
+  let [cmd, message] = neobundle#installer#get_sync_command(
+        \ a:context.source__bang, a:bundle,
+        \ a:context.source__number+1, a:context.source__max_bundles)
+  call unite#print_message('[neobundle/install] ' . message)
+
+  if cmd == ''
+    " Skipped.
+    let a:context.source__process = {}
+    let a:context.source__output = ''
+    let a:context.source__number += 1
+    return
+  endif
+
+  let a:context.source__process = vimproc#pgroup_open(cmd)
+
+  " Close handles.
+  call a:context.source__process.stdin.close()
+  call a:context.source__process.stderr.close()
+
+  if getcwd() !=# cwd
+    lcd `=cwd`
+  endif
+endfunction
+
+function! s:check_output(context)
   let stdout = a:context.source__process.stdout
   let a:context.source__output .= stdout.read(-1, 300)
   if stdout.eof
@@ -110,46 +142,6 @@ function! s:source.async_gather_candidates(args, context)"{{{
     let a:context.source__process = {}
     let a:context.source__output = ''
     let a:context.source__number += 1
-  endif
-
-  return []
-endfunction"}}}
-
-function! s:sync(bundle, context)
-  let cwd = getcwd()
-  let git_dir = expand(a:bundle.path.'/.git/')
-  if isdirectory(git_dir)
-    if !a:context.source__bang
-      call unite#print_message(printf('[neobundle/install] (%0'
-            \ .len(a:context.source__max_bundles).'d/%d): Skipped',
-            \ a:context.source__number+1,
-            \ a:context.source__max_bundles))
-      let a:context.source__number += 1
-      return 0
-    endif
-
-    let cmd = 'git pull'
-    "cd to bundle path"
-    let path = a:bundle.path
-    lcd `=path`
-  else
-    let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
-    let path = cmd
-  endif
-
-  call unite#print_message(printf('[neobundle/install] (%0'
-        \ .len(a:context.source__max_bundles).'d/%d): %s',
-        \ a:context.source__number+1,
-        \ a:context.source__max_bundles, path))
-
-  let a:context.source__process = vimproc#pgroup_open(cmd)
-
-  " Close handles.
-  call a:context.source__process.stdin.close()
-  call a:context.source__process.stderr.close()
-
-  if getcwd() !=# cwd
-    lcd `=cwd`
   endif
 endfunction
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Oct 2011.
+" Last Modified: 18 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,6 +58,10 @@ function! neobundle#installer#install(bang, ...)
 endf
 
 function! neobundle#installer#helptags(bundles)
+  if empty(a:bundles)
+    return
+  endif
+
   let help_dirs = filter(a:bundles, 'v:val.has_doc()')
   call map(help_dirs, 'v:val.helptags()')
   if !empty(help_dirs)
@@ -84,13 +88,13 @@ function! neobundle#installer#clean(bang)
   endif
 endfunction
 
-function! s:sync(bang, bundle, number, max)
-  if a:bundle.type == 'nosync' | return 'todate' | endif
-
-  let cwd = getcwd()
+function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
   if isdirectory(repo_dir)
-    if !(a:bang) | return 0 | endif
+    if !a:bang
+      return ['', printf('(%d/%d): %s', a:number, a:max, 'Skipped')]
+    endif
+
     if a:bundle.type == 'svn'
       let cmd = 'svn up'
     elseif a:bundle.type == 'hg'
@@ -98,27 +102,28 @@ function! s:sync(bang, bundle, number, max)
     elseif a:bundle.type == 'git'
       let cmd = 'git pull'
     else
-      let cmd = 'unknown'
+      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
     endif
 
     "cd to bundle path"
     let path = a:bundle.path
     lcd `=path`
 
-    call s:log(printf('(%d/%d): %s', a:number, a:max, path))
+    let message = printf('(%d/%d): %s', a:number, a:max, path)
     redraw
   else
     if a:bundle.type == 'svn'
-      let cmd = 'svn checkout '.a:bundle.uri.' '.a:bundle.path
+      let cmd = 'svn checkout'
     elseif a:bundle.type == 'hg'
-      let cmd = 'hg clone '.a:bundle.uri.' '.a:bundle.path
+      let cmd = 'hg clone'
     elseif a:bundle.type == 'git'
-      let cmd = 'git clone '.a:bundle.uri.' '.a:bundle.path
+      let cmd = 'git clone'
     else
-      let cmd = ''
+      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
     endif
+    let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
 
-    call s:log(printf('(%d/%d): %s', a:number, a:max, cmd))
+    let message = printf('(%d/%d): %s', a:number, a:max, cmd)
     redraw
   endif
 
@@ -134,10 +139,26 @@ function! s:sync(bang, bundle, number, max)
     elseif a:bundle.type == 'git'
       let cmd .= 'git pull'
     else
-      let cmd .= 'unknown'
+      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
     endif
 
     let cmd .= ' ' . rev
+  endif
+
+  return [cmd, message]
+endfunction
+
+function! s:sync(bang, bundle, number, max)
+  if a:bundle.type == 'nosync' | return 'todate' | endif
+
+  let cwd = getcwd()
+
+  let [cmd, message] = neobundle#installer#get_sync_command(
+        \ a:bang, a:bundle, a:number, a:max)
+  call s:log(message)
+  if cmd == ''
+    " Skipped.
+    return 0
   endif
 
   let result = s:system(cmd)

@@ -212,6 +212,9 @@ neobundle/install
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-10-18
+- Refactored.
+
 2011-10-17
 - Improved neobundle source.
 
