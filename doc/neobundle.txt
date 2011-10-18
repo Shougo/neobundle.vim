@@ -169,17 +169,14 @@ COMMANDS 					*neobundle-commands*
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
+	filetype off
+	
 	if has('vim_starting')
 	  set runtimepath+='path to neobundle directory'
 	
-	  filetype off
-	
 	  call neobundle#rc(expand('~/.bundle'))
-	
-	  filetype plugin on
-	  filetype indent on
 	endif
-
+	
 	NeoBundle 'git://github.com/Shougo/clang_complete.git'
 	NeoBundle 'git://github.com/Shougo/echodoc.git'
 	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
@@ -189,6 +186,9 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'git://github.com/Shougo/vimfiler.git'
 	NeoBundle 'git://github.com/Shougo/vimshell.git'
 	NeoBundle 'git://github.com/Shougo/vinarise.git'
+	
+	filetype plugin on
+	filetype indent on
 >
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
@@ -214,6 +214,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-10-18
 - Refactored.
+- Fixed examples.
 
 2011-10-17
 - Improved neobundle source.
