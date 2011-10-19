@@ -52,6 +52,13 @@ function! neobundle#config#bundle(arg, ...)
   call s:rtp_add(rtpath)
 endfunction
 
+function! neobundle#config#rm_bndle(path)
+  if has_key(s:neobundles, a:path)
+    call s:rtp_rm(s:neobundles[a:path].rtpath)
+    call remove(s:neobundles, a:path)
+  endif
+endfunction
+
 function! s:rtp_rm_all_bundles()
   call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath)')
 endfunction
@@ -74,6 +81,8 @@ function! neobundle#config#init_bundle(name, opts)
   let bundle.rtpath = has_key(bundle, 'rtp') ?
         \ s:expand_path(bundle.path.'/'.bundle.rtp)
         \ : bundle.path
+  let bundle.orig_name = a:name
+  let bundle.orig_opts = a:opts
 
   return extend(copy(s:bundle_base), bundle)
 endfunction

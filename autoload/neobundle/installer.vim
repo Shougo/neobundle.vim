@@ -74,9 +74,10 @@ function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
   let all_dirs = split(globpath(neobundle#get_neobundle_dir(), '*'), "\n")
   let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
-  if a:0 > 0
-    let x_dirs += map(neobundle#config#search(a:000), 'v:val.path')
-  endif
+
+  let rm_dirs = a:0 ==  0 ? [] :
+        \ map(neobundle#config#search(a:000), 'v:val.path')
+  let x_dirs += rm_dirs
 
   if empty(x_dirs)
     call s:log("All clean!")
@@ -84,9 +85,17 @@ function! neobundle#installer#clean(bang, ...)
   end
 
   if a:bang || s:check_really_clean(x_dirs)
-    let cmd = (has('win32') || has('win64')) ?
+    let cmd = (has('win32') || has('win64')) && !executable('rm') ?
           \ 'rmdir /S /Q' : 'rm -rf'
-    call s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+    redraw
+    let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+    if s:get_last_status()
+      call s:error(result)
+    endif
+
+    for dir in rm_dirs
+      call neobundle#config#rm_bndle(dir)
+    endfor
   endif
 endfunction
 

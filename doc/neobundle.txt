@@ -142,6 +142,12 @@ UNITE SOURCES						*neobundle-unite-sources*
 
 Here let me explain about a source for |unite| provided in neobundle.
 
+							*neobundle-unite-source-neobundle*
+neobundle
+		Nominates bundles as a candidate.
+		This source required |vimproc| plugin.
+		http://github.com/Shougo/vimproc
+
 							*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins.
@@ -159,6 +165,13 @@ neobundle/install
 		:Unite neobundle/install:neocomplcache
 		:Unite neobundle/install:neocomplcache:unite.vim
 <
+Actions of each sources
+
+neobundle					*unite-action-neobundle*
+	update		Update bundles(Default action)
+	delete		Delete bundles
+	reinstall	Reinstall bundles
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
@@ -168,6 +181,7 @@ CHANGELOG					*neobundle-changelog*
 - Fixed :NeoBundleInstall bug.
 - Improved :NeoBundleClean.
 - Improved detect error.
+- Added neobundle source.
 
 2011-10-18
 - Refactored.
