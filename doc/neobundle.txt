@@ -103,13 +103,14 @@ COMMANDS 					*neobundle-commands*
 		Install {repository} plugins.
 		If {repository} is ommited, all configured plugin is installed.
 
-:NeoBundleInstall! [{options}] {sources}		*:NeoBundleInstall!*
+:NeoBundleInstall! [{repository}] 			*:NeoBundleInstall!*
 		Install and update {repository} plugins.
 		If {repository} is ommited, all configured plugin is installed
 		and updated.
 
-:NeoBundleClean [{bang}]				*:NeoBundleWithCurrentDir*
+:NeoBundleClean [{bang} [{repository}...]] 			*:NeoBundleWithCurrentDir*
 		Remove not configured plugins. If {bang} is added, force remove
+		plugins. If {repository}s are added, remove {repository}s
 		plugins.
 
 ==============================================================================
@@ -164,6 +165,8 @@ CHANGELOG					*neobundle-changelog*
 2011-10-19
 - Fixed documentation.
 - Improved NeoBundleClean.
+- Fixed :NeoBundleInstall bug.
+- Improved :NeoBundleClean.
 
 2011-10-18
 - Refactored.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2011.
+" Last Modified: 19 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,8 @@ let s:source = {
 function! s:source.hooks.on_init(args, context)"{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
   let a:context.source__bundles = empty(bundle_names) ?
-        \ neobundle#config#get_neobundles() : s:search_bundles(bundle_names)
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#search(bundle_names)
   let a:context.source__synced_bundles = []
   let a:context.source__bang = index(a:args, '!') >= 0
   let a:context.source__number = 0
@@ -143,17 +144,6 @@ function! s:check_output(context)
     let a:context.source__output = ''
     let a:context.source__number += 1
   endif
-endfunction
-
-function! s:search_bundles(bundle_names)
-  let bundles = []
-  for bundle in neobundle#config#get_neobundles()
-    if index(a:bundle_names, bundle.name) >= 0
-      call add(bundles, bundle)
-    endif
-  endfor
-
-  return bundles
 endfunction
 
 let &cpo = s:save_cpo

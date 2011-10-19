@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Sep 2011.
+" Last Modified: 19 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,7 @@ function! neobundle#config#get_neobundles()
 endfunction
 
 function! neobundle#config#bundle(arg, ...)
-  let bundle = s:init_bundle(a:arg, a:000)
+  let bundle = neobundle#config#init_bundle(a:arg, a:000)
   let path = bundle.path
   let rtpath = bundle.rtpath
   if has_key(s:neobundles, path)
@@ -66,7 +66,7 @@ function! s:rtp_add(dir) abort
   execute 'set rtp+='.fnameescape(expand(a:dir.'/after'))
 endfunction
 
-function! s:init_bundle(name, opts)
+function! neobundle#config#init_bundle(name, opts)
   let bundle = extend(s:parse_options(a:opts),
         \ s:parse_name(substitute(a:name,"['".'"]\+','','g')))
   let bundle.path = s:expand_path(
@@ -77,6 +77,18 @@ function! s:init_bundle(name, opts)
 
   return extend(copy(s:bundle_base), bundle)
 endfunction
+
+function! neobundle#config#search(bundle_names)
+  let bundles = []
+  for bundle in neobundle#config#get_neobundles()
+    if index(a:bundle_names, bundle.name) >= 0
+      call add(bundles, bundle)
+    endif
+  endfor
+
+  return bundles
+endfunction
+
 
 function! s:parse_options(opts)
   " TODO: improve this

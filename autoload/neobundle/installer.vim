@@ -45,7 +45,7 @@ function! neobundle#installer#install(bang, ...)
 
   let bundles = (a:1 == '') ?
         \ neobundle#config#get_neobundles() :
-        \ map(copy(a:000), 'neobundle#config#init(v:val, {})')
+        \ map(copy(a:000), 'neobundle#config#init_bundle(v:val, {})')
 
   let installed = s:install(a:bang, bundles)
   redraw!
@@ -70,10 +70,13 @@ function! neobundle#installer#helptags(bundles)
   return help_dirs
 endfunction
 
-function! neobundle#installer#clean(bang)
+function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
   let all_dirs = split(globpath(neobundle#get_neobundle_dir(), '*'), "\n")
   let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
+  if a:0 > 0
+    let x_dirs += map(neobundle#config#search(a:000), 'v:val.path')
+  endif
 
   if empty(x_dirs)
     call s:log("All clean!")
