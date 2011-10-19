@@ -163,6 +163,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-10-19
 - Fixed documentation.
+- Improved NeoBundleClean.
 
 2011-10-18
 - Refactored.

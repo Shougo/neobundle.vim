@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Oct 2011.
+" Last Modified: 19 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,8 +80,7 @@ function! neobundle#installer#clean(bang)
     return
   end
 
-  if a:bang || input('Are you sure you want to remove '
-        \        .len(x_dirs).' bundles? [ y/n ]:') =~? 'y'
+  if a:bang || s:check_really_clean(x_dirs)
     let cmd = (has('win32') || has('win64')) ?
     \           'rmdir /S /Q' : 'rm -rf'
     call s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
@@ -197,7 +196,13 @@ function! s:install(bang, bundles)
   return _
 endfunction
 
-" TODO: make it pause after output in console mode
+function! s:check_really_clean(dirs)
+  echo join(a:dirs, "\n")
+
+  return input('Are you sure you want to remove '
+        \        .len(a:dirs).' bundles? [y/n] : ') =~? 'y'
+endfunction
+
 function! s:log(msg)
   if &filetype == 'unite'
     call unite#print_message(a:msg)
