@@ -46,64 +46,19 @@ For example:
 ==============================================================================
 USAGE						*neobundle-usage*
 
-	In case when you run with files and buffers as the source
->
-	:neobundle file buffer
-<
+Refer to setting examples:
+|neobundle-examples|
 
-	In case when you run with the initial input value foo
+To update, run this command.
 >
-	:neobundle -input=foo file
+	:NeoBundleInstall!
 <
-
-The neobundle you started splits the window horizontally as default, opening on
-the top of the Vim.  For example,
+To use unite.vim interface, use this command(required vimproc and unite.vim
+plugin).
 >
-	:neobundle file
+	:Unite neobundle/install:!
 <
-lists up the files of the current directory.  You may choose one of the
-candidates by moving j or k, and typing Enter opens the candidate in a new
-buffer.  That's the default action for candidates of which kind is file.  You
-may also select an action with <Tab> on a candidate.  See also |neobundle-action|
-about the actions.
-
-You can narrow down the candidates with a keyword.  After opening a neobundle
-window, the cursor goes on the right side of > in the 2nd line by typing i.
-Then you can input a keyword to narrow down the candidates.  Each single
-characters you type narrows down the candidates.  You also can use a wild
-card * as an arbitrary character sequence.  For example
->
-	*hisa
-<
-matches hisa, ujihisa, or ujihisahisa.  Furthermore, two consequence wild cards
-matches directory recursively.  For example
->
-	**/foo
-<
-matches bar/foo or buzz/bar/foo.  Note that you should consider using
-|file_rec| that will be described bellow in most cases.
-
-You may specify multiple keywords to narrow down, separating by spaces.
->
-	foo bar
-<
-That matches candidates that match both foo and bar.
-
-You may specify negative conditions with !.
->
-	foo !bar
-<
-That matches foo but candidates that match bar will be rejected.
-
-	You may add wild cards automatically with / if you specify files on
-	-buffer-name option.  That's handy in case you select file with neobundle.
->
-	:neobundle -buffer-name=files file
-<
-See also |neobundle_default_key_mappings| for other actions.
-
-Screencast is available. Thanks ujihisa!
-http://www.ustream.tv/recorded/11240673
+This plugin setting is compatible with Vundle.vim :-)
 
 ==============================================================================
 INSTALL						*neobundle-install*
@@ -117,15 +72,6 @@ And path to repository directory.
 >
 	set runtimepath+='path to neobundle directory'
 <
-After, refer to setting examples:
-|neobundle-examples|
-
-To update, run this command.
->
-	:NeoBundleInstall!
-<
-This plugin setting is compatible with Vundle.vim :-)
-
 ==============================================================================
 INTERFACE					*neobundle-interface*
 
@@ -189,7 +135,7 @@ EXAMPLES					*neobundle-examples*
 	
 	filetype plugin on
 	filetype indent on
->
+<
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
 
@@ -198,6 +144,9 @@ Here let me explain about a source for |unite| provided in neobundle.
 							*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins.
+		This source required |vimproc| plugin.
+		http://github.com/Shougo/vimproc
+
 		If argment is bang(!), install and update all plugins.
 
 		Source arguments:
@@ -211,6 +160,9 @@ neobundle/install
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-10-19
+- Fixed documentation.
 
 2011-10-18
 - Refactored.
