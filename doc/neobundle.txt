@@ -167,6 +167,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved NeoBundleClean.
 - Fixed :NeoBundleInstall bug.
 - Improved :NeoBundleClean.
+- Improved detect error.
 
 2011-10-18
 - Refactored.

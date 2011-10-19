@@ -85,7 +85,7 @@ function! neobundle#installer#clean(bang, ...)
 
   if a:bang || s:check_really_clean(x_dirs)
     let cmd = (has('win32') || has('win64')) ?
-    \           'rmdir /S /Q' : 'rm -rf'
+          \ 'rmdir /S /Q' : 'rm -rf'
     call s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
   endif
 endfunction
@@ -175,8 +175,9 @@ function! s:sync(bang, bundle, number, max)
     return 0
   endif
 
-  if result =~ 'fatal:'
-    call s:V.print_error('Module ' . a:bundle.name . ' doesn''t exists')
+  if s:get_last_status()
+    call s:error(a:bundle.path)
+    call s:error(result)
     return 0
   endif
 
@@ -212,4 +213,16 @@ function! s:log(msg)
   else
     echo a:msg
   endif
+endfunction
+
+function! s:error(msg)
+  if &filetype == 'unite'
+    call unite#print_error(a:msg)
+    return
+  endif
+
+  for msg in type(a:msg) == type([]) ?
+        \ a:msg : split(a:msg, '\n')
+    echohl WarningMsg | echomsg msg | echohl None
+  endfor
 endfunction

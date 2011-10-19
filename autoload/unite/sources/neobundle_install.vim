@@ -112,7 +112,7 @@ function! s:sync(bundle, context)
     return
   endif
 
-  let a:context.source__process = vimproc#pgroup_open(cmd)
+  let a:context.source__process = vimproc#pgroup_open(cmd, 0, 2)
 
   " Close handles.
   call a:context.source__process.stdin.close()
@@ -129,15 +129,11 @@ function! s:check_output(context)
   if stdout.eof
     let [cond, status] = a:context.source__process.waitpid()
 
-    if cond == 0
-      if a:context.source__output !~ 'up-to-date'
-        call add(a:context.source__synced_bundles,
-              \ a:context.source__bundles[a:context.source__number])
-      endif
-    elseif a:context.source__output =~ 'fatal:'
-      call unite#print_error('Module ' .
-            \ a:context.source__bundles[a:context.source__number]
-            \ . ' doesn''t exists')
+    if status
+      call unite#print_error(split(a:context.source__output, '\n'))
+    elseif a:context.source__output !~ 'up-to-date'
+      call add(a:context.source__synced_bundles,
+            \ a:context.source__bundles[a:context.source__number])
     endif
 
     let a:context.source__process = {}
