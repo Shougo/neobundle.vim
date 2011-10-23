@@ -175,6 +175,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-10-23
+- Fixed vimproc check.
+
 2011-10-19
 - Fixed documentation.
 - Improved NeoBundleClean.
