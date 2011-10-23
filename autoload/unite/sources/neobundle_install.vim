@@ -128,10 +128,19 @@ function! s:check_output(context)
   let a:context.source__output .= stdout.read(-1, 300)
   if stdout.eof
     let [cond, status] = a:context.source__process.waitpid()
+    let num = a:context.source__number+1
+    let max = a:context.source__max_bundles
 
     if status
+      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+            \ num, max, 'Error'))
       call unite#print_error(split(a:context.source__output, '\n'))
-    elseif a:context.source__output !~ 'up-to-date'
+    elseif a:context.source__output =~ 'up-to-date'
+      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+            \ num, max, 'Skipped'))
+    else
+      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+            \ num, max, 'Updated'))
       call add(a:context.source__synced_bundles,
             \ a:context.source__bundles[a:context.source__number])
     endif

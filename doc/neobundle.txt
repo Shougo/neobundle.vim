@@ -177,6 +177,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-10-23
 - Fixed vimproc check.
+- Improved neobundle/install source status messages.
 
 2011-10-19
 - Fixed documentation.
