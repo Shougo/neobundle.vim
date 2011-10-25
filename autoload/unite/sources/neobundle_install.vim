@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2011.
+" Last Modified: 25 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,14 +132,17 @@ function! s:check_output(context)
     let max = a:context.source__max_bundles
 
     if status
-      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+      call unite#print_message(
+            \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'))
       call unite#print_error(split(a:context.source__output, '\n'))
     elseif a:context.source__output =~ 'up-to-date'
-      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+      call unite#print_message(
+            \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Skipped'))
     else
-      call unite#print_message(printf('[neobundle/install] (%d/%d): %s',
+      call unite#print_message(
+            \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Updated'))
       call add(a:context.source__synced_bundles,
             \ a:context.source__bundles[a:context.source__number])

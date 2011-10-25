@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Oct 2011.
+" Last Modified: 25 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,7 +103,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
   if isdirectory(repo_dir)
     if !a:bang
-      return ['', printf('(%d/%d): %s', a:number, a:max, 'Skipped')]
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Skipped')]
     endif
 
     if a:bundle.type == 'svn'
@@ -113,14 +114,16 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     elseif a:bundle.type == 'git'
       let cmd = 'git pull'
     else
-      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Unknown')]
     endif
 
     "cd to bundle path"
     let path = a:bundle.path
     lcd `=path`
 
-    let message = printf('(%d/%d): %s', a:number, a:max, path)
+    let message = printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, path)
     redraw
   else
     if a:bundle.type == 'svn'
@@ -130,11 +133,13 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     elseif a:bundle.type == 'git'
       let cmd = 'git clone'
     else
-      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Unknown')]
     endif
     let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
 
-    let message = printf('(%d/%d): %s', a:number, a:max, cmd)
+    let message = printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, cmd)
     redraw
   endif
 
@@ -150,7 +155,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     elseif a:bundle.type == 'git'
       let cmd .= 'git pull'
     else
-      return ['', printf('(%d/%d): %s', a:number, a:max, 'Unknown')]
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Unknown')]
     endif
 
     let cmd .= ' ' . rev
