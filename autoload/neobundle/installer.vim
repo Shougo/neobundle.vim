@@ -101,7 +101,45 @@ endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
-  if isdirectory(repo_dir)
+  let rev = get(a:bundle, 'rev', '')
+
+  if !isdirectory(repo_dir)
+    if a:bundle.type == 'svn'
+      let cmd = 'svn checkout'
+    elseif a:bundle.type == 'hg'
+      let cmd = 'hg clone'
+    elseif a:bundle.type == 'git'
+      let cmd = 'git clone'
+    else
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Unknown')]
+    endif
+    let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
+
+    let message = printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, cmd)
+  elseif rev != ''
+    " Lock revision.
+    if a:bundle.type == 'svn'
+      let cmd = 'svn up'
+    elseif a:bundle.type == 'hg'
+      let cmd = 'hg up'
+    elseif a:bundle.type == 'git'
+      let cmd = 'git checkout'
+    else
+      return ['', printf('(%'.len(a:max).'d/%d): %s',
+            \ a:number, a:max, 'Unknown')]
+    endif
+
+    let cmd .= ' ' . rev
+
+    " Cd to bundle path.
+    let path = a:bundle.path
+    lcd `=path`
+
+    let message = printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, cmd)
+  else
     if !a:bang
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Skipped')]
@@ -118,48 +156,13 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
             \ a:number, a:max, 'Unknown')]
     endif
 
-    "cd to bundle path"
+    " Cd to bundle path.
     let path = a:bundle.path
     lcd `=path`
 
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, path)
     redraw
-  else
-    if a:bundle.type == 'svn'
-      let cmd = 'svn checkout'
-    elseif a:bundle.type == 'hg'
-      let cmd = 'hg clone'
-    elseif a:bundle.type == 'git'
-      let cmd = 'git clone'
-    else
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Unknown')]
-    endif
-    let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
-
-    let message = printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, cmd)
-    redraw
-  endif
-
-  let rev = get(a:bundle, 'rev', '')
-  if rev != ''
-    let cmd .= ' && '
-
-    " Lock revision.
-    if a:bundle.type == 'svn'
-      let cmd .= 'svn up'
-    elseif a:bundle.type == 'hg'
-      let cmd .= 'hg up'
-    elseif a:bundle.type == 'git'
-      let cmd .= 'git checkout'
-    else
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Unknown')]
-    endif
-
-    let cmd .= ' ' . rev
   endif
 
   return [cmd, message]
