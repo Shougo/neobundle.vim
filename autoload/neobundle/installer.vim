@@ -193,17 +193,18 @@ function! s:sync(bang, bundle, number, max, is_revision)
     lcd `=cwd`
   endif
 
-  if result =~# 'up-to-date'
-    return 0
-  endif
-
   if s:get_last_status()
     call s:error(a:bundle.path)
     call s:error(result)
     return 0
   endif
 
-  return 1
+  if !a:is_revision && get(a:bundle, 'rev', '') != ''
+    " Lock revision.
+    call s:sync(a:bang, a:bundle, a:number, a:max, 1)
+  endif
+
+  return result !~# 'up-to-date'
 endfunction
 
 function! s:install(bang, bundles)
@@ -213,7 +214,7 @@ function! s:install(bang, bundles)
 
   for bundle in a:bundles
     if s:sync(a:bang, bundle, i, max, 0)
-      if get(bundle, 'rev', '') != ''
+      if 
         call s:sync(a:bang, bundle, i, max, 1)
       endif
 
