@@ -151,9 +151,9 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     if a:bundle.type == 'svn'
       let cmd .= 'svn up'
     elseif a:bundle.type == 'hg'
-      let cmd .= 'hg pull && hg up'
+      let cmd .= 'hg up'
     elseif a:bundle.type == 'git'
-      let cmd .= 'git pull'
+      let cmd .= 'git checkout'
     else
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]
