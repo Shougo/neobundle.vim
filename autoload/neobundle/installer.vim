@@ -145,7 +145,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 
   let rev = get(a:bundle, 'rev', '')
   if rev != ''
-    let cmd .= '&&'
+    let cmd .= ' && '
 
     " Lock revision.
     if a:bundle.type == 'svn'
