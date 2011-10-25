@@ -175,6 +175,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-10-26
+- Improved lock revision.
+
 2011-10-25
 - Improved install message.
 - Fixed lock revision.

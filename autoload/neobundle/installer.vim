@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Oct 2011.
+" Last Modified: 26 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -101,7 +101,6 @@ endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
-  let rev = get(a:bundle, 'rev', '')
 
   if !isdirectory(repo_dir)
     if a:bundle.type == 'svn'
@@ -115,27 +114,6 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
             \ a:number, a:max, 'Unknown')]
     endif
     let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
-
-    let message = printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, cmd)
-  elseif rev != ''
-    " Lock revision.
-    if a:bundle.type == 'svn'
-      let cmd = 'svn up'
-    elseif a:bundle.type == 'hg'
-      let cmd = 'hg up'
-    elseif a:bundle.type == 'git'
-      let cmd = 'git checkout'
-    else
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Unknown')]
-    endif
-
-    let cmd .= ' ' . rev
-
-    " Cd to bundle path.
-    let path = a:bundle.path
-    lcd `=path`
 
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, cmd)
@@ -162,18 +140,44 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, path)
-    redraw
   endif
 
   return [cmd, message]
 endfunction
+function! neobundle#installer#get_revision_command(bang, bundle, number, max)
+  let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
 
-function! s:sync(bang, bundle, number, max)
+  " Lock revision.
+  if a:bundle.type == 'svn'
+    let cmd = 'svn up'
+  elseif a:bundle.type == 'hg'
+    let cmd = 'hg up'
+  elseif a:bundle.type == 'git'
+    let cmd = 'git checkout'
+  else
+    return ['', printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, 'Unknown')]
+  endif
+
+  let cmd .= ' ' . a:bundle.rev
+
+  " Cd to bundle path.
+  let path = a:bundle.path
+  lcd `=path`
+
+  let message = printf('(%'.len(a:max).'d/%d): %s',
+        \ a:number, a:max, cmd)
+
+  return [cmd, message]
+endfunction
+
+function! s:sync(bang, bundle, number, max, is_revision)
   if a:bundle.type == 'nosync' | return 'todate' | endif
 
   let cwd = getcwd()
 
-  let [cmd, message] = neobundle#installer#get_sync_command(
+  let [cmd, message] =
+        \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
   call s:log(message)
   if cmd == ''
@@ -208,7 +212,11 @@ function! s:install(bang, bundles)
   let max = len(a:bundles)
 
   for bundle in a:bundles
-    if s:sync(a:bang, bundle, i, max)
+    if s:sync(a:bang, bundle, i, max, 0)
+      if get(bundle, 'rev', '') != ''
+        call s:sync(a:bang, bundle, i, max, 1)
+      endif
+
       call add(_, bundle)
     endif
 

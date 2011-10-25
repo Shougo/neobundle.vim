@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Oct 2011.
+" Last Modified: 26 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,7 +73,7 @@ function! s:source.async_gather_candidates(args, context)"{{{
   if a:context.source__number < a:context.source__max_bundles
     call s:sync(
           \ a:context.source__bundles[a:context.source__number],
-          \ a:context)
+          \ a:context, 0)
     return []
   endif
 
@@ -96,10 +96,11 @@ function! s:source.async_gather_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:sync(bundle, context)
+function! s:sync(bundle, context, is_revision)
   let cwd = getcwd()
 
-  let [cmd, message] = neobundle#installer#get_sync_command(
+  let [cmd, message] =
+        \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
         \ a:context.source__bang, a:bundle,
         \ a:context.source__number+1, a:context.source__max_bundles)
   call unite#print_message('[neobundle/install] ' . message)
@@ -113,6 +114,7 @@ function! s:sync(bundle, context)
   endif
 
   let a:context.source__process = vimproc#pgroup_open(cmd, 0, 2)
+  let a:context.source__revision_locked = a:is_revision
 
   " Close handles.
   call a:context.source__process.stdin.close()
@@ -130,12 +132,17 @@ function! s:check_output(context)
     let [cond, status] = a:context.source__process.waitpid()
     let num = a:context.source__number+1
     let max = a:context.source__max_bundles
+    let bundle = a:context.source__bundles[a:context.source__number]
 
     if status
       call unite#print_message(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'))
       call unite#print_error(split(a:context.source__output, '\n'))
+    elseif a:context.source__revision_locked
+      call unite#print_message(
+            \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
+            \ num, max, 'Locked'))
     elseif a:context.source__output =~ 'up-to-date'
       call unite#print_message(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
@@ -145,7 +152,14 @@ function! s:check_output(context)
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Updated'))
       call add(a:context.source__synced_bundles,
-            \ a:context.source__bundles[a:context.source__number])
+            \ bundle)
+    endif
+
+    if !status && get(bundle, 'rev', '') != ''
+          \ && !a:context.source__revision_locked
+      " Lock revision.
+      call s:sync(bundle, a:context, 1)
+      return
     endif
 
     let a:context.source__process = {}
