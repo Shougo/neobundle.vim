@@ -82,6 +82,18 @@ COMMANDS 					*neobundle-commands*
 :NeoBundle {repository} [{dictionary}]		*:Neobundle*
 		Configures neobundle.
 
+		{dictionary} is has following keys.
+		rev		(String)
+		Revision number or branch/tag name.
+
+		directory	(String)
+		Directory name.
+
+		type		(String)
+		Repository type.
+		For example: nosync, git, svn, hg, ...
+		If type is "nosync", neobundle does not update automatically.
+
 		Examples:
 >
 		NeoBundle 'git_repository_uri'
@@ -181,6 +193,7 @@ CHANGELOG					*neobundle-changelog*
 - Fixed :NeoBundleInstall error.
 - Use --rebase.
 - Supported change dicretory name.
+- Improved documentation.
 
 2011-10-26
 - Improved lock revision.
