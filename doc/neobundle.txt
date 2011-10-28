@@ -79,6 +79,7 @@ INTERFACE					*neobundle-interface*
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [{revision}]		*:Neobundle*
+:NeoBundle {repository} [{dictionary}]		*:Neobundle*
 		Configures neobundle.
 
 		Examples:
@@ -91,6 +92,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'muttator', {'type' : 'nosync'}
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 <
 		This supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -178,6 +180,7 @@ CHANGELOG					*neobundle-changelog*
 2011-10-28
 - Fixed :NeoBundleInstall error.
 - Use --rebase.
+- Supported change dicretory name.
 
 2011-10-26
 - Improved lock revision.

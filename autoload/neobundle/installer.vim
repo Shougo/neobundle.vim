@@ -113,7 +113,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]
     endif
-    let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
+
+    let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
 
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, cmd)

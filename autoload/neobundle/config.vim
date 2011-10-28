@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Oct 2011.
+" Last Modified: 28 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,24 +43,23 @@ endfunction
 function! neobundle#config#bundle(arg, ...)
   let bundle = neobundle#config#init_bundle(a:arg, a:000)
   let path = bundle.path
-  let rtpath = bundle.rtpath
   if has_key(s:neobundles, path)
-    call s:rtp_rm(rtpath)
+    call s:rtp_rm(path)
   endif
 
   let s:neobundles[path] = bundle
-  call s:rtp_add(rtpath)
+  call s:rtp_add(path)
 endfunction
 
 function! neobundle#config#rm_bndle(path)
   if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path].rtpath)
+    call s:rtp_rm(s:neobundles[a:path].path)
     call remove(s:neobundles, a:path)
   endif
 endfunction
 
 function! s:rtp_rm_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath)')
+  call filter(values(s:neobundles), 's:rtp_rm(v:val.path)')
 endfunction
 
 function! s:rtp_rm(dir)
@@ -76,11 +75,8 @@ endfunction
 function! neobundle#config#init_bundle(name, opts)
   let bundle = extend(s:parse_options(a:opts),
         \ s:parse_name(substitute(a:name,"['".'"]\+','','g')))
-  let bundle.path = s:expand_path(
-        \ neobundle#get_neobundle_dir().'/'.bundle.name)
-  let bundle.rtpath = has_key(bundle, 'rtp') ?
-        \ s:expand_path(bundle.path.'/'.bundle.rtp)
-        \ : bundle.path
+  let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
+        \ get(bundle, 'directory', bundle.name))
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
@@ -145,17 +141,17 @@ endfunction
 let s:bundle_base = {}
 
 function! s:bundle_base.has_doc()
-  let rtpath = self.rtpath
-  return isdirectory(rtpath.'/doc')
-  \   && (!filereadable(rtpath.'/doc/tags') || filewritable(rtpath.'/doc/tags'))
-  \   && (glob(rtpath.'/doc/*.txt') != '' || glob(rtpath.'/doc/*.??x') != '')
+  let path = self.path
+  return isdirectory(path.'/doc')
+  \   && (!filereadable(path.'/doc/tags') || filewritable(path.'/doc/tags'))
+  \   && (glob(path.'/doc/*.txt') != '' || glob(path.'/doc/*.??x') != '')
 endfunction
 
 function! s:bundle_base.helptags()
   try
-    helptags `=self.rtpath . '/doc/'`
+    helptags `=self.path . '/doc/'`
   catch
-    call s:V.print_error('Error generating helptags in '.self.rtpath)
+    call s:V.print_error('Error generating helptags in '.self.path)
     call s:V.print_error(v:exception . ' ' . v:throwpoint)
   endtry
 endfunction
