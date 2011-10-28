@@ -128,7 +128,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     elseif a:bundle.type == 'hg'
       let cmd = 'hg pull && hg up'
     elseif a:bundle.type == 'git'
-      let cmd = 'git pull'
+      let cmd = 'git pull --rebase'
     else
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]

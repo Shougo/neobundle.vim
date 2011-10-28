@@ -177,6 +177,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-10-28
 - Fixed :NeoBundleInstall error.
+- Use --rebase.
 
 2011-10-26
 - Improved lock revision.
