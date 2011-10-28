@@ -79,7 +79,7 @@ INTERFACE					*neobundle-interface*
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [{revision}]		*:Neobundle*
-:NeoBundle {repository} [{dictionary}]		*:Neobundle*
+:NeoBundle {repository} [{dictionary}]
 		Configures neobundle.
 
 		{dictionary} is has following keys.
