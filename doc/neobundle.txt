@@ -175,6 +175,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-10-28
+- Fixed :NeoBundleInstall error.
+
 2011-10-26
 - Improved lock revision.
 - Fixed sync.
