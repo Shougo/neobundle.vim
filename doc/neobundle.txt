@@ -36,12 +36,12 @@ Changelog		|neobundle-changelog|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle.vim* is ultimate Vim package manager.
-This plugin is based on Vundle.vim(https://github.com/gmarik/vundle).
-But some features is added.
+*neobundle.vim* is the ultimate Vim package manager. This plugin is based on
+Vundle.vim(https://github.com/gmarik/vundle), But I added some features.
+
 For example:
- * Use vimproc when vimproc is installed.
- * unite.vim interface.
+ * Uses |vimproc| when you have it
+ * |unite.vim| interface
 
 ==============================================================================
 USAGE						*neobundle-usage*
@@ -53,8 +53,8 @@ To update, run this command.
 >
 	:NeoBundleInstall!
 <
-To use unite.vim interface, use this command(required vimproc and unite.vim
-plugin).
+To use unite.vim interface, use this command (required vimproc and unite.vim
+plugin.)
 >
 	:Unite neobundle/install:!
 <
@@ -63,12 +63,12 @@ This plugin setting is compatible with Vundle.vim :-)
 ==============================================================================
 INSTALL						*neobundle-install*
 
-In first, git clone from repository.
+In first, git clone from the repository.
 >
 	git clone git@github.com:Shougo/neobundle.vim.git
 <
 
-And path to repository directory.
+And a path to the repository directory.
 >
 	set runtimepath+='path to neobundle directory'
 <
@@ -79,7 +79,7 @@ INTERFACE					*neobundle-interface*
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [{revision}]		*:Neobundle*
-		Configure neobundle.
+		Configures neobundle.
 
 		Examples:
 >
@@ -92,26 +92,26 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 <
-		Revision lock is supported.
-		Note: Restore revision lock is manually. Or set to revision
+		This supports revision lock.
+		Note: It's manual to restore its revision. Or, set to revision
 		"master".
 >
 		NeoBundle 'Shougo/vimshell', '3787e5'
 		NeoBundle 'Shougo/vimshell', 'master'
 <
 :NeoBundleInstall [{repository}]			*:NeoBundleInstall*
-		Install {repository} plugins.
-		If {repository} is ommited, all configured plugin is installed.
+		Installs {repository} plugins.
+		If {repository} is omited, all configured plugin is installed.
 
 :NeoBundleInstall! [{repository}] 			*:NeoBundleInstall!*
-		Install and update {repository} plugins.
-		If {repository} is ommited, all configured plugin is installed
+		Installs and update {repository} plugins.
+		If {repository} is omited, all configured plugin is installed
 		and updated.
 
 :NeoBundleClean [{bang} [{repository}...]] 			*:NeoBundleWithCurrentDir*
-		Remove not configured plugins. If {bang} is added, force remove
-		plugins. If {repository}s are added, remove {repository}s
-		plugins.
+		Removes non configured plugins. If {bang} is added, force
+		remove plugins. If {repository}s are added, remove
+		{repository}s plugins.
 
 ==============================================================================
 EXAMPLES					*neobundle-examples*
