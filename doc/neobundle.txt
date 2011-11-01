@@ -175,6 +175,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-01
+- Use git protocol instead of https.
+
 2011-10-26
 - Improved lock revision.
 - Fixed sync.

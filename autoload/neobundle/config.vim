@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Oct 2011.
+" Last Modified: 01 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,7 +114,7 @@ endfunction
 
 function! s:parse_name(arg)
   if a:arg =~ '^\s*\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
-    let uri = 'https://github.com/'.split(a:arg, ':')[-1]
+    let uri = 'git://github.com/'.split(a:arg, ':')[-1]
     let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     let type = 'git'
   elseif a:arg =~ '^\s*\(git@\|git://\)\S\+'
@@ -131,7 +131,7 @@ function! s:parse_name(arg)
     endif
   else
     let name = a:arg
-    let uri  = 'https://github.com/vim-scripts/'.name.'.git'
+    let uri  = 'git//github.com/vim-scripts/'.name.'.git'
     let type = 'git'
   endif
 
