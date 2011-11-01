@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Oct 2011.
+" Last Modified: 28 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,7 +113,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]
     endif
-    let cmd .= ' ' . a:bundle.uri . ' "'. a:bundle.path .'"'
+
+    let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
 
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, cmd)
@@ -128,7 +129,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     elseif a:bundle.type == 'hg'
       let cmd = 'hg pull && hg up'
     elseif a:bundle.type == 'git'
-      let cmd = 'git pull'
+      let cmd = 'git pull --rebase'
     else
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]
@@ -214,7 +215,7 @@ function! s:install(bang, bundles)
 
   for bundle in a:bundles
     if s:sync(a:bang, bundle, i, max, 0)
-      if 
+      if get(bundle, 'rev', '') != ''
         call s:sync(a:bang, bundle, i, max, 1)
       endif
 
