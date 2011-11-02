@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Oct 2011.
+" Last Modified: 02 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,7 +54,7 @@ function! neobundle#installer#install(bang, ...)
   \      ['no new bundles installed'] :
   \      map(installed, 'v:val.name')),"\n"))
 
-  call neobundle#installer#helptags(bundles)
+  call neobundle#installer#helptags(installed)
 endf
 
 function! neobundle#installer#helptags(bundles)
@@ -205,7 +205,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  return result !~# 'up-to-date'
+  return result !~# 'up-to-date\|up to date'
 endfunction
 
 function! s:install(bang, bundles)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Oct 2011.
+" Last Modified: 02 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -143,7 +143,7 @@ function! s:check_output(context)
       call unite#print_message(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Locked'))
-    elseif a:context.source__output =~ 'up-to-date'
+    elseif a:context.source__output =~ 'up-to-date\|up to date'
       call unite#print_message(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Skipped'))

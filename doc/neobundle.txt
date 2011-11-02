@@ -189,6 +189,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-02
+- Fixed helptags.
+
 2011-11-01
 - Use git protocol instead of https.
 
