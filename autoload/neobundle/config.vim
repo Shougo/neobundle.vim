@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Nov 2011.
+" Last Modified: 04 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,23 @@ endif
 function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
   let s:neobundles = {}
+
+  let s:bundle_base = {}
+  function! s:bundle_base.has_doc()
+    let path = self.path
+    return isdirectory(path.'/doc')
+          \   && (!filereadable(path.'/doc/tags') || filewritable(path.'/doc/tags'))
+          \   && (glob(path.'/doc/*.txt') != '' || glob(path.'/doc/*.??x') != '')
+  endfunction
+
+  function! s:bundle_base.helptags()
+    try
+      helptags `=self.path . '/doc/'`
+    catch
+      call s:V.print_error('Error generating helptags in '.self.path)
+      call s:V.print_error(v:exception . ' ' . v:throwpoint)
+    endtry
+  endfunction
 endfunction
 
 function! neobundle#config#get_neobundles()
@@ -136,23 +153,5 @@ endfunction
 
 function! s:expand_path(path)
   return simplify(expand(a:path))
-endfunction
-
-let s:bundle_base = {}
-
-function! s:bundle_base.has_doc()
-  let path = self.path
-  return isdirectory(path.'/doc')
-  \   && (!filereadable(path.'/doc/tags') || filewritable(path.'/doc/tags'))
-  \   && (glob(path.'/doc/*.txt') != '' || glob(path.'/doc/*.??x') != '')
-endfunction
-
-function! s:bundle_base.helptags()
-  try
-    helptags `=self.path . '/doc/'`
-  catch
-    call s:V.print_error('Error generating helptags in '.self.path)
-    call s:V.print_error(v:exception . ' ' . v:throwpoint)
-  endtry
 endfunction
 
