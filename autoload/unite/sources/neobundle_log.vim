@@ -1,6 +1,6 @@
 "=============================================================================
-" FILE: neobundle.vim
-" AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
+" FILE: neobundle/log.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 04 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -22,34 +22,27 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 0.1, for Vim 7.2
 "=============================================================================
 
-command! -nargs=+ NeoBundle
-      \ call neobundle#config#bundle(<args>)
+let s:save_cpo = &cpo
+set cpo&vim
 
-command! -nargs=? -bang NeoBundleInstall
-      \ call neobundle#installer#install('!' == '<bang>', <q-args>)
+function! unite#sources#neobundle_log#define()"{{{
+  return s:source
+endfunction"}}}
 
-command! -nargs=? -bang NeoBundleClean
-      \ call neobundle#installer#clean('!' == '<bang>', <q-args>)
+let s:source = {
+      \ 'name' : 'neobundle/log',
+      \ 'description' : 'print previous neobundle install logs',
+      \ }
 
-command! -nargs=0 NeoBundleDocs
-      \ call neobundle#installer#helptags(neobundle#config#get_neobundles())
+function! s:source.gather_candidates(args, context)"{{{
+  return map(copy(neobundle#installer#get_log()), "{
+        \ 'word' : v:val,
+        \ }")
+endfunction"}}}
 
-command! -nargs=0 NeoBundleLog echo join(neobundle#installer#get_log(), "\n")
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
-augroup neobundle
-  autocmd!
-  autocmd Syntax  vim syntax keyword vimCommand NeoBundle
-augroup END
-
-function! neobundle#rc(...)
-  let s:neobundle_dir = expand(get(a:000, 0, '~/.vim/bundle'))
-  call neobundle#config#init()
-endfunction
-
-function! neobundle#get_neobundle_dir()
-  return s:neobundle_dir
-endfunction
-
+" vim: foldmethod=marker

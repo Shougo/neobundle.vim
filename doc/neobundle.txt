@@ -122,10 +122,13 @@ COMMANDS 					*neobundle-commands*
 		If {repository} is omited, all configured plugin is installed
 		and updated.
 
-:NeoBundleClean [{bang} [{repository}...]] 			*:NeoBundleWithCurrentDir*
+:NeoBundleClean [{bang} [{repository}...]] 		*:NeoBundleWithCurrentDir*
 		Removes non configured plugins. If {bang} is added, force
 		remove plugins. If {repository}s are added, remove
 		{repository}s plugins.
+
+:NeoBundleLog 						*:NeoBundleLog*
+		Print previous install logs.
 
 ==============================================================================
 EXAMPLES					*neobundle-examples*
@@ -179,6 +182,10 @@ neobundle/install
 		:Unite neobundle/install:neocomplcache
 		:Unite neobundle/install:neocomplcache:unite.vim
 <
+							*neobundle-unite-source-neobundle-log*
+neobundle/log
+		Print previous neobundle install logs.
+
 Actions of each sources
 
 neobundle					*unite-action-neobundle*
@@ -188,6 +195,11 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-11-04
+- Added :NeoBundleLog command.
+- Added neobundle/log source.
+- Improved log.
 
 2011-11-02
 - Fixed helptags.

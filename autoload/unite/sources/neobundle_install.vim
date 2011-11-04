@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 04 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,6 +49,8 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ len(a:context.source__bundles)
   let a:context.source__process = {}
   let a:context.source__output = ''
+
+  call neobundle#installer#clear_log()
 endfunction"}}}
 function! s:source.hooks.on_close(args, context)"{{{
   if !empty(a:context.source__process)
@@ -59,7 +61,8 @@ endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   if empty(a:context.source__bundles)
     let a:context.is_async = 0
-    call unite#print_message('[neobundle/install] Bundles not found.')
+    call neobundle#installer#log(
+          \ '[neobundle/install] Bundles not found.', 1)
   endif
   return []
 endfunction"}}}
@@ -85,14 +88,14 @@ function! s:source.async_gather_candidates(args, context)"{{{
           \        'v:val.name')
   endif
 
-  call unite#print_message(messages)
+  call neobundle#installer#log(messages, 1)
   call neobundle#installer#helptags(
         \ a:context.source__synced_bundles)
 
   let a:context.is_async = 0
 
   " Finish.
-  call unite#print_message('[neobundle/install] Completed.')
+  call neobundle#installer#log('[neobundle/install] Completed.', 1)
   return []
 endfunction"}}}
 
@@ -103,7 +106,7 @@ function! s:sync(bundle, context, is_revision)
         \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
         \ a:context.source__bang, a:bundle,
         \ a:context.source__number+1, a:context.source__max_bundles)
-  call unite#print_message('[neobundle/install] ' . message)
+  call neobundle#installer#log('[neobundle/install] ' . message, 1)
 
   if cmd == ''
     " Skipped.
@@ -135,22 +138,22 @@ function! s:check_output(context)
     let bundle = a:context.source__bundles[a:context.source__number]
 
     if status
-      call unite#print_message(
+      call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
-            \ num, max, 'Error'))
-      call unite#print_error(split(a:context.source__output, '\n'))
+            \ num, max, 'Error'), 1)
+      call neobundle#installer#error(split(a:context.source__output, '\n'))
     elseif a:context.source__revision_locked
-      call unite#print_message(
+      call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
-            \ num, max, 'Locked'))
+            \ num, max, 'Locked'), 1)
     elseif a:context.source__output =~ 'up-to-date\|up to date'
-      call unite#print_message(
+      call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
-            \ num, max, 'Skipped'))
+            \ num, max, 'Skipped'), 1)
     else
-      call unite#print_message(
+      call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
-            \ num, max, 'Updated'))
+            \ num, max, 'Updated'), 1)
       call add(a:context.source__synced_bundles,
             \ bundle)
     endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 04 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,8 +25,13 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 " Create vital module for neobundle
 let s:V = vital#of('neobundle')
+
+let s:log = []
 
 " Wrapper function of system()
 function! s:system(...)
@@ -47,10 +52,11 @@ function! neobundle#installer#install(bang, ...)
         \ neobundle#config#get_neobundles() :
         \ map(copy(a:000), 'neobundle#config#init_bundle(v:val, {})')
 
+  call neobundle#installer#clear_log()
   let installed = s:install(a:bang, bundles)
   redraw!
 
-  call s:log("Installed bundles:\n".join((empty(installed) ?
+  call neobundle#installer#log("Installed bundles:\n".join((empty(installed) ?
   \      ['no new bundles installed'] :
   \      map(installed, 'v:val.name')),"\n"))
 
@@ -65,7 +71,7 @@ function! neobundle#installer#helptags(bundles)
   let help_dirs = filter(a:bundles, 'v:val.has_doc()')
   call map(help_dirs, 'v:val.helptags()')
   if !empty(help_dirs)
-    call s:log('Helptags: done. '.len(help_dirs).' bundles processed')
+    call neobundle#installer#log('Helptags: done. '.len(help_dirs).' bundles processed')
   endif
   return help_dirs
 endfunction
@@ -80,7 +86,7 @@ function! neobundle#installer#clean(bang, ...)
   let x_dirs += rm_dirs
 
   if empty(x_dirs)
-    call s:log("All clean!")
+    call neobundle#installer#log("All clean!")
     return
   end
 
@@ -90,7 +96,7 @@ function! neobundle#installer#clean(bang, ...)
     redraw
     let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
     if s:get_last_status()
-      call s:error(result)
+      call neobundle#installer#error(result)
     endif
 
     for dir in rm_dirs
@@ -139,8 +145,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     let path = a:bundle.path
     lcd `=path`
 
-    let message = printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, path)
+    let message = printf('(%'.len(a:max).'d/%d): %s %s',
+          \ a:number, a:max, cmd, path)
   endif
 
   return [cmd, message]
@@ -180,7 +186,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let [cmd, message] =
         \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
-  call s:log(message)
+  call neobundle#installer#log(message)
   if cmd == ''
     " Skipped.
     return 0
@@ -195,8 +201,8 @@ function! s:sync(bang, bundle, number, max, is_revision)
   endif
 
   if s:get_last_status()
-    call s:error(a:bundle.path)
-    call s:error(result)
+    call neobundle#installer#error(a:bundle.path)
+    call neobundle#installer#error(result)
     return 0
   endif
 
@@ -235,22 +241,39 @@ function! s:check_really_clean(dirs)
         \        .len(a:dirs).' bundles? [y/n] : ') =~? 'y'
 endfunction
 
-function! s:log(msg)
-  if &filetype == 'unite'
-    call unite#print_message(a:msg)
+function! neobundle#installer#log(msg, ...)
+  let is_unite = get(a:000, 0, 0)
+  let msg = type(a:msg) == type([]) ?
+        \ a:msg : [a:msg]
+  call extend(s:log, msg)
+
+  if &filetype == 'unite' || is_unite
+    call unite#print_message(msg)
   else
-    echo a:msg
+    echo join(msg, "\n")
   endif
 endfunction
 
-function! s:error(msg)
-  if &filetype == 'unite'
-    call unite#print_error(a:msg)
-    return
-  endif
+function! neobundle#installer#error(msg, ...)
+  let is_unite = get(a:000, 0, 0)
+  let msg = type(a:msg) == type([]) ?
+        \ a:msg : [a:msg]
+  call extend(s:log, msg)
 
-  for msg in type(a:msg) == type([]) ?
-        \ a:msg : split(a:msg, '\n')
-    echohl WarningMsg | echomsg msg | echohl None
-  endfor
+  if &filetype == 'unite' || is_unite
+    call unite#print_error(msg)
+  else
+    echohl WarningMsg | echomsg join(msg, "\n") | echohl None
+  endif
 endfunction
+
+function! neobundle#installer#get_log()
+  return s:log
+endfunction
+
+function! neobundle#installer#clear_log()
+  let s:log = []
+endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
