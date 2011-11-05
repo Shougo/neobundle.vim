@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Nov 2011.
+" Last Modified: 05 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,7 @@ function! neobundle#installer#install(bang, ...)
 
   call neobundle#installer#log("Installed bundles:\n".join((empty(installed) ?
   \      ['no new bundles installed'] :
-  \      map(installed, 'v:val.name')),"\n"))
+  \      map(copy(installed), 'v:val.name')),"\n"))
 
   call neobundle#installer#helptags(installed)
 endf
@@ -68,10 +68,12 @@ function! neobundle#installer#helptags(bundles)
     return
   endif
 
-  let help_dirs = filter(a:bundles, 'v:val.has_doc()')
-  call map(help_dirs, 'v:val.helptags()')
+  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.path)')
+
+  call map(help_dirs, 's:helptags(v:val.path)')
   if !empty(help_dirs)
-    call neobundle#installer#log('Helptags: done. '.len(help_dirs).' bundles processed')
+    call neobundle#installer#log('Helptags: done. '
+          \ .len(help_dirs).' bundles processed')
   endif
   return help_dirs
 endfunction
@@ -220,6 +222,7 @@ function! s:install(bang, bundles)
   let max = len(a:bundles)
 
   for bundle in a:bundles
+    call add(_, bundle)
     if s:sync(a:bang, bundle, i, max, 0)
       if get(bundle, 'rev', '') != ''
         call s:sync(a:bang, bundle, i, max, 1)
@@ -232,6 +235,25 @@ function! s:install(bang, bundles)
   endfor
 
   return _
+endfunction
+
+function! s:has_doc(path)
+  return isdirectory(a:path.'/doc')
+        \   && (!filereadable(a:path.'/doc/tags')
+        \       || filewritable(a:path.'/doc/tags'))
+        \   && (!filereadable(a:path.'/doc/tags-??')
+        \       || filewritable(a:path.'/doc/tags-??'))
+        \   && (glob(a:path.'/doc/*.txt') != ''
+        \       || glob(a:path.'/doc/*.??x') != '')
+endfunction
+
+function! s:helptags(path)
+  try
+    helptags `=a:path . '/doc/'`
+  catch
+    call s:V.print_error('Error generating helptags in '.a:path)
+    call s:V.print_error(v:exception . ' ' . v:throwpoint)
+  endtry
 endfunction
 
 function! s:check_really_clean(dirs)

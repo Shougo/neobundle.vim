@@ -201,6 +201,7 @@ CHANGELOG					*neobundle-changelog*
 - Added neobundle/log source.
 - Improved log.
 - Fixed for Vim 7.2.
+- Fixed helptags error.
 
 2011-11-02
 - Fixed helptags.
