@@ -222,7 +222,6 @@ function! s:install(bang, bundles)
   let max = len(a:bundles)
 
   for bundle in a:bundles
-    call add(_, bundle)
     if s:sync(a:bang, bundle, i, max, 0)
       if get(bundle, 'rev', '') != ''
         call s:sync(a:bang, bundle, i, max, 1)
@@ -251,8 +250,8 @@ function! s:helptags(path)
   try
     helptags `=a:path . '/doc/'`
   catch
-    call s:V.print_error('Error generating helptags in '.a:path)
-    call s:V.print_error(v:exception . ' ' . v:throwpoint)
+    call neobundle#installer#error('Error generating helptags in '.a:path)
+    call neobundle#installer#error(v:exception . ' ' . v:throwpoint)
   endtry
 endfunction
 
