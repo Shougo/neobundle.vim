@@ -196,6 +196,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-10
+- Fixed parse bug.
+
 2011-11-04
 - Added :NeoBundleLog command.
 - Added neobundle/log source.
