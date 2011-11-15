@@ -215,8 +215,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
-2011-11-14
+2011-11-15
 - Improved nosync.
+- Implemented plugins reload.
 
 2011-11-10
 - Fixed parse bug.

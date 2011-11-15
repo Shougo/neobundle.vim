@@ -61,6 +61,8 @@ function! neobundle#installer#install(bang, ...)
   \      map(copy(installed), 'v:val.name')),"\n"))
 
   call neobundle#installer#helptags(installed)
+
+  call neobundle#config#reload()
 endf
 
 function! neobundle#installer#helptags(bundles)
