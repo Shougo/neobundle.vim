@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Nov 2011.
+" Last Modified: 10 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ function! s:parse_name(arg)
     endif
   else
     let name = a:arg
-    let uri  = 'git//github.com/vim-scripts/'.name.'.git'
+    let uri  = 'git://github.com/vim-scripts/'.name.'.git'
     let type = 'git'
   endif
 
