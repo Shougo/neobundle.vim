@@ -62,7 +62,7 @@ function! neobundle#installer#install(bang, ...)
 
   call neobundle#installer#helptags(installed)
 
-  call neobundle#config#reload()
+  call neobundle#config#reload(installed)
 endf
 
 function! neobundle#installer#helptags(bundles)

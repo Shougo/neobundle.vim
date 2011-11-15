@@ -91,7 +91,7 @@ function! s:source.async_gather_candidates(args, context)"{{{
   call neobundle#installer#log(messages, 1)
   call neobundle#installer#helptags(
         \ a:context.source__synced_bundles)
-  call neobundle#config#reload()
+  call neobundle#config#reload(a:context.source__synced_bundles)
 
   let a:context.is_async = 0
 

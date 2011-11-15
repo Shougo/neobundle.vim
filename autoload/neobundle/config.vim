@@ -40,7 +40,18 @@ function! neobundle#config#get_neobundles()
   return values(s:neobundles)
 endfunction
 
-function! neobundle#config#reload()
+function! neobundle#config#reload(bundles)
+  if empty(a:bundles)
+    return
+  endif
+
+  " Delete old g:loaded_xxx variables.
+  for var_name in keys(g:)
+    if var_name =~ '^loaded_'
+      execute 'unlet!' var_name
+    endif
+  endfor
+
   runtime! plugin/**.vim
   runtime! after/plugin/**.vim
 endfunction
