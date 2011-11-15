@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Nov 2011.
+" Last Modified: 15 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     let message = printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, cmd)
   else
-    if !a:bang
+    if !a:bang || a:bundle.type ==# 'nosync'
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Skipped')]
     endif
@@ -181,8 +181,6 @@ function! neobundle#installer#get_revision_command(bang, bundle, number, max)
 endfunction
 
 function! s:sync(bang, bundle, number, max, is_revision)
-  if a:bundle.type == 'nosync' | return 'todate' | endif
-
   let cwd = getcwd()
 
   let [cmd, message] =

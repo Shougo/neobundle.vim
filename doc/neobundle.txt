@@ -28,6 +28,7 @@ Introduction		|neobundle-introduction|
 Usage			|neobundle-usage|
 Install			|neobundle-install|
 Interface		|neobundle-interface|
+  Functions		  |neobundle-functions|
   Commands		  |neobundle-commands|
 Configulation Examples	|neobundle-examples|
 Unite sources		|neobundle-unite-sources|
@@ -76,6 +77,21 @@ And a path to the repository directory.
 INTERFACE					*neobundle-interface*
 
 ------------------------------------------------------------------------------
+FUNCTIONS 					*neobundle-functions*
+
+neobundle#rc({path})				*neobundle#rc()*
+	Initialize neobundle.vim. {path} is neobundle downloaded file path.
+>
+	filetype off
+	set runtimepath+='path to neobundle directory'
+	call neobundle#rc(expand('~/.bundle'))
+	
+	NeoBundle 'git://github.com/Shougo/clang_complete.git'
+	
+	filetype plugin on
+	filetype indent on
+<
+------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [{revision}]		*:Neobundle*
@@ -92,7 +108,6 @@ COMMANDS 					*neobundle-commands*
 		type		(String)
 		Repository type.
 		For example: nosync, git, svn, hg, ...
-		If type is "nosync", neobundle does not update automatically.
 
 		Examples:
 >
@@ -101,7 +116,6 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'tpope/vim-fugitive'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
-		NeoBundle 'muttator', {'type' : 'nosync'}
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
@@ -112,6 +126,11 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'Shougo/vimshell', '3787e5'
 		NeoBundle 'Shougo/vimshell', 'master'
+<
+		If type is "nosync", neobundle does not update
+		automatically(like pathogen.vim).
+>
+		NeoBundle 'muttator', {'type' : 'nosync'}
 <
 :NeoBundleInstall [{repository}]			*:NeoBundleInstall*
 		Installs {repository} plugins.
@@ -195,6 +214,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-11-14
+- Improved nosync.
 
 2011-11-04
 - Added :NeoBundleLog command.
