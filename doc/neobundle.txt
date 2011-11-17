@@ -218,6 +218,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-11-17
 - Improved parse name.
+- Fixed parse config.
 
 2011-11-16
 - Reload autoload scripts.

@@ -106,8 +106,8 @@ function! s:rtp_add(dir) abort
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
-  let bundle = extend(s:parse_options(a:opts),
-        \ s:parse_name(substitute(a:name,"['".'"]\+','','g')))
+  let bundle = extend(s:parse_name(substitute(a:name,"['".'"]\+','','g')),
+        \ s:parse_options(a:opts))
   let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
         \ get(bundle, 'directory', bundle.name))
   let bundle.orig_name = a:name
