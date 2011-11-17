@@ -119,6 +119,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
+		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 <
 		This supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -214,6 +215,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-11-17
+- Improved parse name.
 
 2011-11-16
 - Reload autoload scripts.
