@@ -153,7 +153,7 @@ function! s:parse_name(arg)
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
     if uri =~? 'svn'
       let type = 'svn'
-    elseif uri =~? 'hg' || uri =~? 'https\?://bitbucket'
+    elseif uri =~? 'hg' || uri =~? 'https\?://bitbucket' || uri =~? 'https://code\.google\.com'
       let type = 'hg'
     else
       let type = 'git'
