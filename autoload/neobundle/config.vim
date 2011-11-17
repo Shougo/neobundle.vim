@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 15 Nov 2011.
+" Last Modified: 17 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,8 +52,25 @@ function! neobundle#config#reload(bundles)
     endif
   endfor
 
-  runtime! plugin/**.vim
-  runtime! after/plugin/**.vim
+  silent! runtime! plugin/**.vim
+  silent! runtime! after/plugin/**.vim
+
+  " Reload autoload scripts.
+  let scripts = []
+  for line in split(s:redir('scriptnames'), "\n")
+    let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
+    if name != '' && name =~ '/autoload/'
+      call add(scripts, s:unify_path(name))
+    endif
+  endfor
+
+  for script in scripts
+    for bundle in a:bundles
+      if stridx(script, bundle.path) >= 0
+        silent! execute 'source' script
+      endif
+    endfor
+  endfor
 endfunction
 
 function! neobundle#config#bundle(arg, ...)
@@ -152,5 +169,16 @@ endfunction
 
 function! s:expand_path(path)
   return simplify(expand(a:path))
+endfunction
+
+function! s:redir(cmd)
+  redir => res
+  silent! execute a:cmd
+  redir END
+  return res
+endfunction
+
+function! s:unify_path(path)
+  return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
 endfunction
 

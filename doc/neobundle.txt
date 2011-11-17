@@ -215,6 +215,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-16
+- Reload autoload scripts.
+
 2011-11-15
 - Improved nosync.
 - Implemented plugins reload.
