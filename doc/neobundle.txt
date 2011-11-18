@@ -147,6 +147,9 @@ COMMANDS 					*neobundle-commands*
 		remove plugins. If {repository}s are added, remove
 		{repository}s plugins.
 
+:NeoBundleList 						*:NeoBundleList*
+		Print list of configured neobundles.
+
 :NeoBundleLog 						*:NeoBundleLog*
 		Print previous install logs.
 
@@ -229,6 +232,7 @@ CHANGELOG					*neobundle-changelog*
 2011-11-18
 - Improved installer.
 - Improved examples.
+- Added :NeoBundleList command.
 
 2011-11-17
 - Improved parse name.
