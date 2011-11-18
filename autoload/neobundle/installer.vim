@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Nov 2011.
+" Last Modified: 18 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,6 +51,10 @@ function! neobundle#installer#install(bang, ...)
   let bundles = (a:1 == '') ?
         \ neobundle#config#get_neobundles() :
         \ map(copy(a:000), 'neobundle#config#init_bundle(v:val, {})')
+  if !a:bang
+    let bundles = filter(copy(bundles),
+          \ "!isdirectory(expand(v:val.path))")
+  endif
 
   call neobundle#installer#clear_log()
   let installed = s:install(a:bang, bundles)
@@ -110,9 +114,7 @@ function! neobundle#installer#clean(bang, ...)
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
-  let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
-
-  if !isdirectory(repo_dir)
+  if !isdirectory(a:bundle.path)
     if a:bundle.type == 'svn'
       let cmd = 'svn checkout'
     elseif a:bundle.type == 'hg'

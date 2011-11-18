@@ -216,6 +216,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-18
+- Improved installer.
+
 2011-11-17
 - Improved parse name.
 - Fixed parse config.
