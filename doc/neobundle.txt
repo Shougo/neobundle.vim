@@ -233,6 +233,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved installer.
 - Improved examples.
 - Added :NeoBundleList command.
+- Fixed neobundle source error.
 
 2011-11-17
 - Improved parse name.

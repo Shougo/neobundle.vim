@@ -45,8 +45,6 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__synced_bundles = []
   let a:context.source__bang = index(a:args, '!') >= 0
   let a:context.source__number = 0
-  let a:context.source__max_bundles =
-        \ len(a:context.source__bundles)
   let a:context.source__process = {}
   let a:context.source__output = ''
 
@@ -54,6 +52,9 @@ function! s:source.hooks.on_init(args, context)"{{{
     let a:context.source__bundles = filter(copy(a:context.source__bundles),
           \ "!isdirectory(expand(v:val.path))")
   endif
+
+  let a:context.source__max_bundles =
+        \ len(a:context.source__bundles)
 
   call neobundle#installer#clear_log()
 endfunction"}}}
