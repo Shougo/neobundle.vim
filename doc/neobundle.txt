@@ -66,9 +66,9 @@ INSTALL						*neobundle-install*
 
 In first, git clone from the repository.
 >
-	git clone git@github.com:Shougo/neobundle.vim.git
+	$ mkdir -p ~/.vim/.bundle
+	$ git clone git@github.com:Shougo/neobundle.vim.git ~/.vim/.bundle/neobundle.vim
 <
-
 And a path to the repository directory.
 >
 	set runtimepath+='path to neobundle directory'
@@ -82,6 +82,7 @@ FUNCTIONS 					*neobundle-functions*
 neobundle#rc({path})				*neobundle#rc()*
 	Initialize neobundle.vim. {path} is neobundle downloaded file path.
 >
+	set nocompatible
 	filetype off
 	set runtimepath+='path to neobundle directory'
 	call neobundle#rc(expand('~/.bundle'))
@@ -113,7 +114,6 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
-		NeoBundle 'tpope/vim-fugitive'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
@@ -153,26 +153,36 @@ COMMANDS 					*neobundle-commands*
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
-	filetype off
+	set nocompatible                " recommend
+	filetype plugin indent off      " required!
 	
 	if has('vim_starting')
 	  set runtimepath+='path to neobundle directory'
 	
 	  call neobundle#rc(expand('~/.bundle'))
 	endif
+
+	" let neobundle manage neobundle
+	"NeoBundle 'Shougo/neobundle.vim'
 	
+	" My Bundles here:
+	"
+	" Original repositories in github
 	NeoBundle 'git://github.com/Shougo/clang_complete.git'
-	NeoBundle 'git://github.com/Shougo/echodoc.git'
-	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-	NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
-	NeoBundle 'git://github.com/Shougo/unite.vim.git'
-	NeoBundle 'git://github.com/Shougo/vim-vcs.git'
-	NeoBundle 'git://github.com/Shougo/vimfiler.git'
-	NeoBundle 'git://github.com/Shougo/vimshell.git'
-	NeoBundle 'git://github.com/Shougo/vinarise.git'
+	NeoBundle 'tpope/vim-fugitive'
+	" Vim-script repositories
+	NeoBundle 'FuzzyFinder'
+	NeoBundle 'rails.vim'
+	" Non-github repos
+	NeoBundle 'git://git.wincent.com/command-t.git'
+	" Non-git repos
+	NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+
+	" Invalid setting(Error occured).
+	"NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 	
-	filetype plugin on
-	filetype indent on
+	filetype plugin indent on       " required!
 <
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
@@ -218,6 +228,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-11-18
 - Improved installer.
+- Improved examples.
 
 2011-11-17
 - Improved parse name.
