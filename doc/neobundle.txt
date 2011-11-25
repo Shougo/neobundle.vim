@@ -229,6 +229,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-11-25
+- Fixed for Mercurial.
+
 2011-11-21
 - Added README.
 

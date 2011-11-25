@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 25 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,7 +139,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     if a:bundle.type == 'svn'
       let cmd = 'svn up'
     elseif a:bundle.type == 'hg'
-      let cmd = 'hg pull && hg up'
+      let cmd = 'hg pull -u'
     elseif a:bundle.type == 'git'
       let cmd = 'git pull --rebase'
     else
