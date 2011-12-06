@@ -229,6 +229,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-12-06
+- Improved option parse.
+
 2011-12-02
 - Improved reload.
 

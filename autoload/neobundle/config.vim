@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Dec 2011.
+" Last Modified: 06 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,9 +153,9 @@ function! s:parse_name(arg)
     let uri = a:arg
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
 
-    if uri =~? 'svn'
+    if uri =~? '/svn[/.]'
       let type = 'svn'
-    elseif uri =~? 'hg'
+    elseif uri =~? '/hg[/.@]'
           \ || uri =~? '\<https\?://bitbucket\.org/'
           \ || uri =~? '\<https://code\.google\.com/'
       let type = 'hg'
