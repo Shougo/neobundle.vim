@@ -229,6 +229,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2011-12-07
+- Improved assume protocols.
+
 2011-12-06
 - Improved option parse.
 
