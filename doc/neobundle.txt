@@ -95,7 +95,7 @@ neobundle#rc({path})				*neobundle#rc()*
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository} [{revision}]		*:Neobundle*
+:NeoBundle {repository} [{revision}]		*:NeoBundle*
 :NeoBundle {repository} [{dictionary}]
 		Configures neobundle.
 
@@ -152,6 +152,10 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleLog 						*:NeoBundleLog*
 		Print previous install logs.
+
+:NeoExternalBundle {repository} [{revision}]		*:NeoExternalBundle*
+		For external bundle settings, this command register neobundle,
+		but don't add to 'runtimepath'.
 
 ==============================================================================
 EXAMPLES					*neobundle-examples*
@@ -228,6 +232,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-12-19
+- Added NeoExternalBundle command.
 
 2011-12-07
 - Improved assume protocols.
