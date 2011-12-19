@@ -95,8 +95,8 @@ neobundle#rc({path})				*neobundle#rc()*
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository} [{revision}]		*:NeoBundle*
-:NeoBundle {repository} [{dictionary}]
+:NeoBundle {repository} [,{revision}]		*:NeoBundle*
+:NeoBundle {repository} [,{dictionary}]
 		Configures neobundle.
 
 		{dictionary} is has following keys.
@@ -153,7 +153,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleLog 						*:NeoBundleLog*
 		Print previous install logs.
 
-:NeoExternalBundle {repository} [{revision}]		*:NeoExternalBundle*
+:NeoExternalBundle {repository} [, {revision}]		*:NeoExternalBundle*
+:NeoExternalBundle {repository} [, {dictionary}]
 		For external bundle settings, this command register neobundle,
 		but don't add to 'runtimepath'.
 
