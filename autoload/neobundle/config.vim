@@ -85,6 +85,14 @@ function! neobundle#config#bundle(arg, ...)
   call s:rtp_add(path)
 endfunction
 
+function! neobundle#config#external_bundle(arg, ...)
+  let bundle = neobundle#config#init_bundle(a:arg, a:000)
+  let path = bundle.path
+  if !has_key(s:neobundles, path)
+    let s:neobundles[path] = bundle
+  endif
+endfunction
+
 function! neobundle#config#rm_bndle(path)
   if has_key(s:neobundles, a:path)
     call s:rtp_rm(s:neobundles[a:path].path)
