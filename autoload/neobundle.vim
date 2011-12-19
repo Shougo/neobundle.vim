@@ -28,6 +28,9 @@
 command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(<args>)
 
+command! -nargs=+ NeoExternalBundle
+      \ call neobundle#config#external_bundle(<args>)
+
 command! -nargs=? -bang NeoBundleInstall
       \ call neobundle#installer#install('!' == '<bang>', <q-args>)
 
