@@ -230,9 +230,14 @@ neobundle					*unite-action-neobundle*
 	update		Update bundles(Default action)
 	delete		Delete bundles
 	reinstall	Reinstall bundles
+	narrow		Narrow bundle files
+	edit		Browse bundle directory
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-12-20
+- Added edit and narrow action.
 
 2011-12-19
 - Added NeoExternalBundle command.
