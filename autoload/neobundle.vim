@@ -55,7 +55,7 @@ augroup END
 
 function! neobundle#rc(...)
   let s:neobundle_dir =
-        \ unite#util#substitute_path_separator(
+        \ neobundle#util#substitute_path_separator(
         \ expand(get(a:000, 0, '~/.vim/bundle')))
   call neobundle#config#init()
 endfunction

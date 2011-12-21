@@ -185,7 +185,7 @@ function! s:parse_name(arg)
 endfunction
 
 function! s:expand_path(path)
-  return unite#util#substitute_path_separator(simplify(expand(a:path)))
+  return neobundle#util#substitute_path_separator(simplify(expand(a:path)))
 endfunction
 
 function! s:redir(cmd)

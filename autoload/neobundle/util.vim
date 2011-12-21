@@ -30,14 +30,6 @@ set cpo&vim
 " Create vital module for neobundle
 let s:V = vital#of('neobundle')
 
-function! neobundle#util#system(...)
-  return call(s:V.system, a:000, s:V)
-endfunction
-
-function! neobundle#util#get_last_status(...)
-  return call(s:V.get_last_status, a:000, s:V)
-endfunction
-
 function! neobundle#util#substitute_path_separator(...)
   return call(s:V.substitute_path_separator, a:000, s:V)
 endfunction
