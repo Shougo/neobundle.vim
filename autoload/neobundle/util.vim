@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: neobundle.vim
+" FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 " Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
@@ -22,46 +22,24 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 0.1, for Vim 7.2
 "=============================================================================
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=+ NeoBundle
-      \ call neobundle#config#bundle(<args>)
+" Create vital module for neobundle
+let s:V = vital#of('neobundle')
 
-command! -nargs=+ NeoExternalBundle
-      \ call neobundle#config#external_bundle(<args>)
-
-command! -nargs=? -bang NeoBundleInstall
-      \ call neobundle#installer#install('!' == '<bang>', <q-args>)
-
-command! -nargs=? -bang NeoBundleClean
-      \ call neobundle#installer#clean('!' == '<bang>', <q-args>)
-
-command! -nargs=? -bang NeoBundleList
-      \ echo join(map(neobundle#config#get_neobundles(), 'v:val.name'), "\n")
-
-command! -nargs=0 NeoBundleDocs
-      \ call neobundle#installer#helptags(neobundle#config#get_neobundles())
-
-command! -nargs=0 NeoBundleLog echo join(neobundle#installer#get_log(), "\n")
-
-augroup neobundle
-  autocmd!
-  autocmd Syntax  vim syntax keyword vimCommand NeoBundle
-augroup END
-
-function! neobundle#rc(...)
-  let s:neobundle_dir =
-        \ unite#util#substitute_path_separator(
-        \ expand(get(a:000, 0, '~/.vim/bundle')))
-  call neobundle#config#init()
+function! neobundle#util#system(...)
+  return call(s:V.system, a:000, s:V)
 endfunction
 
-function! neobundle#get_neobundle_dir()
-  return s:neobundle_dir
+function! neobundle#util#get_last_status(...)
+  return call(s:V.get_last_status, a:000, s:V)
+endfunction
+
+function! neobundle#util#substitute_path_separator(...)
+  return call(s:V.substitute_path_separator, a:000, s:V)
 endfunction
 
 let &cpo = s:save_cpo

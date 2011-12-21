@@ -28,19 +28,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Create vital module for neobundle
-let s:V = vital#of('neobundle')
-
 let s:log = []
-
-" Wrapper function of system()
-function! s:system(...)
-  return call(s:V.system,a:000,s:V)
-endfunction
-
-function! s:get_last_status(...)
-  return call(s:V.get_last_status,a:000,s:V)
-endfunction
 
 function! neobundle#installer#install(bang, ...)
   let bundle_dir = neobundle#get_neobundle_dir()
@@ -102,8 +90,8 @@ function! neobundle#installer#clean(bang, ...)
     let cmd = (has('win32') || has('win64')) && !executable('rm') ?
           \ 'rmdir /S /Q' : 'rm -rf'
     redraw
-    let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
-    if s:get_last_status()
+    let result = neobundle#util#system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+    if neobundle#util#get_last_status()
       call neobundle#installer#error(result)
     endif
 
@@ -158,8 +146,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   return [cmd, message]
 endfunction
 function! neobundle#installer#get_revision_command(bang, bundle, number, max)
-  let repo_dir = substitute(
-        \ expand(a:bundle.path.'/.'.a:bundle.type.'/'), '\\', '/', 'g')
+  let repo_dir = unite#util#substitute_path_separator(
+        \ expand(a:bundle.path.'/.'.a:bundle.type.'/')
 
   " Lock revision.
   if a:bundle.type == 'svn'
@@ -197,7 +185,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return 0
   endif
 
-  let result = s:system(cmd)
+  let result = neobundle#util#system(cmd)
   echo ''
   redraw
 
@@ -205,7 +193,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     lcd `=cwd`
   endif
 
-  if s:get_last_status()
+  if neobundle#util#get_last_status()
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
     return 0

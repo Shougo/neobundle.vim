@@ -238,6 +238,7 @@ CHANGELOG					*neobundle-changelog*
 
 2011-12-21
 - Fixed substitute path separator.
+- Improved use vital module.
 
 2011-12-20
 - Added edit and narrow action.

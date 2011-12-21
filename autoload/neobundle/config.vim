@@ -25,7 +25,8 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-let s:V = vital#of('neobundle')
+let s:save_cpo = &cpo
+set cpo&vim
 
 if !exists('s:neobundles')
   let s:neobundles = {}
@@ -184,7 +185,7 @@ function! s:parse_name(arg)
 endfunction
 
 function! s:expand_path(path)
-  return substitute(simplify(expand(a:path)), '\\', '/', 'g')
+  return unite#util#substitute_path_separator(simplify(expand(a:path)))
 endfunction
 
 function! s:redir(cmd)
@@ -197,4 +198,7 @@ endfunction
 function! s:unify_path(path)
   return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
