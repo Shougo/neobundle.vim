@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,8 @@ augroup neobundle
 augroup END
 
 function! neobundle#rc(...)
-  let s:neobundle_dir = expand(get(a:000, 0, '~/.vim/bundle'))
+  let s:neobundle_dir =
+        \ substitute(expand(get(a:000, 0, '~/.vim/bundle')), '\\', '/', 'g')
   call neobundle#config#init()
 endfunction
 

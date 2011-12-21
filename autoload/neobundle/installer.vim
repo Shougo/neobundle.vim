@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Nov 2011.
+" Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,7 +158,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   return [cmd, message]
 endfunction
 function! neobundle#installer#get_revision_command(bang, bundle, number, max)
-  let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
+  let repo_dir = substitute(
+        \ expand(a:bundle.path.'/.'.a:bundle.type.'/'), '\\', '/', 'g')
 
   " Lock revision.
   if a:bundle.type == 'svn'

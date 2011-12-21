@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Dec 2011.
+" Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,7 +184,7 @@ function! s:parse_name(arg)
 endfunction
 
 function! s:expand_path(path)
-  return simplify(expand(a:path))
+  return substitute(simplify(expand(a:path)), '\\', '/', 'g')
 endfunction
 
 function! s:redir(cmd)
