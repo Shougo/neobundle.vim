@@ -84,6 +84,7 @@ function! neobundle#config#bundle(arg, ...)
 
   let s:neobundles[path] = bundle
   call s:rtp_add(path)
+  return bundle
 endfunction
 
 function! neobundle#config#external_bundle(arg, ...)
@@ -92,6 +93,7 @@ function! neobundle#config#external_bundle(arg, ...)
   if !has_key(s:neobundles, path)
     let s:neobundles[path] = bundle
   endif
+  return bundle
 endfunction
 
 function! neobundle#config#rm_bndle(path)
