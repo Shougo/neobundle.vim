@@ -73,9 +73,9 @@ function! neobundle#installer#helptags(bundles)
     return
   endif
 
-  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.path)')
+  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
 
-  call map(help_dirs, 's:helptags(v:val.path)')
+  call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
     call neobundle#installer#log('Helptags: done. '
           \ .len(help_dirs).' bundles processed')

@@ -79,11 +79,11 @@ function! neobundle#config#bundle(arg, ...)
   let bundle = neobundle#config#init_bundle(a:arg, a:000)
   let path = bundle.path
   if has_key(s:neobundles, path)
-    call s:rtp_rm(path)
+    call s:rtp_rm(bundle.rtp)
   endif
 
   let s:neobundles[path] = bundle
-  call s:rtp_add(path)
+  call s:rtp_add(bundle.rtp)
   return bundle
 endfunction
 
@@ -98,7 +98,7 @@ endfunction
 
 function! neobundle#config#rm_bndle(path)
   if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path].path)
+    call s:rtp_rm(s:neobundles[a:path].rtp)
     call remove(s:neobundles, a:path)
   endif
 endfunction
@@ -122,6 +122,7 @@ function! neobundle#config#init_bundle(name, opts)
         \ s:parse_options(a:opts))
   let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
         \ get(bundle, 'directory', bundle.name))
+  let bundle.rtp = s:expand_path(bundle.path.'/'.get(bundle, 'rtp', '').'/')
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
