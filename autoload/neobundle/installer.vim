@@ -158,7 +158,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 endfunction
 function! neobundle#installer#get_revision_command(bang, bundle, number, max)
   let repo_dir = neobundle#util#substitute_path_separator(
-        \ expand(a:bundle.path.'/.'.a:bundle.type.'/')
+        \ expand(a:bundle.path.'/.'.a:bundle.type.'/'))
 
   " Lock revision.
   if a:bundle.type == 'svn'
