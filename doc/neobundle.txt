@@ -111,7 +111,10 @@ COMMANDS 					*neobundle-commands*
 		For example: nosync, git, svn, hg, ...
 
 		rtp		(String)
-		Runtimepath.
+		Specify runtime path.
+		You may use this option when the repository has Vim plugin in
+		sub directory.
+		For example: https://github.com/rstacruz/sparkup
 
 		Examples:
 >
