@@ -126,7 +126,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
-		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
 <
 		This supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -242,6 +242,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2011-12-31
+- Improved neobundle initialize.
 
 2011-12-21
 - Fixed substitute path separator.
