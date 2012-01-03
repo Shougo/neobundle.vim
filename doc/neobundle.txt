@@ -245,6 +245,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-01-03
 - Added source completion.
+- Improved neobundle/install source behavior.
 
 2011-12-31
 - Improved neobundle initialize.
