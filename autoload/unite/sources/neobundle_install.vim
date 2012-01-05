@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! s:source.hooks.on_init(args, context)"{{{
 
   if !a:context.source__bang
     let a:context.source__bundles = filter(copy(a:context.source__bundles),
-          \ "!isdirectory(expand(v:val.path))")
+          \ "!isdirectory(neobundle#util#expand(v:val.path))")
   endif
 
   let a:context.source__max_bundles =

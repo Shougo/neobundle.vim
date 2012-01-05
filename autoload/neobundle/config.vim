@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Dec 2011.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,13 +108,13 @@ function! s:rtp_rm_all_bundles()
 endfunction
 
 function! s:rtp_rm(dir)
-  execute 'set rtp-='.fnameescape(expand(a:dir))
-  execute 'set rtp-='.fnameescape(expand(a:dir.'/after'))
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir))
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
 function! s:rtp_add(dir) abort
-  execute 'set rtp^='.fnameescape(expand(a:dir))
-  execute 'set rtp+='.fnameescape(expand(a:dir.'/after'))
+  execute 'set rtp^='.fnameescape(neobundle#util#expand(a:dir))
+  execute 'set rtp+='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
@@ -192,7 +192,8 @@ function! s:parse_name(arg)
 endfunction
 
 function! s:expand_path(path)
-  return neobundle#util#substitute_path_separator(simplify(expand(a:path)))
+  return neobundle#util#substitute_path_separator(
+        \ simplify(neobundle#util#expand(a:path)))
 endfunction
 
 function! s:redir(cmd)

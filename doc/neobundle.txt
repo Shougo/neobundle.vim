@@ -243,6 +243,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-01-05
+- Fixed expand() problem.
+
 2012-01-03
 - Added source completion.
 - Improved neobundle/install source behavior.
