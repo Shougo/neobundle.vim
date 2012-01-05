@@ -245,6 +245,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-01-05
 - Fixed expand() problem.
+- Improved neobundle source.
 
 2012-01-03
 - Added source completion.
