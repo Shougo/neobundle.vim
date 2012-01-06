@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,9 @@ function! neobundle#util#substitute_path_separator(...)
 endfunction
 function! neobundle#util#expand(path)
   return expand(escape(a:path, '*?[]"={}'))
+endfunction
+function! neobundle#util#is_windows()
+  return has('win32') || has('win64')
 endfunction
 
 let &cpo = s:save_cpo

@@ -52,6 +52,8 @@ let s:source = {
 
 function! s:source.hooks.on_init(args, context)"{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
+  let a:context.source__bang =
+        \ index(a:args, '!') >= 0
   let a:context.source__bundles = empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
@@ -63,7 +65,8 @@ function! s:source.gather_candidates(args, context)"{{{
   for bundle in neobundle#config#get_neobundles()
     let dict = {
         \ 'word' : printf('%-'.max.'s : %s',
-        \         bundle.name, s:get_commit_status(bundle)),
+        \         bundle.name, s:get_commit_status(
+        \         a:context.source__bang, bundle)),
         \ 'kind' : 'directory',
         \ 'action__path' : bundle.path,
         \ 'action__directory' : bundle.path,
@@ -76,7 +79,13 @@ function! s:source.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-function! s:get_commit_status(bundle)
+function! s:get_commit_status(bang, bundle)
+  if a:bang && !neobundle#util#is_windows()
+        \ || !a:bang && neobundle#util#is_windows()
+    return neobundle#util#substitute_path_separator(
+          \ fnamemodify(a:bundle.path, ':~'))
+  endif
+
   if !isdirectory(a:bundle.path)
     return ''
   endif

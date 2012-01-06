@@ -208,6 +208,12 @@ Here let me explain about a source for |unite| provided in neobundle.
 neobundle
 		Nominates bundles as a candidate.
 		This source required |vimproc| plugin.
+		
+		Note: In windows
+		If argment is bang(!), print plugins path instead of plugins status.
+		Note: Others
+		If argment is bang(!), print plugins status instead of plugins path.
+		
 		http://github.com/Shougo/vimproc
 
 							*neobundle-unite-source-neobundle-install*
@@ -245,6 +251,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-01-06
 - Improved neobundle source view.
+- Improved neobundle source behavior.
 
 2012-01-05
 - Fixed expand() problem.
