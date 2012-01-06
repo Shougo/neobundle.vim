@@ -80,14 +80,14 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 function! s:get_commit_status(bang, bundle)
+  if !isdirectory(a:bundle.path)
+    return 'Not installed'
+  endif
+
   if a:bang && !neobundle#util#is_windows()
         \ || !a:bang && neobundle#util#is_windows()
     return neobundle#util#substitute_path_separator(
           \ fnamemodify(a:bundle.path, ':~'))
-  endif
-
-  if !isdirectory(a:bundle.path)
-    return ''
   endif
 
   if a:bundle.type == 'svn'
@@ -111,7 +111,8 @@ function! s:get_commit_status(bang, bundle)
   lcd `=cwd`
 
   if s:get_last_status()
-    return ''
+    return printf('Error(%d) occured when executing "%s"',
+          \ s:get_last_status(), cmd)
   endif
 
   return output
