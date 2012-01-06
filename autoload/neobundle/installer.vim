@@ -87,11 +87,11 @@ function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
   let all_dirs = split(neobundle#util#substitute_path_separator(
         \ globpath(neobundle#get_neobundle_dir(), '*')), "\n")
-  let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
-
-  let rm_dirs = a:0 ==  0 ? [] :
-        \ map(neobundle#config#search(a:000), 'v:val.path')
-  let x_dirs += rm_dirs
+  if a:0 == 0
+    let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
+  else
+    let x_dirs = map(neobundle#config#search(a:000), 'v:val.path')
+  endif
 
   if empty(x_dirs)
     call neobundle#installer#log("All clean!")
