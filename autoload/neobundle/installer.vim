@@ -99,7 +99,7 @@ function! neobundle#installer#clean(bang, ...)
   end
 
   if a:bang || s:check_really_clean(x_dirs)
-    let cmd = (has('win32') || has('win64')) && !executable('rm') ?
+    let cmd = neobundle#util#is_windows() ?
           \ 'rmdir /S /Q' : 'rm -rf'
     redraw
     let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
