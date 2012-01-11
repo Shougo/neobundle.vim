@@ -173,9 +173,9 @@ EXAMPLES					*neobundle-examples*
 	
 	if has('vim_starting')
 	  set runtimepath+='path to neobundle directory'
-	
-	  call neobundle#rc(expand('~/.bundle'))
 	endif
+	
+	call neobundle#rc(expand('~/.bundle'))
 
 	" let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
@@ -253,6 +253,7 @@ CHANGELOG					*neobundle-changelog*
 - Fixed :NeoBundleClean bug.
 - Comment line is allowed.
 - Improved :NeoBundle parse.
+- Fixed example.
 
 2012-01-08
 - Fixed clean eror.
