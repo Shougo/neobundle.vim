@@ -252,6 +252,7 @@ CHANGELOG					*neobundle-changelog*
 2012-01-11
 - Fixed :NeoBundleClean bug.
 - Comment line is allowed.
+- Improved :NeoBundle parse.
 
 2012-01-08
 - Fixed clean eror.
