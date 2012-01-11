@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 11 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,8 +28,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=+ NeoBundle
-      \ call neobundle#config#bundle(<args>)
+command! -nargs=+ NeoBundle call neobundle#config#bundle(
+      \ substitute(<q-args>, '\s"[^\-:.%#=*].*$', '', ''))
 
 command! -nargs=+ NeoExternalBundle
       \ call neobundle#config#external_bundle(<args>)

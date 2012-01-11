@@ -194,8 +194,8 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
-	" Invalid setting(Error occured).
-	"NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
+	" Comment is allowed.
+	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 	
 	filetype plugin indent on       " required!
 <
@@ -251,6 +251,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-01-11
 - Fixed :NeoBundleClean bug.
+- Comment line is allowed.
 
 2012-01-08
 - Fixed clean eror.
