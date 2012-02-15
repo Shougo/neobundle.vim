@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 Jan 2012.
+" Last Modified: 15 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -297,6 +297,10 @@ endfunction
 
 function! neobundle#installer#clear_log()
   let s:log = []
+endfunction
+
+function! neobundle#installer#has_vimproc()
+  return call(s:V.has_vimproc, a:000, s:V)
 endfunction
 
 let &cpo = s:save_cpo

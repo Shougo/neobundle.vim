@@ -254,6 +254,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-02-15
+- Added neobundle#installer#has_vimproc().
+
 2012-01-17
 - Added Vimpusher web service description.
 
