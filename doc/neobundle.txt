@@ -254,6 +254,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-02-16
+- Fixed neobundle initialization.
+
 2012-02-15
 - Added neobundle#installer#has_vimproc().
 

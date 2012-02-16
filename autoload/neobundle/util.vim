@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 16 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,17 +27,16 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Create vital module for neobundle
-let s:V = vital#of('neobundle')
+let s:is_windows = has('win32') || has('win64')
 
-function! neobundle#util#substitute_path_separator(...)
-  return call(s:V.substitute_path_separator, a:000, s:V)
+function! neobundle#util#substitute_path_separator(path)
+  return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction
 function! neobundle#util#expand(path)
   return expand(escape(a:path, '*?[]"={}'))
 endfunction
 function! neobundle#util#is_windows()
-  return has('win32') || has('win64')
+  return s:is_windows
 endfunction
 
 let &cpo = s:save_cpo
