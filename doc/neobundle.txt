@@ -74,7 +74,7 @@ In first, git clone from the repository.
 Note: git command is required.
 >
 	$ mkdir -p ~/.vim/.bundle
-	$ git clone git@github.com:Shougo/neobundle.vim.git ~/.vim/.bundle/neobundle.vim
+	$ git clone git:Shougo/neobundle.vim.git ~/.vim/.bundle/neobundle.vim
 <
 And a path to the repository directory.
 >
