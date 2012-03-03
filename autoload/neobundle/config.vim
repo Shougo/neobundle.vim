@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Dec 2011.
+" Last Modified: 24 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,7 +25,8 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-let s:V = vital#of('neobundle')
+let s:save_cpo = &cpo
+set cpo&vim
 
 if !exists('s:neobundles')
   let s:neobundles = {}
@@ -52,8 +53,8 @@ function! neobundle#config#reload(bundles)
     endif
   endfor
 
-  silent! runtime! plugin/**.vim
-  silent! runtime! after/plugin/**.vim
+  silent! runtime! plugin/**/*.vim
+  silent! runtime! after/plugin/**/*.vim
 
   " Reload autoload scripts.
   let scripts = []
@@ -74,20 +75,35 @@ function! neobundle#config#reload(bundles)
   endfor
 endfunction
 
-function! neobundle#config#bundle(arg, ...)
-  let bundle = neobundle#config#init_bundle(a:arg, a:000)
+function! neobundle#config#bundle(arg)
+  sandbox let args = eval('[' . a:arg . ']')
+  if empty(args)
+    return {}
+  endif
+
+  let bundle = neobundle#config#init_bundle(args[0], args[1:])
   let path = bundle.path
   if has_key(s:neobundles, path)
-    call s:rtp_rm(path)
+    call s:rtp_rm(bundle.rtp)
   endif
 
   let s:neobundles[path] = bundle
-  call s:rtp_add(path)
+  call s:rtp_add(bundle.rtp)
+  return bundle
+endfunction
+
+function! neobundle#config#external_bundle(arg, ...)
+  let bundle = neobundle#config#init_bundle(a:arg, a:000)
+  let path = bundle.path
+  if !has_key(s:neobundles, path)
+    let s:neobundles[path] = bundle
+  endif
+  return bundle
 endfunction
 
 function! neobundle#config#rm_bndle(path)
   if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path].path)
+    call s:rtp_rm(s:neobundles[a:path].rtp)
     call remove(s:neobundles, a:path)
   endif
 endfunction
@@ -97,13 +113,13 @@ function! s:rtp_rm_all_bundles()
 endfunction
 
 function! s:rtp_rm(dir)
-  execute 'set rtp-='.fnameescape(expand(a:dir))
-  execute 'set rtp-='.fnameescape(expand(a:dir.'/after'))
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir))
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
 function! s:rtp_add(dir) abort
-  execute 'set rtp^='.fnameescape(expand(a:dir))
-  execute 'set rtp+='.fnameescape(expand(a:dir.'/after'))
+  execute 'set rtp^='.fnameescape(neobundle#util#expand(a:dir))
+  execute 'set rtp+='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
@@ -111,6 +127,11 @@ function! neobundle#config#init_bundle(name, opts)
         \ s:parse_options(a:opts))
   let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
         \ get(bundle, 'directory', bundle.name))
+  let bundle.rtp = s:expand_path(bundle.path.'/'.get(bundle, 'rtp', ''))
+  if bundle.rtp =~ '[/\\]$'
+    " Chomp.
+    let bundle.rtp = bundle.rtp[: -2]
+  endif
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
@@ -153,13 +174,17 @@ function! s:parse_name(arg)
     let uri = a:arg
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
 
-    if uri =~? 'svn'
+    if uri =~? '^git://'
+      " Git protocol.
+      let type = 'git'
+    elseif uri =~? '/svn[/.]'
       let type = 'svn'
-    elseif uri =~? 'hg'
+    elseif uri =~? '/hg[/.@]'
           \ || uri =~? '\<https\?://bitbucket\.org/'
           \ || uri =~? '\<https://code\.google\.com/'
       let type = 'hg'
     else
+      " Assume git(may not..).
       let type = 'git'
     endif
   else
@@ -172,7 +197,8 @@ function! s:parse_name(arg)
 endfunction
 
 function! s:expand_path(path)
-  return simplify(expand(a:path))
+  return neobundle#util#substitute_path_separator(
+        \ simplify(neobundle#util#expand(a:path)))
 endfunction
 
 function! s:redir(cmd)
@@ -185,4 +211,7 @@ endfunction
 function! s:unify_path(path)
   return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 

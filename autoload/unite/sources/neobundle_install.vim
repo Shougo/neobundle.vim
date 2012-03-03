@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,14 +43,15 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
   let a:context.source__synced_bundles = []
-  let a:context.source__bang = index(a:args, '!') >= 0
+  let a:context.source__bang =
+        \ index(a:args, '!') >= 0 || !empty(bundle_names)
   let a:context.source__number = 0
   let a:context.source__process = {}
   let a:context.source__output = ''
 
   if !a:context.source__bang
     let a:context.source__bundles = filter(copy(a:context.source__bundles),
-          \ "!isdirectory(expand(v:val.path))")
+          \ "!isdirectory(neobundle#util#expand(v:val.path))")
   endif
 
   let a:context.source__max_bundles =
@@ -104,6 +105,10 @@ function! s:source.async_gather_candidates(args, context)"{{{
   " Finish.
   call neobundle#installer#log('[neobundle/install] Completed.', 1)
   return []
+endfunction"}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+    return ['!'] + map(neobundle#config#get_neobundles(), 'v:val.name')
 endfunction"}}}
 
 function! s:sync(bundle, context, is_revision)

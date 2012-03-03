@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2011.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,17 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Create vital module for neobundle
+let s:V = vital#of('neobundle')
+
+function! s:system(...)
+  return call(s:V.system, a:000, s:V)
+endfunction
+
+function! s:get_last_status(...)
+  return call(s:V.get_last_status, a:000, s:V)
+endfunction
+
 function! unite#sources#neobundle#define()"{{{
   return unite#util#has_vimproc() ? s:source : {}
 endfunction"}}}
@@ -41,6 +52,8 @@ let s:source = {
 
 function! s:source.hooks.on_init(args, context)"{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
+  let a:context.source__bang =
+        \ index(a:args, '!') >= 0
   let a:context.source__bundles = empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
@@ -48,14 +61,62 @@ endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
   let max = max(map(copy(neobundle#config#get_neobundles()), 'len(v:val.name)'))
-  return map(copy(neobundle#config#get_neobundles()), "{
-        \ 'word' : printf('%-".max."s : %s', v:val.name, v:val.path),
-        \ 'action__path' : v:val.path,
-        \ 'action__directory' : v:val.path,
-        \ 'action__bundle' : v:val,
-        \ 'action__bundle_name' : v:val.name,
-        \ }")
+  let _ = []
+  for bundle in neobundle#config#get_neobundles()
+    let dict = {
+        \ 'word' : printf('%-'.max.'s : %s',
+        \         bundle.name, s:get_commit_status(
+        \         a:context.source__bang, bundle)),
+        \ 'kind' : 'directory',
+        \ 'action__path' : bundle.path,
+        \ 'action__directory' : bundle.path,
+        \ 'action__bundle' : bundle,
+        \ 'action__bundle_name' : bundle.name,
+        \ }
+    call add(_, dict)
+  endfor
+
+  return _
 endfunction"}}}
+
+function! s:get_commit_status(bang, bundle)
+  if !isdirectory(a:bundle.path)
+    return 'Not installed'
+  endif
+
+  if a:bang && !neobundle#util#is_windows()
+        \ || !a:bang && neobundle#util#is_windows()
+    return neobundle#util#substitute_path_separator(
+          \ fnamemodify(a:bundle.path, ':~'))
+  endif
+
+  if a:bundle.type == 'svn'
+    " Todo:
+    return ''
+  elseif a:bundle.type == 'hg'
+    " Todo:
+    return ''
+  elseif a:bundle.type == 'git'
+    let cmd = 'git log -1 --pretty=format:''%h [%cr] %s'''
+  else
+    return ''
+  endif
+
+  let cwd = getcwd()
+
+  lcd `=a:bundle.path`
+
+  let output = s:system(cmd)
+
+  lcd `=cwd`
+
+  if s:get_last_status()
+    return printf('Error(%d) occured when executing "%s"',
+          \ s:get_last_status(), cmd)
+  endif
+
+  return output
+endfunction
 
 " Actions"{{{
 let s:source.action_table.update = {

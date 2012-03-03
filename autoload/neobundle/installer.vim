@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Nov 2011.
+" Last Modified: 15 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,16 +31,15 @@ set cpo&vim
 " Create vital module for neobundle
 let s:V = vital#of('neobundle')
 
-let s:log = []
-
-" Wrapper function of system()
 function! s:system(...)
-  return call(s:V.system,a:000,s:V)
+  return call(s:V.system, a:000, s:V)
 endfunction
 
 function! s:get_last_status(...)
-  return call(s:V.get_last_status,a:000,s:V)
+  return call(s:V.get_last_status, a:000, s:V)
 endfunction
+
+let s:log = []
 
 function! neobundle#installer#install(bang, ...)
   let bundle_dir = neobundle#get_neobundle_dir()
@@ -53,7 +52,7 @@ function! neobundle#installer#install(bang, ...)
         \ map(copy(a:000), 'neobundle#config#init_bundle(v:val, {})')
   if !a:bang
     let bundles = filter(copy(bundles),
-          \ "!isdirectory(expand(v:val.path))")
+          \ "!isdirectory(neobundle#util#expand(v:val.path))")
   endif
 
   call neobundle#installer#clear_log()
@@ -74,9 +73,9 @@ function! neobundle#installer#helptags(bundles)
     return
   endif
 
-  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.path)')
+  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
 
-  call map(help_dirs, 's:helptags(v:val.path)')
+  call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
     call neobundle#installer#log('Helptags: done. '
           \ .len(help_dirs).' bundles processed')
@@ -86,12 +85,13 @@ endfunction
 
 function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
-  let all_dirs = split(globpath(neobundle#get_neobundle_dir(), '*'), "\n")
-  let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
-
-  let rm_dirs = a:0 ==  0 ? [] :
-        \ map(neobundle#config#search(a:000), 'v:val.path')
-  let x_dirs += rm_dirs
+  let all_dirs = split(neobundle#util#substitute_path_separator(
+        \ globpath(neobundle#get_neobundle_dir(), '*')), "\n")
+  if get(a:000, 0, '') == ''
+    let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
+  else
+    let x_dirs = map(neobundle#config#search(a:000), 'v:val.path')
+  endif
 
   if empty(x_dirs)
     call neobundle#installer#log("All clean!")
@@ -99,7 +99,7 @@ function! neobundle#installer#clean(bang, ...)
   end
 
   if a:bang || s:check_really_clean(x_dirs)
-    let cmd = (has('win32') || has('win64')) && !executable('rm') ?
+    let cmd = neobundle#util#is_windows() ?
           \ 'rmdir /S /Q' : 'rm -rf'
     redraw
     let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
@@ -107,7 +107,7 @@ function! neobundle#installer#clean(bang, ...)
       call neobundle#installer#error(result)
     endif
 
-    for dir in rm_dirs
+    for dir in x_dirs
       call neobundle#config#rm_bndle(dir)
     endfor
   endif
@@ -158,7 +158,8 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   return [cmd, message]
 endfunction
 function! neobundle#installer#get_revision_command(bang, bundle, number, max)
-  let repo_dir = expand(a:bundle.path.'/.'.a:bundle.type.'/')
+  let repo_dir = neobundle#util#substitute_path_separator(
+        \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
 
   " Lock revision.
   if a:bundle.type == 'svn'
@@ -296,6 +297,10 @@ endfunction
 
 function! neobundle#installer#clear_log()
   let s:log = []
+endfunction
+
+function! neobundle#installer#has_vimproc()
+  return call(s:V.has_vimproc, a:000, s:V)
 endfunction
 
 let &cpo = s:save_cpo

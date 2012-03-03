@@ -61,6 +61,11 @@ unite.vim plugin).
 <
 This plugin setting is compatible with Vundle.vim :-)
 
+Note: Instead of vundle, neobundle has not search plugins system.  But you can
+search popular plugins and add neobundle settings using Vimpusher web
+service(Registration is required).
+	http://www.vimpusher.com/
+
 ==============================================================================
 INSTALL						*neobundle-install*
 
@@ -97,8 +102,8 @@ neobundle#rc({path})				*neobundle#rc()*
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository} [{revision}]		*:Neobundle*
-:NeoBundle {repository} [{dictionary}]
+:NeoBundle {repository} [,{revision}]		*:NeoBundle*
+:NeoBundle {repository} [,{dictionary}]
 		Configures neobundle.
 
 		{dictionary} is has following keys.
@@ -112,6 +117,12 @@ COMMANDS 					*neobundle-commands*
 		Repository type.
 		For example: nosync, git, svn, hg, ...
 
+		rtp		(String)
+		Specify runtime path.
+		You may use this option when the repository has Vim plugin in
+		sub directory.
+		For example: https://github.com/rstacruz/sparkup
+
 		Examples:
 >
 		NeoBundle 'git_repository_uri'
@@ -122,6 +133,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
 <
 		This supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -155,6 +167,11 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleLog 						*:NeoBundleLog*
 		Print previous install logs.
 
+:NeoExternalBundle {repository} [, {revision}]		*:NeoExternalBundle*
+:NeoExternalBundle {repository} [, {dictionary}]
+		For external bundle settings, this command register neobundle,
+		but don't add to 'runtimepath'.
+
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
@@ -163,9 +180,9 @@ EXAMPLES					*neobundle-examples*
 	
 	if has('vim_starting')
 	  set runtimepath+='path to neobundle directory'
-	
-	  call neobundle#rc(expand('~/.bundle'))
 	endif
+	
+	call neobundle#rc(expand('~/.bundle'))
 
 	" let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
@@ -184,8 +201,8 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
-	" Invalid setting(Error occured).
-	"NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
+	" Comment is allowed.
+	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 	
 	filetype plugin indent on       " required!
 <
@@ -198,6 +215,12 @@ Here let me explain about a source for |unite| provided in neobundle.
 neobundle
 		Nominates bundles as a candidate.
 		This source required |vimproc| plugin.
+		
+		Note: In windows
+		If argment is bang(!), print plugins path instead of plugins status.
+		Note: Others
+		If argment is bang(!), print plugins status instead of plugins path.
+		
 		http://github.com/Shougo/vimproc
 
 							*neobundle-unite-source-neobundle-install*
@@ -227,12 +250,68 @@ neobundle					*unite-action-neobundle*
 	update		Update bundles(Default action)
 	delete		Delete bundles
 	reinstall	Reinstall bundles
+	narrow		Narrow bundle files
+	edit		Browse bundle directory
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
 2012-03-03
 - Improved documentation.
+
+2012-02-24
+- Fixed :NeoBundleInstall bug.
+
+2012-02-16
+- Fixed neobundle initialization.
+
+2012-02-15
+- Added neobundle#installer#has_vimproc().
+
+2012-01-17
+- Added Vimpusher web service description.
+
+2012-01-11
+- Fixed :NeoBundleClean bug.
+- Comment line is allowed.
+- Improved :NeoBundle parse.
+- Fixed example.
+
+2012-01-08
+- Fixed clean eror.
+
+2012-01-06
+- Improved neobundle source view.
+- Improved neobundle source behavior.
+- Improved :NeoBundleClean behavior.
+
+2012-01-05
+- Fixed expand() problem.
+- Improved neobundle source.
+
+2012-01-03
+- Added source completion.
+- Improved neobundle/install source behavior.
+
+2011-12-31
+- Improved neobundle initialize.
+
+2011-12-21
+- Fixed substitute path separator.
+- Improved use vital module.
+- Don't independent unite.
+
+2011-12-20
+- Added edit and narrow action.
+
+2011-12-19
+- Added NeoExternalBundle command.
+
+2011-12-07
+- Improved assume protocols.
+
+2011-12-06
+- Improved option parse.
 
 2011-12-02
 - Improved reload.

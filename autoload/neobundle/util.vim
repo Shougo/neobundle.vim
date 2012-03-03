@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: neobundle.vim
+" FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 " Last Modified: 16 Feb 2012.
 " License: MIT license  {{{
@@ -22,46 +22,21 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 0.1, for Vim 7.2
 "=============================================================================
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=+ NeoBundle call neobundle#config#bundle(
-      \ substitute(<q-args>, '\s"[^\-:.%#=*].*$', '', ''))
+let s:is_windows = has('win32') || has('win64')
 
-command! -nargs=+ NeoExternalBundle
-      \ call neobundle#config#external_bundle(<args>)
-
-command! -nargs=? -bang NeoBundleInstall
-      \ call neobundle#installer#install('!' == '<bang>', <q-args>)
-
-command! -nargs=? -bang NeoBundleClean
-      \ call neobundle#installer#clean('!' == '<bang>', <q-args>)
-
-command! -nargs=? -bang NeoBundleList
-      \ echo join(map(neobundle#config#get_neobundles(), 'v:val.name'), "\n")
-
-command! -nargs=0 NeoBundleDocs
-      \ call neobundle#installer#helptags(neobundle#config#get_neobundles())
-
-command! -nargs=0 NeoBundleLog echo join(neobundle#installer#get_log(), "\n")
-
-augroup neobundle
-  autocmd!
-  autocmd Syntax  vim syntax keyword vimCommand NeoBundle
-augroup END
-
-function! neobundle#rc(...)
-  let s:neobundle_dir =
-        \ neobundle#util#substitute_path_separator(
-        \ neobundle#util#expand(get(a:000, 0, '~/.vim/bundle')))
-  call neobundle#config#init()
+function! neobundle#util#substitute_path_separator(path)
+  return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction
-
-function! neobundle#get_neobundle_dir()
-  return s:neobundle_dir
+function! neobundle#util#expand(path)
+  return expand(escape(a:path, '*?[]"={}'))
+endfunction
+function! neobundle#util#is_windows()
+  return s:is_windows
 endfunction
 
 let &cpo = s:save_cpo
