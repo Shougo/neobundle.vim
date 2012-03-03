@@ -78,7 +78,11 @@ Note: git command is required.
 <
 And a path to the repository directory.
 >
-	set runtimepath+='path to neobundle directory'
+	set runtimepath+={path to neobundle directory}
+<
+Example:
+>
+	set runtimepath+=~/.vim/.bundle/neobundle.vim
 <
 ==============================================================================
 INTERFACE					*neobundle-interface*
@@ -91,7 +95,7 @@ neobundle#rc({path})				*neobundle#rc()*
 >
 	set nocompatible
 	filetype off
-	set runtimepath+='path to neobundle directory'
+	set runtimepath+={path to neobundle directory}
 	call neobundle#rc(expand('~/.bundle'))
 	
 	NeoBundle 'git://github.com/Shougo/clang_complete.git'
@@ -179,7 +183,7 @@ EXAMPLES					*neobundle-examples*
 	filetype plugin indent off      " required!
 	
 	if has('vim_starting')
-	  set runtimepath+='path to neobundle directory'
+	  set runtimepath+={path to neobundle directory}
 	endif
 	
 	call neobundle#rc(expand('~/.bundle'))
