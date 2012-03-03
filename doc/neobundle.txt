@@ -54,8 +54,8 @@ To update, run this command.
 >
 	:NeoBundleInstall!
 <
-To use unite.vim interface, use this command (required vimproc and unite.vim
-plugin.)
+Note: To use unite.vim interface, use this command (required vimproc and
+unite.vim plugin).
 >
 	:Unite neobundle/install:!
 <
@@ -65,6 +65,8 @@ This plugin setting is compatible with Vundle.vim :-)
 INSTALL						*neobundle-install*
 
 In first, git clone from the repository.
+
+Note: git command is required.
 >
 	$ mkdir -p ~/.vim/.bundle
 	$ git clone git@github.com:Shougo/neobundle.vim.git ~/.vim/.bundle/neobundle.vim
@@ -228,6 +230,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-03-03
+- Improved documentation.
 
 2011-12-02
 - Improved reload.
