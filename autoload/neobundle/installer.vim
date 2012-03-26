@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 26 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,12 +56,19 @@ function! neobundle#installer#install(bang, ...)
   endif
 
   call neobundle#installer#clear_log()
-  let installed = s:install(a:bang, bundles)
+  let [installed, errored] = s:install(a:bang, bundles)
   redraw!
 
   call neobundle#installer#log("Installed bundles:\n".join((empty(installed) ?
-  \      ['no new bundles installed'] :
-  \      map(copy(installed), 'v:val.name')),"\n"))
+        \   ['no new bundles installed'] :
+        \   map(copy(installed), 'v:val.name')),"\n"))
+
+  if !empty(errored)
+    call neobundle#installer#log("Errored bundles:\n".join(
+          \ map(copy(errored), 'v:val.name')), "\n")
+    call neobundle#installer#log(
+          \ 'Please read error message log by :message command.')
+  endif
 
   call neobundle#installer#helptags(installed)
 
@@ -191,6 +198,8 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let [cmd, message] =
         \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
+
+  redraw
   call neobundle#installer#log(message)
   if cmd == ''
     " Skipped.
@@ -198,8 +207,6 @@ function! s:sync(bang, bundle, number, max, is_revision)
   endif
 
   let result = s:system(cmd)
-  echo ''
-  redraw
 
   if getcwd() !=# cwd
     lcd `=cwd`
@@ -208,7 +215,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
   if s:get_last_status()
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
-    return 0
+    return -1
   endif
 
   if !a:is_revision && get(a:bundle, 'rev', '') != ''
@@ -221,22 +228,25 @@ endfunction
 
 function! s:install(bang, bundles)
   let i = 1
-  let _ = []
+  let [installed, errored] = [[], []]
   let max = len(a:bundles)
 
   for bundle in a:bundles
-    if s:sync(a:bang, bundle, i, max, 0)
+    let _ = s:sync(a:bang, bundle, i, max, 0)
+    if _ > 0
       if get(bundle, 'rev', '') != ''
         call s:sync(a:bang, bundle, i, max, 1)
       endif
 
-      call add(_, bundle)
+      call add(installed, bundle)
+    elseif _ < 0
+      call add(errored, bundle)
     endif
 
     let i += 1
   endfor
 
-  return _
+  return [installed, errored]
 endfunction
 
 function! s:has_doc(path)
