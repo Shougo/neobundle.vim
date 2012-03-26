@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 26 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,6 +43,7 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
   let a:context.source__synced_bundles = []
+  let a:context.source__errored_bundles = []
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
   let a:context.source__number = 0
@@ -87,11 +88,18 @@ function! s:source.async_gather_candidates(args, context)"{{{
     return []
   endif
 
+  let messages = []
   if empty(a:context.source__synced_bundles)
-    let messages = ['[neobundle/install] No new bundles installed.']
+    let messages += ['[neobundle/install] No new bundles installed.']
   else
-    let messages = ['[neobundle/install] Installed bundles:']
+    let messages += ['[neobundle/install] Installed bundles:']
           \ + map(copy(a:context.source__synced_bundles),
+          \        'v:val.name')
+  endif
+
+  if !empty(a:context.source__errored_bundles)
+    let messages += ['[neobundle/install] Errored bundles:']
+          \ + map(copy(a:context.source__errored_bundles),
           \        'v:val.name')
   endif
 
@@ -154,6 +162,8 @@ function! s:check_output(context)
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'), 1)
       call neobundle#installer#error(split(a:context.source__output, '\n'))
+      call add(a:context.source__errored_bundles,
+            \ bundle)
     elseif a:context.source__revision_locked
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',

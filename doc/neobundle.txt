@@ -260,6 +260,9 @@ neobundle					*unite-action-neobundle*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-03-26
+- Improved neobundle/install source.
+
 2012-03-03
 - Improved documentation.
 
