@@ -34,9 +34,13 @@ command! -nargs=+ NeoBundle call neobundle#config#bundle(
 command! -nargs=+ NeoExternalBundle
       \ call neobundle#config#external_bundle(<args>)
 
-command! -nargs=? -bang NeoBundleInstall
+command! -nargs=? -bang
+      \ -complete=customlist,neobundle#complete_bundles
+      \ NeoBundleInstall
       \ call neobundle#installer#install('!' == '<bang>', <q-args>)
-command! -nargs=? NeoBundleUpdate
+command! -nargs=?
+      \ -complete=customlist,neobundle#complete_bundles
+      \ NeoBundleUpdate
       \ call neobundle#installer#install(1, <q-args>)
 
 command! -nargs=? -bang NeoBundleClean
@@ -64,6 +68,11 @@ endfunction
 
 function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
+endfunction
+
+function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
+  return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
+          \ 'stridx(v:val, a:arglead) == 0')
 endfunction
 
 let &cpo = s:save_cpo

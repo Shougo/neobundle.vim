@@ -116,7 +116,8 @@ function! s:source.async_gather_candidates(args, context)"{{{
 endfunction"}}}
 
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
-    return ['!'] + map(neobundle#config#get_neobundles(), 'v:val.name')
+  return ['!'] +
+        \ neobundle#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 function! s:sync(bundle, context, is_revision)

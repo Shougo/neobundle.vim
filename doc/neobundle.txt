@@ -266,6 +266,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved :NeoBundleInstall behavior.
 - Improved neobundle/install source.
 - Added :NeoBundleUpdate command.
+- Implemented completion.
 
 2012-03-03
 - Improved documentation.
