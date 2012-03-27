@@ -250,6 +250,11 @@ neobundle/install
 neobundle/log
 		Print previous neobundle install logs.
 
+							*neobundle-unite-source-neobundle-update*
+neobundle/update
+		Install and update configured plugins.
+		Note: This source is same to "neobundle/intall:!" source.
+
 Actions of each sources
 
 neobundle					*unite-action-neobundle*
@@ -261,6 +266,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-03-27
+- Added neobundle/update source.
 
 2012-03-26
 - Improved :NeoBundleInstall behavior.

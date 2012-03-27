@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Mar 2012.
+" Last Modified: 27 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,45 +28,30 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#sources#neobundle_install#define()"{{{
-  return unite#util#has_vimproc() ? s:source : {}
+  return unite#util#has_vimproc() ?
+        \ [s:source_install, s:source_update] : {}
 endfunction"}}}
 
-let s:source = {
+let s:source_install = {
       \ 'name' : 'neobundle/install',
       \ 'description' : 'install bundles',
       \ 'hooks' : {},
       \ }
 
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source_install.hooks.on_init(args, context)"{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
-  let a:context.source__bundles = empty(bundle_names) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(bundle_names)
-  let a:context.source__synced_bundles = []
-  let a:context.source__errored_bundles = []
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
-  let a:context.source__number = 0
-  let a:context.source__process = {}
-  let a:context.source__output = ''
 
-  if !a:context.source__bang
-    let a:context.source__bundles = filter(copy(a:context.source__bundles),
-          \ "!isdirectory(neobundle#util#expand(v:val.path))")
-  endif
-
-  let a:context.source__max_bundles =
-        \ len(a:context.source__bundles)
-
-  call neobundle#installer#clear_log()
+  call s:init(a:context, bundle_names)
 endfunction"}}}
-function! s:source.hooks.on_close(args, context)"{{{
+function! s:source_install.hooks.on_close(args, context)"{{{
   if !empty(a:context.source__process)
     call a:context.source__process.waitpid()
   endif
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source_install.gather_candidates(args, context)"{{{
   if empty(a:context.source__bundles)
     let a:context.is_async = 0
     call neobundle#installer#log(
@@ -75,7 +60,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:source.async_gather_candidates(args, context)"{{{
+function! s:source_install.async_gather_candidates(args, context)"{{{
   if !empty(a:context.source__process)
     call s:check_output(a:context)
     return []
@@ -115,12 +100,45 @@ function! s:source.async_gather_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_install.complete(args, context, arglead, cmdline, cursorpos)"{{{
   return ['!'] +
         \ neobundle#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
-function! s:sync(bundle, context, is_revision)
+let s:source_update = deepcopy(s:source_install)
+let s:source_update.name = 'neobundle/update'
+let s:source_update.description = 'update bundles'
+
+function! s:source_update.hooks.on_init(args, context)"{{{
+  let a:context.source__bang = 1
+  call s:init(a:context, a:args)
+endfunction"}}}
+
+function! s:init(context, bundle_names)
+  let a:context.source__synced_bundles = []
+  let a:context.source__errored_bundles = []
+
+  let a:context.source__bundles = empty(a:bundle_names) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#search(a:bundle_names)
+
+  let a:context.source__number = 0
+  let a:context.source__process = {}
+  let a:context.source__output = ''
+
+  if !a:context.source__bang
+    let a:context.source__bundles = filter(
+          \ copy(a:context.source__bundles),
+          \ "!isdirectory(neobundle#util#expand(v:val.path))")
+  endif
+
+  let a:context.source__max_bundles =
+        \ len(a:context.source__bundles)
+
+  call neobundle#installer#clear_log()
+endfunction
+
+function! s:sync(bundle, context, is_revision)"{{{
   let cwd = getcwd()
 
   let [cmd, message] =
@@ -147,9 +165,9 @@ function! s:sync(bundle, context, is_revision)
   if getcwd() !=# cwd
     lcd `=cwd`
   endif
-endfunction
+endfunction"}}}
 
-function! s:check_output(context)
+function! s:check_output(context)"{{{
   let stdout = a:context.source__process.stdout
   let a:context.source__output .= stdout.read(-1, 300)
   if stdout.eof
@@ -192,7 +210,7 @@ function! s:check_output(context)
     let a:context.source__output = ''
     let a:context.source__number += 1
   endif
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
