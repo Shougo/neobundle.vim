@@ -86,6 +86,8 @@ function! s:source_install.async_gather_candidates(args, context)"{{{
     let messages += ['[neobundle/install] Errored bundles:']
           \ + map(copy(a:context.source__errored_bundles),
           \        'v:val.name')
+    call neobundle#installer#log(
+          \ 'Please read error message log by :message command.')
   endif
 
   call neobundle#installer#log(messages, 1)
@@ -180,7 +182,9 @@ function! s:check_output(context)"{{{
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'), 1)
-      call neobundle#installer#error(split(a:context.source__output, '\n'))
+      call neobundle#installer#error(bundle.path)
+      call neobundle#installer#error(
+            \ split(a:context.source__output, '\n'))
       call add(a:context.source__errored_bundles,
             \ bundle)
     elseif a:context.source__revision_locked

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Mar 2012.
+" Last Modified: 27 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,12 +59,15 @@ function! neobundle#installer#install(bang, ...)
   let [installed, errored] = s:install(a:bang, bundles)
   redraw!
 
-  call neobundle#installer#log("Installed bundles:\n".join((empty(installed) ?
+  call neobundle#installer#log(
+        \ "[neobundle/install] Installed bundles:\n".
+        \ join((empty(installed) ?
         \   ['no new bundles installed'] :
         \   map(copy(installed), 'v:val.name')),"\n"))
 
   if !empty(errored)
-    call neobundle#installer#log("Errored bundles:\n".join(
+    call neobundle#installer#log(
+          \ "[neobundle/install] Errored bundles:\n".join(
           \ map(copy(errored), 'v:val.name')), "\n")
     call neobundle#installer#log(
           \ 'Please read error message log by :message command.')
@@ -84,7 +87,7 @@ function! neobundle#installer#helptags(bundles)
 
   call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
-    call neobundle#installer#log('Helptags: done. '
+    call neobundle#installer#log('[neobundle/install] Helptags: done. '
           \ .len(help_dirs).' bundles processed')
   endif
   return help_dirs

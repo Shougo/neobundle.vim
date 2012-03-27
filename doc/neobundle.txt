@@ -269,6 +269,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-03-27
 - Added neobundle/update source.
+- Improved log.
 
 2012-03-26
 - Improved :NeoBundleInstall behavior.
