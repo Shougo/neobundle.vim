@@ -44,6 +44,9 @@ Vundle.vim(https://github.com/gmarik/vundle), But I added some features.
 For example:
  * Uses |vimproc| when you have it
  * |unite.vim| interface
+ * Revision lock
+ * Supports svn/Mercurial repository
+ * Specify base path
 
 ==============================================================================
 USAGE						*neobundle-usage*
@@ -116,13 +119,18 @@ COMMANDS 					*neobundle-commands*
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
 
-		{dictionary} has following keys.
+		{dictionary} has following keys:
+
 		rev		(String)
 		Revision number or branch/tag name.
 
 		directory	(String)
 		Relative directory path from base directory(set by
 		|neobundle#rc()|).
+
+		base		(String)
+		Directory base path. If you omit it, used |neobundle#rc()| base
+		path.
 
 		type		(String)
 		Repository type.  If you omit repository type, it is detected
@@ -155,8 +163,11 @@ COMMANDS 					*neobundle-commands*
 <
 		If type is "nosync", neobundle does not update
 		automatically(like pathogen.vim).
+		Note: If you want to use neobundle like pathogen.vim, you
+		should set base path to separate from standard neobundle
+		bundles paths.
 >
-		NeoBundle 'muttator', {'type' : 'nosync'}
+		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 <
 :NeoBundleInstall [{repository}]		*:NeoBundleInstall*
 		Installs {repository} plugins.
@@ -285,6 +296,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-04-17
 - Updated documentation.
+- Added base attribute.
 
 2012-04-13
 - Added g:neobundle_default_git_protocol variable.

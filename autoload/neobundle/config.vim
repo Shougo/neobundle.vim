@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Apr 2012.
+" Last Modified: 17 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,7 +125,9 @@ endfunction
 function! neobundle#config#init_bundle(name, opts)
   let bundle = extend(s:parse_name(substitute(a:name,"['".'"]\+','','g')),
         \ s:parse_options(a:opts))
-  let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
+  let bundle.base = s:expand_path(get(bundle, 'base',
+        \ neobundle#get_neobundle_dir()))
+  let bundle.path = s:expand_path(bundle.base.'/'.
         \ get(bundle, 'directory', bundle.name))
   let bundle.rtp = s:expand_path(bundle.path.'/'.get(bundle, 'rtp', ''))
   if bundle.rtp =~ '[/\\]$'
