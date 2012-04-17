@@ -66,6 +66,8 @@ Note: Instead of vundle, neobundle has not search plugins system.  But you can
 search popular plugins and add neobundle settings using Vimpusher web
 service(Registration is required).
 	http://www.vimpusher.com/
+Or using vim-scripts.org.
+	http://vim-scripts.org/
 
 ==============================================================================
 INSTALL						*neobundle-install*
@@ -91,15 +93,16 @@ INTERFACE					*neobundle-interface*
 ------------------------------------------------------------------------------
 FUNCTIONS 					*neobundle-functions*
 
-neobundle#rc({path})				*neobundle#rc()*
-	Initialize neobundle.vim. {path} is neobundle downloaded file path.
+neobundle#rc({base-path})			*neobundle#rc()*
+		Initialize neobundle.vim. {base-path} is neobundle downloaded
+		file base path.
 >
 	set nocompatible
 	filetype off
 	set runtimepath+={path to neobundle directory}
 	call neobundle#rc(expand('~/.bundle'))
 	
-	NeoBundle 'git://github.com/Shougo/clang_complete.git'
+	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
 	
 	filetype plugin on
 	filetype indent on
@@ -110,16 +113,20 @@ COMMANDS 					*neobundle-commands*
 :NeoBundle {repository} [,{revision}]		*:NeoBundle*
 :NeoBundle {repository} [,{dictionary}]
 		Configures neobundle.
+		Note: If you omit the protocol(ex: git or https) in git type,
+		|g:neobundle_default_git_protocol| is used.
 
-		{dictionary} is has following keys.
+		{dictionary} has following keys.
 		rev		(String)
 		Revision number or branch/tag name.
 
 		directory	(String)
-		Directory name.
+		Relative directory path from base directory(set by
+		|neobundle#rc()|).
 
 		type		(String)
-		Repository type.
+		Repository type.  If you omit repository type, it is detected
+		automatically from {repository}.
 		For example: nosync, git, svn, hg, ...
 
 		rtp		(String)
@@ -139,7 +146,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
 <
-		This supports revision lock.
+		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
 		"master".
 >
@@ -156,7 +163,7 @@ COMMANDS 					*neobundle-commands*
 		If {repository} is omited, all configured plugin is installed.
 
 :NeoBundleInstall! [{repository}] 		*:NeoBundleInstall!*
-		Installs and update {repository} plugins.
+		Installs and updates {repository} plugins.
 		If {repository} is omited, all configured plugin is installed
 		and updated.
 :NeoBundleUpdate [{repository}]			*:NeoBundleUpdate*
@@ -205,7 +212,7 @@ EXAMPLES					*neobundle-examples*
 	" My Bundles here:
 	"
 	" Original repositories in github
-	NeoBundle 'git://github.com/Shougo/clang_complete.git'
+	NeoBundle 'Shougo/neocomplcache-clang.git'
 	NeoBundle 'tpope/vim-fugitive'
 	" Vim-script repositories
 	NeoBundle 'FuzzyFinder'
@@ -275,6 +282,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-04-17
+- Updated documentation.
 
 2012-04-13
 - Added g:neobundle_default_git_protocol variable.
