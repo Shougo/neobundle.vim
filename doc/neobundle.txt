@@ -102,13 +102,14 @@ neobundle#rc({base-path})			*neobundle#rc()*
 >
 	set nocompatible
 	filetype off
+	filetype plugin indent off
 	set runtimepath+={path to neobundle directory}
 	call neobundle#rc(expand('~/.bundle'))
 	
 	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
 	
-	filetype plugin on
-	filetype indent on
+	filetype plugin indent on
+	filetype on
 <
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
@@ -209,6 +210,7 @@ g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
 EXAMPLES					*neobundle-examples*
 >
 	set nocompatible                " recommend
+	filetype off                    " required!
 	filetype plugin indent off      " required!
 	
 	if has('vim_starting')
@@ -238,6 +240,7 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 
 	filetype plugin indent on       " required!
+	filetype on                     " required!
 <
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
@@ -293,6 +296,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-04-19
+- Fixed examples.
 
 2012-04-17
 - Updated documentation.
