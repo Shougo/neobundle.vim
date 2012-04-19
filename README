@@ -17,7 +17,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
 
      ```vim
      set nocompatible               " be iMproved
-     filetype plugin indent off     " required!
+     filetype off     " required!
 
      if has('vim_starting')
        set runtimepath+=~/.vim/bundle/neobundle.vim/
