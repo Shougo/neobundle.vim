@@ -1,6 +1,6 @@
 *neobundle.txt*	Ultimate Vim package manager
 
-Version: 0.1
+Version: 1.0
 Author : Shougo <Shougo.Matsu at gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -109,7 +109,6 @@ neobundle#rc({base-path})			*neobundle#rc()*
 	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
 	
 	filetype plugin indent on
-	filetype on
 <
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
@@ -240,7 +239,6 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 
 	filetype plugin indent on       " required!
-	filetype on                     " required!
 <
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
@@ -296,6 +294,10 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-04-21
+- Ver.1.0.
+- Fixed documentation.
 
 2012-04-19
 - Fixed examples.
