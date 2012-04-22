@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Apr 2012.
+" Last Modified: 22 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.0, for Vim 7.2
+" Version: 2.0, for Vim 7.2
 "=============================================================================
 
 let s:save_cpo = &cpo
@@ -46,7 +46,9 @@ command! -nargs=?
       \ NeoBundleUpdate
       \ call neobundle#installer#install(1, <q-args>)
 
-command! -nargs=? -bang NeoBundleClean
+command! -nargs=? -bang
+      \ -complete=customlist,neobundle#complete_deleted_bundles
+      \ NeoBundleClean
       \ call neobundle#installer#clean('!' == '<bang>', <q-args>)
 
 command! -nargs=? -bang NeoBundleList
@@ -76,6 +78,16 @@ endfunction
 function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
           \ 'stridx(v:val, a:arglead) == 0')
+endfunction
+
+function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
+  let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
+  let all_dirs = split(neobundle#util#substitute_path_separator(
+        \ globpath(neobundle#get_neobundle_dir(), '*')), "\n")
+  let x_dirs = filter(all_dirs, 'index(bundle_dirs, v:val) < 0')
+
+  return filter(map(x_dirs, "fnamemodify(v:val, ':t')"),
+        \ 'stridx(v:val, a:arglead) == 0')
 endfunction
 
 let &cpo = s:save_cpo

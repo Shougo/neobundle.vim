@@ -1,6 +1,6 @@
 *neobundle.txt*	Ultimate Vim package manager
 
-Version: 1.0
+Version: 2.0
 Author : Shougo <Shougo.Matsu at gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -294,6 +294,10 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-04-22
+- Ver.2.0 development is started.
+- Implemented :NeoBundleClean completion.
 
 2012-04-21
 - Ver.1.0.
