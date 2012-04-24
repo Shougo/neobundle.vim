@@ -297,6 +297,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-04-25
 - Improved :NeoBundleClean behavior.
+- Added test.
 
 2012-04-22
 - Ver.2.0 development is started.

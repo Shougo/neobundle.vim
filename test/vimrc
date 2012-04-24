@@ -1,0 +1,84 @@
+set nocompatible                " recommend
+
+let testdir = expand('~/neobundle-test/bundles', 1)
+let src = 'git://github.com/Shougo/neobundle.vim.git'
+
+filetype off                    " required!
+filetype plugin indent off      " required!
+
+if has('vim_starting')
+  execute 'set' 'runtimepath+='.testdir.'/neobundle.vim'
+endif
+
+if !isdirectory(expand(testdir, 1).'/neobundle.vim')
+  execute '!git clone '.src.' '.shellescape(testdir, 1).'/neobundle.vim'
+endif
+
+call neobundle#rc(expand(testdir, 1))
+
+" My Bundles here:
+"
+
+" Let neobundle manage neobundle.
+NeoBundle 'Shougo/neobundle.vim'
+
+" Original repositories in github.
+NeoBundle 'Shougo/neocomplcache-clang.git'
+
+" Vim-script repositories.
+NeoBundle 'rails.vim'
+
+" Non-github repos.
+NeoBundle 'git://git.wincent.com/command-t.git'
+
+" Username with dashes.
+NeoBundle 'vim-scripts/ragtag.vim'
+
+" Original repo.
+NeoBundle 'altercation/vim-colors-solarized'
+" With extension.
+NeoBundle 'nelstrom/vim-mac-classic-theme.git'
+
+" Invalid uri.
+NeoBundle 'nonexistinguser/hogehoge.git'
+
+" Full uri.
+NeoBundle 'https://github.com/vim-scripts/vim-game-of-life'
+NeoBundle 'git@github.com:gmarik/ingretu.git'
+
+" Short uri.
+NeoBundle 'gh:gmarik/snipmate.vim.git'
+NeoBundle 'github:mattn/gist-vim.git'
+
+" Camel case.
+NeoBundle 'vim-scripts/RubySinatra'
+
+" Non-git repos.
+NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+NeoBundle 'http://github.com/tpope/vim-fugitive.git'
+NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+
+" With options.
+NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
+NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
+NeoBundle 'Shougo/vimshell', '3787e5'
+
+" Nosync repos.
+NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
+
+" Comment is allowed.
+NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
+
+filetype plugin indent on       " required!
+
+" Should not break helptags.
+set wildignore+=doc
+
+" Should not break clone.
+set wildignore+=.git
+set wildignore+=.git/*
+set wildignore+=*/.git/*
+
+autocmd VimEnter * NeoBundleInstall
