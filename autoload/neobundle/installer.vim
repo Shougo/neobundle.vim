@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Apr 2012.
+" Last Modified: 02 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,6 +30,10 @@ set cpo&vim
 
 " Create vital module for neobundle
 let s:V = vital#of('neobundle.vim')
+
+let g:neobundle_rm_command =
+      \ get(g:, 'neobundle_rm_command',
+      \ neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf')
 
 function! s:system(...)
   return call(s:V.system, a:000, s:V)
@@ -110,10 +114,9 @@ function! neobundle#installer#clean(bang, ...)
   end
 
   if a:bang || s:check_really_clean(x_dirs)
-    let cmd = neobundle#util#is_windows() ?
-          \ 'rmdir /S /Q' : 'rm -rf'
     redraw
-    let result = s:system(cmd . ' ' . join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+    let result = s:system(g:neobundle_rm_command . ' ' .
+          \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
     if s:get_last_status()
       call neobundle#installer#error(result)
     endif

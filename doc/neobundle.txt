@@ -205,6 +205,12 @@ g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
 
 		Default value is "git".
 
+g:neobundle_rm_command				*g:neobundle_rm_command*
+		The remove file command in |:NeoBundleClean|.
+
+		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
+		others.
+
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
@@ -294,6 +300,9 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-05-02
+- Added g:neobundle_rm_command option.
 
 2012-04-28
 - Updated vital.
