@@ -115,7 +115,7 @@ function! neobundle#installer#clean(bang, ...)
 
   if a:bang || s:check_really_clean(x_dirs)
     redraw
-    let result = s:system(g:neobundle_rm_command . ' ' .
+    let result = system(g:neobundle_rm_command . ' ' .
           \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
     if s:get_last_status()
       call neobundle#installer#error(result)
