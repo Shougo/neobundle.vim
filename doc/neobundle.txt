@@ -313,6 +313,11 @@ neobundle/update
 		Install and update configured plugins.
 		Note: This source is same to "neobundle/intall:!" source.
 
+							*neobundle-unite-source-neobundle-search*
+neobundle/search
+		Search plugins settings from "http://vim-scripts.org/".
+		Note: This source requires "curl" or "wget" command.
+
 Actions of each sources
 
 neobundle					*unite-action-neobundle*
@@ -322,6 +327,9 @@ neobundle					*unite-action-neobundle*
 	narrow		Narrow bundle files
 	edit		Browse bundle directory
 
+neobundle/search				*unite-action-neobundle-search*
+	yank		Yank plugin settings
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
@@ -329,6 +337,7 @@ CHANGELOG					*neobundle-changelog*
 - Added build option.
 - Improved test.
 - Improved revision lock behavior.
+- Added neobundle/search source.
 
 2012-05-02
 - Added g:neobundle_rm_command option.
