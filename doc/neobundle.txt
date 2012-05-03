@@ -328,6 +328,7 @@ CHANGELOG					*neobundle-changelog*
 2012-05-03
 - Added build option.
 - Improved test.
+- Improved revision behavior.
 
 2012-05-02
 - Added g:neobundle_rm_command option.

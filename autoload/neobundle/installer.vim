@@ -34,6 +34,14 @@ let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
+" Check vimproc."{{{
+try
+  let s:exists_vimproc_version = vimproc#version()
+catch
+  let s:exists_vimproc_version = 0
+endtry
+"}}}
+
 " Create vital module for neobundle
 let s:V = vital#of('neobundle.vim')
 
@@ -199,6 +207,13 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
       let cmd = 'hg pull -u'
     elseif a:bundle.type == 'git'
       let cmd = 'git pull --rebase'
+
+      if get(a:bundle, 'rev', '') != ''
+        " Restore revision.
+        let cmd = 'git checkout master'
+              \ . (s:is_windows && s:exists_vimproc_version == 0 ?
+              \   '& ' : '; ')  . cmd
+      endif
     else
       return ['', printf('(%'.len(a:max).'d/%d): %s',
             \ a:number, a:max, 'Unknown')]
@@ -282,11 +297,12 @@ function! s:install(bang, bundles)
 
   for bundle in a:bundles
     let _ = s:sync(a:bang, bundle, i, max, 0)
-    if _ > 0
-      if get(bundle, 'rev', '') != ''
-        call s:sync(a:bang, bundle, i, max, 1)
-      endif
 
+    if get(bundle, 'rev', '') != ''
+      call s:sync(a:bang, bundle, i, max, 1)
+    endif
+
+    if _ > 0
       call add(installed, bundle)
       call neobundle#installer#build(bundle)
     elseif _ < 0
