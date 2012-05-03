@@ -121,27 +121,51 @@ COMMANDS 					*neobundle-commands*
 
 		{dictionary} has following keys:
 
-		rev		(String)
+		rev			(String)
 		Revision number or branch/tag name.
 
-		directory	(String)
+		directory		(String)
 		Relative directory path from base directory(set by
 		|neobundle#rc()|).
 
-		base		(String)
+		base			(String)
 		Directory base path. If you omit it, used |neobundle#rc()| base
 		path.
 
-		type		(String)
+		type			(String)
 		Repository type.  If you omit repository type, it is detected
 		automatically from {repository}.
 		For example: nosync, git, svn, hg, ...
 
-		rtp		(String)
+		rtp			(String)
 		Specify runtime path.
 		You may use this option when the repository has Vim plugin in
 		sub directory.
 		For example: https://github.com/rstacruz/sparkup
+
+		build			(Dictionary)
+		Specify build script.
+		You may use this option when the plugin have to be built.
+		This command is executed by |system()| or |vimproc#system()| in
+		plugin runtimepath.
+		For example: |vimproc|
+
+		This dictionary has following keys:
+
+			windows		(String)
+			Specify Windows environment build script.
+
+			mac		(String)
+			Specify Mac OS X environment build script.
+
+			cygwin		(String)
+			Specify Cygwin environment build script.
+
+			unix		(String)
+			Specify Unix environment build script.
+
+			others		(String)
+			Specify others environment build script.
 
 		Examples:
 >
@@ -300,6 +324,10 @@ neobundle					*unite-action-neobundle*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-05-03
+- Added build option.
+- Improved test.
 
 2012-05-02
 - Added g:neobundle_rm_command option.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 May 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,12 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+let s:is_windows = has('win16') || has('win32') || has('win64')
+let s:is_cygwin = has('win32unix')
+let s:is_mac = !s:is_windows
+      \ && (has('mac') || has('macunix') || has('gui_macvim') ||
+      \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
 " Create vital module for neobundle
 let s:V = vital#of('neobundle.vim')
@@ -80,7 +86,7 @@ function! neobundle#installer#install(bang, ...)
   call neobundle#installer#helptags(installed)
 
   call neobundle#config#reload(installed)
-endf
+endfunction
 
 function! neobundle#installer#helptags(bundles)
   if empty(a:bundles)
@@ -95,6 +101,43 @@ function! neobundle#installer#helptags(bundles)
           \ .len(help_dirs).' bundles processed')
   endif
   return help_dirs
+endfunction
+
+function! neobundle#installer#build(bundle)
+  " Environment check.
+  let build = get(a:bundle, 'build', {})
+  if s:is_windows && has_key(build, 'windows')
+    let cmd = build.windows
+  elseif s:is_mac && has_key(build, 'mac')
+    let cmd = build.mac
+  elseif s:is_mac && has_key(build, 'cygwin')
+    let cmd = build.cygwin
+  elseif !s:is_windows && has_key(build, 'unix')
+    let cmd = build.unix
+  elseif has_key(build, 'others')
+    let cmd = build.others
+  else
+    return
+  endif
+
+  call neobundle#installer#log('Building...')
+
+  let cwd = getcwd()
+  silent lcd `=a:bundle.path`
+
+  let result = s:system(cmd)
+
+  if getcwd() !=# cwd
+    lcd `=cwd`
+  endif
+
+  if s:get_last_status()
+    call neobundle#installer#error(result)
+  else
+    call neobundle#installer#log(result)
+  endif
+
+  return s:get_last_status()
 endfunction
 
 function! neobundle#installer#clean(bang, ...)
@@ -162,11 +205,10 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
     endif
 
     " Cd to bundle path.
-    let path = a:bundle.path
-    lcd `=path`
+    lcd `=a:bundle.path`
 
     let message = printf('(%'.len(a:max).'d/%d): %s %s',
-          \ a:number, a:max, cmd, path)
+          \ a:number, a:max, cmd, a:bundle.path)
   endif
 
   return [cmd, message]
@@ -246,6 +288,7 @@ function! s:install(bang, bundles)
       endif
 
       call add(installed, bundle)
+      call neobundle#installer#build(bundle)
     elseif _ < 0
       call add(errored, bundle)
     endif
@@ -298,7 +341,7 @@ endfunction
 function! neobundle#installer#error(msg, ...)
   let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
-        \ a:msg : [a:msg]
+        \ a:msg : split(a:msg, '\r\?\n')
   call extend(s:log, msg)
 
   if &filetype == 'unite' || is_unite
