@@ -326,9 +326,11 @@ neobundle					*unite-action-neobundle*
 	reinstall	Reinstall bundles
 	narrow		Narrow bundle files
 	edit		Browse bundle directory
+	start		Browse github plugin page
 
 neobundle/search				*unite-action-neobundle-search*
 	yank		Yank plugin settings
+	start		Browse github plugin page
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
@@ -338,6 +340,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved test.
 - Improved revision lock behavior.
 - Added neobundle/search source.
+- Added start action.
 
 2012-05-02
 - Added g:neobundle_rm_command option.

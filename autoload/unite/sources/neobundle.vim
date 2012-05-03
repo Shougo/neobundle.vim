@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'default_action' : 'update',
+      \ 'parents' : ['uri'],
       \ }
 
 function! s:source.hooks.on_init(args, context)"{{{
@@ -57,6 +58,18 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__bundles = empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
+endfunction"}}}
+function! s:source.hooks.on_post_filter(args, context)"{{{
+  for candidate in a:context.candidates
+    if candidate.source__uri =~
+          \ '^\%(https\?\|git\)://github.com/'
+      let candidate.action__uri = candidate.source__uri
+      let candidate.action__uri =
+            \ substitute(candidate.action__uri, '^git://', 'https://', '')
+      let candidate.action__uri =
+            \ substitute(candidate.action__uri, '.git$', '', '')
+    endif
+  endfor
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -72,6 +85,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'action__directory' : bundle.path,
         \ 'action__bundle' : bundle,
         \ 'action__bundle_name' : bundle.name,
+        \ 'source__uri' : bundle.uri,
         \ }
     call add(_, dict)
   endfor

@@ -54,6 +54,7 @@ let s:source = {
       \ 'default_action' : 'yank',
       \ 'max_candidates' : 50,
       \ 'syntax' : 'uniteSource__NeoBundleSearch',
+      \ 'parents' : ['uri'],
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -74,6 +75,8 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'abbr' : printf('%-20s %-10s %-5s -- %s',
         \          v:val.n, v:val.t, v:val.rv, v:val.s),
         \ 'source__name' : v:val.n,
+        \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.n,
+        \ 'action__path' : 'https://github.com/vim-scripts/' . v:val.n,
         \ }")
 endfunction"}}}
 
@@ -93,6 +96,13 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__NeoBundleSearch_Name Statement
   highlight default link uniteSource__NeoBundleSearch_Marker Special
   highlight default link uniteSource__NeoBundleSearch_Description Comment
+endfunction"}}}
+function! s:source.hooks.on_post_filter(args, context)"{{{
+  for candidate in a:context.candidates
+    let candidate.action__uri =
+          \ 'https://github.com/vim-scripts/' . candidate.source__name
+    let candidate.action__path = candidate.action__uri
+  endfor
 endfunction"}}}
 
 " Actions"{{{
