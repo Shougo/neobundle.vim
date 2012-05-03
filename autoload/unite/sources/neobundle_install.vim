@@ -204,7 +204,7 @@ function! s:check_output(context)"{{{
             \ bundle)
     endif
 
-    if !status && get(bundle, 'rev', '') != ''
+    if get(bundle, 'rev', '') != ''
           \ && !a:context.source__revision_locked
       " Lock revision.
       call s:sync(bundle, a:context, 1)
