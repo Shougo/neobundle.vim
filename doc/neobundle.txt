@@ -335,6 +335,9 @@ neobundle/search				*unite-action-neobundle-search*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-05-06
+- Improved neobundle source.
+
 2012-05-03
 - Added build option.
 - Improved test.

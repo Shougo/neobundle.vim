@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 06 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,6 +60,7 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ neobundle#config#search(bundle_names)
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
+  let max = max(map(copy(a:context.candidates), 'len(v:val.word)'))
   for candidate in a:context.candidates
     if candidate.source__uri =~
           \ '^\%(https\?\|git\)://github.com/'
@@ -69,17 +70,21 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
       let candidate.action__uri =
             \ substitute(candidate.action__uri, '.git$', '', '')
     endif
+    if !has_key(candidate, 'abbr')
+      let candidate.abbr = printf('%-'.max.'s : %s',
+        \         candidate.word, s:get_commit_status(
+        \         a:context.source__bang, candidate.action__bundle))
+    endif
   endfor
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let max = max(map(copy(neobundle#config#get_neobundles()), 'len(v:val.name)'))
   let _ = []
   for bundle in neobundle#config#get_neobundles()
+    let name = substitute(bundle.orig_name,
+        \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', '')
     let dict = {
-        \ 'word' : printf('%-'.max.'s : %s',
-        \         bundle.name, s:get_commit_status(
-        \         a:context.source__bang, bundle)),
+        \ 'word' : name,
         \ 'kind' : 'directory',
         \ 'action__path' : bundle.path,
         \ 'action__directory' : bundle.path,
