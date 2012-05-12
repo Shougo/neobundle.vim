@@ -31,37 +31,42 @@ set cpo&vim
 let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
 
-command! -nargs=+ NeoBundle call neobundle#config#bundle(
-      \ substitute(<q-args>, '\s"[^"]\+$', '', ''))
+command! -nargs=+ NeoBundle
+      \ call neobundle#config#bundle(
+      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=+ NeoBundleLazy
       \ call neobundle#config#lazy_bundle(<args>)
 command! -nargs=+ NeoExternalBundle NeoBundleLazy
 
-command! -nargs=+ NeoBundleSource
+command! -nargs=+ -bar NeoBundleSource
       \ call neobundle#config#source(<f-args>)
 
-command! -nargs=? -bang
+command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#complete_bundles
       \ NeoBundleInstall
       \ call neobundle#installer#install('!' == '<bang>', <q-args>)
-command! -nargs=?
+command! -nargs=? -bar
       \ -complete=customlist,neobundle#complete_bundles
       \ NeoBundleUpdate
       \ call neobundle#installer#install(1, <q-args>)
 
-command! -nargs=? -bang
+command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#complete_deleted_bundles
       \ NeoBundleClean
       \ call neobundle#installer#clean('!' == '<bang>', <q-args>)
 
-command! -nargs=? -bang NeoBundleList
+command! -nargs=? -bang -bar
+      \ NeoBundleList
       \ echo join(map(neobundle#config#get_neobundles(), 'v:val.name'), "\n")
 
-command! -nargs=0 NeoBundleDocs
+command! -nargs=0 -bar
+      \ NeoBundleDocs
       \ call neobundle#installer#helptags(neobundle#config#get_neobundles())
 
-command! -nargs=0 NeoBundleLog echo join(neobundle#installer#get_log(), "\n")
+command! -nargs=0 -bar
+      \ NeoBundleLog
+      \ echo join(neobundle#installer#get_log(), "\n")
 
 augroup neobundle
   autocmd!
