@@ -36,7 +36,8 @@ command! -nargs=+ NeoBundle
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=+ NeoBundleLazy
-      \ call neobundle#config#lazy_bundle(<args>)
+      \ call neobundle#config#bundle(
+      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 command! -nargs=+ NeoExternalBundle NeoBundleLazy
 
 command! -nargs=+ -bar NeoBundleSource

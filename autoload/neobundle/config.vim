@@ -97,7 +97,12 @@ function! neobundle#config#bundle(arg)
 endfunction
 
 function! neobundle#config#lazy_bundle(arg, ...)
-  let bundle = neobundle#config#init_bundle(a:arg, a:000)
+  sandbox let args = eval('[' . a:arg . ']')
+  if empty(args)
+    return {}
+  endif
+
+  let bundle = neobundle#config#init_bundle(args[0], args[1:])
   let path = bundle.path
   if !has_key(s:neobundles, path)
     let s:neobundles[path] = bundle
@@ -112,6 +117,12 @@ function! neobundle#config#source(...)
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
       for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
         source `=file`
+
+        let path = bundle.path
+        if has_key(s:neobundles, path)
+          call s:rtp_rm(bundle.rtp)
+        endif
+        call s:rtp_add(bundle.rtp)
       endfor
     endfor
 
