@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 12 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,7 @@ endif
 function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
   let s:neobundles = {}
+  let s:loaded_neobundles = {}
 endfunction
 
 function! neobundle#config#get_neobundles()
@@ -90,17 +91,32 @@ function! neobundle#config#bundle(arg)
   endif
 
   let s:neobundles[path] = bundle
+  let s:loaded_neobundles[bundle.name] = 1
   call s:rtp_add(bundle.rtp)
   return bundle
 endfunction
 
-function! neobundle#config#external_bundle(arg, ...)
+function! neobundle#config#lazy_bundle(arg, ...)
   let bundle = neobundle#config#init_bundle(a:arg, a:000)
   let path = bundle.path
   if !has_key(s:neobundles, path)
     let s:neobundles[path] = bundle
   endif
   return bundle
+endfunction
+
+function! neobundle#config#source(...)
+  for bundle in filter(neobundle#config#search(a:000),
+        \ '!has_key(s:loaded_neobundles, v:val.name)')
+    for directory in
+          \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
+      for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
+        source `=file`
+      endfor
+    endfor
+
+    let s:loaded_neobundles[bundle.name] = 1
+  endfor
 endfunction
 
 function! neobundle#config#rm_bndle(path)

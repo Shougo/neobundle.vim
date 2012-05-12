@@ -193,21 +193,21 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 <
-:NeoBundleInstall [{repository}]		*:NeoBundleInstall*
-		Installs {repository} plugins.
-		If {repository} is omited, all configured plugin is installed.
+:NeoBundleInstall [{name}...]		*:NeoBundleInstall*
+		Installs {name} plugins.
+		If {name} is omited, all configured plugin is installed.
 
-:NeoBundleInstall! [{repository}] 		*:NeoBundleInstall!*
-		Installs and updates {repository} plugins.
-		If {repository} is omited, all configured plugin is installed
+:NeoBundleInstall! [{name}]... 		*:NeoBundleInstall!*
+		Installs and updates {name} plugins.
+		If {name} is omited, all configured plugin is installed
 		and updated.
-:NeoBundleUpdate [{repository}]			*:NeoBundleUpdate*
+:NeoBundleUpdate [{name}]			*:NeoBundleUpdate*
 		Same to |:NeoBundleInstall!|.
 
-:NeoBundleClean [{bang} [{repository}...]] 	*:NeoBundleWithCurrentDir*
+:NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleWithCurrentDir*
 		Removes non configured plugins. If {bang} is added, force
-		remove plugins. If {repository}s are added, remove
-		{repository}s plugins.
+		remove plugins. If {name} are added, remove
+		{name} plugins.
 
 :NeoBundleList 					*:NeoBundleList*
 		Print list of configured neobundles.
@@ -215,10 +215,17 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleLog 					*:NeoBundleLog*
 		Print previous install logs.
 
-:NeoExternalBundle {repository} [, {revision}]	*:NeoExternalBundle*
+:NeoBundleLazy {repository} [, {dictionary}]	*:NeoBundleLazy*
 :NeoExternalBundle {repository} [, {dictionary}]
-		For external bundle settings, this command register neobundle,
-		but don't add to 'runtimepath'.
+						*:NeoExternalBundle*
+		This command register neobundle, but don't add to
+		'runtimepath'.
+		Note: |:NeoExternalBundle| is deprecated name.
+
+:NeoBundleSource {name}...			*:NeoBundleLazy*
+		|:source| {name} plugins.
+		Note: This command is used to load the neobundles configured by
+		|:NeoBundleLazy|.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
@@ -267,6 +274,10 @@ EXAMPLES					*neobundle-examples*
 
 	" Comment is allowed.
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
+
+	" Lazy load.
+	NeoBundleLazy 'c9s/perlomni.vim.git'
+	NeoBundleSource perlomni.vim
 
 	filetype plugin indent on       " required!
 <
@@ -334,6 +345,9 @@ neobundle/search				*unite-action-neobundle-search*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-05-12
+- Added NeoBundleLazy and NeoBundleSource command.
 
 2012-05-06
 - Improved neobundle source.

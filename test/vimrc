@@ -73,6 +73,10 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 
+" Lazy load.
+NeoBundleLazy 'c9s/perlomni.vim.git'
+NeoBundleSource perlomni.vim
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.
@@ -83,4 +87,4 @@ set wildignore+=.git
 set wildignore+=.git/*
 set wildignore+=*/.git/*
 
-autocmd VimEnter * NeoBundleInstall!
+autocmd VimEnter * NeoBundleInstall
