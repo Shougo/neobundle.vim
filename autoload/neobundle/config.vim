@@ -110,7 +110,7 @@ endfunction
 
 function! neobundle#config#source(...)
   for bundle in filter(neobundle#config#search(a:000),
-        \ '!has_key(s:loaded_neobundles, v:val.name)')
+        \ '!neobundle#config#is_sourced(v:val.name)')
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
       for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
@@ -126,6 +126,10 @@ function! neobundle#config#source(...)
 
     let s:loaded_neobundles[bundle.name] = 1
   endfor
+endfunction
+
+function! neobundle#config#is_sourced(name)
+  return has_key(s:loaded_neobundles, a:name)
 endfunction
 
 function! neobundle#config#rm_bndle(path)
