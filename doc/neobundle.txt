@@ -222,7 +222,7 @@ COMMANDS 					*neobundle-commands*
 		'runtimepath'.
 		Note: |:NeoExternalBundle| is deprecated name.
 
-:NeoBundleSource {name}...			*:NeoBundleLazy*
+:NeoBundleSource {name}...			*:NeoBundleSource*
 		|:source| {name} plugins.
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
@@ -345,6 +345,9 @@ neobundle/search				*unite-action-neobundle-search*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-05-13
+- Fixed tags error.
 
 2012-05-12
 - Added NeoBundleLazy and NeoBundleSource command.
