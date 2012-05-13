@@ -114,14 +114,14 @@ function! neobundle#config#source(...)
         \ neobundle#config#search(a:000)
   for bundle in filter(bundles,
         \ '!neobundle#config#is_sourced(v:val.name)')
+    if has_key(s:neobundles, bundle.path)
+      call s:rtp_rm(bundle.rtp)
+    endif
+    call s:rtp_add(bundle.rtp)
+
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
       for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-        if has_key(s:neobundles, bundle.path)
-          call s:rtp_rm(bundle.rtp)
-        endif
-        call s:rtp_add(bundle.rtp)
-
         source `=file`
       endfor
     endfor
