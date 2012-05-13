@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 13 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,10 +70,9 @@ function! neobundle#config#reload(bundles)
   endfor
 
   for script in scripts
-    for bundle in a:bundles
-      if stridx(script, bundle.path) >= 0
-        silent! execute 'source' script
-      endif
+    for bundle in filter(copy(a:bundles),
+          \ 'stridx(script, v:val.path) >= 0')
+      silent! execute source `=script`
     endfor
   endfor
 endfunction
@@ -104,9 +103,8 @@ function! neobundle#config#lazy_bundle(arg, ...)
 
   let bundle = neobundle#config#init_bundle(args[0], args[1:])
   let path = bundle.path
-  if !has_key(s:neobundles, path)
-    let s:neobundles[path] = bundle
-  endif
+
+  let s:neobundles[path] = bundle
   return bundle
 endfunction
 
