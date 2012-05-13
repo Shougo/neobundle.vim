@@ -112,8 +112,16 @@ function! neobundle#config#source(...)
   let bundles = empty(a:000) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(a:000)
-  for bundle in filter(bundles,
+  let bundles = filter(bundles,
         \ '!neobundle#config#is_sourced(v:val.name)')
+  if empty(bundles)
+    return
+  endif
+
+  filetype off
+  filetype indent plugin off
+
+  for bundle in bundles
     if has_key(s:neobundles, bundle.path)
       call s:rtp_rm(bundle.rtp)
     endif
@@ -128,6 +136,8 @@ function! neobundle#config#source(...)
 
     let s:loaded_neobundles[bundle.name] = 1
   endfor
+
+  filetype plugin indent on
 endfunction
 
 function! neobundle#config#is_sourced(name)
