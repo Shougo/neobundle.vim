@@ -222,8 +222,9 @@ COMMANDS 					*neobundle-commands*
 		'runtimepath'.
 		Note: |:NeoExternalBundle| is deprecated name.
 
-:NeoBundleSource {name}...			*:NeoBundleSource*
+:NeoBundleSource [{name}...]			*:NeoBundleSource*
 		|:source| {name} plugins.
+		If omit {name}, |:source| all lazy plugins.
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
@@ -361,6 +362,7 @@ CHANGELOG					*neobundle-changelog*
 - Added neobundle/lazy source.
 - Fixed :NeoBundleExternal.
 - Added test.
+- Improved :NeoBundleSource.
 
 2012-05-12
 - Added NeoBundleLazy and NeoBundleSource command.

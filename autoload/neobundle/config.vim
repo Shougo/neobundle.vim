@@ -109,18 +109,20 @@ function! neobundle#config#lazy_bundle(arg, ...)
 endfunction
 
 function! neobundle#config#source(...)
-  for bundle in filter(neobundle#config#search(a:000),
+  let bundles = empty(a:000) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#search(a:000)
+  for bundle in filter(bundles,
         \ '!neobundle#config#is_sourced(v:val.name)')
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
       for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-        source `=file`
-
-        let path = bundle.path
-        if has_key(s:neobundles, path)
+        if has_key(s:neobundles, bundle.path)
           call s:rtp_rm(bundle.rtp)
         endif
         call s:rtp_add(bundle.rtp)
+
+        source `=file`
       endfor
     endfor
 
@@ -181,7 +183,6 @@ function! neobundle#config#search(bundle_names)
 
   return bundles
 endfunction
-
 
 function! s:parse_options(opts)
   " TODO: improve this

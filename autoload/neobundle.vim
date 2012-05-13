@@ -35,12 +35,16 @@ command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+ NeoBundleLazy
+command! -nargs=+
+      \ -complete=customlist,neobundle#complete_lazy_bundles
+      \ NeoBundleLazy
       \ call neobundle#config#lazy_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 command! -nargs=+ NeoExternalBundle NeoBundleLazy <args>
 
-command! -nargs=+ -bar NeoBundleSource
+command! -nargs=* -bar
+      \ -complete=customlist,neobundle#complete_lazy_bundles
+      \  NeoBundleSource
       \ call neobundle#config#source(<f-args>)
 
 command! -nargs=? -bang -bar
@@ -88,6 +92,12 @@ endfunction
 function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
           \ 'stridx(v:val, a:arglead) == 0')
+endfunction
+
+function! neobundle#complete_lazy_bundles(arglead, cmdline, cursorpos)
+  return filter(map(filter(neobundle#config#get_neobundles(),
+        \ '!neobundle#config#is_sourced(v:val.name)'), 'v:val.name'),
+        \ 'stridx(v:val, a:arglead) == 0')
 endfunction
 
 function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
