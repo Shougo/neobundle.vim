@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 13 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,7 +36,7 @@ command! -nargs=+ NeoBundle
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=+ NeoBundleLazy
-      \ call neobundle#config#bundle(
+      \ call neobundle#config#lazy_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 command! -nargs=+ NeoExternalBundle NeoBundleLazy
 

@@ -349,6 +349,7 @@ CHANGELOG					*neobundle-changelog*
 2012-05-13
 - Fixed tags error.
 - Improved reload behavior.
+- Fixed :NeoBundleLazy.
 
 2012-05-12
 - Added NeoBundleLazy and NeoBundleSource command.
