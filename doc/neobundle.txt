@@ -359,7 +359,8 @@ CHANGELOG					*neobundle-changelog*
 - Improved reload behavior.
 - Fixed :NeoBundleLazy.
 - Added neobundle/lazy source.
-- Fixed :NeoBundleExternal
+- Fixed :NeoBundleExternal.
+- Added test.
 
 2012-05-12
 - Added NeoBundleLazy and NeoBundleSource command.

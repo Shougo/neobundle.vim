@@ -74,6 +74,7 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 
 " Lazy load.
+NeoBundleExternal 'CSApprox'
 NeoBundleLazy 'c9s/perlomni.vim.git'
 NeoBundleSource perlomni.vim
 
