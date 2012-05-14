@@ -77,6 +77,14 @@ NeoBundle 'Shougo/vimproc', {
 NeoExternalBundle 'CSApprox'
 NeoBundleLazy 'c9s/perlomni.vim.git'
 NeoBundleSource perlomni.vim
+call neobundle#source(['CSApprox'])
+
+NeoBundleLazy 'masudaK/vim-python'
+NeoBundleLazy 'klen/python-mode'
+autocmd FileType python*
+      \ NeoBundleFileTypeSource python python-mode
+call neobundle#filetype_source('python', ['vim-python'])
+
 
 filetype plugin indent on       " required!
 

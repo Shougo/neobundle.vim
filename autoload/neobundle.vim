@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 May 2012.
+" Last Modified: 14 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,8 +44,13 @@ command! -nargs=+ NeoExternalBundle NeoBundleLazy <args>
 
 command! -nargs=* -bar
       \ -complete=customlist,neobundle#complete_lazy_bundles
-      \  NeoBundleSource
+      \ NeoBundleSource
       \ call neobundle#config#source(<f-args>)
+
+command! -nargs=+ -bar
+      \ -complete=customlist,neobundle#complete_lazy_ft_bundles
+      \ NeoBundleFileTypeSource
+      \ call neobundle#config#filetype_source(<f-args>)
 
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#complete_bundles
@@ -89,6 +94,15 @@ function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
 endfunction
 
+function! neobundle#source(bundle_names)
+  return call('neobundle#config#source', a:bundle_names)
+endfunction
+
+function! neobundle#filetype_source(filetype, bundle_names)
+  return call('neobundle#config#filetype_source',
+        \ [a:filetype] + a:bundle_names)
+endfunction
+
 function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
           \ 'stridx(v:val, a:arglead) == 0')
@@ -98,6 +112,20 @@ function! neobundle#complete_lazy_bundles(arglead, cmdline, cursorpos)
   return filter(map(filter(neobundle#config#get_neobundles(),
         \ '!neobundle#config#is_sourced(v:val.name)'), 'v:val.name'),
         \ 'stridx(v:val, a:arglead) == 0')
+endfunction
+
+function! neobundle#complete_lazy_ft_bundles(arglead, cmdline, cursorpos)
+  if split(cmdline) >= 1
+    let candidates =
+          \ map(split(globpath(&runtimepath, 'syntax/*.vim'), '\n')
+          \   + split(globpath(&runtimepath, 'ftplugin/*.vim'), '\n')
+          \       "matchstr(fnamemodify(v:val, ':t:r'), '^[[:alnum:]-]*')")
+  else
+    let candidates = map(filter(neobundle#config#get_neobundles(),
+        \ '!neobundle#config#is_sourced(v:val.name)'), 'v:val.name')
+  endif
+
+  return filter(candidates, 'stridx(v:val, a:arglead) == 0')
 endfunction
 
 function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)

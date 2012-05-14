@@ -110,6 +110,16 @@ neobundle#rc({base-path})			*neobundle#rc()*
 	
 	filetype plugin indent on
 <
+neobundle#source({bundle-names})		*neobundle#source()*
+		Same to |:NeoBundleSource|.
+		{bundle-names} is bundle name list.
+
+neobundle#filetype_source({filetype}, {bundle-names})
+						*neobundle#filetype_source()*
+		Same to |:NeoBundleFileTypeSource|.
+		{filetype} is set filetype.
+		{bundle-names} is bundle name list.
+
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -228,6 +238,14 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
+:NeoBundleFileTypeSource {filetype} [{name}...]
+						*:NeoBundleFileTypeSource*
+		|:source| {name} plugins and set {filetype} filetype.
+		Note: This command is used to load the neobundles configured by
+		|:NeoBundleLazy|.
+		Note: This command is used for the neobundles contains filetype
+		plugin.(Ex: klen/python-mode)
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -279,6 +297,9 @@ EXAMPLES					*neobundle-examples*
 	" Lazy load.
 	NeoBundleLazy 'c9s/perlomni.vim.git'
 	NeoBundleSource perlomni.vim
+	NeoBundleLazy 'klen/python-mode'
+	autocmd FileType python
+	      \ NeoBundleFileTypeSource python-mode
 
 	filetype plugin indent on       " required!
 <
@@ -354,6 +375,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-05-14
+- Added :NeoBundleFileTypeSource command.
 
 2012-05-13
 - Fixed tags error.
