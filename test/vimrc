@@ -11,6 +11,8 @@ endif
 
 call neobundle#rc(expand(testdir, 1))
 
+let g:neobundle_default_git_protocol = 'https'
+
 " My Bundles here:
 "
 
@@ -81,10 +83,7 @@ call neobundle#source(['CSApprox'])
 
 NeoBundleLazy 'masudaK/vim-python'
 NeoBundleLazy 'klen/python-mode'
-autocmd FileType python*
-      \ NeoBundleFileTypeSource python python-mode
-call neobundle#filetype_source('python', ['vim-python'])
-
+autocmd FileType python* NeoBundleSource python-mode
 
 filetype plugin indent on       " required!
 

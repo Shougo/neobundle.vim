@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 14 May 2012.
+" Last Modified: 16 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,26 +138,9 @@ function! neobundle#config#source(...)
   endfor
 
   filetype plugin indent on
-endfunction
 
-function! neobundle#config#filetype_source(...)
-  if a:0 <= 1
-    return
-  endif
-
-  let filetype = a:1
-  let bundles = empty(a:000[1:]) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(a:000[1:])
-  let bundles = filter(bundles,
-        \ '!neobundle#config#is_sourced(v:val.name)')
-  if empty(bundles)
-    return
-  endif
-
-  call call('neobundle#config#source', a:000[1:])
-
-  execute 'set filetype='.filetype
+  " Reload filetype plugins.
+  let &l:filetype = &l:filetype
 endfunction
 
 function! neobundle#config#is_sourced(name)

@@ -114,12 +114,6 @@ neobundle#source({bundle-names})		*neobundle#source()*
 		Same to |:NeoBundleSource|.
 		{bundle-names} is bundle name list.
 
-neobundle#filetype_source({filetype}, {bundle-names})
-						*neobundle#filetype_source()*
-		Same to |:NeoBundleFileTypeSource|.
-		{filetype} is set filetype.
-		{bundle-names} is bundle name list.
-
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -238,14 +232,6 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
-:NeoBundleFileTypeSource {filetype} [{name}...]
-						*:NeoBundleFileTypeSource*
-		|:source| {name} plugins and set {filetype} filetype.
-		Note: This command is used to load the neobundles configured by
-		|:NeoBundleLazy|.
-		Note: This command is used for the neobundles contains filetype
-		plugin.(Ex: klen/python-mode)
-
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -294,12 +280,22 @@ EXAMPLES					*neobundle-examples*
 	" Comment is allowed.
 	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 
+	" Build repos.
+	NeoBundle 'Shougo/vimproc', {
+	      \ 'build' : {
+	      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+	      \     'cygwin' : 'make -f make_cygwin.mak',
+	      \     'mac' : 'make -f make_mac.mak',
+	      \     'unix' : 'make -f make_unix.mak',
+	      \    },
+	      \ }
+
 	" Lazy load.
 	NeoBundleLazy 'c9s/perlomni.vim.git'
 	NeoBundleSource perlomni.vim
 	NeoBundleLazy 'klen/python-mode'
 	autocmd FileType python
-	      \ NeoBundleFileTypeSource python-mode
+	      \ NeoBundleSource python-mode
 
 	filetype plugin indent on       " required!
 <
@@ -376,6 +372,10 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-05-16
+- Improved :NeoBundleSource behavior.
+- Deleted :NeoBundleFileTypeSource command.
+
 2012-05-14
 - Added :NeoBundleFileTypeSource command.
 
@@ -417,6 +417,9 @@ CHANGELOG					*neobundle-changelog*
 - Ver.2.0 development is started.
 - Implemented :NeoBundleClean completion.
 - Improved reload behavior.
+
+------------------------------------------------------------------------------
+ChangeLog neobundle 1.0:
 
 2012-04-21
 - Ver.1.0.
