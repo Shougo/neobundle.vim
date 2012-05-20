@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 May 2012.
+" Last Modified: 20 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,6 +84,7 @@ function! neobundle#config#bundle(arg)
   endif
 
   let bundle = neobundle#config#init_bundle(args[0], args[1:])
+  let bundle.orig_arg = a:arg
   let path = bundle.path
   if has_key(s:neobundles, path)
     call s:rtp_rm(bundle.rtp)
@@ -102,6 +103,7 @@ function! neobundle#config#lazy_bundle(arg, ...)
   endif
 
   let bundle = neobundle#config#init_bundle(args[0], args[1:])
+  let bundle.orig_arg = a:arg
   let path = bundle.path
 
   let s:neobundles[path] = bundle

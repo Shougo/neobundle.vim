@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2012.
+" Last Modified: 20 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -163,13 +163,13 @@ let s:source.action_table.reinstall = {
 function! s:source.action_table.reinstall.func(candidates)"{{{
   for candidate in a:candidates
     " Save info.
-    let name = candidate.action__bundle.orig_name
-    let opts = candidate.action__bundle.orig_opts
+    let arg = candidate.action__bundle.orig_arg
 
     " Remove.
     call neobundle#installer#clean(1, candidate.action__bundle_name)
 
-    call call('neobundle#config#bundle', [name] + opts)
+    call call('neobundle#config#bundle',
+          \ [candidate.action__bundle.orig_arg])
   endfor
 
   " Install.
