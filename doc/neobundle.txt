@@ -372,6 +372,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-06-02
+- Added .git suffix.
+
 2012-05-20
 - Fixed reinstall error.
 

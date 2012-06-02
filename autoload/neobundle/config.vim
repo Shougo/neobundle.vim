@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 May 2012.
+" Last Modified: 02 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -216,6 +216,11 @@ function! s:parse_name(arg)
   if a:arg =~ '\<\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
     let uri = g:neobundle_default_git_protocol .
           \ '://github.com/'.split(a:arg, ':')[-1]
+    if uri !~ '\.git\s*$'
+      " Add .git suffix.
+      let uri .= '.git'
+    endif
+
     let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     let type = 'git'
   elseif a:arg =~ '\<\%(git@\|git://\)\S\+'

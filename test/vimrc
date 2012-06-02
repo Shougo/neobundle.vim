@@ -19,6 +19,9 @@ let g:neobundle_default_git_protocol = 'https'
 " Original repositories in github.
 NeoBundle 'Shougo/neocomplcache-clang.git'
 
+" Omit suffix.
+NeoBundle 'Shougo/vimshell'
+
 " Vim-script repositories.
 NeoBundle 'rails.vim'
 
@@ -30,6 +33,7 @@ NeoBundle 'vim-scripts/ragtag.vim'
 
 " Original repo.
 NeoBundle 'altercation/vim-colors-solarized'
+
 " With extension.
 NeoBundle 'nelstrom/vim-mac-classic-theme.git'
 
