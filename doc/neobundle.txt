@@ -208,7 +208,7 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleUpdate [{name}]			*:NeoBundleUpdate*
 		Same to |:NeoBundleInstall!|.
 
-:NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleWithCurrentDir*
+:NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleClean*
 		Removes non configured plugins. If {bang} is added, force
 		remove plugins. If {name} are added, remove
 		{name} plugins.
