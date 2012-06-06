@@ -31,6 +31,10 @@ set cpo&vim
 let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
 
+let s:neobundle_dir = get(
+      \ map(split(globpath(&runtimepath, 'bundle'), '\n'),
+      \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
+
 command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
@@ -81,10 +85,6 @@ augroup END
 function! neobundle#rc(...)
   if a:0 > 0
     let s:neobundle_dir = a:1
-  else
-    let s:neobundle_dir = get(split(
-          \ map(globpath(&runtimepath, 'bundle'), '\n'),
-          \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
   endif
 
   let s:neobundle_dir =
