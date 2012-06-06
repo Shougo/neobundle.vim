@@ -99,8 +99,8 @@ FUNCTIONS 					*neobundle-functions*
 neobundle#rc([{base-path}])			*neobundle#rc()*
 		Initialize neobundle.vim. {base-path} is neobundle downloaded
 		file base path.
-		If omit {base-path}, neobundle search "bundle" directory from
-		'runtimepath'.
+		If omit {base-path}, neobundle searches "bundle" directory from
+		default 'runtimepath'.
 >
 	set nocompatible
 	filetype off
