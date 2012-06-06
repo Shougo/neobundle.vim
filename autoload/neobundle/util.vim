@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Mar 2012.
+" Last Modified: 06 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +34,7 @@ function! neobundle#util#substitute_path_separator(path)
 endfunction
 function! neobundle#util#expand(path)
   return neobundle#util#substitute_path_separator(
-        \ expand(escape(a:path, '*?[]"={}')))
+        \ expand(escape(a:path, '*?[]"={}'), 1))
 endfunction
 function! neobundle#util#is_windows()
   return s:is_windows
