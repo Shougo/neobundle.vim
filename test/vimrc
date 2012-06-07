@@ -85,6 +85,9 @@ NeoBundleLazy 'c9s/perlomni.vim.git'
 NeoBundleSource perlomni.vim
 call neobundle#source(['CSApprox'])
 
+NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
+call neobundle#source(['The-NERD-tree'])
+
 NeoBundleLazy 'masudaK/vim-python'
 NeoBundleLazy 'klen/python-mode'
 autocmd FileType python* NeoBundleSource python-mode

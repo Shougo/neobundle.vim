@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jun 2012.
+" Last Modified: 07 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,6 +135,14 @@ function! neobundle#config#source(...)
         source `=file`
       endfor
     endfor
+
+    if has_key(bundle, 'augroup')
+      execute 'doautocmd' bundle.augroup 'VimEnter'
+
+      if has('gui_running')
+        execute 'doautocmd' bundle.augroup 'GUIEnter'
+      endif
+    endif
 
     let s:loaded_neobundles[bundle.name] = 1
   endfor

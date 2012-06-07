@@ -173,6 +173,14 @@ COMMANDS 					*neobundle-commands*
 			others		(String)
 			Specify others environment build script.
 
+		augroup		(String)
+		Specify augroup name in the plugin.
+		Neobundle call |VimEnter| or |GUIEnter| autocmds automatically.
+		Note: Some function define autocmds for |VimEnter| or
+		|GUIEnter|.
+		For example, "fugitive", "NERDTree", "session.vim".
+		This attribute is valid in |:NeoBundleLazy|.
+
 		Examples:
 >
 		NeoBundle 'git_repository_uri'
@@ -227,7 +235,10 @@ COMMANDS 					*neobundle-commands*
 		This command register neobundle, but don't add to
 		'runtimepath'.
 		Note: |:NeoExternalBundle| is deprecated name.
-
+>
+		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
+		NeoBundleSource The-NERD-tree
+<
 :NeoBundleSource [{name}...]			*:NeoBundleSource*
 		|:source| {name} plugins.
 		If omit {name}, |:source| all lazy plugins.
@@ -373,6 +384,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-06-07
+- Added augroup attribute.
 
 2012-06-06
 - Improved neobundle#rc() behavior.
