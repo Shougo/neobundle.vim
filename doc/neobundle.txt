@@ -387,6 +387,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-06-17
 - Added .gitignore.
+- Improved neobundle sources behavior.
 
 2012-06-07
 - Added augroup attribute.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 May 2012.
+" Last Modified: 17 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,9 +59,10 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
 endfunction"}}}
-function! s:source.hooks.on_post_filter(args, context)"{{{
-  let max = max(map(copy(a:context.candidates), 'len(v:val.word)'))
-  for candidate in a:context.candidates
+
+" Filters"{{{
+function! s:source.source__converter(candidates, context)"{{{
+  for candidate in a:candidates
     if candidate.source__uri =~
           \ '^\%(https\?\|git\)://github.com/'
       let candidate.action__uri = candidate.source__uri
@@ -70,29 +71,35 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
       let candidate.action__uri =
             \ substitute(candidate.action__uri, '.git$', '', '')
     endif
-    if !has_key(candidate, 'abbr')
-      let candidate.abbr = printf('%-'.max.'s : %s',
-        \         candidate.word, s:get_commit_status(
-        \         a:context.source__bang, candidate.action__bundle))
-    endif
   endfor
+
+  return a:candidates
 endfunction"}}}
 
+let s:source.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source.source__converter]
+"}}}
+
 function! s:source.gather_candidates(args, context)"{{{
-  let _ = []
-  for bundle in neobundle#config#get_neobundles()
-    let name = substitute(bundle.orig_name,
-        \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', '')
-    let dict = {
-        \ 'word' : name,
+  let _ = map(neobundle#config#get_neobundles(), "{
+        \ 'word' : substitute(v:val.orig_name,
+        \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', ''),
         \ 'kind' : 'directory',
-        \ 'action__path' : bundle.path,
-        \ 'action__directory' : bundle.path,
-        \ 'action__bundle' : bundle,
-        \ 'action__bundle_name' : bundle.name,
-        \ 'source__uri' : bundle.uri,
+        \ 'action__path' : v:val.path,
+        \ 'action__directory' : v:val.path,
+        \ 'action__bundle' : v:val,
+        \ 'action__bundle_name' : v:val.name,
+        \ 'source__uri' : v:val.uri,
         \ }
-    call add(_, dict)
+        \")
+
+  let max = max(map(copy(_), 'len(v:val.word)'))
+
+  for candidate in _
+    let candidate.word = printf('%-'.max.'s : %s',
+          \         candidate.word, s:get_commit_status(
+          \         a:context.source__bang, candidate.action__bundle))
   endfor
 
   return _

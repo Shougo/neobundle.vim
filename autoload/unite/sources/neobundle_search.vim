@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 17 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,10 +71,13 @@ function! s:source.gather_candidates(args, context)"{{{
   let plugins = s:get_repository_plugins(a:context, repository)
 
   return map(copy(plugins), "{
-        \ 'word' : v:val.n . v:val.s,
+        \ 'word' : v:val.n . ' ' . v:val.s,
         \ 'abbr' : printf('%-20s %-10s %-5s -- %s',
         \          v:val.n, v:val.t, v:val.rv, v:val.s),
         \ 'source__name' : v:val.n,
+        \ 'source__type' : v:val.t,
+        \ 'source__version' : v:val.rv,
+        \ 'source__description' : v:val.s,
         \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.n,
         \ 'action__path' : 'https://github.com/vim-scripts/' . v:val.n,
         \ }")
@@ -97,13 +100,6 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__NeoBundleSearch_Marker Special
   highlight default link uniteSource__NeoBundleSearch_Description Comment
 endfunction"}}}
-function! s:source.hooks.on_post_filter(args, context)"{{{
-  for candidate in a:context.candidates
-    let candidate.action__uri =
-          \ 'https://github.com/vim-scripts/' . candidate.source__name
-    let candidate.action__path = candidate.action__uri
-  endfor
-endfunction"}}}
 
 " Actions"{{{
 let s:source.action_table.yank = {
@@ -119,6 +115,30 @@ function! s:source.action_table.yank.func(candidates)"{{{
 
   echo 'Yanked plugin settings!'
 endfunction"}}}
+"}}}
+
+" Filters"{{{
+function! s:source.source__converter(candidates, context)"{{{
+  let max = max(map(copy(a:candidates),
+        \ 'len(v:val.source__name)'))
+  let format = '%-'. max .'s %-10s %-5s -- %s'
+
+  for candidate in a:candidates
+    let candidate.abbr = printf(format,
+        \          candidate.source__name, candidate.source__type,
+        \          candidate.source__version,
+        \          candidate.source__description)
+    let candidate.action__uri =
+          \ 'https://github.com/vim-scripts/' . candidate.source__name
+    let candidate.action__path = candidate.action__uri
+  endfor
+
+  return a:candidates
+endfunction"}}}
+
+let s:source.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source.source__converter]
 "}}}
 
 " Misc.
