@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Jun 2012.
+" Last Modified: 23 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,7 +32,7 @@ let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
 
 let s:neobundle_dir = get(
-      \ map(split(globpath(&runtimepath, 'bundle', 1), '\n'),
+      \ filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
       \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
 
 command! -nargs=+ NeoBundle
