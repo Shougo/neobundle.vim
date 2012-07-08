@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 08 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,6 +159,7 @@ function! s:sync(bundle, context, is_revision)"{{{
 
   let a:context.source__process = vimproc#pgroup_open(cmd, 0, 2)
   let a:context.source__revision_locked = a:is_revision
+  let a:context.source__sha = vimproc#system('git rev-parse HEAD')
 
   " Close handles.
   call a:context.source__process.stdin.close()
@@ -178,7 +179,9 @@ function! s:check_output(context)"{{{
     let max = a:context.source__max_bundles
     let bundle = a:context.source__bundles[a:context.source__number]
 
-    if status
+    let sha = vimproc#system('git rev-parse HEAD')
+
+    if status && a:context.source__sha == sha
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'), 1)
@@ -191,7 +194,7 @@ function! s:check_output(context)"{{{
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Locked'), 1)
-    elseif a:context.source__output =~ 'up-to-date\|up to date'
+    elseif a:context.source__sha == sha
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Skipped'), 1)
