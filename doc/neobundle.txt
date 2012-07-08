@@ -385,6 +385,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-07-08
+- Improved installer.
+
 2012-06-23
 - Fixed s:neobundle_dir problem.
 

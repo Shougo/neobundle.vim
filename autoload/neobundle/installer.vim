@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 08 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -260,13 +260,19 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return 0
   endif
 
+  let old_sha = s:system('git rev-parse HEAD')
+
   let result = s:system(cmd)
 
   if getcwd() !=# cwd
     lcd `=cwd`
   endif
 
-  if s:get_last_status()
+  let status = s:get_last_status()
+
+  let new_sha = s:system('git rev-parse HEAD')
+
+  if status && old_sha == new_sha
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
     return -1
@@ -277,7 +283,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  return result !~# 'up-to-date\|up to date'
+  return old_sha != new_sha
 endfunction
 
 function! s:install(bang, bundles)
