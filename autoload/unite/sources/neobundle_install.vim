@@ -160,6 +160,7 @@ function! s:sync(bundle, context, is_revision)"{{{
   let a:context.source__process = vimproc#pgroup_open(cmd, 0, 2)
   let a:context.source__revision_locked = a:is_revision
   let a:context.source__sha = vimproc#system('git rev-parse HEAD')
+  let a:context.source__bundle = a:bundle
 
   " Close handles.
   call a:context.source__process.stdin.close()
@@ -179,9 +180,16 @@ function! s:check_output(context)"{{{
     let max = a:context.source__max_bundles
     let bundle = a:context.source__bundles[a:context.source__number]
 
-    let sha = vimproc#system('git rev-parse HEAD')
+    let cwd = getcwd()
+    try
+      lcd `=a:context.source__bundle.path`
+      let sha = vimproc#system('git rev-parse HEAD')
+    finally
+      lcd `=cwd`
+    endtry
 
     if status && a:context.source__sha == sha
+        \ && a:context.source__output !~# 'up-to-date\|up to date'
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'), 1)

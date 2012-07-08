@@ -273,6 +273,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let new_sha = s:system('git rev-parse HEAD')
 
   if status && old_sha == new_sha
+        \ && result !~# 'up-to-date\|up to date'
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
     return -1
