@@ -188,7 +188,7 @@ function! neobundle#config#init_bundle(name, opts)
   let bundle.rtp = s:expand_path(bundle.path.'/'.get(bundle, 'rtp', ''))
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
-    let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '')
+    let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
