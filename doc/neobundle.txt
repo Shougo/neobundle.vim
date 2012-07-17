@@ -388,6 +388,9 @@ CHANGELOG					*neobundle-changelog*
 2012-07-18
 - Fixed documentation.
 
+2012-07-12
+- Improved chomp behavior.
+
 2012-07-08
 - Improved installer.
 - Fixed for new git.
