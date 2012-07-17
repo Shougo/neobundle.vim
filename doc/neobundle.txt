@@ -79,8 +79,8 @@ In first, git clone from the repository.
 
 Note: git command is required.
 >
-	$ mkdir -p ~/.vim/.bundle
-	$ git clone git:Shougo/neobundle.vim.git ~/.vim/.bundle/neobundle.vim
+	$ mkdir -p ~/.vim/bundle
+	$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 <
 And a path to the repository directory.
 >
@@ -271,7 +271,7 @@ EXAMPLES					*neobundle-examples*
 	  set runtimepath+={path to neobundle directory}
 	endif
 	
-	call neobundle#rc(expand('~/.bundle'))
+	call neobundle#rc(expand('~/.vim/bundle'))
 
 	" let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
@@ -384,6 +384,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-07-18
+- Fixed documentation.
 
 2012-07-08
 - Improved installer.

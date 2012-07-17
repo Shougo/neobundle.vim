@@ -8,7 +8,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
 
      ```
      $ mkdir -p ~/.vim/bundle
-     $ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+     $ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
      ```
 
 2. Configure bundles:
