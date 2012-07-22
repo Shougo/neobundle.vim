@@ -88,7 +88,7 @@ And a path to the repository directory.
 <
 Example:
 >
-	set runtimepath+=~/.vim/.bundle/neobundle.vim
+	set runtimepath+=~/.vim/bundle/neobundle.vim
 <
 ==============================================================================
 INTERFACE					*neobundle-interface*
@@ -106,7 +106,7 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 	filetype off
 	filetype plugin indent off
 	set runtimepath+={path to neobundle directory}
-	call neobundle#rc(expand('~/.bundle'))
+	call neobundle#rc(expand('~/.vim/bundle'))
 	
 	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
 	
@@ -384,6 +384,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-07-22
+- Fixed documentation.
 
 2012-07-18
 - Fixed documentation.
