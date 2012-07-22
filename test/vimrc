@@ -69,10 +69,13 @@ NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 
 " Depends repos.
-NeoBundle 'Shougo/neocomplcache', {'depends' :
-      \ [ 'Shougo/neocomplcache-snippets-complete.git',
+NeoBundle 'Shougo/neocomplcache',
+      \ {'depends' : [
+      \   'Shougo/neocomplcache-snippets-complete.git',
       \   ['rstacruz/sparkup', {'rtp': 'vim'}],
       \ ]}
+NeoBundle 'Shougo/vimfiler',
+      \ { 'depends' : 'Shougo/unite.vim' }
 
 " Build repos.
 NeoBundle 'Shougo/vimproc', {

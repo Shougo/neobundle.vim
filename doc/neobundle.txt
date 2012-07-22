@@ -149,10 +149,11 @@ COMMANDS 					*neobundle-commands*
 		sub directory.
 		For example: https://github.com/rstacruz/sparkup
 
-		depends			(List)
+		depends			(List or String)
 		Depends plugins list.
 		List items are '{plugin-name}' or ['{plugin-name}', {args}].
 		This plugins are installed automatically.
+		Note: Type String is syntax sugar for List of {plugin-name}.
 
 		build			(Dictionary)
 		Specify build script.
@@ -199,6 +200,8 @@ COMMANDS 					*neobundle-commands*
 		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
 		    \ ]}
+		NeoBundle 'Shougo/vimfiler',
+		    \ {'depends' : 'Shougo/unite.vim' }
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision

@@ -204,7 +204,11 @@ function! neobundle#config#init_bundle(name, opts)
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
-  let bundle.depends = get(bundle, 'depends', [])
+
+  let depends = get(bundle, 'depends', [])
+  let bundle.depends = type(depends) == type('') ?
+        \ [depends] : depends
+
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
