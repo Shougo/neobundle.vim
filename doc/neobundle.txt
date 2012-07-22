@@ -149,6 +149,11 @@ COMMANDS 					*neobundle-commands*
 		sub directory.
 		For example: https://github.com/rstacruz/sparkup
 
+		depends			(List)
+		Depends plugins list.
+		List items are '{plugin-name}' or ['{plugin-name}', {args}].
+		This plugins are installed automatically.
+
 		build			(Dictionary)
 		Specify build script.
 		You may use this option when the plugin have to be built.
@@ -190,7 +195,10 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
-		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
+		NeoBundle 'Shougo/neocomplcache', {'depends' :
+		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
+		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
+		    \ ]}
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -384,6 +392,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-07-23
+- Added depends.
 
 2012-07-22
 - Fixed documentation.

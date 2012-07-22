@@ -60,7 +60,6 @@ NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
 " With options.
 NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
-NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
 NeoBundle 'Shougo/vimshell', '3787e5'
 
 " Nosync repos.
@@ -68,6 +67,12 @@ NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 
 " Comment is allowed.
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
+
+" Depends repos.
+NeoBundle 'Shougo/neocomplcache', {'depends' :
+      \ [ 'Shougo/neocomplcache-snippets-complete.git',
+      \   ['rstacruz/sparkup', {'rtp': 'vim'}],
+      \ ]}
 
 " Build repos.
 NeoBundle 'Shougo/vimproc', {

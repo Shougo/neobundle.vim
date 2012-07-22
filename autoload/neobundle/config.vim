@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jul 2012.
+" Last Modified: 22 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,7 +78,9 @@ function! neobundle#config#reload(bundles)
 endfunction
 
 function! neobundle#config#bundle(arg)
-  sandbox let args = eval('[' . a:arg . ']')
+  let arg = type(a:arg) == type([]) ?
+   \ string(a:arg) : '[' . a:arg . ']'
+  sandbox let args = eval(arg)
   if empty(args)
     return {}
   endif
@@ -93,6 +95,16 @@ function! neobundle#config#bundle(arg)
   let s:neobundles[path] = bundle
   let s:loaded_neobundles[bundle.name] = 1
   call s:rtp_add(bundle.rtp)
+  for depend in bundle.depends
+    if type(depend) == type('')
+      let depend = string(depend)
+    endif
+
+    call neobundle#config#bundle(depend)
+
+    unlet depend
+  endfor
+
   return bundle
 endfunction
 
@@ -179,17 +191,20 @@ function! s:rtp_add(dir) abort
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
-  let bundle = extend(s:parse_name(substitute(a:name,"['".'"]\+','','g')),
+  let bundle = extend(s:parse_name(
+        \ substitute(a:name,"['".'"]\+','','g')),
         \ s:parse_options(a:opts))
   let bundle.base = s:expand_path(get(bundle, 'base',
         \ neobundle#get_neobundle_dir()))
   let bundle.path = s:expand_path(bundle.base.'/'.
         \ get(bundle, 'directory', bundle.name))
-  let bundle.rtp = s:expand_path(bundle.path.'/'.get(bundle, 'rtp', ''))
+  let bundle.rtp = s:expand_path(bundle.path.'/'.
+        \ get(bundle, 'rtp', ''))
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
+  let bundle.depends = get(bundle, 'depends', [])
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
