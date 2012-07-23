@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Jul 2012.
+" Last Modified: 23 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -250,7 +250,8 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let cwd = getcwd()
 
   let [cmd, message] =
-        \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
+        \ neobundle#installer#get_{a:is_revision ?
+        \   'revision' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
 
   redraw

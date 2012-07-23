@@ -398,6 +398,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-07-23
 - Added depends.
+- Improved for repository errors.
 
 2012-07-22
 - Fixed documentation.

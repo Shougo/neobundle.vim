@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jul 2012.
+" Last Modified: 23 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,6 +184,21 @@ function! s:check_output(context)"{{{
     try
       lcd `=a:context.source__bundle.path`
       let sha = vimproc#system('git rev-parse HEAD')
+    catch
+      call neobundle#installer#log(
+            \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
+            \ num, max, 'Error'), 1)
+      call neobundle#installer#error(bundle.path)
+      call neobundle#installer#error(v:throwpoint)
+      call neobundle#installer#error(v:exception)
+      call neobundle#installer#error('Your repository path may be wrong.')
+      call add(a:context.source__errored_bundles,
+            \ bundle)
+      let a:context.source__process = {}
+      let a:context.source__output = ''
+      let a:context.source__number += 1
+
+      return
     finally
       lcd `=cwd`
     endtry
