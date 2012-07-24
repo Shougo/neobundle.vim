@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Jul 2012.
+" Last Modified: 25 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,7 +98,12 @@ function! neobundle#config#bundle(arg)
     return {}
   endif
 
-  let bundle = neobundle#config#init_bundle(args[0], args[1:])
+  let bundle = neobundle#config#init_bundle(
+        \ args[0], args[1:])
+  if empty(bundle)
+    return {}
+  endif
+
   let bundle.orig_arg = a:arg
   let path = bundle.path
   if has_key(s:neobundles, path)
@@ -189,8 +194,12 @@ function! neobundle#config#rm_bndle(path)
   endif
 endfunction
 
+function! neobundle#config#get_types()
+  return s:neobundle_types
+endfunction
+
 function! neobundle#config#parse_path(path)
-  for type in values(s:neobundle_types)
+  for type in values(neobundle#config#get_types())
     let detect = type.detect(a:path)
     if !empty(detect)
       return detect
@@ -215,9 +224,17 @@ function! s:rtp_add(dir) abort
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
-  let bundle = extend(s:parse_name(
+  let bundle = extend(neobundle#config#parse_path(
         \ substitute(a:name,"['".'"]\+','','g')),
         \ s:parse_options(a:opts))
+  if !has_key(bundle, 'type') || !has_key(bundle, 'uri')
+        \ || !has_key(bundle, 'name')
+    call neobundle#installer#error(
+          \ printf('Failed parse name "%s" and args %s',
+          \   a:name, string(a:opts)))
+    return {}
+  endif
+
   let bundle.base = s:expand_path(get(bundle, 'base',
         \ neobundle#get_neobundle_dir()))
   let bundle.path = s:expand_path(bundle.base.'/'.

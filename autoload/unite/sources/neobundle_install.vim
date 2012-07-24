@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2012.
+" Last Modified: 25 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,7 +144,7 @@ function! s:sync(bundle, context, is_revision)"{{{
   let cwd = getcwd()
 
   let [cmd, message] =
-        \ neobundle#installer#get_{a:is_revision ? 'revision' : 'sync'}_command(
+        \ neobundle#installer#get_{a:is_revision ? 'revision_lock' : 'sync'}_command(
         \ a:context.source__bang, a:bundle,
         \ a:context.source__number+1, a:context.source__max_bundles)
   call neobundle#installer#log('[neobundle/install] ' . message, 1)
@@ -157,9 +157,12 @@ function! s:sync(bundle, context, is_revision)"{{{
     return
   endif
 
+  let types = neobundle#config#get_types()
+  let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
+
   let a:context.source__process = vimproc#pgroup_open(cmd, 0, 2)
   let a:context.source__revision_locked = a:is_revision
-  let a:context.source__sha = vimproc#system('git rev-parse HEAD')
+  let a:context.source__rev = vimproc#system(rev_cmd)
   let a:context.source__bundle = a:bundle
 
   " Close handles.
@@ -180,10 +183,12 @@ function! s:check_output(context)"{{{
     let max = a:context.source__max_bundles
     let bundle = a:context.source__bundles[a:context.source__number]
 
+    let types = neobundle#config#get_types()
+    let rev_cmd = types[bundle.type].get_revision_number_command(bundle)
     let cwd = getcwd()
     try
       lcd `=a:context.source__bundle.path`
-      let sha = vimproc#system('git rev-parse HEAD')
+      let rev = vimproc#system(rev_cmd)
     catch
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
@@ -203,8 +208,9 @@ function! s:check_output(context)"{{{
       lcd `=cwd`
     endtry
 
-    if status && a:context.source__sha == sha
-        \ && a:context.source__output !~# 'up-to-date\|up to date'
+    if status && a:context.source__rev == rev
+        \ && (bundle.type !=# 'git' ||
+        \     a:context.source__output !~# 'up-to-date\|up to date')
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Error'), 1)
@@ -217,7 +223,7 @@ function! s:check_output(context)"{{{
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Locked'), 1)
-    elseif a:context.source__sha == sha
+    elseif a:context.source__rev == rev
       call neobundle#installer#log(
             \ printf('[neobundle/install] (%'.len(max).'d/%d): %s',
             \ num, max, 'Skipped'), 1)

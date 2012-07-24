@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Jul 2012.
+" Last Modified: 25 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -171,77 +171,46 @@ function! neobundle#installer#clean(bang, ...)
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
-  if !isdirectory(a:bundle.path)
-    if a:bundle.type == 'svn'
-      let cmd = 'svn checkout'
-    elseif a:bundle.type == 'hg'
-      let cmd = 'hg clone'
-    elseif a:bundle.type == 'git'
-      let cmd = 'git clone'
-    else
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Unknown')]
-    endif
-
-    let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
-
-    let message = printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, cmd)
-  else
-    if !a:bang || a:bundle.type ==# 'nosync'
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Skipped')]
-    endif
-
-    if a:bundle.type == 'svn'
-      let cmd = 'svn up'
-    elseif a:bundle.type == 'hg'
-      let cmd = 'hg pull -u'
-    elseif a:bundle.type == 'git'
-      let cmd = 'git pull --rebase'
-
-      if get(a:bundle, 'rev', '') != ''
-        " Restore revision.
-        let cmd = 'git checkout master && ' . cmd
-      endif
-    else
-      return ['', printf('(%'.len(a:max).'d/%d): %s',
-            \ a:number, a:max, 'Unknown')]
-    endif
-
-    " Cd to bundle path.
-    lcd `=a:bundle.path`
-
-    let message = printf('(%'.len(a:max).'d/%d): %s %s',
-          \ a:number, a:max, cmd, a:bundle.path)
-  endif
-
-  return [cmd, message]
-endfunction
-function! neobundle#installer#get_revision_command(bang, bundle, number, max)
-  let repo_dir = neobundle#util#substitute_path_separator(
-        \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
-
-  " Lock revision.
-  if a:bundle.type == 'svn'
-    let cmd = 'svn up'
-  elseif a:bundle.type == 'hg'
-    let cmd = 'hg up'
-  elseif a:bundle.type == 'git'
-    let cmd = 'git checkout'
-  else
+  let types = neobundle#config#get_types()
+  if !has_key(types, a:bundle.type)
     return ['', printf('(%'.len(a:max).'d/%d): %s',
           \ a:number, a:max, 'Unknown')]
   endif
 
-  let cmd .= ' ' . a:bundle.rev
+  if isdirectory(a:bundle.path) &&
+        \ (!a:bang || a:bundle.type ==# 'nosync')
+    return ['', printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, 'Skipped')]
+  endif
+
+  let cmd = types[a:bundle.type].get_sync_command(a:bundle)
+  let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
+        \ a:number, a:max, a:bundle.name, cmd)
+
+  if isdirectory(a:bundle.path)
+    " Cd to bundle path.
+    lcd `=a:bundle.path`
+  endif
+
+  return [cmd, message]
+endfunction
+function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max)
+  let repo_dir = neobundle#util#substitute_path_separator(
+        \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
+
+  let types = neobundle#config#get_types()
+  if !has_key(types, a:bundle.type)
+    return ['', printf('(%'.len(a:max).'d/%d): %s',
+          \ a:number, a:max, 'Unknown')]
+  endif
+
+  let cmd = types[a:bundle.type].get_revision_lock_command(a:bundle)
 
   " Cd to bundle path.
-  let path = a:bundle.path
-  lcd `=path`
+  lcd `=a:bundle.path`
 
-  let message = printf('(%'.len(a:max).'d/%d): %s',
-        \ a:number, a:max, cmd)
+  let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
+        \ a:number, a:max, a:bundle.name, cmd)
 
   return [cmd, message]
 endfunction
@@ -251,7 +220,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
 
   let [cmd, message] =
         \ neobundle#installer#get_{a:is_revision ?
-        \   'revision' : 'sync'}_command(
+        \   'revision_lock' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
 
   redraw
@@ -261,7 +230,10 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return 0
   endif
 
-  let old_sha = s:system('git rev-parse HEAD')
+  let types = neobundle#config#get_types()
+  let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
+
+  let old_rev = s:system(rev_cmd)
 
   let result = s:system(cmd)
 
@@ -271,10 +243,11 @@ function! s:sync(bang, bundle, number, max, is_revision)
 
   let status = s:get_last_status()
 
-  let new_sha = s:system('git rev-parse HEAD')
+  let new_rev = s:system(rev_cmd)
 
-  if status && old_sha == new_sha
-        \ && result !~# 'up-to-date\|up to date'
+  if status && old_rev == new_rev
+        \ && (a:bundle.type !=# 'git'
+        \    || result !~# 'up-to-date\|up to date')
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
     return -1
@@ -285,7 +258,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  return old_sha != new_sha
+  return old_rev != new_rev
 endfunction
 
 function! s:install(bang, bundles)

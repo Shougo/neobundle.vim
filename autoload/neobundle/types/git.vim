@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jul 2012.
+" Last Modified: 25 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,9 +67,10 @@ function! s:type.detect(path)"{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:type.get_update_command(bundle)"{{{
+function! s:type.get_sync_command(bundle)"{{{
   if !isdirectory(a:bundle.path)
     let cmd = 'git clone'
+    let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
     let cmd = 'git pull --rebase'
 
