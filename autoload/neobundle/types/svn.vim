@@ -40,7 +40,7 @@ function! s:type.detect(path)"{{{
 
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
         \ && a:path =~? '[/.]svn[/.]'
-    let uri = a:arg
+    let uri = a:path
     let name = split(uri, '/')[-1]
 
     let type = 'svn'

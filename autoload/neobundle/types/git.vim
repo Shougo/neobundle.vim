@@ -38,9 +38,11 @@ let s:type = {
 function! s:type.detect(path)"{{{
   let type = ''
 
-  if a:path =~# '\<\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
+  if a:path =~# '\<\(gh\|github\):\S\+\|'.
+        \'^\w[[:alnum:]-]*/[^/]\+$\|://github.com/'
     let uri = g:neobundle_default_git_protocol .
-          \ '://github.com/'.split(a:path, ':')[-1]
+          \ '://github.com/'.substitute(split(a:path, ':')[-1],
+          \ '^//github.com/', '', '')
     if uri !~ '\.git\s*$'
       " Add .git suffix.
       let uri .= '.git'
@@ -48,13 +50,14 @@ function! s:type.detect(path)"{{{
 
     let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     let type = 'git'
-  elseif a:path# =~ '\<\%(git@\|git://\)\S\+'
+  elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
     let uri = a:path
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
 
     let type = 'git'
-  else
+  elseif a:path !~ '/'
+    " www.vim.org Vim scripts.
     let name = a:path
     let uri  = g:neobundle_default_git_protocol .
           \ '://github.com/vim-scripts/'.name.'.git'
