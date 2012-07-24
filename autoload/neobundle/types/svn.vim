@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2012.
+" Last Modified: 24 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,15 +27,15 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#vcs#svn#define()"{{{
-  return s:vcs
+function! neobundle#types#svn#define()"{{{
+  return s:type
 endfunction"}}}
 
-let s:vcs = {
+let s:type = {
       \ 'name' : 'svn',
       \ }
 
-function! s:vcs.detect(path)"{{{
+function! s:type.detect(path)"{{{
   let type = ''
 
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
@@ -49,7 +49,7 @@ function! s:vcs.detect(path)"{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:vcs.get_update_command(bundle)"{{{
+function! s:type.get_update_command(bundle)"{{{
   if !isdirectory(a:bundle.path)
     let cmd = 'svn checkout'
   else
@@ -58,10 +58,10 @@ function! s:vcs.get_update_command(bundle)"{{{
 
   return cmd
 endfunction"}}}
-function! s:vcs.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle)"{{{
   return 'svn info'
 endfunction"}}}
-function! s:vcs.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle)"{{{
   return 'svn up ' . a:bundle.rev
 endfunction"}}}
 

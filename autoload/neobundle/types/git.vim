@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: hg.vim
+" FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2012.
+" Last Modified: 24 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,44 +27,61 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#vcs#hg#define()"{{{
-  return s:vcs
+function! neobundle#types#git#define()"{{{
+  return s:type
 endfunction"}}}
 
-let s:vcs = {
-      \ 'name' : 'hg',
+let s:type = {
+      \ 'name' : 'git',
       \ }
 
-function! s:vcs.detect(path)"{{{
+function! s:type.detect(path)"{{{
   let type = ''
 
-  if a:path =~? '[/.]hg[/.@]'
-          \ || (a:path =~# '\<https\?://bitbucket\.org/'
-          \ || a:path =~# '\<https://code\.google\.com/'
-          \    && a:path !~# '.git$')
-    let uri = a:path
-    let name = split(a:path, '/')[-1]
+  if a:path =~# '\<\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
+    let uri = g:neobundle_default_git_protocol .
+          \ '://github.com/'.split(a:path, ':')[-1]
+    if uri !~ '\.git\s*$'
+      " Add .git suffix.
+      let uri .= '.git'
+    endif
 
-    let type = 'hg'
+    let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
+    let type = 'git'
+  elseif a:path# =~ '\<\%(git@\|git://\)\S\+'
+        \ || a:path =~# '\.git\s*$'
+    let uri = a:path
+    let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
+
+    let type = 'git'
+  else
+    let name = a:path
+    let uri  = g:neobundle_default_git_protocol .
+          \ '://github.com/vim-scripts/'.name.'.git'
+    let type = 'git'
   endif
 
   return type == '' ?  {} :
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:vcs.get_update_command(bundle)"{{{
+function! s:type.get_update_command(bundle)"{{{
   if !isdirectory(a:bundle.path)
-    let cmd = 'hg clone'
+    let cmd = 'git clone'
   else
-    let cmd = 'hg pull -u'
-  endif
+    let cmd = 'git pull --rebase'
 
+    if get(a:bundle, 'rev', '') != ''
+      " Restore revision.
+      let cmd = 'git checkout master && ' . cmd
+    endif
+  endif
   return cmd
 endfunction"}}}
-function! s:vcs.get_revision_number_command(bundle)"{{{
-  return 'hg heads --quiet --rev default'
+function! s:type.get_revision_number_command(bundle)"{{{
+  return 'git rev-parse HEAD'
 endfunction"}}}
-function! s:vcs.get_revision_lock_command(bundle)"{{{
-  return 'hg up ' . a:bundle.rev
+function! s:type.get_revision_lock_command(bundle)"{{{
+  return 'git checkout ' . a:bundle.rev
 endfunction"}}}
 
 let &cpo = s:save_cpo

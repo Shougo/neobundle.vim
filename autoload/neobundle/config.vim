@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Jul 2012.
+" Last Modified: 24 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,6 +36,19 @@ function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
   let s:neobundles = {}
   let s:loaded_neobundles = {}
+
+  " Load neobundle types.
+  let s:neobundle_types = {}
+  for define in map(split(globpath(&runtimepath,
+        \ 'autoload/neobundle/types/*.vim', 1), '\n'),
+        \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
+    for dict in (type(define) == type([]) ? define : [define])
+      if !empty(dict) && !has_key(s:neobundle_types, dict.name)
+        let s:neobundle_types[dict.name] = dict
+      endif
+    endfor
+    unlet define
+  endfor
 endfunction
 
 function! neobundle#config#get_neobundles()
@@ -174,6 +187,17 @@ function! neobundle#config#rm_bndle(path)
     call s:rtp_rm(s:neobundles[a:path].rtp)
     call remove(s:neobundles, a:path)
   endif
+endfunction
+
+function! neobundle#config#parse_path(path)
+  for type in values(s:neobundle_types)
+    let detect = type.detect(a:path)
+    if !empty(detect)
+      return detect
+    endif
+  endfor
+
+  return {}
 endfunction
 
 function! s:rtp_rm_all_bundles()
