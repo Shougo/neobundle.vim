@@ -122,6 +122,7 @@ COMMANDS 					*neobundle-commands*
 :NeoBundle {repository} [,{revision}]		*:NeoBundle*
 :NeoBundle {repository} [,{dictionary}]
 		Configures neobundle.
+		Note: You don't set neobundle setting in .gvimrc!
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
 
