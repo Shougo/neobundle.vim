@@ -400,6 +400,9 @@ CHANGELOG					*neobundle-changelog*
 2012-08-05
 - Fixed typo.
 
+2012-08-03
+- Added version check.
+
 2012-07-25
 - Improved vcs types.
 
