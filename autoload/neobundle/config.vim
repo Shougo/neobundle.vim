@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Jul 2012.
+" Last Modified: 05 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -187,7 +187,7 @@ function! neobundle#config#is_sourced(name)
   return has_key(s:loaded_neobundles, a:name)
 endfunction
 
-function! neobundle#config#rm_bndle(path)
+function! neobundle#config#rm_bundle(path)
   if has_key(s:neobundles, a:path)
     call s:rtp_rm(s:neobundles[a:path].rtp)
     call remove(s:neobundles, a:path)
