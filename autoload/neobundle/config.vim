@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Aug 2012.
+" Last Modified: 07 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,7 +166,7 @@ function! neobundle#config#source(...)
       endfor
     endfor
 
-    if has_key(bundle, 'augroup')
+    if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
       execute 'doautocmd' bundle.augroup 'VimEnter'
 
       if has('gui_running')
@@ -210,7 +210,8 @@ function! neobundle#config#parse_path(path)
 endfunction
 
 function! s:rtp_rm_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_rm(v:val.path)')
+  call filter(filter(values(s:neobundles),
+        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val.path)')
 endfunction
 
 function! s:rtp_rm(dir)

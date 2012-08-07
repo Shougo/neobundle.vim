@@ -35,7 +35,8 @@ NeoBundle 'vim-scripts/ragtag.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 
 " With extension.
-NeoBundle 'nelstrom/vim-mac-classic-theme.git'
+" Comment is allowed.
+NeoBundle 'nelstrom/vim-mac-classic-theme.git' " Foo, Bar
 
 " Invalid uri.
 NeoBundle 'nonexistinguser/hogehoge.git'
@@ -53,7 +54,6 @@ NeoBundle 'vim-scripts/RubySinatra'
 
 " Non-git repos.
 NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
 " With options.
 NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
@@ -61,9 +61,6 @@ NeoBundle 'Shougo/vimshell', '3787e5'
 
 " Nosync repos.
 NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
-
-" Comment is allowed.
-NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
 
 " Depends repos.
 NeoBundle 'Shougo/neocomplcache',
