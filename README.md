@@ -16,9 +16,9 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
      Sample `.vimrc`:
 
      ```vim
-     set nocompatible               " be iMproved
-     filetype off                   " required!
-     filetype plugin indent off     " required!
+     set nocompatible               " Be iMproved
+     filetype off                   " Required!
+     filetype plugin indent off     " Required!
 
      if has('vim_starting')
        set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -26,11 +26,11 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
 
      call neobundle#rc(expand('~/.vim/bundle/'))
 
-     " let NeoBundle manage NeoBundle
+     " Let NeoBundle manage NeoBundle
      "NeoBundle 'Shougo/neobundle.vim'
 
-     " recommended to install
-     " after install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+     " Recommended to install
+     " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
      NeoBundle 'Shougo/vimproc'
 
      NeoBundle 'Shougo/vimshell'
@@ -38,7 +38,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
 
      " My Bundles here:
      "
-     " original repos on github
+     " Original repos on github
      NeoBundle 'tpope/vim-fugitive'
      NeoBundle 'Lokaltog/vim-easymotion'
      NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -46,15 +46,15 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
      NeoBundle 'L9'
      NeoBundle 'FuzzyFinder'
      NeoBundle 'rails.vim'
-     " non github repos
+     " Non github repos
      NeoBundle 'git://git.wincent.com/command-t.git'
-     " non git repos
+     " Non git repos
      NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
      NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
      " ...
 
-     filetype plugin indent on     " required!
+     filetype plugin indent on     " Required!
      "
      " Brief help
      " :NeoBundleList          - list configured bundles

@@ -126,6 +126,9 @@ COMMANDS 					*neobundle-commands*
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
 
+		Note: If you manage neobundle by neobundle, it may be error
+		occurred when update neobundle.
+
 		{dictionary} has following keys:
 
 		rev			(String)
@@ -275,9 +278,9 @@ g:neobundle_rm_command				*g:neobundle_rm_command*
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
-	set nocompatible                " recommend
-	filetype off                    " required!
-	filetype plugin indent off      " required!
+	set nocompatible                " Recommend
+	filetype off                    " Required!
+	filetype plugin indent off      " Required!
 	
 	if has('vim_starting')
 	  set runtimepath+={path to neobundle directory}
@@ -285,7 +288,7 @@ EXAMPLES					*neobundle-examples*
 	
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
-	" let neobundle manage neobundle
+	" Let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
 	
 	" My Bundles here:
