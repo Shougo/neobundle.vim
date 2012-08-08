@@ -284,7 +284,7 @@ EXAMPLES					*neobundle-examples*
 	endif
 	
 	call neobundle#rc(expand('~/.vim/bundle'))
-
+	
 	" let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
 	
@@ -396,6 +396,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-08
+- Fixed documentation.
 
 2012-08-07
 - Fixed neobundle config problem.
