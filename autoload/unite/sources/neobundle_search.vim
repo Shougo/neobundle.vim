@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2012.
+" Last Modified: 08 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,17 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Cache = vital#of('neobundle.vim').import('System.Cache')
-
-let s:V = vital#of('neobundle.vim')
-
-function! s:system(...)
-  return call(s:V.system, a:000, s:V)
-endfunction
-
-function! s:get_last_status(...)
-  return call(s:V.get_last_status, a:000, s:V)
-endfunction
+let s:Cache = vital#of('unite.vim').import('System.Cache')
 
 function! unite#sources#neobundle_search#define()"{{{
   return s:source
@@ -159,9 +149,9 @@ function! s:get_repository_plugins(context, path)"{{{
       let cmd = 'wget -q -O "' . cache_path . '" ' . a:path
     endif
 
-    let result = s:system(cmd)
+    let result = unite#util#system(cmd)
 
-    if s:get_last_status()
+    if unite#util#get_last_status()
       call unite#print_message('[neobundle/search] ' . cmd)
       call unite#print_error('[neobundle/search] Error occured!')
       call unite#print_error(result)

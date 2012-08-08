@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2012.
+" Last Modified: 08 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,17 +26,6 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-" Create vital module for neobundle
-let s:V = vital#of('neobundle.vim')
-
-function! s:system(...)
-  return call(s:V.system, a:000, s:V)
-endfunction
-
-function! s:get_last_status(...)
-  return call(s:V.get_last_status, a:000, s:V)
-endfunction
 
 function! unite#sources#neobundle#define()"{{{
   return unite#util#has_vimproc() ? s:source : {}
@@ -132,13 +121,13 @@ function! s:get_commit_status(bang, bundle)
 
   lcd `=a:bundle.path`
 
-  let output = s:system(cmd)
+  let output = neobundle#util#system(cmd)
 
   lcd `=cwd`
 
   if s:get_last_status()
     return printf('Error(%d) occured when executing "%s"',
-          \ s:get_last_status(), cmd)
+          \ neobundle#util#get_last_status(), cmd)
   endif
 
   return output

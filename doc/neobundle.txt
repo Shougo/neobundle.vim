@@ -402,6 +402,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-08
 - Fixed documentation.
+- Deleted vital.
 
 2012-08-07
 - Fixed neobundle config problem.

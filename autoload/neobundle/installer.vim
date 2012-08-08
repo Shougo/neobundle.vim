@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Aug 2012.
+" Last Modified: 08 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,20 +34,9 @@ let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
-" Create vital module for neobundle
-let s:V = vital#of('neobundle.vim')
-
 let g:neobundle_rm_command =
       \ get(g:, 'neobundle_rm_command',
       \ neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf')
-
-function! s:system(...)
-  return call(s:V.system, a:000, s:V)
-endfunction
-
-function! s:get_last_status(...)
-  return call(s:V.get_last_status, a:000, s:V)
-endfunction
 
 let s:log = []
 
@@ -125,19 +114,19 @@ function! neobundle#installer#build(bundle)
   let cwd = getcwd()
   silent lcd `=a:bundle.path`
 
-  let result = s:system(cmd)
+  let result = neobundle#util#system(cmd)
 
   if getcwd() !=# cwd
     lcd `=cwd`
   endif
 
-  if s:get_last_status()
+  if neobundle#util#get_last_status()
     call neobundle#installer#error(result)
   else
     call neobundle#installer#log(result)
   endif
 
-  return s:get_last_status()
+  return neobundle#util#get_last_status()
 endfunction
 
 function! neobundle#installer#clean(bang, ...)
@@ -160,7 +149,7 @@ function! neobundle#installer#clean(bang, ...)
     redraw
     let result = system(g:neobundle_rm_command . ' ' .
           \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
-    if s:get_last_status()
+    if neobundle#util#get_last_status()
       call neobundle#installer#error(result)
     endif
 
@@ -233,17 +222,17 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let types = neobundle#config#get_types()
   let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
 
-  let old_rev = s:system(rev_cmd)
+  let old_rev = neobundle#util#system(rev_cmd)
 
-  let result = s:system(cmd)
+  let result = neobundle#util#system(cmd)
 
   if getcwd() !=# cwd
     lcd `=cwd`
   endif
 
-  let status = s:get_last_status()
+  let status = neobundle#util#get_last_status()
 
-  let new_rev = s:system(rev_cmd)
+  let new_rev = neobundle#util#system(rev_cmd)
 
   if status && old_rev == new_rev
         \ && (a:bundle.type !=# 'git'
@@ -344,10 +333,6 @@ endfunction
 
 function! neobundle#installer#clear_log()
   let s:log = []
-endfunction
-
-function! neobundle#installer#has_vimproc()
-  return call(s:V.has_vimproc, a:000, s:V)
 endfunction
 
 let &cpo = s:save_cpo
