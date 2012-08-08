@@ -225,14 +225,13 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let old_rev = neobundle#util#system(rev_cmd)
 
   let result = neobundle#util#system(cmd)
+  let status = neobundle#util#get_last_status()
+
+  let new_rev = neobundle#util#system(rev_cmd)
 
   if getcwd() !=# cwd
     lcd `=cwd`
   endif
-
-  let status = neobundle#util#get_last_status()
-
-  let new_rev = neobundle#util#system(rev_cmd)
 
   if status && old_rev == new_rev
         \ && (a:bundle.type !=# 'git'
