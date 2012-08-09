@@ -404,6 +404,7 @@ CHANGELOG					*neobundle-changelog*
 - Fixed documentation.
 - Deleted vital.
 - Fixed :NeoBundleInstall behavior.
+- Reduced runtimepath.
 
 2012-08-07
 - Fixed neobundle config problem.

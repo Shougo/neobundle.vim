@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 09 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,6 +59,8 @@ function! neobundle#config#reload(bundles)
   if empty(a:bundles)
     return
   endif
+
+  call s:rtp_add_all_bundles()
 
   " Delete old g:loaded_xxx variables.
   for var_name in keys(g:)
@@ -211,7 +213,7 @@ endfunction
 
 function! s:rtp_rm_all_bundles()
   call filter(filter(values(s:neobundles),
-        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val.path)')
+        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val.rtp)')
 endfunction
 
 function! s:rtp_rm(dir)
@@ -219,9 +221,18 @@ function! s:rtp_rm(dir)
   execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
+function! s:rtp_add_all_bundles()
+  call filter(values(s:neobundles), 's:rtp_add(v:val.rtp)')
+endfunction
+
 function! s:rtp_add(dir) abort
-  execute 'set rtp^='.fnameescape(neobundle#util#expand(a:dir))
-  execute 'set rtp+='.fnameescape(neobundle#util#expand(a:dir.'/after'))
+  let rtp = neobundle#util#expand(a:dir)
+  if isdirectory(rtp)
+    execute 'set rtp^='.fnameescape(rtp)
+  endif
+  if isdirectory(rtp.'/after')
+    execute 'set rtp+='.fnameescape(rtp.'/after')
+  endif
 endfunction
 
 function! neobundle#config#init_bundle(name, opts)
