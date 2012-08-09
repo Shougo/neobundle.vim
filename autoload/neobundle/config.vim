@@ -60,7 +60,7 @@ function! neobundle#config#reload(bundles)
     return
   endif
 
-  call s:rtp_add_all_bundles()
+  call s:rtp_add_bundles(a:bundles)
 
   " Delete old g:loaded_xxx variables.
   for var_name in keys(g:)
@@ -221,8 +221,8 @@ function! s:rtp_rm(dir)
   execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir.'/after'))
 endfunction
 
-function! s:rtp_add_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_add(v:val.rtp)')
+function! s:rtp_add_bundles(bundles)
+  call filter(copy(a:bundles), 's:rtp_add(v:val.rtp)')
 endfunction
 
 function! s:rtp_add(dir) abort
