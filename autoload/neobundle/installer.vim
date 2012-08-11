@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Aug 2012.
+" Last Modified: 11 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -162,8 +162,8 @@ endfunction
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let types = neobundle#config#get_types()
   if !has_key(types, a:bundle.type)
-    return ['', printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, 'Unknown')]
+    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Unknown Type')]
   endif
 
   if isdirectory(a:bundle.path) &&
@@ -189,8 +189,8 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
 
   let types = neobundle#config#get_types()
   if !has_key(types, a:bundle.type)
-    return ['', printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, 'Unknown')]
+    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Unknown Type')]
   endif
 
   let cmd = types[a:bundle.type].get_revision_lock_command(a:bundle)
