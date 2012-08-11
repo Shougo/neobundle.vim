@@ -36,8 +36,7 @@ Context types
     Should neobundle#config#parse_path(
           \ 'https://github.com/vim-scripts/vim-game-of-life') ==
           \ {'type' : 'git', 'uri' :
-          \ g:neobundle_default_git_protocol .
-          \ '://github.com/vim-scripts/vim-game-of-life.git',
+          \ 'https://github.com/vim-scripts/vim-game-of-life.git',
           \  'name' : 'vim-game-of-life'}
     Should neobundle#config#parse_path(
           \ 'git@github.com:gmarik/ingretu.git') ==

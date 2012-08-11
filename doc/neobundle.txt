@@ -406,6 +406,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved neobundle#config#get_neobundles().
 - Added nosync type.
 - Improved documentation.
+- Fixed uri parse.
 
 2012-08-08
 - Fixed documentation.
