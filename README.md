@@ -33,11 +33,9 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
      " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
      NeoBundle 'Shougo/vimproc'
 
-     NeoBundle 'Shougo/vimshell'
-     NeoBundle 'Shougo/unite.vim'
-
      " My Bundles here:
      "
+     " Note: You don't set neobundle setting in .gvimrc!
      " Original repos on github
      NeoBundle 'tpope/vim-fugitive'
      NeoBundle 'Lokaltog/vim-easymotion'

@@ -293,6 +293,7 @@ EXAMPLES					*neobundle-examples*
 	
 	" My Bundles here:
 	"
+	" Note: You don't set neobundle setting in .gvimrc!
 	" Original repositories in github
 	NeoBundle 'Shougo/neocomplcache-clang.git'
 	NeoBundle 'tpope/vim-fugitive'
@@ -404,6 +405,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved error message.
 - Improved neobundle#config#get_neobundles().
 - Added nosync type.
+- Improved documentation.
 
 2012-08-08
 - Fixed documentation.
