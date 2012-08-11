@@ -403,6 +403,7 @@ CHANGELOG					*neobundle-changelog*
 2012-08-11
 - Improved error message.
 - Improved neobundle#config#get_neobundles().
+- Added nosync type.
 
 2012-08-08
 - Fixed documentation.

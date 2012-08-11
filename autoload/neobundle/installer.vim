@@ -166,13 +166,13 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
           \ a:number, a:max, a:bundle.name, 'Unknown Type')]
   endif
 
-  if isdirectory(a:bundle.path) &&
-        \ (!a:bang || a:bundle.type ==# 'nosync')
-    return ['', printf('(%'.len(a:max).'d/%d): %s',
-          \ a:number, a:max, 'Skipped')]
+  let cmd = types[a:bundle.type].get_sync_command(a:bundle)
+
+  if cmd == '' || (isdirectory(a:bundle.path) && !a:bang)
+    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Skipped')]
   endif
 
-  let cmd = types[a:bundle.type].get_sync_command(a:bundle)
   let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
         \ a:number, a:max, a:bundle.name, cmd)
 
@@ -194,6 +194,11 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
   endif
 
   let cmd = types[a:bundle.type].get_revision_lock_command(a:bundle)
+
+  if cmd == ''
+    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Skipped')]
+  endif
 
   " Cd to bundle path.
   lcd `=a:bundle.path`
