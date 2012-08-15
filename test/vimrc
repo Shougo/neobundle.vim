@@ -3,7 +3,6 @@ set nocompatible                " recommend
 let testdir = expand('~/neobundle-test/bundles', 1)
 
 filetype off                    " required!
-filetype plugin indent off      " required!
 
 if has('vim_starting')
   execute 'set' 'runtimepath+='.getcwd()

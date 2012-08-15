@@ -104,7 +104,6 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 >
 	set nocompatible
 	filetype off
-	filetype plugin indent off
 	set runtimepath+={path to neobundle directory}
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
@@ -280,7 +279,6 @@ EXAMPLES					*neobundle-examples*
 >
 	set nocompatible                " Recommend
 	filetype off                    " Required!
-	filetype plugin indent off      " Required!
 	
 	if has('vim_starting')
 	  set runtimepath+={path to neobundle directory}
@@ -400,6 +398,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-15
+- Deleted filetype plugin indent off.
 
 2012-08-14
 - Ver.2.1 development is started.
