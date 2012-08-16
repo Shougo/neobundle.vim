@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jul 2012.
+" Last Modified: 16 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,7 +63,7 @@ function! s:type.get_revision_number_command(bundle)"{{{
   return 'svn info'
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
-  return 'svn up ' . a:bundle.rev
+  return 'svn up -r ' . a:bundle.rev
 endfunction"}}}
 
 let &cpo = s:save_cpo

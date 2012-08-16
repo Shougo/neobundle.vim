@@ -401,6 +401,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-16
 - Fixed get_last_status() error.
+- Fixed subversion lock command.
 
 2012-08-15
 - Deleted filetype plugin indent off.
