@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2012.
+" Last Modified: 17 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,7 +49,8 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)"{{{
   if !executable('curl') && !executable('wget')
-    call unite#print_error('[neobundle/search] curl or wget is not available!')
+    call unite#print_error(
+          \ '[neobundle/search] curl or wget is not available!')
     return []
   endif
 
