@@ -49,22 +49,20 @@ function! s:source_install.hooks.on_init(args, context)"{{{
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
 
   call s:init(a:context, bundle_names)
-endfunction"}}}
-function! s:source_install.hooks.on_close(args, context)"{{{
-  if !empty(a:context.source__processes)
-    for process in a:context.source__processes
-      call process.waitpid()
-    endfor
-  endif
-endfunction"}}}
 
-function! s:source_install.gather_candidates(args, context)"{{{
   if empty(a:context.source__bundles)
     let a:context.is_async = 0
     call neobundle#installer#log(
           \ '[neobundle/install] Bundles not found.', 1)
   endif
-  return []
+endfunction"}}}
+
+function! s:source_install.hooks.on_close(args, context)"{{{
+  if !empty(a:context.source__processes)
+    for process in a:context.source__processes
+      call process.proc.waitpid()
+    endfor
+  endif
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context)"{{{
