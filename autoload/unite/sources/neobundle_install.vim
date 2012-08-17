@@ -157,8 +157,6 @@ endfunction
 function! s:sync(bundle, context, is_revision)"{{{
   let a:context.source__number += 1
 
-  let cwd = getcwd()
-
   let [cmd, message] =
         \ neobundle#installer#get_{
         \ a:is_revision ? 'revision_lock' : 'sync'}_command(
@@ -175,6 +173,12 @@ function! s:sync(bundle, context, is_revision)"{{{
   let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
 
   try
+    let cwd = getcwd()
+    if isdirectory(a:bundle.path)
+      " Cd to bundle path.
+      lcd `=a:bundle.path`
+    endif
+
     let process = {
           \ 'proc' : vimproc#pgroup_open(cmd, 0, 2),
           \ 'number' : a:context.source__number,

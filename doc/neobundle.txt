@@ -414,6 +414,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved documentation.
 - Improved types.
 - Fixed for error message.
+- Improved cd to bundle path.
 
 2012-08-16
 - Fixed get_last_status() error.

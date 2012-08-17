@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 Aug 2012.
+" Last Modified: 17 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -112,13 +112,15 @@ function! neobundle#installer#build(bundle)
   call neobundle#installer#log('Building...')
 
   let cwd = getcwd()
-  silent lcd `=a:bundle.path`
+  try
+    if isdirectory(a:bundle.path)
+      lcd `=a:bundle.path`
+    endif
 
-  let result = neobundle#util#system(cmd)
-
-  if getcwd() !=# cwd
+    let result = neobundle#util#system(cmd)
+  finally
     lcd `=cwd`
-  endif
+  endtry
 
   if neobundle#util#get_last_status()
     call neobundle#installer#error(result)
@@ -176,11 +178,6 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
         \ a:number, a:max, a:bundle.name, cmd)
 
-  if isdirectory(a:bundle.path)
-    " Cd to bundle path.
-    lcd `=a:bundle.path`
-  endif
-
   return [cmd, message]
 endfunction
 function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max)
@@ -200,9 +197,6 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
           \ a:number, a:max, a:bundle.name, 'Skipped')]
   endif
 
-  " Cd to bundle path.
-  lcd `=a:bundle.path`
-
   let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
         \ a:number, a:max, a:bundle.name, cmd)
 
@@ -210,8 +204,6 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
 endfunction
 
 function! s:sync(bang, bundle, number, max, is_revision)
-  let cwd = getcwd()
-
   let [cmd, message] =
         \ neobundle#installer#get_{a:is_revision ?
         \   'revision_lock' : 'sync'}_command(
@@ -227,16 +219,21 @@ function! s:sync(bang, bundle, number, max, is_revision)
   let types = neobundle#config#get_types()
   let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
 
-  let old_rev = neobundle#util#system(rev_cmd)
+  let cwd = getcwd()
+  try
+    if isdirectory(a:bundle.path)
+      " Cd to bundle path.
+      lcd `=a:bundle.path`
+    endif
 
-  let result = neobundle#util#system(cmd)
-  let status = neobundle#util#get_last_status()
+    let old_rev = neobundle#util#system(rev_cmd)
+    let result = neobundle#util#system(cmd)
+    let status = neobundle#util#get_last_status()
 
-  let new_rev = neobundle#util#system(rev_cmd)
-
-  if getcwd() !=# cwd
+    let new_rev = neobundle#util#system(rev_cmd)
+  finally
     lcd `=cwd`
-  endif
+  endtry
 
   if status && old_rev == new_rev
         \ && (a:bundle.type !=# 'git'
