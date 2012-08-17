@@ -274,6 +274,13 @@ g:neobundle_rm_command				*g:neobundle_rm_command*
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
 
+g:unite_source_neobundle_install_max_processes
+						*g:unite_source_neobundle_install_max_processes*
+		The max processes number in neobundle/install source
+		asyncronous update.
+
+		Default value is "5".
+
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
@@ -398,6 +405,10 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-17
+- Implemented asyncronous update.
+- Added g:unite_source_neobundle_install_max_processes option.
 
 2012-08-16
 - Fixed get_last_status() error.
