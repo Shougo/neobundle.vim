@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 15 Aug 2012.
+" Last Modified: 17 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,13 +132,17 @@ function! neobundle#config#bundle(arg)
   return bundle
 endfunction
 
-function! neobundle#config#lazy_bundle(arg, ...)
+function! neobundle#config#lazy_bundle(arg)
   sandbox let args = eval('[' . a:arg . ']')
   if empty(args)
     return {}
   endif
 
   let bundle = neobundle#config#init_bundle(args[0], args[1:])
+  if empty(bundle)
+    return {}
+  endif
+
   let bundle.orig_arg = a:arg
   let path = bundle.path
 

@@ -413,6 +413,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved neobundle/update source.
 - Improved documentation.
 - Improved types.
+- Fixed for error message.
 
 2012-08-16
 - Fixed get_last_status() error.
