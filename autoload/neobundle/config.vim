@@ -256,6 +256,11 @@ function! neobundle#config#init_bundle(name, opts)
 
   if !has_key(bundle, 'type') || !has_key(bundle, 'uri')
         \ || !has_key(bundle, 'name')
+    if !executable('git')
+      call neobundle#installer#error(
+            \ '[neobundle] git is not installed. You cannot install plugins from github.')
+    endif
+
     call neobundle#installer#error(
           \ printf('Failed parse name "%s" and args %s',
           \   a:name, string(a:opts)))
