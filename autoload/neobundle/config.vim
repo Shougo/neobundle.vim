@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Aug 2012.
+" Last Modified: 19 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -251,7 +251,7 @@ function! neobundle#config#init_bundle(name, opts)
   endif
   if !has_key(bundle, 'name')
     let bundle.name =
-          \ substitute(split(path, '/')[-1], '\.git\s*$','','i'))
+          \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
   endif
 
   if !has_key(bundle, 'type')
