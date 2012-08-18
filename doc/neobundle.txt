@@ -396,6 +396,11 @@ neobundle/install
 		:Unite neobundle/install:neocomplcache
 		:Unite neobundle/install:neocomplcache:unite.vim
 <
+		If you use the source with "-auto-quit" option, the unite
+		buffer will close automatically.
+>
+		:Unite neobundle/install -auto-quit
+<
 							*neobundle-unite-source-neobundle-log*
 neobundle/log
 		Print previous neobundle install logs.
@@ -406,6 +411,11 @@ neobundle/update
 		Note: This source is same to "neobundle/intall:!" source.
 		Note: This source requires |vimproc| plugin.
 
+		If you use the source with "-auto-quit" option, the unite
+		buffer will close automatically.
+>
+		:Unite neobundle/update -auto-quit
+<
 							*neobundle-unite-source-neobundle-search*
 neobundle/search
 		Search plugins settings from "http://vim-scripts.org/".
