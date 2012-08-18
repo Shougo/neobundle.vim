@@ -121,6 +121,14 @@ neobundle#source({bundle-names})		*neobundle#source()*
 		Same to |:NeoBundleSource|.
 		{bundle-names} is bundle name list.
 
+neobundle#exists_not_installed_bundles([{bundle-names}])
+						*neobundle#exists_not_installed_bundles()*
+		Checks if exists not installed bundles.
+
+neobundle#get_not_installed_bundle_names([{bundle-names}])
+						*neobundle#get_not_installed_bundle_names()*
+		Returns not installed bundle names.
+
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -345,6 +353,14 @@ EXAMPLES					*neobundle-examples*
 	      \ NeoBundleSource python-mode
 
 	filetype plugin indent on       " required!
+
+	" Installation check.
+	if neobundle#exists_not_installed_bundles()
+	  echomsg 'Not installed bundles : ' .
+	        \ string(neobundle#get_not_installed_bundle_names())
+	  echomsg 'Please execute ":NeoBundleInstall" command.'
+	  finish
+	endif
 <
 ==============================================================================
 UNITE SOURCES						*neobundle-unite-sources*
@@ -424,6 +440,7 @@ CHANGELOG					*neobundle-changelog*
 - Added :NeoBundleLocal command.
 - Improved documentation.
 - Improved update.
+- Added installation check.
 
 2012-08-17
 - Implemented asyncronous update.
