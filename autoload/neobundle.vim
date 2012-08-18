@@ -139,10 +139,10 @@ function! s:neobundle_local(localdir)
 endfunction
 
 function! neobundle#exists_not_installed_bundles(...)
-  return !empty(call('s:get_not_installed_bundles', a:000))
+  return !empty(call('neobundle#get_not_installed_bundles', a:000))
 endfunction
 
-function! s:get_not_installed_bundles(...)
+function! neobundle#get_not_installed_bundles(...)
   let bundle_names = get(a:000, 0, [])
   let bundles = empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
@@ -153,7 +153,7 @@ function! s:get_not_installed_bundles(...)
 endfunction
 
 function! neobundle#get_not_installed_bundle_names(...)
-  return map(call('s:get_not_installed_bundles', a:000), 'v:val.name')
+  return map(call('neobundle#get_not_installed_bundles', a:000), 'v:val.name')
 endfunction
 
 let &cpo = s:save_cpo
