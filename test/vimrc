@@ -61,6 +61,9 @@ NeoBundle 'Shougo/vimshell', '3787e5'
 " Nosync repos.
 NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 
+" NeoBundleLocal test.
+NeoBundleLocal ~/.vim/bundle/
+
 " Depends repos.
 NeoBundle 'Shougo/neocomplcache',
       \ {'depends' : [

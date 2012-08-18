@@ -215,17 +215,24 @@ COMMANDS 					*neobundle-commands*
 <
 		If type is "nosync", neobundle does not update
 		automatically(like pathogen.vim).
+>
+		NeoBundleLocal 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
+
+:NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
+		Likes pathogen.vim wrapper.  This command add
+		{base-directory-path} directories in runtimepath.
+
 		Note: If you want to use neobundle like pathogen.vim, you
 		should set base path to separate from standard neobundle
 		bundles paths.
 >
-		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
-<
-:NeoBundleInstall [{name}...]		*:NeoBundleInstall*
+		NeoBundleLocal ~/.vim/bundle
+
+:NeoBundleInstall [{name}...]			*:NeoBundleInstall*
 		Installs {name} plugins.
 		If {name} is omited, all configured plugin is installed.
 
-:NeoBundleInstall! [{name}]... 		*:NeoBundleInstall!*
+:NeoBundleInstall! [{name}]...			*:NeoBundleInstall!*
 		Installs and updates {name} plugins.
 		If {name} is omited, all configured plugin is installed
 		and updated.
@@ -406,6 +413,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-18
+- Added :NeoBundleLocal command.
 
 2012-08-17
 - Implemented asyncronous update.

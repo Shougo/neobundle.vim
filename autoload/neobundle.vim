@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Aug 2012.
+" Last Modified: 18 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,6 +50,9 @@ command! -nargs=+
       \ call neobundle#config#lazy_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 command! -nargs=+ NeoExternalBundle NeoBundleLazy <args>
+
+command! -nargs=1 NeoBundleLocal
+      \ call s:neobundle_local(<q-args>)
 
 command! -nargs=* -bar
       \ -complete=customlist,neobundle#complete_lazy_bundles
@@ -125,6 +128,14 @@ function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
 
   return filter(map(x_dirs, "fnamemodify(v:val, ':t')"),
         \ 'stridx(v:val, a:arglead) == 0')
+endfunction
+
+function! s:neobundle_local(localdir)
+  for dir in map(split(glob(neobundle#util#expand(a:localdir)
+        \ . '/*'), '\n'), "fnamemodify(v:val, ':t')")
+    call neobundle#config#bundle([dir,
+          \ { 'type' : 'nosync', 'base' : a:localdir, }])
+  endfor
 endfunction
 
 let &cpo = s:save_cpo
