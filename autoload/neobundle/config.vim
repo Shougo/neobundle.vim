@@ -246,12 +246,11 @@ function! neobundle#config#init_bundle(name, opts)
   let path = substitute(a:name,"['".'"]\+','','g')
   let bundle = extend(neobundle#config#parse_path(path),
         \ s:parse_options(a:opts))
-  if has_key(bundle, 'type') &&
-        \ (!has_key(bundle, 'uri') || !has_key(bundle, 'name'))
-    " Use default parse.
-    let bundle.uri = path
-    let bundle.name = substitute(split(uri, '/')[-1],
-          \ '\.git\s*$','','i')
+  if has_key(bundle, 'type')
+    let bundle.uri = get(bundle, 'uri', path)
+    let bundle.name = get(bundle, 'name',
+          \ substitute(split(path, '/')[-1],
+          \ '\.git\s*$','','i'))
   endif
 
   if !has_key(bundle, 'type') || !has_key(bundle, 'uri')
