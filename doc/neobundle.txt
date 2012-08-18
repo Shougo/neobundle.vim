@@ -231,7 +231,11 @@ COMMANDS 					*neobundle-commands*
 		automatically(like pathogen.vim).
 >
 		NeoBundleLocal 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
-
+<
+		Note: To use hg commands for git repository, please use this.
+>
+		NeoBundle 'git://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
+<
 :NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
 		Likes pathogen.vim wrapper.  This command add
 		{base-directory-path} directories in runtimepath.
@@ -451,6 +455,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved documentation.
 - Improved update.
 - Added installation check.
+- Fixed parse type.
 
 2012-08-17
 - Implemented asyncronous update.

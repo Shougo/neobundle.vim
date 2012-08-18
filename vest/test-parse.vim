@@ -71,6 +71,13 @@ Context types
           \ {'type' : 'hg', 'uri' :
           \  'https://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
+
+    let bundle = neobundle#config#init_bundle(
+          \ 'git://github.com/Shougo/neobundle.vim.git',
+          \ [{ 'type' : 'hg'}])
+    Should bundle.name == 'neobundle.vim'
+    Should bundle.type == 'hg'
+    Should bundle.uri == 'git://github.com/Shougo/neobundle.vim.git'
   End
 End
 
