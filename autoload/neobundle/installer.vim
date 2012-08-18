@@ -224,9 +224,11 @@ function! s:sync(bang, bundle, number, max, is_revision)
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       lcd `=a:bundle.path`
+      let old_rev = neobundle#util#system(rev_cmd)
+    else
+      let old_rev = ''
     endif
 
-    let old_rev = neobundle#util#system(rev_cmd)
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
 
@@ -248,7 +250,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  return old_rev != new_rev
+  return old_rev == '' || old_rev != new_rev
 endfunction
 
 function! s:install(bang, bundles)

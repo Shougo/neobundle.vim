@@ -66,15 +66,6 @@ function! s:source_install.hooks.on_close(args, context)"{{{
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context)"{{{
-  if !empty(a:context.source__processes)
-    for process in a:context.source__processes
-      call s:check_output(a:context, process)
-    endfor
-
-    " Filter eof processes.
-    call filter(a:context.source__processes, '!v:val.eof')
-  endif
-
   if a:context.source__number < a:context.source__max_bundles
     while a:context.source__number < a:context.source__max_bundles
         \ && len(a:context.source__processes) <
@@ -83,6 +74,15 @@ function! s:source_install.async_gather_candidates(args, context)"{{{
             \ a:context.source__bundles[a:context.source__number],
             \ a:context, 0)
     endwhile
+  endif
+
+  if !empty(a:context.source__processes)
+    for process in a:context.source__processes
+      call s:check_output(a:context, process)
+    endfor
+
+    " Filter eof processes.
+    call filter(a:context.source__processes, '!v:val.eof')
 
     return []
   endif
@@ -173,13 +173,16 @@ function! s:sync(bundle, context, is_revision)"{{{
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       lcd `=a:bundle.path`
+      let rev = vimproc#system(rev_cmd)
+    else
+      let rev = ''
     endif
 
     let process = {
           \ 'proc' : vimproc#pgroup_open(cmd, 0, 2),
           \ 'number' : a:context.source__number,
           \ 'revision_locked' : a:is_revision,
-          \ 'rev' : vimproc#system(rev_cmd),
+          \ 'rev' : rev,
           \ 'bundle' : a:bundle,
           \ 'output' : '',
           \ 'eof' : 0,

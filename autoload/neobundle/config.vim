@@ -246,14 +246,15 @@ function! neobundle#config#init_bundle(name, opts)
   let path = substitute(a:name, "['".'"]\+', '', 'g')
   let bundle = extend(neobundle#config#parse_path(path),
         \ s:parse_options(a:opts))
-  if has_key(bundle, 'type')
-    let bundle.uri = get(bundle, 'uri', path)
-    let bundle.name = get(bundle, 'name',
+  if !has_key(bundle, 'uri')
+    let bundle.uri = path
+  endif
+  if !has_key(bundle, 'name')
+    let bundle.name =
           \ substitute(split(path, '/')[-1], '\.git\s*$','','i'))
   endif
 
-  if !has_key(bundle, 'type') || !has_key(bundle, 'uri')
-        \ || !has_key(bundle, 'name')
+  if !has_key(bundle, 'type')
     if !executable('git')
       call neobundle#installer#error(
             \ '[neobundle] git is not installed. You cannot install plugins from github.')

@@ -456,6 +456,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved update.
 - Added installation check.
 - Fixed parse type.
+- Fixed update.
 
 2012-08-17
 - Implemented asyncronous update.
