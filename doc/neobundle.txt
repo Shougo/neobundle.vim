@@ -90,7 +90,7 @@ Example:
 >
 	set runtimepath+=~/.vim/bundle/neobundle.vim
 <
-And configure bundles. (Refer to |neobundle-examaples|)
+And configure neobundles. (Refer to |neobundle-examaples|)
 
 To install plugins, you must execute |:NeoBundleInstall| command.
 >
@@ -423,6 +423,7 @@ CHANGELOG					*neobundle-changelog*
 2012-08-18
 - Added :NeoBundleLocal command.
 - Improved documentation.
+- Improved update.
 
 2012-08-17
 - Implemented asyncronous update.

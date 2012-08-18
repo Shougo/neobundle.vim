@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2012.
+" Last Modified: 18 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,19 +134,15 @@ function! s:init(context, bundle_names)
   let a:context.source__synced_bundles = []
   let a:context.source__errored_bundles = []
 
-  let a:context.source__bundles = empty(a:bundle_names) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(a:bundle_names)
-
   let a:context.source__processes = []
 
   let a:context.source__number = 0
 
-  if !a:context.source__bang
-    let a:context.source__bundles = filter(
-          \ copy(a:context.source__bundles),
-          \ "!isdirectory(neobundle#util#expand(v:val.path))")
-  endif
+  let a:context.source__bundles = !a:context.source__bang ?
+        \ neobundle#get_not_installed_bundles(a:bundle_names) :
+        \ empty(a:bundle_names) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#search(a:bundle_names)
 
   let a:context.source__max_bundles =
         \ len(a:context.source__bundles)
