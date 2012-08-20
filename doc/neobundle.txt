@@ -363,7 +363,7 @@ EXAMPLES					*neobundle-examples*
 	  echomsg 'Not installed bundles : ' .
 	        \ string(neobundle#get_not_installed_bundle_names())
 	  echomsg 'Please execute ":NeoBundleInstall" command.'
-	  finish
+	  "finish
 	endif
 <
 ==============================================================================

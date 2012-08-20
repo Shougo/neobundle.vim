@@ -63,7 +63,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
        echomsg 'Not installed bundles : ' .
              \ string(neobundle#get_not_installed_bundle_names())
        echomsg 'Please execute ":NeoBundleInstall" command.'
-       finish
+       "finish
      endif
      ```
 3. Install configured bundles:
