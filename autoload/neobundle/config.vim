@@ -155,7 +155,7 @@ function! neobundle#config#depends_bundle(arg)
   let s:loaded_neobundles[bundle.name] = 0
 
   " Install bundle automatically.
-  call neobundle#installer#install(0, bundle.name)
+  silent call neobundle#installer#install(0, bundle.name)
 
   " Load scripts.
   call neobundle#config#source([bundle])
