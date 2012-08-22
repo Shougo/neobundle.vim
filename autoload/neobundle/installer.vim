@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Aug 2012.
+" Last Modified: 22 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,9 @@ function! neobundle#installer#install(bang, ...)
 
   call neobundle#installer#clear_log()
   let [installed, errored] = s:install(a:bang, bundles)
-  redraw!
+  if !has('vim_starting')
+    redraw!
+  endif
 
   call neobundle#installer#log(
         \ "[neobundle/install] Installed bundles:\n".
@@ -148,7 +150,9 @@ function! neobundle#installer#clean(bang, ...)
   end
 
   if a:bang || s:check_really_clean(x_dirs)
-    redraw
+    if !has('vim_starting')
+      redraw
+    endif
     let result = system(g:neobundle_rm_command . ' ' .
           \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
     if neobundle#util#get_last_status()
@@ -209,7 +213,9 @@ function! s:sync(bang, bundle, number, max, is_revision)
         \   'revision_lock' : 'sync'}_command(
         \ a:bang, a:bundle, a:number, a:max)
 
-  redraw
+  if !has('vim_starting')
+    redraw
+  endif
   call neobundle#installer#log(message)
   if cmd == ''
     " Skipped.
