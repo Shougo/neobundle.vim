@@ -284,6 +284,16 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
+:NeoBundleDepends {repository} [, {dictionary}]	*:NeoBundleDepends*
+		This command register neobundle and install the plugin.  It is
+		useful to define Vim plugin dependency.
+		Note: This command is not overwritten user neobundle
+		configuration.
+>
+		if exists(':NeoBundleDepends')
+		  NeoBundleDepends 'Shougo/unite.vim.git'
+		endif
+<
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -452,6 +462,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-22
 - Improved redraw behavior.
+- Added :NeoBundleDepends command.
 
 2012-08-18
 - Added :NeoBundleLocal command.

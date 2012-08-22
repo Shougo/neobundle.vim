@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Aug 2012.
+" Last Modified: 22 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,12 +30,19 @@ set cpo&vim
 
 if !exists('s:neobundles')
   let s:neobundles = {}
+  let s:loaded_neobundles = {}
 endif
 
 function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
-  let s:neobundles = {}
-  let s:loaded_neobundles = {}
+
+  for bundle in values(s:neobundles)
+    if bundle.resettable
+      " Reset.
+      call delete(s:neobundles, bundle.path)
+      call delete(s:loaded_neobundles, bundle.name)
+    endif
+  endfor
 
   " Load neobundle types.
   let s:neobundle_types = {}
@@ -97,20 +104,11 @@ function! neobundle#config#reload(bundles)
 endfunction
 
 function! neobundle#config#bundle(arg)
-  let arg = type(a:arg) == type([]) ?
-   \ string(a:arg) : '[' . a:arg . ']'
-  sandbox let args = eval(arg)
-  if empty(args)
-    return {}
-  endif
-
-  let bundle = neobundle#config#init_bundle(
-        \ args[0], args[1:])
+  let bundle = s:parse_arg(a:arg)
   if empty(bundle)
     return {}
   endif
 
-  let bundle.orig_arg = a:arg
   let path = bundle.path
   if has_key(s:neobundles, path)
     call s:rtp_rm(bundle.rtp)
@@ -133,20 +131,54 @@ function! neobundle#config#bundle(arg)
 endfunction
 
 function! neobundle#config#lazy_bundle(arg)
-  sandbox let args = eval('[' . a:arg . ']')
+  let bundle = s:parse_arg(a:arg)
+  if empty(bundle)
+    return {}
+  endif
+
+  let path = bundle.path
+
+  let s:neobundles[path] = bundle
+  return bundle
+endfunction
+
+function! neobundle#config#depends_bundle(arg)
+  let bundle = s:parse_arg(a:arg)
+
+  if empty(bundle) || has_key(s:neobundles, bundle.path)
+    " Ignore.
+    return {}
+  endif
+
+  let bundle = neobundle#config#bundle(a:arg)
+  let bundle.resettable = 0
+  let s:loaded_neobundles[bundle.name] = 0
+
+  " Install bundle automatically.
+  call neobundle#installer#install(0, bundle.name)
+
+  " Load scripts.
+  call neobundle#config#source([bundle])
+
+  return bundle
+endfunction
+
+function! s:parse_arg(arg)
+  let arg = type(a:arg) == type([]) ?
+   \ string(a:arg) : '[' . a:arg . ']'
+  sandbox let args = eval(arg)
   if empty(args)
     return {}
   endif
 
-  let bundle = neobundle#config#init_bundle(args[0], args[1:])
+  let bundle = neobundle#config#init_bundle(
+        \ args[0], args[1:])
   if empty(bundle)
     return {}
   endif
 
   let bundle.orig_arg = a:arg
-  let path = bundle.path
 
-  let s:neobundles[path] = bundle
   return bundle
 endfunction
 
@@ -167,6 +199,16 @@ function! neobundle#config#source(...)
       call s:rtp_rm(bundle.rtp)
     endif
     call s:rtp_add(bundle.rtp)
+
+    for depend in bundle.depends
+      if type(depend) == type('')
+        let depend = string(depend)
+      endif
+
+      call neobundle#config#bundle(depend)
+
+      unlet depend
+    endfor
 
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
@@ -283,6 +325,7 @@ function! neobundle#config#init_bundle(name, opts)
 
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
+  let bundle.resettable = 1
 
   return bundle
 endfunction
