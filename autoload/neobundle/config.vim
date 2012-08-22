@@ -39,8 +39,10 @@ function! neobundle#config#init()
   for bundle in values(s:neobundles)
     if bundle.resettable
       " Reset.
-      call delete(s:neobundles, bundle.path)
-      call delete(s:loaded_neobundles, bundle.name)
+      call remove(s:neobundles, bundle.path)
+      if neobundle#config#is_sourced(bundle.name)
+        call remove(s:loaded_neobundles, bundle.name)
+      endif
     endif
   endfor
 
