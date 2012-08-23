@@ -255,7 +255,7 @@ function! s:check_output(context, process)"{{{
   else
     call neobundle#installer#log(
           \ printf('[neobundle/install] %s -> %s',
-          \ num, max, a:process.rev, rev), 1)
+          \ a:process.rev, rev), 1)
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
