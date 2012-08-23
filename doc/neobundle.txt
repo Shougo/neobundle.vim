@@ -460,6 +460,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-08-23
+- Improved updated log.
+
 2012-08-22
 - Improved redraw behavior.
 - Added :NeoBundleDepends command.
