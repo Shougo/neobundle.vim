@@ -254,11 +254,11 @@ function! s:check_output(context, process)"{{{
           \ num, max, bundle.name, 'Skipped'), 1)
   else
     call neobundle#installer#log(
-          \ printf('[neobundle/install] %s -> %s',
-          \ a:process.rev, rev), 1)
-    call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] %s -> %s',
+          \ a:process.rev, rev), 1)
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
           \ bundle)
