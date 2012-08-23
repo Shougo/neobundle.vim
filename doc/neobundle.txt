@@ -306,7 +306,6 @@ g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
 g:neobundle_log_filename			*g:neobundle_log_filename*
 		The filename of outputting log. If it is "", don't output log
 		to file.
-		Note: The log is appended to the file.
 
 		Default value is "".
 

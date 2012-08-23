@@ -357,6 +357,12 @@ endfunction
 
 function! neobundle#installer#clear_log()
   let s:log = []
+
+  if g:neobundle_log_filename != ''
+        \ && filereadable(g:neobundle_log_filename)
+    " Delete log file.
+    call delete(g:neobundle_log_filename)
+  endif
 endfunction
 
 let &cpo = s:save_cpo
