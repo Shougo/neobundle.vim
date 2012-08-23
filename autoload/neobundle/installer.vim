@@ -328,6 +328,14 @@ function! neobundle#installer#log(msg, ...)
   else
     echo join(msg, "\n")
   endif
+
+  if g:neobundle_log_filename != ''
+    " Appends to log file.
+    if filereadable(g:neobundle_log_filename)
+      let msg = readfile(g:neobundle_log_filename) + msg
+    endif
+    call writefile(msg, g:neobundle_log_filename)
+  endif
 endfunction
 
 function! neobundle#installer#error(msg, ...)

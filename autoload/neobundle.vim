@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Aug 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,8 +33,12 @@ if v:version < 702
   finish
 endif
 
+" Global options definition."{{{
 let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
+let g:neobundle_log_filename =
+      \ get(g:, 'neobundle_log_filename', '')
+"}}}
 
 let s:neobundle_dir = get(
       \ filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
@@ -162,4 +166,3 @@ endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-

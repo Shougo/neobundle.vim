@@ -303,6 +303,13 @@ g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
 
 		Default value is "git".
 
+g:neobundle_log_filename			*g:neobundle_log_filename*
+		The filename of outputting log. If it is "", don't output log
+		to file.
+		Note: The log is appended to the file.
+
+		Default value is "".
+
 g:neobundle_rm_command				*g:neobundle_rm_command*
 		The remove file command in |:NeoBundleClean|.
 
@@ -462,6 +469,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-23
 - Improved updated log.
+- Added g:neobundle_log_filename option.
 
 2012-08-22
 - Improved redraw behavior.
