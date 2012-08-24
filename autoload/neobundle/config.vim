@@ -160,7 +160,7 @@ function! neobundle#config#depends_bundle(arg)
   silent call neobundle#installer#install(0, bundle.name)
 
   " Load scripts.
-  call neobundle#config#source([bundle])
+  call neobundle#config#source(bundle.name)
 
   return bundle
 endfunction
@@ -333,14 +333,8 @@ function! neobundle#config#init_bundle(name, opts)
 endfunction
 
 function! neobundle#config#search(bundle_names)
-  let bundles = []
-  for bundle in neobundle#config#get_neobundles()
-    if index(a:bundle_names, bundle.name) >= 0
-      call add(bundles, bundle)
-    endif
-  endfor
-
-  return bundles
+  return filter(neobundle#config#get_neobundles(),
+        \ 'index(a:bundle_names, v:val.name) >= 0')
 endfunction
 
 function! s:parse_options(opts)
