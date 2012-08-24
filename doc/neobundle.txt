@@ -470,6 +470,7 @@ CHANGELOG					*neobundle-changelog*
 - Added initilization check in .gvimrc.
 - Fixed neobundle#config#is_sourced().
 - Fixed :NeoBundleDepends.
+- Fixed get revision.
 
 2012-08-23
 - Improved updated log.

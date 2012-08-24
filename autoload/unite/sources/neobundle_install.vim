@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 24 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -213,8 +213,12 @@ function! s:check_output(context, process)"{{{
   let rev_cmd = types[bundle.type].get_revision_number_command(bundle)
   let cwd = getcwd()
   try
-    lcd `=bundle.path`
-    let rev = vimproc#system(rev_cmd)
+    if isdirectory(bundle.path)
+      lcd `=bundle.path`
+      let rev = vimproc#system(rev_cmd)
+    else
+      let rev = ''
+    endif
   catch
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',

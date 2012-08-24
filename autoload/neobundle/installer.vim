@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 24 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -238,7 +238,13 @@ function! s:sync(bang, bundle, number, max, is_revision)
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
 
-    let new_rev = neobundle#util#system(rev_cmd)
+    if isdirectory(a:bundle.path)
+      " Cd to bundle path.
+      lcd `=a:bundle.path`
+      let new_rev = neobundle#util#system(rev_cmd)
+    else
+      let new_rev= ''
+    endif
   finally
     lcd `=cwd`
   endtry
