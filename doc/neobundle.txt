@@ -161,9 +161,14 @@ COMMANDS 					*neobundle-commands*
 		For example: nosync, git, svn, hg, ...
 
 		site			(String)
-		Repository site.  If you omit repository site, it is used
-		|g:neobundle_default_site|.
-		In current, "git" is avallable.
+		Repository site.  If you omit repository URL and site
+		attribute, it is used |g:neobundle_default_site|.
+		Note: You can specify site by "{site-name}:{path}" path.
+		For example: "github:Shougo/vimshell"
+
+		Available sites:
+		"github" or "gh"    : github.com (git)
+		"bitbucket" or "bb" : bitbucket.com (hg)
 
 		rtp			(String)
 		Specify runtime path.
@@ -224,6 +229,8 @@ COMMANDS 					*neobundle-commands*
 		    \ ]}
 		NeoBundle 'Shougo/vimfiler',
 		    \ {'depends' : 'Shougo/unite.vim' }
+		NeoBundle 'github:Shougo/vimshell'
+		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -303,7 +310,7 @@ COMMANDS 					*neobundle-commands*
 VARIABLES 					*neobundle-variables*
 
 g:neobundle_default_site		*g:neobundle_default_site*
-		The default repository site if site is omitted.
+		The default repository site if site attribute is omitted.
 
 		Default value is "github".
 
@@ -320,10 +327,16 @@ g:neobundle_rm_command				*g:neobundle_rm_command*
 		others.
 
 g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
-		The default protocol used for git(github). If you must use
-		proxy server, you may change the value to "https".
+		The default protocol used for git(github).
+		Note: If you must use proxy server, you may change the value
+		to "https".
 
 		Default value is "git".
+
+g:neobundle_default_hg_protocol			*g:neobundle_default_hg_protocol*
+		The default protocol used for hg(bitbucket).
+
+		Default value is "https".
 
 g:unite_source_neobundle_install_max_processes
 						*g:unite_source_neobundle_install_max_processes*
@@ -478,6 +491,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-25
 - Added g:neobundle_default_site option.
+- Added g:neobundle_default_hg_protocol option.
 
 2012-08-24
 - Added initilization check in .gvimrc.

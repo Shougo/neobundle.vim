@@ -71,6 +71,24 @@ Context types
           \ {'type' : 'hg', 'uri' :
           \  'https://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
+    Should neobundle#config#parse_path(
+          \ 'bitbucket://bitbucket.org/ns9tks/vim-fuzzyfinder') ==
+          \ {'type' : 'hg', 'uri' :
+          \  g:neobundle_default_hg_protocol.
+          \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
+          \  'name' : 'vim-fuzzyfinder'}
+    Should neobundle#config#parse_path(
+          \ 'bitbucket:ns9tks/vim-fuzzyfinder') ==
+          \ {'type' : 'hg', 'uri' :
+          \  g:neobundle_default_hg_protocol.
+          \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
+          \  'name' : 'vim-fuzzyfinder'}
+    Should neobundle#config#parse_path(
+          \ 'ns9tks/vim-fuzzyfinder', {'site': 'bitbucket'}) ==
+          \ {'type' : 'hg', 'uri' :
+          \  g:neobundle_default_hg_protocol.
+          \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
+          \  'name' : 'vim-fuzzyfinder'}
 
     let bundle = neobundle#config#init_bundle(
           \ 'git://github.com/Shougo/neobundle.vim.git',

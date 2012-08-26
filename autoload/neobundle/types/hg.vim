@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2012.
+" Last Modified: 26 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,11 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Global options definition."{{{
+let g:neobundle_default_hg_protocol =
+      \ get(g:, 'neobundle_default_hg_protocol', 'https')
+"}}}
+
 function! neobundle#types#hg#define()"{{{
   return executable('hg') ? s:type : {}
 endfunction"}}}
@@ -38,7 +43,16 @@ let s:type = {
 function! s:type.detect(path)"{{{
   let type = ''
 
-  if a:path =~? '[/.]hg[/.@]'
+  if a:path =~# '\<\(bb\|bitbucket\):\S\+'
+    let uri = printf('%s://bitbucket.org/%s',
+          \ g:neobundle_default_hg_protocol,
+          \ substitute(split(a:path, ':')[-1],
+          \ '^//bitbucket.org/', '', ''))
+
+    let name = split(uri, '/')[-1]
+
+    let type = 'hg'
+  elseif a:path =~? '[/.]hg[/.@]'
           \ || (a:path =~# '\<https\?://bitbucket\.org/'
           \ || a:path =~# '\<https://code\.google\.com/'
           \    && a:path !~# '.git$')
