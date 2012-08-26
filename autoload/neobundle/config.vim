@@ -258,8 +258,6 @@ function! neobundle#config#parse_path(path, ...)
   if path !~ ':'
     " Add default site.
     let path = site . ':' . path
-    echomsg site
-    echomsg path
   endif
 
   for type in values(neobundle#config#get_types())
