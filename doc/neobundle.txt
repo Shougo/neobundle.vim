@@ -160,6 +160,11 @@ COMMANDS 					*neobundle-commands*
 		automatically from {repository}.
 		For example: nosync, git, svn, hg, ...
 
+		site			(String)
+		Repository site.  If you omit repository site, it is used
+		|g:neobundle_default_site|.
+		In current, "git" is avallable.
+
 		rtp			(String)
 		Specify runtime path.
 		You may use this option when the repository has Vim plugin in
@@ -297,11 +302,10 @@ COMMANDS 					*neobundle-commands*
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
-g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
-		The default protocol used for git(github). If you use proxy
-		server, you may change the value to "https".
+g:neobundle_default_site		*g:neobundle_default_site*
+		The default repository site if site is omitted.
 
-		Default value is "git".
+		Default value is "github".
 
 g:neobundle_log_filename			*g:neobundle_log_filename*
 		The filename of outputting log. If it is "", don't output log
@@ -314,6 +318,12 @@ g:neobundle_rm_command				*g:neobundle_rm_command*
 
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
+
+g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
+		The default protocol used for git(github). If you must use
+		proxy server, you may change the value to "https".
+
+		Default value is "git".
 
 g:unite_source_neobundle_install_max_processes
 						*g:unite_source_neobundle_install_max_processes*
@@ -465,6 +475,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-25
+- Added g:neobundle_default_site option.
 
 2012-08-24
 - Added initilization check in .gvimrc.

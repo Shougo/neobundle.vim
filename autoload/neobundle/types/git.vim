@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 26 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,11 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Global options definition."{{{
+let g:neobundle_default_git_protocol =
+      \ get(g:, 'neobundle_default_git_protocol', 'git')
+"}}}
+
 function! neobundle#types#git#define()"{{{
   return executable('git') ? s:type : {}
 endfunction"}}}
@@ -38,30 +43,32 @@ let s:type = {
 function! s:type.detect(path)"{{{
   let type = ''
 
-  if a:path =~# '\<\(gh\|github\):\S\+\|'.
-        \'^\w[[:alnum:]-]*/[^/]\+$\|://github.com/'
-    let uri = (a:path =~# '://github.com/') ? a:path :
-          \ g:neobundle_default_git_protocol .
-          \   '://github.com/'.substitute(split(a:path, ':')[-1],
-          \   '^//github.com/', '', '')
-    if uri !~ '\.git\s*$'
-      " Add .git suffix.
-      let uri .= '.git'
+  if a:path =~# '\<\(gh\|github\):\S\+\|://github.com/'
+    if a:path !~ '/'
+      " www.vim.org Vim scripts.
+      let name = split(a:path, ':')[-1]
+      let uri  = g:neobundle_default_git_protocol .
+            \ '://github.com/vim-scripts/'.name.'.git'
+      let type = 'git'
+    else
+      let uri = (a:path =~# '://github.com/') ? a:path :
+            \ g:neobundle_default_git_protocol .
+            \   '://github.com/'.substitute(split(a:path, ':')[-1],
+            \   '^//github.com/', '', '')
+      if uri !~ '\.git\s*$'
+        " Add .git suffix.
+        let uri .= '.git'
+      endif
+
+      let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     endif
 
-    let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     let type = 'git'
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
     let uri = a:path
     let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
 
-    let type = 'git'
-  elseif a:path !~ '/'
-    " www.vim.org Vim scripts.
-    let name = a:path
-    let uri  = g:neobundle_default_git_protocol .
-          \ '://github.com/vim-scripts/'.name.'.git'
     let type = 'git'
   endif
 

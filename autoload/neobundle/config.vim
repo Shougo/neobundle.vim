@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 26 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -251,9 +251,17 @@ function! neobundle#config#get_types()
   return s:neobundle_types
 endfunction
 
-function! neobundle#config#parse_path(path)
+function! neobundle#config#parse_path(path, ...)
+  let opts = get(a:000, 0, {})
+  let site = get(opts, 'site', g:neobundle_default_site)
+  let path = a:path
+  if path !~ ':'
+    " Add default site.
+    let path = site . ':' . path
+  endif
+
   for type in values(neobundle#config#get_types())
-    let detect = type.detect(a:path)
+    let detect = type.detect(path)
     if !empty(detect)
       return detect
     endif
@@ -288,8 +296,9 @@ endfunction
 
 function! neobundle#config#init_bundle(name, opts)
   let path = substitute(a:name, "['".'"]\+', '', 'g')
-  let bundle = extend(neobundle#config#parse_path(path),
-        \ s:parse_options(a:opts))
+  let opts = s:parse_options(a:opts)
+  let bundle = extend(neobundle#config#parse_path(
+        \ path, opts), opts)
   if !has_key(bundle, 'uri')
     let bundle.uri = path
   endif
@@ -348,46 +357,6 @@ function! s:parse_options(opts)
   else
     return { 'rev': a:opts[0] }
   endif
-endfunction
-
-function! s:parse_name(arg)
-  if a:arg =~ '\<\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
-    let uri = g:neobundle_default_git_protocol .
-          \ '://github.com/'.split(a:arg, ':')[-1]
-    if uri !~ '\.git\s*$'
-      " Add .git suffix.
-      let uri .= '.git'
-    endif
-
-    let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
-    let type = 'git'
-  elseif a:arg =~ '\<\%(git@\|git://\)\S\+'
-        \ || a:arg =~ '\<\%(file\|https\?\|svn\)://'
-        \ || a:arg =~ '\.git\s*$'
-    let uri = a:arg
-    let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
-
-    if uri =~? '^git://'
-      " Git protocol.
-      let type = 'git'
-    elseif uri =~? '/svn[/.]'
-      let type = 'svn'
-    elseif uri =~? '/hg[/.@]'
-          \ || uri =~? '\<https\?://bitbucket\.org/'
-          \ || uri =~? '\<https://code\.google\.com/'
-      let type = 'hg'
-    else
-      " Assume git(may not..).
-      let type = 'git'
-    endif
-  else
-    let name = a:arg
-    let uri  = g:neobundle_default_git_protocol .
-          \ '://github.com/vim-scripts/'.name.'.git'
-    let type = 'git'
-  endif
-
-  return { 'name': name, 'uri': uri, 'type' : type }
 endfunction
 
 function! s:expand_path(path)
