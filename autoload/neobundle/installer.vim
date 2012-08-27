@@ -56,6 +56,8 @@ function! neobundle#installer#install(bang, ...)
   if empty(bundles)
     call neobundle#installer#error(
           \ '[neobundle/install] Bundles not found.')
+    call neobundle#installer#error(
+          \ '[neobundle/install] You may use wrong bundle name.')
     return
   endif
 

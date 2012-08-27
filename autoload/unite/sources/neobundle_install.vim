@@ -54,6 +54,8 @@ function! s:source_install.hooks.on_init(args, context)"{{{
     let a:context.is_async = 0
     call neobundle#installer#log(
           \ '[neobundle/install] Bundles not found.', 1)
+    call neobundle#installer#log(
+          \ '[neobundle/install] You may use wrong bundle name.', 1)
   endif
 endfunction"}}}
 
