@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,6 +53,11 @@ function! neobundle#installer#install(bang, ...)
         \ empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(bundle_names)
+  if empty(bundles)
+    call neobundle#installer#error(
+          \ '[neobundle/install] Bundles not found.')
+    return
+  endif
 
   call neobundle#installer#clear_log()
   let [installed, errored] = s:install(a:bang, bundles)

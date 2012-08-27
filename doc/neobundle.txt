@@ -132,9 +132,12 @@ neobundle#get_not_installed_bundle_names([{bundle-names}])
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository} [,{revision}]		*:NeoBundle*
-:NeoBundle {repository} [,{dictionary}]
+:NeoBundle {repository} [[,{revision}] [,{dictionary}]]
+						*:NeoBundle*
 		Configures neobundle.
+		The {repository} is repository URI.  The {revision} is
+		revision or branch name. If omitted it, use current latest
+		revision.
 		Note: You don't set neobundle setting in .gvimrc!
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
@@ -142,7 +145,7 @@ COMMANDS 					*neobundle-commands*
 		Note: If you manage neobundle by neobundle, it may be error
 		occurred when update neobundle.
 
-		{dictionary} has following keys:
+		The {dictionary} has following keys:
 
 		rev			(String)
 		Revision number or branch/tag name.
@@ -261,11 +264,16 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleInstall [{name}...]			*:NeoBundleInstall*
 		Installs {name} plugins.
 		If {name} is omited, all configured plugin is installed.
+		Note: {name} is plugin name like "neobundle.vim". Not
+		"Shougo/neobundle.vim".
 
 :NeoBundleInstall! [{name}]...			*:NeoBundleInstall!*
 		Installs and updates {name} plugins.
 		If {name} is omited, all configured plugin is installed
 		and updated.
+		Note: {name} is plugin name like "neobundle.vim". Not
+		"Shougo/neobundle.vim".
+
 :NeoBundleUpdate [{name}]			*:NeoBundleUpdate*
 		Same to |:NeoBundleInstall!|.
 
@@ -488,6 +496,10 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-27
+- Improved error check in :NeoBundleUpdate.
+- Improved documentation.
 
 2012-08-25
 - Added g:neobundle_default_site option.
