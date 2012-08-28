@@ -171,7 +171,7 @@ COMMANDS 					*neobundle-commands*
 
 		Available sites:
 		"github" or "gh"    : github.com (git)
-		"bitbucket" or "bb" : bitbucket.com (hg)
+		"bitbucket" or "bb" : bitbucket.org (hg)
 
 		rtp			(String)
 		Specify runtime path.
