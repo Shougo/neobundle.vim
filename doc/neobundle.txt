@@ -275,14 +275,14 @@ COMMANDS 					*neobundle-commands*
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
-:NeoBundleInstall! [{name}]...			*:NeoBundleInstall!*
+:NeoBundleInstall! [{name}...]			*:NeoBundleInstall!*
 		Installs and updates {name} plugins.
 		If {name} is omited, all configured plugin is installed
 		and updated.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
-:NeoBundleUpdate [{name}]			*:NeoBundleUpdate*
+:NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
 		Same to |:NeoBundleInstall!|.
 
 :NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleClean*
