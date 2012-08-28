@@ -234,6 +234,9 @@ COMMANDS 					*neobundle-commands*
 		    \ {'depends' : 'Shougo/unite.vim' }
 		NeoBundle 'github:Shougo/vimshell'
 		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
+
+		" For bitbucket git repository.
+		NeoBundle 'bitbucket:kh3phr3n/vim-qt-syntax.git'
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -496,6 +499,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-08-28
+- Added bitbucket git repository test.
 
 2012-08-27
 - Improved error check in :NeoBundleUpdate.

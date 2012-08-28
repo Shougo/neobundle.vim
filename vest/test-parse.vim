@@ -6,7 +6,7 @@ set cpo&vim
 " }}}
 
 Context types
-  It parse git repos
+  It parses github git repos
     Should neobundle#config#parse_path(
           \ 'Shougo/neocomplcache-clang.git') ==
           \ {'type' : 'git', 'uri' :
@@ -65,7 +65,7 @@ Context types
           \  'name' : 'mpvim'}
   End
 
-  It parse hg repos
+  It parses bitbucket hg repos
     Should neobundle#config#parse_path(
           \ 'https://bitbucket.org/ns9tks/vim-fuzzyfinder') ==
           \ {'type' : 'hg', 'uri' :
@@ -96,6 +96,20 @@ Context types
     Should bundle.name == 'neobundle.vim'
     Should bundle.type == 'hg'
     Should bundle.uri == 'git://github.com/Shougo/neobundle.vim.git'
+  End
+
+  It parses bitbucket git repos
+    Should neobundle#config#parse_path(
+          \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git') ==
+          \ {'type' : 'git', 'uri' :
+          \  'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
+          \  'name' : 'vim-qt-syntax'}
+    Should neobundle#config#parse_path(
+          \ 'bitbucket:kh3phr3n/vim-qt-syntax.git') ==
+          \ {'type' : 'git', 'uri' :
+          \  g:neobundle_default_git_protocol.
+          \  '://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
+          \  'name' : 'vim-qt-syntax'}
   End
 End
 
