@@ -222,8 +222,6 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
-		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
@@ -233,10 +231,17 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'Shougo/vimfiler',
 		    \ {'depends' : 'Shougo/unite.vim' }
 		NeoBundle 'github:Shougo/vimshell'
-		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
 
-		" For bitbucket git repository.
+		" For bitbucket svn repository.
+		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+
+		" For bitbucket hg repository.
+		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
+		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+
+		" For bitbucket git repository(.git is needed).
 		NeoBundle 'bitbucket:kh3phr3n/vim-qt-syntax.git'
+		NeoBundle 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -246,9 +251,9 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'Shougo/vimshell', 'master'
 <
 		If type is "nosync", neobundle does not update
-		automatically(like pathogen.vim).
+		automatically(like pathogen.vim). Refer to |NeoBundleLocal|.
 >
-		NeoBundleLocal 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
+		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 <
 		Note: To use hg commands for git repository, please use this.
 >
