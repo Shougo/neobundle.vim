@@ -507,6 +507,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-28
 - Added bitbucket git repository test.
+- Fixed :NeoBundleInstall.
 
 2012-08-27
 - Improved error check in :NeoBundleUpdate.
