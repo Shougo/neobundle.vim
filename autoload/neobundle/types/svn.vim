@@ -51,6 +51,8 @@ function! s:type.detect(path)"{{{
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
   if !executable('svn')
+    call neobundle#installer#error(
+          \ '[neobundle] svn command is not installed.')
     return ''
   endif
 

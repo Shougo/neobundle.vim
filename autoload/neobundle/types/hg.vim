@@ -67,6 +67,8 @@ function! s:type.detect(path)"{{{
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
   if !executable('hg')
+    call neobundle#installer#error(
+          \ '[neobundle] hg command is not installed.')
     return ''
   endif
 

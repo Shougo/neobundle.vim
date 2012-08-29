@@ -507,6 +507,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-08-29
 - Improved executable() check.
+- Improved error message.
 
 2012-08-28
 - Added bitbucket git repository test.
