@@ -56,22 +56,26 @@ Refer to setting examples:
 
 To update, run this command.
 >
-	:NeoBundleInstall!
+	:NeoBundleUpdate
 <
-Note: To use unite.vim interface, use this command (required vimproc and
-unite.vim plugin).
+Note: To use unite.vim interface, use this command (required |vimproc| and
+|unite.vim| plugins).
 >
-	:Unite neobundle/install:!
+	:Unite neobundle/update
 <
 This plugin setting is compatible with Vundle.vim :-)
 
-Note: Instead of vundle, neobundle has not search plugins system.  But you can
-search popular plugins and add neobundle settings using Vimpusher web
+You can search popular plugins and add neobundle settings using Vimpusher web
 service(Registration is required).
 	http://www.vimpusher.com/
 Or using vim-scripts.org.
 	http://vim-scripts.org/
 
+Neobundle implemented search plugins system from vim.org scripts (|unite.vim|
+is required).
+>
+	:Unite neobundle/search
+<
 ==============================================================================
 INSTALL						*neobundle-install*
 
@@ -508,6 +512,7 @@ CHANGELOG					*neobundle-changelog*
 2012-08-29
 - Improved executable() check.
 - Improved error message.
+- Improved documentation.
 
 2012-08-28
 - Added bitbucket git repository test.
