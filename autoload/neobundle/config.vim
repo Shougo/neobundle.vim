@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -308,11 +308,6 @@ function! neobundle#config#init_bundle(name, opts)
   endif
 
   if !has_key(bundle, 'type')
-    if !executable('git')
-      call neobundle#installer#error(
-            \ '[neobundle] git is not installed. You cannot install plugins from github.')
-    endif
-
     call neobundle#installer#error(
           \ printf('Failed parse name "%s" and args %s',
           \   a:name, string(a:opts)))

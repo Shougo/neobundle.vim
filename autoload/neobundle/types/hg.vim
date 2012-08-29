@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ let g:neobundle_default_hg_protocol =
 "}}}
 
 function! neobundle#types#hg#define()"{{{
-  return executable('hg') ? s:type : {}
+  return s:type
 endfunction"}}}
 
 let s:type = {
@@ -66,6 +66,10 @@ function! s:type.detect(path)"{{{
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
+  if !executable('hg')
+    return ''
+  endif
+
   if !isdirectory(a:bundle.path)
     let cmd = 'hg clone'
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
@@ -76,9 +80,17 @@ function! s:type.get_sync_command(bundle)"{{{
   return cmd
 endfunction"}}}
 function! s:type.get_revision_number_command(bundle)"{{{
+  if !executable('hg')
+    return ''
+  endif
+
   return 'hg heads --quiet --rev default'
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
+  if !executable('hg')
+    return ''
+  endif
+
   return 'hg up ' . a:bundle.rev
 endfunction"}}}
 
