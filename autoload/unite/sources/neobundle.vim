@@ -171,20 +171,32 @@ let s:source.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.preview.func(candidate)"{{{
-  let winnr = winnr()
+  " Search help files.
+  let readme = get(split(globpath(
+        \ a:candidate.action__path, 'doc/*.?*'), '\n'), 0, '')
 
-  try
-    execute 'help' fnamemodify(substitute(
-          \ a:candidate.action__bundle_name, '^vim-', '', ''), ':r').'.txt'
-    normal! zv
-    normal! zt
-    setlocal previewwindow
-    setlocal winfixheight
-  catch /^Vim\%((\a\+)\)\?:E149/
-    " Ignore
-  endtry
+  if readme == ''
+    " Search README files.
+    let readme = get(split(globpath(
+          \ a:candidate.action__path, 'README*'), '\n'), 0, '')
+    if readme == ''
+      return
+    endif
+  endif
 
-  execute winnr.'wincmd w'
+  let buflisted = buflisted(
+        \ unite#util#escape_file_searching(readme))
+
+  pedit `=readme`
+
+  " Open folds.
+  normal! zv
+  normal! zt
+
+  if !buflisted
+    call unite#add_previewed_buffer_list(
+          \ bufnr(unite#util#escape_file_searching(readme)))
+  endif
 endfunction"}}}
 "}}}
 
