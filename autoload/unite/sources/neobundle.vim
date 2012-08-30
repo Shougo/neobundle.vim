@@ -35,9 +35,6 @@ let s:source = {
       \ 'name' : 'neobundle',
       \ 'description' : 'candidates from bundles',
       \ 'hooks' : {},
-      \ 'action_table' : {},
-      \ 'default_action' : 'update',
-      \ 'parents' : ['uri'],
       \ }
 
 function! s:source.hooks.on_init(args, context)"{{{
@@ -74,7 +71,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let _ = map(neobundle#config#get_neobundles(), "{
         \ 'word' : substitute(v:val.orig_name,
         \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', ''),
-        \ 'kind' : 'directory',
+        \ 'kind' : 'neobundle',
         \ 'action__path' : v:val.path,
         \ 'action__directory' : v:val.path,
         \ 'action__bundle' : v:val,
@@ -94,7 +91,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-function! s:get_commit_status(bang, bundle)
+function! s:get_commit_status(bang, bundle)"{{{
   if !isdirectory(a:bundle.path)
     return 'Not installed'
   endif
@@ -125,80 +122,7 @@ function! s:get_commit_status(bang, bundle)
   endif
 
   return output
-endfunction
-
-" Actions"{{{
-let s:source.action_table.update = {
-      \ 'description' : 'update bundles',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:source.action_table.update.func(candidates)"{{{
-  call unite#start([['neobundle/install', '!']
-        \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
 endfunction"}}}
-let s:source.action_table.delete = {
-      \ 'description' : 'delete bundles',
-      \ 'is_invalidate_cache' : 1,
-      \ 'is_quit' : 0,
-      \ 'is_selectable' : 1,
-      \ }
-function! s:source.action_table.delete.func(candidates)"{{{
-  call call('neobundle#installer#clean', insert(map(copy(a:candidates),
-        \ 'v:val.action__bundle_name'), 0))
-endfunction"}}}
-let s:source.action_table.reinstall = {
-      \ 'description' : 'reinstall bundles',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:source.action_table.reinstall.func(candidates)"{{{
-  for candidate in a:candidates
-    " Save info.
-    let arg = candidate.action__bundle.orig_arg
-
-    " Remove.
-    call neobundle#installer#clean(1, candidate.action__bundle_name)
-
-    call call('neobundle#config#bundle',
-          \ [candidate.action__bundle.orig_arg])
-  endfor
-
-  " Install.
-  call unite#start([['neobundle/install', '!']
-        \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
-endfunction"}}}
-let s:source.action_table.preview = {
-      \ 'description' : 'view the plugin documentation',
-      \ 'is_quit' : 0,
-      \ }
-function! s:source.action_table.preview.func(candidate)"{{{
-  " Search help files.
-  let readme = get(split(globpath(
-        \ a:candidate.action__path, 'doc/*.?*'), '\n'), 0, '')
-
-  if readme == ''
-    " Search README files.
-    let readme = get(split(globpath(
-          \ a:candidate.action__path, 'README*'), '\n'), 0, '')
-    if readme == ''
-      return
-    endif
-  endif
-
-  let buflisted = buflisted(
-        \ unite#util#escape_file_searching(readme))
-
-  pedit `=readme`
-
-  " Open folds.
-  normal! zv
-  normal! zt
-
-  if !buflisted
-    call unite#add_previewed_buffer_list(
-          \ bufnr(unite#util#escape_file_searching(readme)))
-  endif
-endfunction"}}}
-"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

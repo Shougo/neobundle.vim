@@ -488,9 +488,9 @@ neobundle/search
 neobundle/lazy
 		List lazy configured plugins(not sourced by |:NeoBundleSource|).
 
-Actions of each sources
-
-neobundle					*unite-action-neobundle*
+							*unite-kind-neobundle*
+neobundle		An interface for neobundle bundles. It is used in
+			neobundle source and neobundle/lazy sources.
 	update		Update bundles(Default action)
 	delete		Delete bundles
 	preview		view the plugin documentation
@@ -499,19 +499,21 @@ neobundle					*unite-action-neobundle*
 	edit		Browse bundle directory
 	start		Browse github plugin page
 
+Actions of each sources
+
 neobundle/search				*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
 	start		Browse github plugin page
 
 neobundle/lazy					*unite-action-neobundle-lazy*
 	source		Source plugin files(Default action)
-	start		Browse github plugin page
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
 2012-08-30
 - Added preview action in neobundle source.
+- Added neobundle kind.
 
 2012-08-29
 - Improved executable() check.
