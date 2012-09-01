@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -181,7 +181,8 @@ function! s:sync(bundle, context, is_revision)"{{{
     endif
 
     let process = {
-          \ 'proc' : vimproc#pgroup_open(cmd, 0, 2),
+          \ 'proc' : vimproc#pgroup_open(vimproc#util#iconv(
+          \            cmd, &encoding, 'char'), 0, 2),
           \ 'number' : a:context.source__number,
           \ 'revision_locked' : a:is_revision,
           \ 'rev' : rev,
@@ -201,7 +202,8 @@ function! s:sync(bundle, context, is_revision)"{{{
 endfunction"}}}
 
 function! s:check_output(context, process)"{{{
-  let a:process.output .= a:process.proc.stdout.read(-1, 300)
+  let a:process.output .= vimproc#util#iconv(
+        \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
   if !a:process.proc.stdout.eof
     return
   endif
