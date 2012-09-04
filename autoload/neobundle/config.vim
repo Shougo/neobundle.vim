@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -215,7 +215,10 @@ function! neobundle#config#source(...)
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
       for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-        source `=file`
+        try
+          source `=file`
+        catch /^Vim\%((\a\+)\)\?:E127/
+        endtry
       endfor
     endfor
 
