@@ -125,13 +125,17 @@ neobundle#source({bundle-names})		*neobundle#source()*
 		Same to |:NeoBundleSource|.
 		{bundle-names} is bundle name list.
 
-neobundle#exists_not_installed_bundles([{bundle-names}])
-						*neobundle#exists_not_installed_bundles()*
+neobundle#exists_not_installed_bundles()
+				*neobundle#exists_not_installed_bundles()*
 		Checks if exists not installed bundles.
 
-neobundle#get_not_installed_bundle_names([{bundle-names}])
-						*neobundle#get_not_installed_bundle_names()*
+neobundle#get_not_installed_bundle_names()
+				*neobundle#get_not_installed_bundle_names()*
 		Returns not installed bundle names.
+
+neobundle#is_installed({bundle-name})
+				*neobundle#is_installed()*
+		Checks if {bundle-name} bundle is installed.
 
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
@@ -513,6 +517,9 @@ CHANGELOG					*neobundle-changelog*
 
 2012-09-01
 - Added encoding conversion in neobundle/install source.
+- Added neobundle#is_installed().
+- Changed neobundle#exists_not_installed_bundles() and
+  neobundle#get_not_installed_bundle_names().
 
 2012-08-30
 - Added preview action in neobundle source.

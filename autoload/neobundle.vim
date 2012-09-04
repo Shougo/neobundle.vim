@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,22 +152,37 @@ function! s:neobundle_local(localdir)
   endfor
 endfunction
 
-function! neobundle#exists_not_installed_bundles(...)
-  return !empty(call('neobundle#get_not_installed_bundles', a:000))
+function! neobundle#exists_not_installed_bundles()
+  return !empty(s:get_not_installed_bundles([]))
 endfunction
 
-function! neobundle#get_not_installed_bundles(...)
-  let bundle_names = get(a:000, 0, [])
-  let bundles = empty(bundle_names) ?
+function! neobundle#is_installed(...)
+  let bundle_names = type(get(a:000, 0, [])) == type([]) ?
+        \ get(a:000, 0, []) : [a:1]
+
+  return !empty(s:get_installed_bundles(bundle_names))
+endfunction
+
+function! neobundle#get_not_installed_bundle_names()
+  return map(s:get_not_installed_bundles([]), 'v:val.name')
+endfunction
+
+function! s:get_not_installed_bundles(bundle_names)
+  let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(bundle_names)
+        \ neobundle#config#search(a:bundle_names)
 
   return filter(copy(bundles),
         \ "!isdirectory(neobundle#util#expand(v:val.path))")
 endfunction
 
-function! neobundle#get_not_installed_bundle_names(...)
-  return map(call('neobundle#get_not_installed_bundles', a:000), 'v:val.name')
+function! s:get_installed_bundles(bundle_names)
+  let bundles = empty(a:bundle_names) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#search(a:bundle_names)
+
+  return filter(copy(bundles),
+        \ "isdirectory(neobundle#util#expand(v:val.path))")
 endfunction
 
 let &cpo = s:save_cpo
