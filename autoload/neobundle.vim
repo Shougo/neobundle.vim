@@ -29,7 +29,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Check 'term' option value.
-if get(g:, 'loaded_neobundle', 0) && &term ==# 'builtin_gui'
+if !get(g:, 'loaded_neobundle', 0) && &term ==# 'builtin_gui'
   echoerr 'neobundle is initialized in .gvimrc!'
         \' neobundle must be initialized in .vimrc.'
 endif
