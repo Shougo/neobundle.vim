@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 05 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,10 +29,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Check 'term' option value.
-if &term ==# 'builtin_gui'
+if get(g:, 'loaded_neobundle', 0) && &term ==# 'builtin_gui'
   echoerr 'neobundle is initialized in .gvimrc!'
         \' neobundle must be initialized in .vimrc.'
 endif
+
+let g:loaded_neobundle = 1
 
 if v:version < 702
   echoerr 'neobundle does not work this version of Vim (' . v:version . ').'
