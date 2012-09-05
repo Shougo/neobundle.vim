@@ -153,21 +153,21 @@ function! s:neobundle_local(localdir)
 endfunction
 
 function! neobundle#exists_not_installed_bundles()
-  return !empty(s:get_not_installed_bundles([]))
+  return !empty(neobundle#get_not_installed_bundles([]))
 endfunction
 
 function! neobundle#is_installed(...)
   let bundle_names = type(get(a:000, 0, [])) == type([]) ?
         \ get(a:000, 0, []) : [a:1]
 
-  return !empty(s:get_installed_bundles(bundle_names))
+  return !empty(neobundle#get_installed_bundles(bundle_names))
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()
-  return map(s:get_not_installed_bundles([]), 'v:val.name')
+  return map(neobundle#get_not_installed_bundles([]), 'v:val.name')
 endfunction
 
-function! s:get_not_installed_bundles(bundle_names)
+function! neobundle#get_not_installed_bundles(bundle_names)
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(a:bundle_names)
