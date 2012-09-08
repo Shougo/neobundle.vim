@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 08 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -270,7 +270,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
   endif
 
   if old_rev !=# new_rev
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ printf('(%'.len(a:max).'d/%d): |%s| %s %s -> %s',
           \ a:number, a:max, a:bundle.name,
           \ 'Updated', old_rev, new_rev))
@@ -351,11 +351,19 @@ function! neobundle#installer#log(msg, ...)
   endif
 endfunction
 
+function! neobundle#installer#update_log(msg, ...)
+  call call('neobundle#installer#log', [a:msg] + a:000)
+  let msg = type(a:msg) == type([]) ?
+        \ a:msg : [a:msg]
+  call extend(s:updates_log, msg)
+endfunction
+
 function! neobundle#installer#error(msg, ...)
   let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
         \ a:msg : split(a:msg, '\r\?\n')
   call extend(s:log, msg)
+  call extend(s:updates_log, msg)
 
   if &filetype == 'unite' || is_unite
     call unite#print_error(msg)
@@ -368,8 +376,13 @@ function! neobundle#installer#get_log()
   return s:log
 endfunction
 
+function! neobundle#installer#get_updates_log()
+  return s:updates_log
+endfunction
+
 function! neobundle#installer#clear_log()
   let s:log = []
+  let s:updates_log = []
 
   if g:neobundle_log_filename != ''
         \ && filereadable(g:neobundle_log_filename)

@@ -302,7 +302,10 @@ COMMANDS 					*neobundle-commands*
 		Print list of configured neobundles.
 
 :NeoBundleLog 					*:NeoBundleLog*
-		Print previous install logs.
+		Print previous all install logs.
+
+:NeoBundleUpdatesLog 				*:NeoBundleUpdatesLog*
+		Print previous update logs.
 
 :NeoBundleLazy {repository} [, {dictionary}]	*:NeoBundleLazy*
 :NeoExternalBundle {repository} [, {dictionary}]
@@ -514,6 +517,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-09-08
+- Added :NeoBundleUpdatesLog command.
 
 2012-09-01
 - Added encoding conversion in neobundle/install source.

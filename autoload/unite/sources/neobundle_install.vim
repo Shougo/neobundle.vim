@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 08 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -261,10 +261,10 @@ function! s:check_output(context, process)"{{{
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Skipped'), 1)
   else
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ printf('[neobundle/install] %s -> %s',
           \ a:process.rev, rev), 1)
     call neobundle#installer#build(bundle)
