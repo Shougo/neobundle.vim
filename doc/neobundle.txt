@@ -225,7 +225,7 @@ COMMANDS 					*neobundle-commands*
 		For example, "fugitive", "NERDTree", "session.vim".
 		This attribute is valid in |:NeoBundleLazy|.
 
-		Examples:
+		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
@@ -239,6 +239,9 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'Shougo/vimfiler',
 		    \ {'depends' : 'Shougo/unite.vim' }
 		NeoBundle 'github:Shougo/vimshell'
+
+		" Pushable github repository.
+		NeoBundle 'git@github.com:Shougo/neocomplcache.git'
 
 		" For bitbucket svn repository.
 		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
@@ -388,39 +391,10 @@ EXAMPLES					*neobundle-examples*
 	"NeoBundle 'Shougo/neobundle.vim'
 	
 	" My Bundles here:
-	"
+	" Refer to |:NeoBundle-examaples|.
 	" Note: You don't set neobundle setting in .gvimrc!
-	" Original repositories in github
-	NeoBundle 'Shougo/neocomplcache-clang.git'
-	NeoBundle 'tpope/vim-fugitive'
-	" Vim-script repositories
-	NeoBundle 'FuzzyFinder'
-	NeoBundle 'rails.vim'
-	" Non-github repos
-	NeoBundle 'git://git.wincent.com/command-t.git'
-	" Non-git repos
-	NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
-	" Comment is allowed.
-	NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder' " Foo, Bar
-
-	" Build repos.
-	NeoBundle 'Shougo/vimproc', {
-	      \ 'build' : {
-	      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-	      \     'cygwin' : 'make -f make_cygwin.mak',
-	      \     'mac' : 'make -f make_mac.mak',
-	      \     'unix' : 'make -f make_unix.mak',
-	      \    },
-	      \ }
-
-	" Lazy load.
-	NeoBundleLazy 'c9s/perlomni.vim.git'
-	NeoBundleSource perlomni.vim
-	NeoBundleLazy 'klen/python-mode'
-	autocmd FileType python
-	      \ NeoBundleSource python-mode
+	" ...
 
 	filetype plugin indent on       " required!
 
@@ -520,6 +494,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-09-09
 - Added test.
+- Improved documentation.
 
 2012-09-08
 - Added :NeoBundleUpdatesLog command.
