@@ -55,6 +55,11 @@ Context types
           \ g:neobundle_default_git_protocol .
           \ '://github.com/mattn/gist-vim.git',
           \  'name' : 'gist-vim'}
+    Should neobundle#config#parse_path(
+          \ 'git@github.com:Shougo/neocomplcache.git') ==
+          \ {'type' : 'git', 'uri' :
+          \ 'git@github.com:Shougo/neocomplcache.git',
+          \  'name' : 'neocomplcache'}
   End
 
   It parse svn repos
