@@ -163,7 +163,9 @@ COMMANDS 					*neobundle-commands*
 		|neobundle#rc()|).
 
 		tail_path		(Number)
-		If it is 1, neobundle add path in tail.
+		If it is 1, neobundle add the path to the end of user
+		runtimepath.
+		Note: This is useful not to overwritten user scripts.
 
 		base			(String)
 		Directory base path. If you omit it, used |neobundle#rc()| base
