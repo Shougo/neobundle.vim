@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,12 +113,12 @@ function! neobundle#config#bundle(arg)
 
   let path = bundle.path
   if has_key(s:neobundles, path)
-    call s:rtp_rm(bundle.rtp)
+    call s:rtp_rm(bundle)
   endif
 
   let s:neobundles[path] = bundle
   let s:loaded_neobundles[bundle.name] = 1
-  call s:rtp_add(bundle.rtp)
+  call s:rtp_add(bundle)
   for depend in bundle.depends
     if type(depend) == type('')
       let depend = string(depend)
@@ -198,9 +198,9 @@ function! neobundle#config#source(...)
 
   for bundle in bundles
     if has_key(s:neobundles, bundle.path)
-      call s:rtp_rm(bundle.rtp)
+      call s:rtp_rm(bundle)
     endif
-    call s:rtp_add(bundle.rtp)
+    call s:rtp_add(bundle)
 
     for depend in bundle.depends
       if type(depend) == type('')
@@ -245,7 +245,7 @@ endfunction
 
 function! neobundle#config#rm_bundle(path)
   if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path].rtp)
+    call s:rtp_rm(s:neobundles[a:path])
     call remove(s:neobundles, a:path)
   endif
 endfunction
@@ -275,22 +275,31 @@ endfunction
 
 function! s:rtp_rm_all_bundles()
   call filter(filter(values(s:neobundles),
-        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val.rtp)')
+        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val)')
 endfunction
 
-function! s:rtp_rm(dir)
-  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir))
-  execute 'set rtp-='.fnameescape(neobundle#util#expand(a:dir.'/after'))
+function! s:rtp_rm(bundle)
+  let dir = a:bundle.rtp
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(dir))
+  execute 'set rtp-='.fnameescape(neobundle#util#expand(dir.'/after'))
 endfunction
 
 function! s:rtp_add_bundles(bundles)
-  call filter(copy(a:bundles), 's:rtp_add(v:val.rtp)')
+  call filter(copy(a:bundles), 's:rtp_add(v:val)')
 endfunction
 
-function! s:rtp_add(dir) abort
-  let rtp = neobundle#util#expand(a:dir)
+function! s:rtp_add(bundle) abort
+  let dir = a:bundle.rtp
+  let rtp = neobundle#util#expand(dir)
   if isdirectory(rtp)
-    execute 'set rtp^='.fnameescape(rtp)
+    if a:bundle.tail_path
+      " Join to the tail in runtimepath.
+      let rtps = neobundle#util#split_rtp(&runtimepath)
+      let n = index(rtps, $VIMRUNTIME)
+      let &runtimepath = neobundle#util#join_rtp(insert(rtps, rtp, n))
+    else
+      execute 'set rtp^='.fnameescape(rtp)
+    endif
   endif
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.fnameescape(rtp.'/after')
@@ -308,6 +317,9 @@ function! neobundle#config#init_bundle(name, opts)
   if !has_key(bundle, 'name')
     let bundle.name =
           \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
+  endif
+  if !has_key(bundle, 'tail_path')
+    let bundle.tail_path = 0
   endif
 
   if !has_key(bundle, 'type')

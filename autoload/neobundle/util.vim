@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Aug 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,7 +88,27 @@ function! neobundle#util#get_last_status()
         \ vimproc#get_last_status() : v:shell_error
 endfunction
 
+" Split a comma separated string to a list.
+function! neobundle#util#split_rtp(...)
+  let rtp = a:0 ? a:1 : &runtimepath
+  if type(rtp) == type([])
+    return rtp
+  endif
+  let split = split(rtp, '\\\@<!\%(\\\\\)*\zs,')
+  return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
+endfunction
+
+function! neobundle#util#join_rtp(list)
+  return join(map(copy(a:list), 's:escape(v:val)'), ',')
+endfunction
+
+" Escape a path for runtimepath.
+function! s:escape(path)
+  return substitute(a:path, ',\|\\,\@=', '\\\0', 'g')
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
 " vim: foldmethod=marker
+

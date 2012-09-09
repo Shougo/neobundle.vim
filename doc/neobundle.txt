@@ -162,6 +162,9 @@ COMMANDS 					*neobundle-commands*
 		Relative directory path from base directory(set by
 		|neobundle#rc()|).
 
+		tail_path		(Number)
+		If it is 1, neobundle add path in tail.
+
 		base			(String)
 		Directory base path. If you omit it, used |neobundle#rc()| base
 		path.
@@ -495,6 +498,7 @@ CHANGELOG					*neobundle-changelog*
 2012-09-09
 - Added test.
 - Improved documentation.
+- Added tail_path option.
 
 2012-09-08
 - Added :NeoBundleUpdatesLog command.
