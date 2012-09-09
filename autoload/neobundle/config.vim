@@ -319,7 +319,7 @@ function! neobundle#config#init_bundle(name, opts)
           \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
   endif
   if !has_key(bundle, 'tail_path')
-    let bundle.tail_path = 0
+    let bundle.tail_path = g:neobundle_enable_tail_path
   endif
 
   if !has_key(bundle, 'type')

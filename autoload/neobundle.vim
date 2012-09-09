@@ -46,6 +46,8 @@ let g:neobundle_log_filename =
       \ get(g:, 'neobundle_log_filename', '')
 let g:neobundle_default_site =
       \ get(g:, 'neobundle_default_site', 'github')
+let g:neobundle_enable_tail_path =
+      \ get(g:, 'neobundle_enable_tail_path', 1)
 "}}}
 
 let s:neobundle_dir = get(

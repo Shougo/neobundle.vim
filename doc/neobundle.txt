@@ -355,6 +355,11 @@ g:neobundle_log_filename			*g:neobundle_log_filename*
 
 		Default value is "".
 
+g:neobundle_enable_tail_path			*g:neobundle_enable_tail_path*
+		If it is 1, default "tail_path" attribute will be 1 in bundle.
+
+		Default value is 0.
+
 g:neobundle_rm_command				*g:neobundle_rm_command*
 		The remove file command in |:NeoBundleClean|.
 
@@ -501,6 +506,7 @@ CHANGELOG					*neobundle-changelog*
 - Added test.
 - Improved documentation.
 - Added tail_path option.
+- Added g:neobundle_enable_tail_path option.
 
 2012-09-08
 - Added :NeoBundleUpdatesLog command.
