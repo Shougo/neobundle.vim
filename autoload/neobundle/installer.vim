@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Sep 2012.
+" Last Modified: 10 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ let g:neobundle_rm_command =
       \ neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf')
 
 let s:log = []
+let s:updates_log = []
 
 function! neobundle#installer#install(bang, bundle_names)
   let bundle_dir = neobundle#get_neobundle_dir()
