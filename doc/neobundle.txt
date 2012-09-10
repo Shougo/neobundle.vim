@@ -164,11 +164,12 @@ COMMANDS 					*neobundle-commands*
 
 		tail_path		(Number)
 		If it is 1, neobundle add the path to the end of user
-		runtimepath.
-		Note: This is useful not to overwritten user scripts.
+		runtimepath. It is useful not to overwritten user scripts by
+		neobundle.
 
 		base			(String)
-		Directory base path. If you omit it, used |neobundle#rc()| base
+		Directory base path. If you omit it, used |neobundle#rc()|
+		base path. It is useful for loading scripts from different
 		path.
 
 		type			(String)
@@ -501,6 +502,9 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-09-10
+- Improved documentation.
 
 2012-09-09
 - Added test.
