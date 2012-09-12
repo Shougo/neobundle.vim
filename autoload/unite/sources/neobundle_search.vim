@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2012.
+" Last Modified: 12 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,22 +62,14 @@ function! s:source.gather_candidates(args, context)"{{{
   let plugins = s:get_repository_plugins(a:context, repository)
 
   return map(copy(plugins), "{
-        \ 'word' : v:val.n . ' ' . v:val.s,
-        \ 'abbr' : printf('%-20s %-10s %-5s -- %s',
-        \          v:val.n, v:val.t, v:val.rv, v:val.s),
-        \ 'source__name' : v:val.n,
-        \ 'source__type' : v:val.t,
-        \ 'source__version' : v:val.rv,
-        \ 'source__description' : v:val.s,
-        \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.n,
-        \ 'action__path' : 'https://github.com/vim-scripts/' . v:val.n,
+        \ 'word' : v:val.name . ' ' . v:val.description,
+        \ 'source__name' : v:val.name,
+        \ 'source__description' : v:val.description,
+        \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.uri,
         \ }")
 endfunction"}}}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__NeoBundleSearch_Name
-        \ /\S\+\ze\s\+\w\+\s\+\s\+\w*/
-        \ contained containedin=uniteSource__NeoBundleSearch
   syntax match uniteSource__NeoBundleSearch_DescriptionLine
         \ / -- .*$/
         \ contained containedin=uniteSource__NeoBundleSearch
@@ -112,12 +104,11 @@ endfunction"}}}
 function! s:source.source__converter(candidates, context)"{{{
   let max = max(map(copy(a:candidates),
         \ 'len(v:val.source__name)'))
-  let format = '%-'. max .'s %-10s %-5s -- %s'
+  let format = '%-'. max .'s %s'
 
   for candidate in a:candidates
     let candidate.abbr = printf(format,
-        \          candidate.source__name, candidate.source__type,
-        \          candidate.source__version,
+        \          candidate.source__name,
         \          candidate.source__description)
     let candidate.action__uri =
           \ 'https://github.com/vim-scripts/' . candidate.source__name
@@ -144,10 +135,12 @@ function! s:get_repository_plugins(context, path)"{{{
           \ '[neobundle/search] Reloading cache from ' . a:path)
     redraw
 
+    let temp = tempname()
+
     if executable('curl')
-      let cmd = 'curl --fail -s -o "' . cache_path . '" '. a:path
+      let cmd = 'curl --fail -s -o "' . temp . '" '. a:path
     elseif executable('wget')
-      let cmd = 'wget -q -O "' . cache_path . '" ' . a:path
+      let cmd = 'wget -q -O "' . temp . '" ' . a:path
     endif
 
     let result = unite#util#system(cmd)
@@ -160,6 +153,14 @@ function! s:get_repository_plugins(context, path)"{{{
     else
       call unite#print_message('[neobundle/search] Done!')
     endif
+
+    sandbox let data = eval(readfile(temp)[0])
+
+    " Convert cache data.
+    call s:Cache.writefile(cache_dir, a:path,
+          \ [string(s:convert_vim_scripts_data(data))])
+
+    call delete(temp)
   endif
 
   if !has_key(s:repository_cache, a:path)
@@ -168,6 +169,16 @@ function! s:get_repository_plugins(context, path)"{{{
   endif
 
   return s:repository_cache[a:path]
+endfunction"}}}
+function! s:convert_vim_scripts_data(data)"{{{
+  return map(copy(a:data), "{
+        \ 'name' : v:val.n,
+        \ 'raw_type' : v:val.t,
+        \ 'repository' : v:val.rv,
+        \ 'description' : printf('%-10s %-5s -- %s',
+        \          v:val.t, v:val.rv, v:val.s),
+        \ 'uri' : 'https://github.com/vim-scripts/' . v:val.n,
+        \ }")
 endfunction"}}}
 
 let &cpo = s:save_cpo
