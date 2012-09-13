@@ -33,6 +33,7 @@ Interface		|neobundle-interface|
   Variables		  |neobundle-variables|
 Configulation Examples	|neobundle-examples|
 Unite sources		|neobundle-unite-sources|
+FAQ			|neobundle-faq|
 Changelog		|neobundle-changelog|
 
 ==============================================================================
@@ -503,7 +504,23 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 	source		Source plugin files(Default action)
 
 ==============================================================================
+FAQ						*neobundle-faq*
+
+Q: I want to manage rsense Vim plugin using neobundle.
+A: Unfortunately, rsense Vim has not plugin directory so neobundle cannot
+manage it. But you can use vim-rsense instead.  It can be managed by
+neobundle.
+
+https://github.com/taichouchou2/vim-rsense
+>
+	NeoBundle 'taichouchou2/vim-rsense'
+<
+
+==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-09-13
+- Added FAQ section.
 
 2012-09-12
 - Improved neobundle/search source.
