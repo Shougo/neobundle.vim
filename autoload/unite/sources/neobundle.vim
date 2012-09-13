@@ -68,7 +68,7 @@ let s:source.filters =
 "}}}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let _ = map(neobundle#config#get_neobundles(), "{
+  let _ = map(a:context.source__bundles, "{
         \ 'word' : substitute(v:val.orig_name,
         \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', ''),
         \ 'kind' : 'neobundle',
