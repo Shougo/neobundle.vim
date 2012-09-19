@@ -515,9 +515,11 @@ https://github.com/taichouchou2/vim-rsense
 >
 	NeoBundle 'taichouchou2/vim-rsense'
 <
-
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-09-19
+- Ignore case in completion.
 
 2012-09-13
 - Added FAQ section.
