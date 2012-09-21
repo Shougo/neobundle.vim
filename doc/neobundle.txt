@@ -521,6 +521,7 @@ CHANGELOG					*neobundle-changelog*
 2012-09-21
 - Improved neobundle#config#search() behavior.
 - Improved neobundle/search source.
+- Ignore error in :NeoBundleSource.
 
 2012-09-19
 - Ignore case in completion.

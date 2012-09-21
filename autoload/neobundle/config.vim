@@ -234,7 +234,7 @@ function! neobundle#config#source(...)
     let s:loaded_neobundles[bundle.name] = 1
   endfor
 
-  filetype plugin indent on
+  silent! filetype plugin indent on
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
