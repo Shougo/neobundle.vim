@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Sep 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,7 +109,8 @@ function! s:source.source__converter(candidates, context)"{{{
   for candidate in a:candidates
     let candidate.abbr = printf(format,
         \          candidate.source__name,
-        \          candidate.source__description)
+        \          (neobundle#is_installed(candidate.source__name) ?
+        \           'Installed' : candidate.source__description))
     let candidate.action__uri =
           \ 'https://github.com/vim-scripts/' . candidate.source__name
     let candidate.action__path = candidate.action__uri
