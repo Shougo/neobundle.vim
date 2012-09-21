@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -105,10 +105,11 @@ function! neobundle#config#reload(bundles)
   endfor
 endfunction
 
-function! neobundle#config#bundle(arg)
+function! neobundle#config#bundle(arg, ...)
   let bundle = s:parse_arg(a:arg)
-  if empty(bundle)
-    return {}
+  let is_parse_only = get(a:000, 0, 0)
+  if empty(bundle) || is_parse_only
+    return bundle
   endif
 
   let path = bundle.path
@@ -352,8 +353,19 @@ function! neobundle#config#init_bundle(name, opts)
 endfunction
 
 function! neobundle#config#search(bundle_names)
-  return filter(neobundle#config#get_neobundles(),
+  let _ = filter(neobundle#config#get_neobundles(),
         \ 'index(a:bundle_names, v:val.name) >= 0')
+
+  for bundle in copy(_)
+    for depend in bundle.depends
+      if type(depend) == type('')
+        let depend = string(depend)
+      endif
+      call add(_, neobundle#config#bundle(depend, 1))
+    endfor
+  endfor
+
+  return neobundle#util#uniq(_)
 endfunction
 
 function! s:parse_options(opts)

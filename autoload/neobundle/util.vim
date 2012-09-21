@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,6 +100,23 @@ endfunction
 
 function! neobundle#util#join_rtp(list)
   return join(map(copy(a:list), 's:escape(v:val)'), ',')
+endfunction
+
+" Removes duplicates from a list.
+function! neobundle#util#uniq(list, ...)
+  let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
+  let i = 0
+  let seen = {}
+  while i < len(list)
+    let key = string(a:0 ? list[i][1] : list[i])
+    if has_key(seen, key)
+      call remove(list, i)
+    else
+      let seen[key] = 1
+      let i += 1
+    endif
+  endwhile
+  return a:0 ? map(list, 'v:val[0]') : list
 endfunction
 
 " Escape a path for runtimepath.

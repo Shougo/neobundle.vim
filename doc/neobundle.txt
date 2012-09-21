@@ -518,6 +518,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-09-21
+- Improved neobundle#config#search() behavior.
+
 2012-09-19
 - Ignore case in completion.
 
