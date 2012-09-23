@@ -368,24 +368,30 @@ g:neobundle_rm_command				*g:neobundle_rm_command*
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
 
-g:neobundle_default_git_protocol		*g:neobundle_default_git_protocol*
+g:neobundle_default_git_protocol	*g:neobundle_default_git_protocol*
 		The default protocol used for git(github).
 		Note: If you must use proxy server, you may change the value
 		to "https".
 
 		Default value is "git".
 
-g:neobundle_default_hg_protocol			*g:neobundle_default_hg_protocol*
+g:neobundle_default_hg_protocol		*g:neobundle_default_hg_protocol*
 		The default protocol used for hg(bitbucket).
 
 		Default value is "https".
 
 g:unite_source_neobundle_install_max_processes
-						*g:unite_source_neobundle_install_max_processes*
+			*g:unite_source_neobundle_install_max_processes*
 		The max processes number in neobundle/install source
 		asyncronous update.
 
 		Default value is "5".
+
+g:neobundle_type_git_get_revision_number_command
+			*g:neobundle_type_git_get_revision_number_command*
+		It is the command type git uses for get revision number.
+
+		Default value is "git log -1 --pretty=format:'%h [%cr] %s'".
 
 ==============================================================================
 EXAMPLES					*neobundle-examples*
@@ -517,6 +523,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-09-23
+- Added g:neobundle_type_git_get_revision_number_command option.
 
 2012-09-21
 - Improved neobundle#config#search() behavior.
