@@ -30,8 +30,8 @@ set cpo&vim
 " Global options definition."{{{
 let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
-let g:neobundle_type_git_get_revision_number_command =
-      \ get(g:, 'neobundle_type_git_get_revision_number_command',
+let g:neobundle#types#git#get_revision_number_command =
+      \ get(g:, 'g:neobundle#types#git#get_revision_number_command',
       \     "git log -1 --pretty=format:'%h [%cr] %s'")
 "}}}
 
@@ -109,7 +109,7 @@ function! s:type.get_revision_number_command(bundle)"{{{
   endif
 
   " return 'git rev-parse HEAD'
-  return g:neobundle_type_git_get_revision_number_command
+  return g:neobundle#types#git#get_revision_number_command
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')

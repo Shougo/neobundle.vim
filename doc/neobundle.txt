@@ -387,8 +387,8 @@ g:unite_source_neobundle_install_max_processes
 
 		Default value is "5".
 
-g:neobundle_type_git_get_revision_number_command
-			*g:neobundle_type_git_get_revision_number_command*
+g:neobundle#types#git#get_revision_number_command
+			*g:neobundle#types#git#get_revision_number_command*
 		It is the command type git uses for get revision number.
 
 		Default value is "git log -1 --pretty=format:'%h [%cr] %s'".
@@ -525,7 +525,7 @@ https://github.com/taichouchou2/vim-rsense
 CHANGELOG					*neobundle-changelog*
 
 2012-09-23
-- Added g:neobundle_type_git_get_revision_number_command option.
+- Added g:neobundle#types#git#get_revision_number_command option.
 
 2012-09-21
 - Improved neobundle#config#search() behavior.
