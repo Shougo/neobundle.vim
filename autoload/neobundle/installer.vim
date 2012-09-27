@@ -69,7 +69,7 @@ function! neobundle#installer#install(bang, bundle_names)
   endif
 
   call neobundle#installer#log(
-        \ "[neobundle/install] Installed bundles:\n".
+        \ "[neobundle/install] Installed/Updated bundles:\n".
         \ join((empty(installed) ?
         \   ['no new bundles installed'] :
         \   map(copy(installed), 'v:val.name')),"\n"))

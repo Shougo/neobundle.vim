@@ -93,7 +93,7 @@ function! s:source_install.async_gather_candidates(args, context)"{{{
   if empty(a:context.source__synced_bundles)
     let messages += ['[neobundle/install] No new bundles installed.']
   else
-    let messages += ['[neobundle/install] Installed bundles:']
+    let messages += ['[neobundle/install] Installed/Updated bundles:']
           \ + map(copy(a:context.source__synced_bundles),
           \        'v:val.name')
   endif
