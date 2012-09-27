@@ -299,8 +299,7 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  " if old_rev !=# new_rev
-  if 1
+  if old_rev !=# new_rev
     let message = neobundle#installer#get_updated_log_message(
           \ a:bundle, new_rev, old_rev)
     " Use log command.
