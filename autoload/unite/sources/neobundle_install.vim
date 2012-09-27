@@ -254,7 +254,7 @@ function! s:check_output(context, process)"{{{
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
     let message = neobundle#installer#get_updated_log_message(
-          \ bundle, new_rev, a:process.rev)
+          \ bundle, rev, a:process.rev)
     call neobundle#installer#update_log('[neobundle/install] ' . message, 1)
 
     call neobundle#installer#build(bundle)
