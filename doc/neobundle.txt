@@ -425,11 +425,11 @@ EXAMPLES					*neobundle-examples*
 	endif
 <
 ==============================================================================
-UNITE SOURCES						*neobundle-unite-sources*
+UNITE SOURCES					*neobundle-unite-sources*
 
 Here let me explain about a source for |unite| provided in neobundle.
 
-							*neobundle-unite-source-neobundle*
+						*neobundle-unite-source-neobundle*
 neobundle
 		Nominates bundles as a candidate.
 		Note: This source requires |vimproc| plugin.
@@ -441,7 +441,7 @@ neobundle
 		
 		http://github.com/Shougo/vimproc
 
-							*neobundle-unite-source-neobundle-install*
+					*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asyncronously.
 		Note: This source requires |vimproc| plugin.
@@ -463,11 +463,11 @@ neobundle/install
 >
 		:Unite neobundle/install -auto-quit
 <
-							*neobundle-unite-source-neobundle-log*
+					*neobundle-unite-source-neobundle-log*
 neobundle/log
 		Print previous neobundle install logs.
 
-							*neobundle-unite-source-neobundle-update*
+					*neobundle-unite-source-neobundle-update*
 neobundle/update
 		Install and update configured plugins asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
@@ -478,14 +478,14 @@ neobundle/update
 >
 		:Unite neobundle/update -auto-quit
 <
-							*neobundle-unite-source-neobundle-search*
+					*neobundle-unite-source-neobundle-search*
 neobundle/search
 		Search plugins settings from "http://vim-scripts.org/".
 		Note: This source requires "curl" or "wget" command.
 		Note: If you get errors in this source, please re-make cache
 		file by |<Plug>(unite_redraw)|.
 
-							*neobundle-unite-source-neobundle-lazy*
+					*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
 		List lazy configured plugins(not sourced by |:NeoBundleSource|).
 
@@ -502,7 +502,7 @@ neobundle		An interface for neobundle bundles. It is used in
 
 Actions of each sources
 
-neobundle/search				*unite-action-neobundle-search*
+neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
 	start		Browse github plugin page
 
