@@ -114,13 +114,13 @@ function! s:type.get_revision_pretty_command(bundle)"{{{
 
   return "git log -1 --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
-function! s:type.get_log_command(bundle, rev, old_rev)"{{{
+function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
   if !executable('git')
     return ''
   endif
 
   return printf("git log %s..%s --pretty=format:'%%h [%%cr] %%s'",
-        \ a:rev, a:old_rev)
+        \ a:old_rev, a:new_rev)
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')
