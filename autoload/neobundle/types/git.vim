@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,7 +94,8 @@ function! s:type.get_sync_command(bundle)"{{{
     let cmd = 'git clone'
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'git pull --rebase'
+    " let cmd = 'git pull --rebase'
+    let cmd = 'git fetch && git rebase'
 
     if get(a:bundle, 'rev', '') != ''
       " Restore revision.
@@ -110,6 +111,13 @@ function! s:type.get_revision_number_command(bundle)"{{{
 
   " return 'git rev-parse HEAD'
   return g:neobundle#types#git#get_revision_number_command
+endfunction"}}}
+function! s:type.get_log_command(bundle)"{{{
+  if !executable('git')
+    return ''
+  endif
+
+  return "git log HEAD..FETCH_HEAD --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')

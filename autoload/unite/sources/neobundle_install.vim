@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -167,8 +167,8 @@ function! s:sync(bundle, context, is_revision)"{{{
     return
   endif
 
-  let types = neobundle#config#get_types()
-  let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
+  let type = neobundle#config#get_types()[a:bundle.type]
+  let rev_cmd = type.get_revision_number_command(a:bundle)
 
   try
     let cwd = getcwd()
@@ -213,15 +213,19 @@ function! s:check_output(context, process)"{{{
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  let types = neobundle#config#get_types()
-  let rev_cmd = types[bundle.type].get_revision_number_command(bundle)
+  let type = neobundle#config#get_types()[bundle.type]
+  let rev_cmd = type.get_revision_number_command(bundle)
   let cwd = getcwd()
   try
     if isdirectory(bundle.path)
       lcd `=bundle.path`
       let rev = vimproc#system(rev_cmd)
+
+      let log = has_key(type, 'get_log_command') ?
+            \ neobundle#util#system(
+            \   type.get_log_command(bundle)) : ''
     else
-      let rev = ''
+      let [rev, log] = ['', '']
     endif
   catch
     call neobundle#installer#log(
@@ -264,9 +268,12 @@ function! s:check_output(context, process)"{{{
     call neobundle#installer#update_log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
-    call neobundle#installer#update_log(
-          \ printf('[neobundle/install] %s -> %s',
-          \ a:process.rev, rev), 1)
+    if log == ''
+      " Default log.
+      let log = printf('%s -> %s', a:process.rev, rev)
+    endif
+    call neobundle#installer#update_log('[neobundle/install] ' . log, 1)
+
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
           \ bundle)

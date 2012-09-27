@@ -524,6 +524,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-09-27
+- Improved update log.
+
 2012-09-23
 - Added g:neobundle#types#git#get_revision_number_command option.
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Sep 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -230,8 +230,8 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return 0
   endif
 
-  let types = neobundle#config#get_types()
-  let rev_cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
+  let type = neobundle#config#get_types()[a:bundle.type]
+  let rev_cmd = type.get_revision_number_command(a:bundle)
 
   let cwd = getcwd()
   try
@@ -253,6 +253,10 @@ function! s:sync(bang, bundle, number, max, is_revision)
     else
       let new_rev= ''
     endif
+
+    let log = has_key(type, 'get_log_command') ?
+          \ neobundle#util#system(
+          \   type.get_log_command(a:bundle)) : ''
   finally
     lcd `=cwd`
   endtry
@@ -270,11 +274,21 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  if old_rev !=# new_rev
-    call neobundle#installer#update_log(
-          \ printf('(%'.len(a:max).'d/%d): |%s| %s %s -> %s',
-          \ a:number, a:max, a:bundle.name,
-          \ 'Updated', old_rev, new_rev))
+  " if old_rev !=# new_rev
+  if 1
+    if log != ''
+      " Use log command.
+      call neobundle#installer#update_log(
+            \ printf('(%'.len(a:max).'d/%d): |%s| %s',
+            \ a:number, a:max, a:bundle.name, 'Updated'))
+
+      call neobundle#installer#update_log(log)
+    else
+      call neobundle#installer#update_log(
+            \ printf('(%'.len(a:max).'d/%d): |%s| %s %s -> %s',
+            \ a:number, a:max, a:bundle.name,
+            \ 'Updated', old_rev, new_rev))
+    endif
   endif
 
   return old_rev == '' || old_rev !=# new_rev
