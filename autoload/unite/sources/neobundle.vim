@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,8 +102,10 @@ function! s:get_commit_status(bang, bundle)"{{{
           \ fnamemodify(a:bundle.path, ':~'))
   endif
 
-  let types = neobundle#config#get_types()
-  let cmd = types[a:bundle.type].get_revision_number_command(a:bundle)
+  let type = neobundle#config#get_types()[a:bundle.type]
+  let cmd = has_key(type, 'get_revision_pretty_command') ?
+        \ type.get_revision_pretty_command(a:bundle) :
+        \ type.get_revision_number_command(a:bundle)
   if cmd == ''
     return ''
   endif

@@ -387,12 +387,6 @@ g:unite_source_neobundle_install_max_processes
 
 		Default value is "5".
 
-g:neobundle#types#git#get_revision_number_command
-			*g:neobundle#types#git#get_revision_number_command*
-		It is the command type git uses for get revision number.
-
-		Default value is "git log -1 --pretty=format:'%h [%cr] %s'".
-
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
@@ -526,6 +520,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-09-27
 - Improved update log.
+- Improved log behavior.
 
 2012-09-23
 - Added g:neobundle#types#git#get_revision_number_command option.

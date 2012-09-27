@@ -30,9 +30,6 @@ set cpo&vim
 " Global options definition."{{{
 let g:neobundle_default_git_protocol =
       \ get(g:, 'neobundle_default_git_protocol', 'git')
-let g:neobundle#types#git#get_revision_number_command =
-      \ get(g:, 'g:neobundle#types#git#get_revision_number_command',
-      \     "git log -1 --pretty=format:'%h [%cr] %s'")
 "}}}
 
 function! neobundle#types#git#define()"{{{
@@ -94,8 +91,7 @@ function! s:type.get_sync_command(bundle)"{{{
     let cmd = 'git clone'
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    " let cmd = 'git pull --rebase'
-    let cmd = 'git fetch && git rebase'
+    let cmd = 'git pull --rebase'
 
     if get(a:bundle, 'rev', '') != ''
       " Restore revision.
@@ -109,15 +105,24 @@ function! s:type.get_revision_number_command(bundle)"{{{
     return ''
   endif
 
-  " return 'git rev-parse HEAD'
-  return g:neobundle#types#git#get_revision_number_command
+  return 'git rev-parse HEAD'
 endfunction"}}}
-function! s:type.get_log_command(bundle)"{{{
+function! s:type.get_revision_pretty_command(bundle)"{{{
   if !executable('git')
     return ''
   endif
 
-  return "git log HEAD..FETCH_HEAD --pretty=format:'%h [%cr] %s'"
+  return "git log -1 --pretty=format:'%h [%cr] %s'"
+endfunction"}}}
+function! s:type.get_log_command(bundle, rev, old_rev)"{{{
+  if !executable('git')
+    return ''
+  endif
+  echomsg a:rev
+  echomsg a:old_rev
+
+  return printf("git log %s..%s --pretty=format:'%%h [%%cr] %%s'",
+        \ a:rev, a:old_rev)
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')

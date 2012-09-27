@@ -167,18 +167,14 @@ function! s:sync(bundle, context, is_revision)"{{{
     return
   endif
 
-  let type = neobundle#config#get_types()[a:bundle.type]
-  let rev_cmd = type.get_revision_number_command(a:bundle)
-
   try
     let cwd = getcwd()
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       lcd `=a:bundle.path`
-      let rev = vimproc#system(rev_cmd)
-    else
-      let rev = ''
     endif
+
+    let rev = neobundle#installer#get_revision_number(a:bundle)
 
     let process = {
           \ 'proc' : vimproc#pgroup_open(vimproc#util#iconv(
@@ -213,20 +209,9 @@ function! s:check_output(context, process)"{{{
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  let type = neobundle#config#get_types()[bundle.type]
-  let rev_cmd = type.get_revision_number_command(bundle)
   let cwd = getcwd()
   try
-    if isdirectory(bundle.path)
-      lcd `=bundle.path`
-      let rev = vimproc#system(rev_cmd)
-
-      let log = has_key(type, 'get_log_command') ?
-            \ neobundle#util#system(
-            \   type.get_log_command(bundle)) : ''
-    else
-      let [rev, log] = ['', '']
-    endif
+    let rev = neobundle#installer#get_revision_number(bundle)
   catch
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
@@ -268,11 +253,9 @@ function! s:check_output(context, process)"{{{
     call neobundle#installer#update_log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), 1)
-    if log == ''
-      " Default log.
-      let log = printf('%s -> %s', a:process.rev, rev)
-    endif
-    call neobundle#installer#update_log('[neobundle/install] ' . log, 1)
+    let message = neobundle#installer#get_updated_log_message(
+          \ a:bundle, new_rev, a:process.rev)
+    call neobundle#installer#update_log('[neobundle/install] ' . message, 1)
 
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,

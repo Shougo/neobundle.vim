@@ -215,6 +215,46 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
   return [cmd, message]
 endfunction
 
+function! neobundle#installer#get_revision_number(bundle)
+  let cwd = getcwd()
+  try
+    let type = neobundle#config#get_types()[a:bundle.type]
+
+    if !isdirectory(a:bundle.path)
+      return ''
+    endif
+
+    lcd `=a:bundle.path`
+
+    let rev_cmd = type.get_revision_number_command(a:bundle)
+
+    let rev = substitute(neobundle#util#system(rev_cmd), '\n$', '', '')
+
+    return rev
+  finally
+    lcd `=cwd`
+  endtry
+endfunction
+
+function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
+  let cwd = getcwd()
+  try
+    let type = neobundle#config#get_types()[a:bundle.type]
+
+    if isdirectory(a:bundle.path)
+      lcd `=a:bundle.path`
+    endif
+
+    let log = has_key(type, 'get_log_command') ?
+          \ neobundle#util#system(
+          \   type.get_log_command(a:bundle, a:new_rev, a:old_rev)) : ''
+    return log != '' ? "\n" . log :
+          \ printf('%s -> %s', a:old_rev, a:new_rev)
+  finally
+    lcd `=cwd`
+  endtry
+endfunction
+
 function! s:sync(bang, bundle, number, max, is_revision)
   let [cmd, message] =
         \ neobundle#installer#get_{a:is_revision ?
@@ -230,33 +270,19 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return 0
   endif
 
-  let type = neobundle#config#get_types()[a:bundle.type]
-  let rev_cmd = type.get_revision_number_command(a:bundle)
-
   let cwd = getcwd()
   try
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       lcd `=a:bundle.path`
-      let old_rev = neobundle#util#system(rev_cmd)
-    else
-      let old_rev = ''
     endif
+
+    let old_rev = neobundle#installer#get_revision_number(a:bundle)
 
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
 
-    if isdirectory(a:bundle.path)
-      " Cd to bundle path.
-      lcd `=a:bundle.path`
-      let new_rev = neobundle#util#system(rev_cmd)
-    else
-      let new_rev= ''
-    endif
-
-    let log = has_key(type, 'get_log_command') ?
-          \ neobundle#util#system(
-          \   type.get_log_command(a:bundle)) : ''
+    let new_rev = neobundle#installer#get_revision_number(a:bundle)
   finally
     lcd `=cwd`
   endtry
@@ -274,20 +300,14 @@ function! s:sync(bang, bundle, number, max, is_revision)
     call s:sync(a:bang, a:bundle, a:number, a:max, 1)
   endif
 
-  if old_rev !=# new_rev
-    if log != ''
-      " Use log command.
-      call neobundle#installer#update_log(
-            \ printf('(%'.len(a:max).'d/%d): |%s| %s',
-            \ a:number, a:max, a:bundle.name, 'Updated'))
-
-      call neobundle#installer#update_log(log)
-    else
-      call neobundle#installer#update_log(
-            \ printf('(%'.len(a:max).'d/%d): |%s| %s %s -> %s',
-            \ a:number, a:max, a:bundle.name,
-            \ 'Updated', old_rev, new_rev))
-    endif
+  " if old_rev !=# new_rev
+  if 1
+    let message = neobundle#installer#get_updated_log_message(
+          \ a:bundle, new_rev, old_rev)
+    " Use log command.
+    call neobundle#installer#update_log(
+          \ printf('(%'.len(a:max).'d/%d): |%s| %s %s',
+          \ a:number, a:max, a:bundle.name, 'Updated', message))
   endif
 
   return old_rev == '' || old_rev !=# new_rev
