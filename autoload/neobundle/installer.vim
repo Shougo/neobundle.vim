@@ -34,9 +34,9 @@ let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
-let g:neobundle_rm_command =
-      \ get(g:, 'neobundle_rm_command',
-      \ neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf')
+call neobundle#util#set_default(
+      \ 'g:neobundle_rm_command',
+      \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'))
 
 let s:log = []
 let s:updates_log = []

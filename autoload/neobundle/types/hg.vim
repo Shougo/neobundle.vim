@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 28 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,8 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition."{{{
-let g:neobundle_default_hg_protocol =
-      \ get(g:, 'neobundle_default_hg_protocol', 'https')
+call neobundle#util#set_default(
+      \ 'g:neobundle_default_hg_protocol', 'https')
 "}}}
 
 function! neobundle#types#hg#define()"{{{

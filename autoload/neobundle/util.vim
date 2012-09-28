@@ -119,9 +119,12 @@ function! neobundle#util#uniq(list, ...)"{{{
   return a:0 ? map(list, 'v:val[0]') : list
 endfunction"}}}
 
-function! neobundle#util#set_default(var, val)  "{{{
+function! neobundle#util#set_default(var, val, ...)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
-    let {a:var} = a:val
+    let alternate_var = get(a:000, 0, '')
+
+    let {a:var} = exists(alternate_var) ?
+          \ {alternate_var} : a:val
   endif
 endfunction"}}}
 function! neobundle#util#set_dictionary_helper(variable, keys, pattern)"{{{

@@ -521,6 +521,7 @@ CHANGELOG					*neobundle-changelog*
 2012-09-28
 - Improved log message.
 - Improved update log.
+- Use set_default().
 
 2012-09-27
 - Improved update log.

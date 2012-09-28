@@ -28,8 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition."{{{
-let g:neobundle_default_git_protocol =
-      \ get(g:, 'neobundle_default_git_protocol', 'git')
+call neobundle#util#set_default(
+      \ 'g:neobundle_default_git_protocol', 'git')
 "}}}
 
 function! neobundle#types#git#define()"{{{
