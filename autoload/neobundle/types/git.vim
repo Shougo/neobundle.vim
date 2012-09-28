@@ -121,6 +121,7 @@ function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
 
   return printf("git log %s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
         \ a:old_rev, a:new_rev)
+  " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')

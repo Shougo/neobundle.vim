@@ -520,7 +520,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-09-28
 - Improved log message.
-- Improved log.
+- Improved update log.
 
 2012-09-27
 - Improved update log.

@@ -384,16 +384,19 @@ function! neobundle#installer#log(msg, ...)
 endfunction
 
 function! neobundle#installer#update_log(msg, ...)
-  call call('neobundle#installer#log', [a:msg] + a:000)
-  let msgs = type(a:msg) == type([]) ?
+  let msgs = []
+  for msg in type(a:msg) == type([]) ?
         \ a:msg : [a:msg]
+    let source_name = matchstr(msg, '^\[.\{-}\] ')
 
-  let source_name = matchstr(get(msgs, 0, ''), '^\[.\{-}\] ')
-  for msg in msgs
     let msg_nrs = split(msg, '\n')
-    let s:updates_log += [msg_nrs[0]] +
+    let msgs += [msg_nrs[0]] +
           \ map(msg_nrs[1:], "source_name . v:val")
   endfor
+
+  call call('neobundle#installer#log', [msgs] + a:000)
+
+  let s:updates_log += msgs
 endfunction
 
 function! neobundle#installer#error(msg, ...)
