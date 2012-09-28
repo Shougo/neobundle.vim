@@ -248,7 +248,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
     let log = has_key(type, 'get_log_command') ?
           \ neobundle#util#system(
           \   type.get_log_command(a:bundle, a:new_rev, a:old_rev)) : ''
-    return log != '' ? "\n" . log : printf('%s -> %s', a:old_rev, a:new_rev)
+    return log != '' ? log : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
     lcd `=cwd`
   endtry
@@ -385,9 +385,15 @@ endfunction
 
 function! neobundle#installer#update_log(msg, ...)
   call call('neobundle#installer#log', [a:msg] + a:000)
-  let msg = type(a:msg) == type([]) ?
+  let msgs = type(a:msg) == type([]) ?
         \ a:msg : [a:msg]
-  call extend(s:updates_log, msg)
+
+  let source_name = matchstr(get(msgs, 0, ''), '^\[.\{-}\] ')
+  for msg in msgs
+    let msg_nrs = split(msg, '\n')
+    let s:updates_log += [msg_nrs[0]] +
+          \ map(msg_nrs[1:], "source_name . v:val")
+  endfor
 endfunction
 
 function! neobundle#installer#error(msg, ...)
