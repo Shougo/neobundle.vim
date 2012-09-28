@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 28 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,16 +29,16 @@ set cpo&vim
 
 let s:is_windows = has('win32') || has('win64')
 
-function! neobundle#util#substitute_path_separator(path)
+function! neobundle#util#substitute_path_separator(path)"{{{
   return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
-endfunction
-function! neobundle#util#expand(path)
+endfunction"}}}
+function! neobundle#util#expand(path)"{{{
   return neobundle#util#substitute_path_separator(
         \ expand(escape(a:path, '*?[]"={}'), 1))
-endfunction
-function! neobundle#util#is_windows()
+endfunction"}}}
+function! neobundle#util#is_windows()"{{{
   return s:is_windows
-endfunction
+endfunction"}}}
 
 " Check vimproc."{{{
 function! s:has_vimproc()"{{{
@@ -54,13 +54,13 @@ function! s:has_vimproc()"{{{
 endfunction"}}}
 "}}}
 " iconv() wrapper for safety.
-function! s:iconv(expr, from, to)
+function! s:iconv(expr, from, to)"{{{
   if a:from == '' || a:to == '' || a:from ==? a:to
     return a:expr
   endif
   let result = iconv(a:expr, a:from, a:to)
   return result != '' ? result : a:expr
-endfunction
+endfunction"}}}
 function! neobundle#util#system(str, ...)"{{{
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
@@ -83,27 +83,27 @@ function! neobundle#util#system(str, ...)"{{{
 
   return output
 endfunction"}}}
-function! neobundle#util#get_last_status()
+function! neobundle#util#get_last_status()"{{{
   return s:has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
-endfunction
+endfunction"}}}
 
 " Split a comma separated string to a list.
-function! neobundle#util#split_rtp(...)
+function! neobundle#util#split_rtp(...)"{{{
   let rtp = a:0 ? a:1 : &runtimepath
   if type(rtp) == type([])
     return rtp
   endif
   let split = split(rtp, '\\\@<!\%(\\\\\)*\zs,')
   return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
-endfunction
+endfunction"}}}
 
-function! neobundle#util#join_rtp(list)
+function! neobundle#util#join_rtp(list)"{{{
   return join(map(copy(a:list), 's:escape(v:val)'), ',')
-endfunction
+endfunction"}}}
 
 " Removes duplicates from a list.
-function! neobundle#util#uniq(list, ...)
+function! neobundle#util#uniq(list, ...)"{{{
   let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
   let i = 0
   let seen = {}
@@ -117,7 +117,20 @@ function! neobundle#util#uniq(list, ...)
     endif
   endwhile
   return a:0 ? map(list, 'v:val[0]') : list
-endfunction
+endfunction"}}}
+
+function! neobundle#util#set_default(var, val)  "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    let {a:var} = a:val
+  endif
+endfunction"}}}
+function! neobundle#util#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, '\s*,\s*')
+    if !has_key(a:variable, key)
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
 
 " Escape a path for runtimepath.
 function! s:escape(path)
