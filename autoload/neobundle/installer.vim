@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Sep 2012.
+" Last Modified: 28 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -248,7 +248,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
     let log = has_key(type, 'get_log_command') ?
           \ neobundle#util#system(
           \   type.get_log_command(a:bundle, a:new_rev, a:old_rev)) : ''
-    return log != '' ? log : printf('%s -> %s', a:old_rev, a:new_rev)
+    return log != '' ? "\n" . log : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
     lcd `=cwd`
   endtry
