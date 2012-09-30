@@ -518,6 +518,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-09-30
+- Improved log command.
+
 2012-09-28
 - Improved log message.
 - Improved update log.
