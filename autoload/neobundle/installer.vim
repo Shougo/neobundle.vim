@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 01 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -304,8 +304,9 @@ function! s:sync(bang, bundle, number, max, is_revision)
           \ a:bundle, new_rev, old_rev)
     " Use log command.
     call neobundle#installer#update_log(
-          \ printf('(%'.len(a:max).'d/%d): |%s| %s %s',
-          \ a:number, a:max, a:bundle.name, 'Updated', message))
+          \ printf('(%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Updated'))
+    call neobundle#installer#update_log(message)
   endif
 
   return old_rev == '' || old_rev !=# new_rev
