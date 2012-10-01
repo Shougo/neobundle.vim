@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 30 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,7 +119,7 @@ function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
     return ''
   endif
 
-  return printf("git log %s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
+  return printf("git log %s^..%s --graph --pretty=format:'%%h [%%cr] %%s'",
         \ a:old_rev, a:new_rev)
   " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
 endfunction"}}}

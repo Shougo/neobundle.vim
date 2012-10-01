@@ -521,6 +521,9 @@ CHANGELOG					*neobundle-changelog*
 2012-10-01
 - Improved log messages.
 
+2012-09-30
+- Improved log command.
+
 2012-09-28
 - Improved log message.
 - Improved update log.
