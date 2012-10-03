@@ -143,7 +143,7 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [[,{revision}] [,{dictionary}]]
 						*:NeoBundle*
-		Configures neobundle.
+		Configures bundle.
 		The {repository} is repository URI.  The {revision} is
 		revision or branch name. If omitted it, use current latest
 		revision.
@@ -151,18 +151,38 @@ COMMANDS 					*neobundle-commands*
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
 
-		Note: If you manage neobundle by neobundle, it may be error
-		occurred when update neobundle.
+		Note: If you manage bundle by neobundle, it may be error
+		occurred when update bundles.
 
 		The {dictionary} has following keys:
 
+		name			(String)
+		Specify bundle name. It is used for neobundle management and
+		other commands(Ex: |:NeoBundleUpdate|). If you omit it, used
+		tail of the repository name.
+
+		Example:
+>
+		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		   \ {'name' : 'unite'}
+<
 		rev			(String)
 		Revision number or branch/tag name.
 
+		Example:
+>
+		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+<
 		directory		(String)
-		Relative directory path from base directory(set by
-		|neobundle#rc()|).
+		Specify relative directory path from base directory(set by
+		|neobundle#rc()| or "base" attribute). If you omit it, used
+		tail of the repository name.
 
+		Example:
+>
+		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		   \ {'directory' : 'unite'}
+<
 		tail_path		(Number)
 		If it is 1, neobundle add the path to the end of user
 		runtimepath. It is useful not to overwritten user scripts by
@@ -174,10 +194,14 @@ COMMANDS 					*neobundle-commands*
 		path.
 
 		type			(String)
-		Repository type.  If you omit repository type, it is detected
-		automatically from {repository}.
-		For example: nosync, git, svn, hg, ...
+		Specify repository type.  If you omit repository type, it is
+		detected automatically from {repository}.
+		For example: "nosync", "git", "svn", "hg", ...
 
+		Example:
+>
+		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+<
 		site			(String)
 		Repository site.  If you omit repository URL and site
 		attribute, it is used |g:neobundle_default_site|.
@@ -190,21 +214,31 @@ COMMANDS 					*neobundle-commands*
 
 		rtp			(String)
 		Specify runtime path.
-		You may use this option when the repository has Vim plugin in
-		sub directory.
+		You may use this option when the repository has Vim plugin
+		sub directory from neobundle base path.
 		For example: https://github.com/rstacruz/sparkup
+		Note: It is not absolute path. It is relative path from base
+		path.
 
+		Example:
+>
+		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
+<
 		depends			(List or String)
 		Depends plugins list.
 		List items are '{plugin-name}' or ['{plugin-name}', {args}].
 		This plugins are installed automatically.
 		Note: Type String is syntax sugar for List of {plugin-name}.
 
+		Example:
+>
+		NeoBundle 'Shougo/vimfiler', {'depends' : 'Shougo/unite.vim' }
+<
 		build			(Dictionary)
 		Specify build script.
 		You may use this option when the plugin have to be built.
-		This command is executed by |system()| or |vimproc#system()| in
-		plugin runtimepath.
+		This command is executed by |system()| or |vimproc#system()|
+		in plugin runtimepath.
 		For example: |vimproc|
 
 		This dictionary has following keys:
@@ -226,7 +260,8 @@ COMMANDS 					*neobundle-commands*
 
 		augroup		(String)
 		Specify augroup name in the plugin.
-		Neobundle call |VimEnter| or |GUIEnter| autocmds automatically.
+		Neobundle call |VimEnter| or |GUIEnter| autocmds
+		automatically.
 		Note: Some function define autocmds for |VimEnter| or
 		|GUIEnter|.
 		For example, "fugitive", "NERDTree", "session.vim".
@@ -237,14 +272,10 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
-		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
-		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
 		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
 		    \ ]}
-		NeoBundle 'Shougo/vimfiler',
-		    \ {'depends' : 'Shougo/unite.vim' }
 		NeoBundle 'github:Shougo/vimshell'
 
 		" Pushable github repository.
@@ -304,12 +335,11 @@ COMMANDS 					*neobundle-commands*
 		Same to |:NeoBundleInstall!|.
 
 :NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleClean*
-		Removes non configured plugins. If {bang} is added, force
-		remove plugins. If {name} are added, remove
-		{name} plugins.
+		Removes non configured bundles. If {bang} is added, force
+		remove bundles. If {name} are added, remove {name} bundles.
 
 :NeoBundleList 					*:NeoBundleList*
-		Print list of configured neobundles.
+		Print list of configured bundles.
 
 :NeoBundleLog 					*:NeoBundleLog*
 		Print previous all install logs.
@@ -320,21 +350,20 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleLazy {repository} [, {dictionary}]	*:NeoBundleLazy*
 :NeoExternalBundle {repository} [, {dictionary}]
 						*:NeoExternalBundle*
-		This command register neobundle, but don't add to
-		'runtimepath'.
+		This command register bundle, but don't add to 'runtimepath'.
 		Note: |:NeoExternalBundle| is deprecated name.
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
 		NeoBundleSource The-NERD-tree
 <
 :NeoBundleSource [{name}...]			*:NeoBundleSource*
-		|:source| {name} plugins.
-		If omit {name}, |:source| all lazy plugins.
+		|:source| {name} bundles.
+		If omit {name}, |:source| all lazy bundles.
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
 :NeoBundleDepends {repository} [, {dictionary}]	*:NeoBundleDepends*
-		This command register neobundle and install the plugin.  It is
+		This command register bundle and install the plugin.  It is
 		useful to define Vim plugin dependency.
 		Note: This command is not overwritten user neobundle
 		configuration.
@@ -517,6 +546,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-03
+- Improved documentation.
 
 2012-10-01
 - Improved log messages.
