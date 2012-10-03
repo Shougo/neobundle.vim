@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -334,8 +334,12 @@ function! neobundle#config#init_bundle(name, opts)
         \ neobundle#get_neobundle_dir()))
   let bundle.path = s:expand_path(bundle.base.'/'.
         \ get(bundle, 'directory', bundle.name))
-  let bundle.rtp = s:expand_path(bundle.path.'/'.
-        \ get(bundle, 'rtp', ''))
+
+  let rtp = get(bundle, 'rtp', '')
+  " Check relative path.
+  let bundle.rtp = (rtp =~ '^\%(/\|\~\|\a\+:\)') ?
+        \ rtp : (bundle.path.'/'.rtp)
+  let bundle.rtp = s:expand_path(bundle.rtp)
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')

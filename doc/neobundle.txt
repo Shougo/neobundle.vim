@@ -217,12 +217,13 @@ COMMANDS 					*neobundle-commands*
 		You may use this option when the repository has Vim plugin
 		sub directory from neobundle base path.
 		For example: https://github.com/rstacruz/sparkup
-		Note: It is not absolute path. It is relative path from base
-		path.
 
 		Example:
 >
 		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim'}
+		NeoBundle 'https://code.google.com/p/vimwiki/', {
+		    \ 'rtp': "~/.vim/bundle/vimwiki/src",
+		    \ }
 <
 		depends			(List or String)
 		Depends plugins list.
@@ -549,6 +550,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-03
 - Improved documentation.
+- Added check of relative path in rtp attribute.
 
 2012-10-01
 - Improved log messages.
