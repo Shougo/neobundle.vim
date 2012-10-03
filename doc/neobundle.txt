@@ -160,6 +160,10 @@ COMMANDS 					*neobundle-commands*
 		Specify bundle name. It is used for neobundle management and
 		other commands(Ex: |:NeoBundleUpdate|). If you omit it, used
 		tail of the repository name.
+		Note: name must be unique. If a bundle conflicted with other
+		name, neobundle will overwrite previous named bundle.
+		To prevent overwrite bundle, you must set "name" attribute
+		manually.
 
 		Example:
 >
