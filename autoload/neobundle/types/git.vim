@@ -103,7 +103,12 @@ function! s:type.get_revision_number_command(bundle)"{{{
     return ''
   endif
 
-  return 'git rev-parse HEAD'
+  let rev = get(a:bundle, 'rev', '')
+  if rev == ''
+    let rev = 'HEAD'
+  endif
+
+  return 'git rev-parse ' . rev
 endfunction"}}}
 function! s:type.get_revision_pretty_command(bundle)"{{{
   if !executable('git')

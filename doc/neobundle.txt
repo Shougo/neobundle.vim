@@ -558,6 +558,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-04
 - Improved commands error check.
+- Improved revision parse.
 
 2012-10-03
 - Improved documentation.
