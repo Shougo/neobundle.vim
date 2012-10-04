@@ -257,7 +257,7 @@ endfunction
 
 function! neobundle#config#parse_path(path, ...)
   let opts = get(a:000, 0, {})
-  let site = get(opts, 'site', g:neobundle_default_site)
+  let site = get(opts, 'site', g:neobundle#default_site)
   let path = a:path
   if path !~ ':'
     " Add default site.
@@ -320,7 +320,7 @@ function! neobundle#config#init_bundle(name, opts)
           \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
   endif
   if !has_key(bundle, 'tail_path')
-    let bundle.tail_path = g:neobundle_enable_tail_path
+    let bundle.tail_path = g:neobundle#enable_tail_path
   endif
 
   if !has_key(bundle, 'type')

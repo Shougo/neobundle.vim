@@ -29,7 +29,8 @@ set cpo&vim
 
 " Global options definition."{{{
 call neobundle#util#set_default(
-      \ 'g:neobundle_default_git_protocol', 'git')
+      \ 'g:neobundle#types#git#default_protocol', 'git',
+      \ 'g:neobundle_default_git_protocol')
 "}}}
 
 function! neobundle#types#git#define()"{{{
@@ -47,12 +48,12 @@ function! s:type.detect(path)"{{{
     if a:path !~ '/'
       " www.vim.org Vim scripts.
       let name = split(a:path, ':')[-1]
-      let uri  = g:neobundle_default_git_protocol .
+      let uri  = g:neobundle#types#git#default_protocol .
             \ '://github.com/vim-scripts/'.name.'.git'
       let type = 'git'
     else
       let uri = (a:path =~# '://github.com/') ? a:path :
-            \ g:neobundle_default_git_protocol .
+            \ g:neobundle#types#git#default_protocol .
             \   '://github.com/'.substitute(split(a:path, ':')[-1],
             \   '^//github.com/', '', '')
       if uri !~ '\.git\s*$'
@@ -67,7 +68,7 @@ function! s:type.detect(path)"{{{
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
     if a:path =~# '\<\(bb\|bitbucket\):\S\+'
-      let uri = g:neobundle_default_git_protocol .
+      let uri = g:neobundle#types#git#default_protocol .
             \ '://bitbucket.org/'.split(a:path, ':')[-1]
     else
       let uri = a:path

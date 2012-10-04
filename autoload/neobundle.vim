@@ -43,11 +43,11 @@ endif
 
 " Global options definition."{{{
 call neobundle#util#set_default(
-      \ 'g:neobundle_log_filename', '')
+      \ 'g:neobundle#log_filename', '', 'g:neobundle_log_filename')
 call neobundle#util#set_default(
-      \ 'g:neobundle_default_site', 'github')
+      \ 'g:neobundle#default_site', 'github', 'g:neobundle_default_site')
 call neobundle#util#set_default(
-      \ 'g:neobundle_enable_tail_path', 1)
+      \ 'g:neobundle#enable_tail_path', 1, 'g:neobundle_enable_tail_path')
 "}}}
 
 let s:neobundle_dir = get(

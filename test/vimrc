@@ -10,7 +10,7 @@ endif
 
 call neobundle#rc(expand(testdir, 1))
 
-let g:neobundle_default_git_protocol = 'https'
+let g:neobundle#types#git#default_protocol = 'https'
 
 " My Bundles here:
 "

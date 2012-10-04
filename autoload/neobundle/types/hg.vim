@@ -29,7 +29,8 @@ set cpo&vim
 
 " Global options definition."{{{
 call neobundle#util#set_default(
-      \ 'g:neobundle_default_hg_protocol', 'https')
+      \ 'g:neobundle#types#hg#default_protocol', 'https',
+      \ 'g:neobundle_default_hg_protocol')
 "}}}
 
 function! neobundle#types#hg#define()"{{{
@@ -45,7 +46,7 @@ function! s:type.detect(path)"{{{
 
   if a:path =~# '\<\(bb\|bitbucket\):\S\+'
     let uri = printf('%s://bitbucket.org/%s',
-          \ g:neobundle_default_hg_protocol,
+          \ g:neobundle#types#hg#default_protocol,
           \ substitute(split(a:path, ':')[-1],
           \ '^//bitbucket.org/', '', ''))
 

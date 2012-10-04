@@ -35,8 +35,9 @@ let s:is_mac = !s:is_windows
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
 call neobundle#util#set_default(
-      \ 'g:neobundle_rm_command',
-      \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'))
+      \ 'g:neobundle#rm_command',
+      \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'),
+      \ 'g:neobundle_rm_command')
 
 let s:log = []
 let s:updates_log = []
@@ -161,7 +162,7 @@ function! neobundle#installer#clean(bang, ...)
     if !has('vim_starting')
       redraw
     endif
-    let result = system(g:neobundle_rm_command . ' ' .
+    let result = system(g:neobundle#rm_command . ' ' .
           \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
     if neobundle#util#get_last_status()
       call neobundle#installer#error(result)
@@ -380,12 +381,12 @@ function! neobundle#installer#log(msg, ...)
     echo join(msg, "\n")
   endif
 
-  if g:neobundle_log_filename != ''
+  if g:neobundle#log_filename != ''
     " Appends to log file.
-    if filereadable(g:neobundle_log_filename)
-      let msg = readfile(g:neobundle_log_filename) + msg
+    if filereadable(g:neobundle#log_filename)
+      let msg = readfile(g:neobundle#log_filename) + msg
     endif
-    call writefile(msg, g:neobundle_log_filename)
+    call writefile(msg, g:neobundle#log_filename)
   endif
 endfunction
 
@@ -431,10 +432,10 @@ function! neobundle#installer#clear_log()
   let s:log = []
   let s:updates_log = []
 
-  if g:neobundle_log_filename != ''
-        \ && filereadable(g:neobundle_log_filename)
+  if g:neobundle#log_filename != ''
+        \ && filereadable(g:neobundle#log_filename)
     " Delete log file.
-    call delete(g:neobundle_log_filename)
+    call delete(g:neobundle#log_filename)
   endif
 endfunction
 

@@ -10,17 +10,17 @@ Context types
     Should neobundle#config#parse_path(
           \ 'Shougo/neocomplcache-clang.git') ==
           \ {'type' : 'git', 'uri' :
-          \   g:neobundle_default_git_protocol .
+          \   g:neobundle#types#git#default_protocol .
           \  '://github.com/Shougo/neocomplcache-clang.git',
           \  'name' : 'neocomplcache-clang'}
     Should neobundle#config#parse_path('Shougo/vimshell') ==
           \ {'type' : 'git', 'uri' :
-          \   g:neobundle_default_git_protocol .
+          \   g:neobundle#types#git#default_protocol .
           \  '://github.com/Shougo/vimshell.git',
           \  'name' : 'vimshell'}
     Should neobundle#config#parse_path('rails.vim') ==
           \ {'type' : 'git', 'uri' :
-          \ g:neobundle_default_git_protocol .
+          \ g:neobundle#types#git#default_protocol .
           \ '://github.com/vim-scripts/rails.vim.git',
           \  'name' : 'rails.vim'}
     Should neobundle#config#parse_path(
@@ -30,7 +30,7 @@ Context types
           \  'name' : 'command-t'}
     Should neobundle#config#parse_path('vim-scripts/ragtag.vim') ==
           \ {'type' : 'git', 'uri' :
-          \ g:neobundle_default_git_protocol .
+          \ g:neobundle#types#git#default_protocol .
           \ '://github.com/vim-scripts/ragtag.vim.git',
           \  'name' : 'ragtag.vim'}
     Should neobundle#config#parse_path(
@@ -46,13 +46,13 @@ Context types
     Should neobundle#config#parse_path(
           \ 'gh:gmarik/snipmate.vim.git') ==
           \ {'type' : 'git', 'uri' :
-          \ g:neobundle_default_git_protocol .
+          \ g:neobundle#types#git#default_protocol .
           \ '://github.com/gmarik/snipmate.vim.git',
           \  'name' : 'snipmate.vim'}
     Should neobundle#config#parse_path(
           \ 'github:mattn/gist-vim.git') ==
           \ {'type' : 'git', 'uri' :
-          \ g:neobundle_default_git_protocol .
+          \ g:neobundle#types#git#default_protocol .
           \ '://github.com/mattn/gist-vim.git',
           \  'name' : 'gist-vim'}
     Should neobundle#config#parse_path(
@@ -79,19 +79,19 @@ Context types
     Should neobundle#config#parse_path(
           \ 'bitbucket://bitbucket.org/ns9tks/vim-fuzzyfinder') ==
           \ {'type' : 'hg', 'uri' :
-          \  g:neobundle_default_hg_protocol.
+          \  g:neobundle#types#hg#default_protocol.
           \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
     Should neobundle#config#parse_path(
           \ 'bitbucket:ns9tks/vim-fuzzyfinder') ==
           \ {'type' : 'hg', 'uri' :
-          \  g:neobundle_default_hg_protocol.
+          \  g:neobundle#types#hg#default_protocol.
           \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
     Should neobundle#config#parse_path(
           \ 'ns9tks/vim-fuzzyfinder', {'site': 'bitbucket'}) ==
           \ {'type' : 'hg', 'uri' :
-          \  g:neobundle_default_hg_protocol.
+          \  g:neobundle#types#hg#default_protocol.
           \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
 
@@ -112,7 +112,7 @@ Context types
     Should neobundle#config#parse_path(
           \ 'bitbucket:kh3phr3n/vim-qt-syntax.git') ==
           \ {'type' : 'git', 'uri' :
-          \  g:neobundle_default_git_protocol.
+          \  g:neobundle#types#git#default_protocol.
           \  '://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
           \  'name' : 'vim-qt-syntax'}
   End
