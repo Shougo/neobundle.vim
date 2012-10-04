@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 04 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -133,7 +133,7 @@ endfunction
 
 function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
-        \ 'stridx(tolower(v:val), tolower(a:arglead)) == 0')
+        \ 'stridx(tolower(v:val), tolower(a:arglead)) >= 0')
 endfunction
 
 function! neobundle#complete_lazy_bundles(arglead, cmdline, cursorpos)
