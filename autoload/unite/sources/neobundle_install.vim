@@ -181,8 +181,8 @@ function! s:sync(bundle, context, is_revision)"{{{
 
   call neobundle#installer#log('[neobundle/install] ' . message, 1)
 
+  let cwd = getcwd()
   try
-    let cwd = getcwd()
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       lcd `=a:bundle.path`
