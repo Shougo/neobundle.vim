@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 04 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -160,12 +160,26 @@ function! s:sync(bundle, context, is_revision)"{{{
         \ a:is_revision ? 'revision_lock' : 'sync'}_command(
         \ a:context.source__bang, a:bundle,
         \ a:context.source__number, a:context.source__max_bundles)
-  call neobundle#installer#log('[neobundle/install] ' . message, 1)
 
   if cmd == ''
     " Skipped.
+    call neobundle#installer#log('[neobundle/install] ' . message, 1)
+    return
+  elseif cmd =~# '^E: '
+    " Errored.
+
+    let num = a:context.source__number
+    let max = a:context.source__max_bundles
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ num, max, a:bundle.name, 'Error'), 1)
+    call neobundle#installer#error(cmd[3:], 1)
+    call add(a:context.source__errored_bundles,
+          \ a:bundle)
     return
   endif
+
+  call neobundle#installer#log('[neobundle/install] ' . message, 1)
 
   try
     let cwd = getcwd()
@@ -216,10 +230,11 @@ function! s:check_output(context, process)"{{{
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error'), 1)
-    call neobundle#installer#error(bundle.path)
-    call neobundle#installer#error(v:throwpoint)
-    call neobundle#installer#error(v:exception)
-    call neobundle#installer#error('Your repository path may be wrong.')
+    call neobundle#installer#error(bundle.path, 1)
+    call neobundle#installer#error(v:throwpoint, 1)
+    call neobundle#installer#error(v:exception, 1)
+    call neobundle#installer#error(
+          \ 'Your repository path may be wrong.', 1)
     call add(a:context.source__errored_bundles,
           \ bundle)
 
@@ -236,9 +251,9 @@ function! s:check_output(context, process)"{{{
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error'), 1)
-    call neobundle#installer#error(bundle.path)
+    call neobundle#installer#error(bundle.path, 1)
     call neobundle#installer#error(
-          \ split(a:process.output, '\n'))
+          \ split(a:process.output, '\n'), 1)
     call add(a:context.source__errored_bundles,
           \ bundle)
   elseif a:process.revision_locked

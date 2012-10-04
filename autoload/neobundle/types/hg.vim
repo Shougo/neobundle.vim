@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 04 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,9 +67,7 @@ function! s:type.detect(path)"{{{
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
   if !executable('hg')
-    call neobundle#installer#error(
-          \ '[neobundle] hg command is not installed.')
-    return ''
+    return 'E: "hg" command is not installed.'
   endif
 
   if !isdirectory(a:bundle.path)

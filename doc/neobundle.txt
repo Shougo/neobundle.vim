@@ -160,15 +160,19 @@ COMMANDS 					*neobundle-commands*
 		Specify bundle name. It is used for neobundle management and
 		other commands(Ex: |:NeoBundleUpdate|). If you omit it, used
 		tail of the repository name.
-		Note: name must be unique. If a bundle conflicted with other
-		name, neobundle will overwrite previous named bundle.
-		To prevent overwrite bundle, you must set "name" attribute
-		manually.
+		Note: name attribute must be unique. If a bundle conflicted
+		with other name, neobundle will overwrite previous named
+		bundle.  To prevent overwrite bundle, you must set "name"
+		attribute manually.
 
 		Example:
 >
 		NeoBundle 'git://github.com/Shougo/unite.vim.git',
 		   \ {'name' : 'unite'}
+		NeoBundle 'git://github.com/foo/foo.git',
+		   \ {'name' : 'foo-foo'}
+		NeoBundle 'git://github.com/bar/foo.git',
+		   \ {'name' : 'bar-foo'}
 <
 		rev			(String)
 		Revision number or branch/tag name.
@@ -180,7 +184,7 @@ COMMANDS 					*neobundle-commands*
 		directory		(String)
 		Specify relative directory path from base directory(set by
 		|neobundle#rc()| or "base" attribute). If you omit it, used
-		tail of the repository name.
+		"name" attribute.
 
 		Example:
 >
@@ -551,6 +555,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-04
+- Improved commands error check.
 
 2012-10-03
 - Improved documentation.

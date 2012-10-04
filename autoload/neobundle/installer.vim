@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Oct 2012.
+" Last Modified: 04 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -267,6 +267,11 @@ function! s:sync(bang, bundle, number, max, is_revision)
   if cmd == ''
     " Skipped.
     return 0
+  elseif cmd =~# '^E: '
+    " Errored.
+    call neobundle#installer#error(a:bundle.path)
+    call neobundle#installer#error(cmd[3:])
+    return -1
   endif
 
   let cwd = getcwd()
