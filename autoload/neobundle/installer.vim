@@ -53,7 +53,7 @@ function! neobundle#installer#install(bang, bundle_names)
         \ neobundle#get_not_installed_bundles(bundle_names) :
         \ empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(bundle_names)
+        \ neobundle#config#fuzzy_search(bundle_names)
   if empty(bundles)
     call neobundle#installer#error(
           \ '[neobundle/install] Bundles not found.')

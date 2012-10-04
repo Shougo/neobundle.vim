@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Oct 2012.
+" Last Modified: 04 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -359,6 +359,29 @@ endfunction
 function! neobundle#config#search(bundle_names)
   let _ = filter(neobundle#config#get_neobundles(),
         \ 'index(a:bundle_names, v:val.name) >= 0')
+
+  for bundle in copy(_)
+    for depend in bundle.depends
+      if type(depend) == type('')
+        let depend = string(depend)
+      endif
+      call add(_, neobundle#config#bundle(depend, 1))
+    endfor
+  endfor
+
+  return neobundle#util#uniq(_)
+endfunction
+
+function! neobundle#config#fuzzy_search(bundle_names)
+  let _ = []
+  for bundle in neobundle#config#get_neobundles()
+    for name in a:bundle_names
+      if stridx(bundle.name, name) >= 0
+        call add(_, bundle)
+        break
+      endif
+    endfor
+  endfor
 
   for bundle in copy(_)
     for depend in bundle.depends

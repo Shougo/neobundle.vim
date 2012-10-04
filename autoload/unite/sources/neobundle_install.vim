@@ -144,7 +144,7 @@ function! s:init(context, bundle_names)
         \ neobundle#get_not_installed_bundles(a:bundle_names) :
         \ empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(a:bundle_names)
+        \ neobundle#config#fuzzy_search(a:bundle_names)
 
   let a:context.source__max_bundles =
         \ len(a:context.source__bundles)

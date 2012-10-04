@@ -328,7 +328,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundleLocal ~/.vim/bundle
 
 :NeoBundleInstall [{name}...]			*:NeoBundleInstall*
-		Installs {name} plugins.
+		Installs {name} plugins. {name} is fuzzy searched.
 		If {name} is omited, all configured plugin is installed.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
@@ -482,7 +482,7 @@ neobundle/install
 		If argment is bang(!), install and update all plugins.
 
 		Source arguments:
-		bundle names.
+		bundle names(fuzzy searched).
 
 		Example:
 >
@@ -560,6 +560,8 @@ CHANGELOG					*neobundle-changelog*
 - Improved commands error check.
 - Improved revision parse.
 - Improved complete bundles.
+- Implemented fuzzy search in :NeoBundleUpdate and :NeoBundleInstall and unite
+  sources.
 
 2012-10-03
 - Improved documentation.
