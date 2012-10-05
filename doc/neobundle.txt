@@ -368,8 +368,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleSource [{name}...]			*:NeoBundleSource*
 		|:source| {name} bundles.
 		If omit {name}, |:source| all lazy bundles.
-		Note: This command is used to load the neobundles configured by
-		|:NeoBundleLazy|.
+		Note: This command is used to load the neobundles configured
+		by |:NeoBundleLazy|.
 
 :NeoBundleDepends {repository} [, {dictionary}]
 						*:NeoBundleDepends*
