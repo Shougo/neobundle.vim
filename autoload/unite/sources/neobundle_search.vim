@@ -50,7 +50,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   if !executable('curl') && !executable('wget')
     call unite#print_error(
-          \ '[neobundle/search] curl or wget is not available!')
+          \ '[neobundle/search] curl or wget command is not available!')
     return []
   endif
 

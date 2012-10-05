@@ -350,6 +350,9 @@ function! neobundle#config#init_bundle(name, opts)
   if !has_key(bundle, 'tail_path')
     let bundle.tail_path = g:neobundle#enable_tail_path
   endif
+  if !has_key(bundle, 'script_type')
+    let bundle.script_type = ''
+  endif
 
   if !has_key(bundle, 'type')
     call neobundle#installer#error(

@@ -182,7 +182,7 @@ endfunction
 function! neobundle#get_not_installed_bundles(bundle_names)
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(a:bundle_names)
+        \ neobundle#config#fuzzy_search(a:bundle_names)
 
   return filter(copy(bundles),
         \ "!isdirectory(neobundle#util#expand(v:val.path))")

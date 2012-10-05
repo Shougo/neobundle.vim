@@ -204,15 +204,26 @@ COMMANDS 					*neobundle-commands*
 		type			(String)
 		Specify repository type.  If you omit repository type, it is
 		detected automatically from {repository}.
-		For example: "nosync", "git", "svn", "hg", ...
+		For example: "nosync", "raw", "git", "hg", ...
+
+		Available types:
+		"nosync"    : No syncronous
+		"raw"       : Raw plugin file("script_type" attribute is
+		              needed)
+		"git"       : Git
+		"hg"        : Mercurial
 
 		Example:
 >
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 <
+		script_type			(String)
+		Specify script type.
+		For example: "indent", "plugin", "ftplugin", ...
+
 		site			(String)
 		Repository site.  If you omit repository URL and site
-		attribute, it is used |g:neobundle_default_site|.
+		attribute, it is used |g:neobundle#default_site|.
 		Note: You can specify site by "{site-name}:{path}" path.
 		For example: "github:Shougo/vimshell"
 
@@ -300,6 +311,10 @@ COMMANDS 					*neobundle-commands*
 		" For bitbucket git repository(.git is needed).
 		NeoBundle 'bitbucket:kh3phr3n/vim-qt-syntax.git'
 		NeoBundle 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'
+
+		" For raw repository.
+		NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
+		      \ {'script_type' : 'plugin'}
 <
 		Neobundle supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
@@ -593,6 +608,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-05
 - Added install action in neobundle/search source.
 - Improved syntax in neobundle/search source.
+- Added raw type.
 
 2012-10-04
 - Improved commands error check.
