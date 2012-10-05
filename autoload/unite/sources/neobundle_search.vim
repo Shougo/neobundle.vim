@@ -79,6 +79,9 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__NeoBundleSearch_Marker
         \ / -- /
         \ contained containedin=uniteSource__NeoBundleSearch_DescriptionLine
+  syntax match uniteSource__NeoBundleSearch_Marker
+        \ / Installed /
+        \ contained containedin=uniteSource__NeoBundleSearch
   highlight default link uniteSource__NeoBundleSearch_Name Statement
   highlight default link uniteSource__NeoBundleSearch_Marker Special
   highlight default link uniteSource__NeoBundleSearch_Description Comment
