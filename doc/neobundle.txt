@@ -442,6 +442,12 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
 
+g:neobundle#types#raw#calc_hash_command
+				*g:neobundle#types#raw#calc_hash_command*
+		The calc command in raw repository type.
+
+		Default value is "sha1sum" or "md5sum".
+
 g:neobundle#types#git#default_protocol
 				*g:neobundle#types#git#default_protocol*
 		The default protocol used for git(github).
