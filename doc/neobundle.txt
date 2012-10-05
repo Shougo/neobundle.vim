@@ -371,8 +371,9 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured by
 		|:NeoBundleLazy|.
 
-:NeoBundleDepends {repository} [, {dictionary}]	*:NeoBundleDepends*
-		This command register bundle and install the plugin.  It is
+:NeoBundleDepends {repository} [, {dictionary}]
+						*:NeoBundleDepends*
+		This command registers bundle and install the plugin.  It is
 		useful to define Vim plugin dependency.
 		Note: This command is not overwritten user neobundle
 		configuration.
@@ -380,6 +381,14 @@ COMMANDS 					*neobundle-commands*
 		if exists(':NeoBundleDepends')
 		  NeoBundleDepends 'Shougo/unite.vim.git'
 		endif
+<
+:NeoBundleDirectInstall {repository} [, {dictionary}]
+						*:NeoBundleDirectInstall*
+		This command registers bundle, and installs it directly.
+		Note: If you used the command, you cannot customize the bundle
+		settings.
+>
+		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
@@ -481,7 +490,7 @@ UNITE SOURCES					*neobundle-unite-sources*
 
 Here let me explain about a source for |unite| provided in neobundle.
 
-						*neobundle-unite-source-neobundle*
+					*neobundle-unite-source-neobundle*
 neobundle
 		Nominates bundles as a candidate.
 		Note: This source requires |vimproc| plugin.
@@ -493,7 +502,7 @@ neobundle
 		
 		http://github.com/Shougo/vimproc
 
-					*neobundle-unite-source-neobundle-install*
+				*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asyncronously.
 		Note: This source requires |vimproc| plugin.
@@ -519,7 +528,7 @@ neobundle/install
 neobundle/log
 		Print previous neobundle install logs.
 
-					*neobundle-unite-source-neobundle-update*
+				*neobundle-unite-source-neobundle-update*
 neobundle/update
 		Install and update configured plugins asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
@@ -530,16 +539,17 @@ neobundle/update
 >
 		:Unite neobundle/update -auto-quit
 <
-					*neobundle-unite-source-neobundle-search*
+				*neobundle-unite-source-neobundle-search*
 neobundle/search
 		Search plugins settings from "http://vim-scripts.org/".
 		Note: This source requires "curl" or "wget" command.
 		Note: If you get errors in this source, please re-make cache
 		file by |<Plug>(unite_redraw)|.
 
-					*neobundle-unite-source-neobundle-lazy*
+				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
-		List lazy configured plugins(not sourced by |:NeoBundleSource|).
+		List lazy configured plugins(not sourced by
+		|:NeoBundleSource|).
 
 							*unite-kind-neobundle*
 neobundle		An interface for neobundle bundles. It is used in
@@ -556,7 +566,11 @@ Actions of each sources
 
 neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
+	install		Direct install plugins from repository.
 	start		Browse github plugin page
+
+	Note: If you used the install action, you cannot customize the bundle
+	settings.
 
 neobundle/lazy					*unite-action-neobundle-lazy*
 	source		Source plugin files(Default action)
@@ -575,6 +589,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-05
+- Added install action in neobundle/search source.
 
 2012-10-04
 - Improved commands error check.

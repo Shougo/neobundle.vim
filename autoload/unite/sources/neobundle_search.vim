@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 05 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,6 +97,17 @@ function! s:source.action_table.yank.func(candidates)"{{{
   endif
 
   echo 'Yanked plugin settings!'
+endfunction"}}}
+
+let s:source.action_table.install = {
+      \ 'description' : 'direct install plugins',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:source.action_table.install.func(candidates)"{{{
+  for candidate in a:candidates
+    call neobundle#config#direct_bundle(
+          \ string(candidate.source__name))
+  endfor
 endfunction"}}}
 "}}}
 

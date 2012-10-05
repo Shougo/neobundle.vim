@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Oct 2012.
+" Last Modified: 05 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,7 @@ set cpo&vim
 if !exists('s:neobundles')
   let s:neobundles = {}
   let s:loaded_neobundles = {}
+  let s:direct_neobundles = {}
 endif
 
 function! neobundle#config#init()
@@ -58,6 +59,9 @@ function! neobundle#config#init()
     endfor
     unlet define
   endfor
+
+  " Load direct installed bundles.
+  call neobundle#config#load_direct_bundles()
 endfunction
 
 function! neobundle#config#get_neobundles()
@@ -166,6 +170,23 @@ function! neobundle#config#depends_bundle(arg)
   return bundle
 endfunction
 
+function! neobundle#config#direct_bundle(arg)
+  let bundle = neobundle#config#bundle(a:arg)
+  if empty(bundle)
+    return {}
+  endif
+
+  let path = bundle.path
+
+  let s:direct_neobundles[path] = bundle
+  call neobundle#config#save_direct_bundles()
+
+  " Direct install.
+  call neobundle#installer#install(0, bundle.name)
+
+  return bundle
+endfunction
+
 function! s:parse_arg(arg)
   let arg = type(a:arg) == type([]) ?
    \ string(a:arg) : '[' . a:arg . ']'
@@ -249,6 +270,13 @@ function! neobundle#config#rm_bundle(path)
     call s:rtp_rm(s:neobundles[a:path])
     call remove(s:neobundles, a:path)
   endif
+
+  " Delete from s:direct_neobundles.
+  if has_key(s:direct_neobundles, a:path)
+    call remove(s:direct_neobundles, a:path)
+  endif
+
+  call neobundle#config#save_direct_bundles()
 endfunction
 
 function! neobundle#config#get_types()
@@ -422,6 +450,23 @@ endfunction
 
 function! s:unify_path(path)
   return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
+endfunction
+
+function! neobundle#config#load_direct_bundles()
+  let path = neobundle#get_neobundle_dir() . '/.direct_bundles'
+
+  if !filereadable(path)
+    let s:direct_neobundles = {}
+  else
+    sandbox let s:direct_neobundles = eval(get(readfile(path), 0, '[]'))
+  endif
+
+  call extend(s:neobundles, s:direct_neobundles)
+endfunction
+
+function! neobundle#config#save_direct_bundles()
+  call writefile([string(s:direct_neobundles)],
+        \ neobundle#get_neobundle_dir() . '/.direct_bundles')
 endfunction
 
 let &cpo = s:save_cpo
