@@ -75,7 +75,29 @@ function! s:get_repository_plugins(context)"{{{
             \ 'website' : '',
             \ }
 
-      call add(s:repository_cache, extend(data, default, 'keep'))
+      let data = extend(data, default, 'keep')
+
+      " Set options.
+      if has_key(data, 'depends')
+        let data.options.depends = data.depends
+      endif
+      if has_key(data, 'rev')
+        let data.options.rev = data.rev
+      endif
+      if has_key(data, 'type')
+        let data.options.type = data.type
+      endif
+      if has_key(data, 'script_type')
+        let data.options.script_type = data.script_type
+      endif
+      if has_key(data, 'rtp')
+        let data.options.rtp = data.rtp
+      endif
+      if has_key(data, 'base')
+        let data.options.base = data.base
+      endif
+
+      call add(s:repository_cache, data)
     endfor
   endif
 
