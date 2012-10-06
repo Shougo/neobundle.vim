@@ -611,6 +611,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-06
+- Added vim-sripts.org source.
+
 2012-10-05
 - Added install action in neobundle/search source.
 - Improved syntax in neobundle/search source.
