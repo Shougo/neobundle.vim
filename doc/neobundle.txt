@@ -218,7 +218,7 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 <
-		script_type			(String)
+		script_type		(String)
 		Specify script type.
 		For example: "indent", "plugin", "ftplugin", ...
 
@@ -612,7 +612,49 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 RECIPE						*neobundle-recipe*
 
+The standard recipes are in "neobundle-vim-scripts".
+
+https://github.com/Shougo/neobundle-vim-scripts
+
 ToDo
+
+		The recipe has following keys. Most of keys are same to
+		neobundle configuration dictionary:
+
+		name			(String)	(Required)
+		Specify plugin name.
+
+		path			(String)	(Required)
+		The repository URI.
+		Note: You can omit long path.
+		Example: "Shougo/neobundle.vim"
+
+		description		(String)	(Optional)
+		String of plugin description.
+
+		author			(String)	(Optional)
+		The script author name.
+
+		base			(String)	(Optional)
+		Directory base path.
+
+		type			(String)	(Optional)
+		Specify repository type.
+
+		script_type		(String)	(Optional)
+		Specify script type.
+
+		site			(String)	(Optional)
+		Repository site.
+
+		rtp			(String)	(Optional)
+		Specify runtime path.
+
+		depends		(List or String)	(Optional)
+		Depends plugins list.
+
+		build			(Dictionary)	(Optional)
+		Specify build script.
 
 ==============================================================================
 FAQ						*neobundle-faq*
