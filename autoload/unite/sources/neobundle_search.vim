@@ -60,14 +60,28 @@ let s:source = {
       \ 'parents' : ['uri'],
       \ }
 
+function! s:source.hooks.on_init(args, context)"{{{
+  let a:context.source__sources = copy(s:neobundle_sources)
+  if !empty(a:args)
+    let a:context.source__sources = filter(
+          \ a:context.source__sources,
+          \ 'index(a:args, v:key) >= 0')
+  endif
+endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   let candidates = []
 
-  for source in values(s:neobundle_sources)
+  for source in values(a:context.source__sources)
     let candidates += source.gather_candidates(a:args, a:context)
   endfor
 
   return candidates
+endfunction"}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  let arglead = get(a:args, -1, '')
+  return filter(keys(s:neobundle_sources),
+        \ "stridx(v:val, arglead) == 0")
 endfunction"}}}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
@@ -94,8 +108,8 @@ let s:source.action_table.yank = {
       \ 'is_selectable' : 1,
       \ }
 function! s:source.action_table.yank.func(candidates)"{{{
-  let @" = join(map(copy(a:candidates),
-        \ "'NeoBundle '''.v:val.source__name.''''"), "\n")
+  let @" = join(map(a:candidates,
+        \ "'NeoBundle ' . s:get_neobundle_args(v:val)"), "\n")
   if has('clipboard')
     let @* = @"
   endif
@@ -111,13 +125,16 @@ let s:source.action_table.install = {
       \ }
 function! s:source.action_table.install.func(candidates)"{{{
   for candidate in a:candidates
-    call neobundle#config#direct_bundle(
-          \ string(candidate.source__name))
+    execute 'NeoBundleDirectInstall'
+          \ s:get_neobundle_args(candidate)
   endfor
 endfunction"}}}
 "}}}
 
 " Filters"{{{
+function! s:source.source__sorter(candidates, context)"{{{
+  return s:sort_by(a:candidates, 'v:val.source__name')
+endfunction"}}}
 function! s:source.source__converter(candidates, context)"{{{
   let max_plugin_name = max(map(copy(a:candidates),
         \ 'len(v:val.source__name)'))
@@ -135,11 +152,37 @@ function! s:source.source__converter(candidates, context)"{{{
 endfunction"}}}
 
 let s:source.filters =
-      \ ['matcher_default', 'sorter_default',
+      \ ['matcher_default', s:source.source__sorter,
       \      s:source.source__converter]
 "}}}
 
-" Misc.
+" Misc."{{{
+function! s:sort_by(list, expr)
+  let pairs = map(a:list, printf('[v:val, %s]', a:expr))
+  return map(s:sort(pairs,
+        \      'a:a[1] == a:b[1] ? 0 : a:a[1] > a:b[1] ? 1 : -1'), 'v:val[0]')
+endfunction
+
+" Sorts a list with expression to compare each two values.
+" a:a and a:b can be used in {expr}.
+function! s:sort(list, expr)
+  if type(a:expr) == type(function('function'))
+    return sort(a:list, a:expr)
+  endif
+  let s:expr = a:expr
+  return sort(a:list, 's:_compare')
+endfunction
+
+function! s:_compare(a, b)
+  return eval(s:expr)
+endfunction
+
+function! s:get_neobundle_args(candidate)
+  return string(a:candidate.source__path)
+          \  . (empty(a:candidate.source__options) ?
+          \    '' : ', ' . string(a:candidate.source__options))
+endfunction
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

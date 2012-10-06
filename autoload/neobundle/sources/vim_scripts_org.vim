@@ -56,7 +56,9 @@ function! s:source.gather_candidates(args, context)"{{{
   return map(copy(plugins), "{
         \ 'word' : v:val.name . ' ' . v:val.description,
         \ 'source__name' : v:val.name,
+        \ 'source__path' : v:val.name,
         \ 'source__description' : v:val.description,
+        \ 'source__options' : [],
         \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.uri,
         \ }")
 endfunction"}}}

@@ -613,6 +613,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-06
 - Added vim-sripts.org source.
+- Added neobundle-vim-scripts source.
 
 2012-10-05
 - Added install action in neobundle/search source.
