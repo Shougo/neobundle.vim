@@ -33,6 +33,7 @@ Interface		|neobundle-interface|
   Variables		  |neobundle-variables|
 Configulation Examples	|neobundle-examples|
 Unite sources		|neobundle-unite-sources|
+Recipe			|neobundle-recipe|
 FAQ			|neobundle-faq|
 Changelog		|neobundle-changelog|
 
@@ -490,6 +491,9 @@ EXAMPLES					*neobundle-examples*
 	" Let neobundle manage neobundle
 	"NeoBundle 'Shougo/neobundle.vim'
 	
+	" Use neobundle standard recipes.
+	NeoBundle 'Shougo/neobundle-vim-scripts'
+	
 	" My Bundles here:
 	" Refer to |:NeoBundle-examaples|.
 	" Note: You don't set neobundle setting in .gvimrc!
@@ -562,10 +566,19 @@ neobundle/update
 <
 				*neobundle-unite-source-neobundle-search*
 neobundle/search
-		Search plugins settings from "http://vim-scripts.org/".
+		Search plugin settings from sources.
 		Note: This source requires "curl" or "wget" command.
 		Note: If you get errors in this source, please re-make cache
 		file by |<Plug>(unite_redraw)|.
+
+		Source arguments:
+		source names.
+		
+		Following source name is available:
+		"vim-script.org"    : Search plugins settings from
+		        "http://vim-scripts.org/".
+		"neobundle-vim-scripts"    : Search plugins settings from
+		        "https://github.com/Shougo/neobundle-vim-scripts".
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
@@ -595,6 +608,11 @@ neobundle/search			*unite-action-neobundle-search*
 
 neobundle/lazy					*unite-action-neobundle-lazy*
 	source		Source plugin files(Default action)
+
+==============================================================================
+RECIPE						*neobundle-recipe*
+
+ToDo
 
 ==============================================================================
 FAQ						*neobundle-faq*
