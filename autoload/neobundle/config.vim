@@ -203,6 +203,8 @@ function! s:parse_arg(arg)
 
   let bundle.orig_arg = a:arg
 
+  call neobundle#config#check_external_commands(bundle)
+
   return bundle
 endfunction
 
@@ -478,25 +480,28 @@ function! neobundle#config#check_external_commands(bundle)
   if type(external_commands) == type([])
         \ || type(external_commands) == type('')
     let commands = external_commands
-  elseif s:is_windows && has_key(external_commands, 'windows')
-    let commands = build.windows
-  elseif s:is_mac && has_key(external_commands, 'mac')
-    let commands = build.mac
-  elseif s:is_mac && has_key(external_commands, 'cygwin')
-    let commands = build.cygwin
-  elseif !s:is_windows && has_key(external_commands, 'unix')
-    let commands = build.unix
-  elseif has_key(build, 'others')
-    let commands = build.others
+  elseif neobundle#util#is_windows() && has_key(external_commands, 'windows')
+    let commands = external_commands.windows
+  elseif neobundle#util#is_mac() && has_key(external_commands, 'mac')
+    let commands = external_commands.mac
+  elseif neobundle#util#is_cygwin() && has_key(external_commands, 'cygwin')
+    let commands = external_commands.cygwin
+  elseif !neobundle#util#is_windows() && has_key(external_commands, 'unix')
+    let commands = external_commands.unix
+  elseif has_key(external_commands, 'others')
+    let commands = external_commands.others
   else
     " Invalid.
     return
   endif
 
-  for command in type(commands) == type([]) ?
-        \ commands : [commands]
+  for command in (type(commands) == type([]) ?
+        \ commands : [commands])
     if !executable(command)
-      call neobundle#util#
+      call neobundle#installer#error(
+            \ printf('external command : "%s" is not found.', command))
+      call neobundle#installer#error(
+            \ printf('"%s" needs it.', a:bundle.name))
     endif
   endfor
 endfunction

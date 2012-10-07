@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Oct 2012.
+" Last Modified: 07 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,12 +27,6 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-let s:is_windows = has('win16') || has('win32') || has('win64')
-let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows
-      \ && (has('mac') || has('macunix') || has('gui_macvim') ||
-      \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
 call neobundle#util#set_default(
       \ 'g:neobundle#rm_command',
@@ -106,13 +100,13 @@ endfunction
 function! neobundle#installer#build(bundle)
   " Environment check.
   let build = get(a:bundle, 'build', {})
-  if s:is_windows && has_key(build, 'windows')
+  if neobundle#util#is_windows() && has_key(build, 'windows')
     let cmd = build.windows
-  elseif s:is_mac && has_key(build, 'mac')
+  elseif neobundle#util#is_mac() && has_key(build, 'mac')
     let cmd = build.mac
-  elseif s:is_mac && has_key(build, 'cygwin')
+  elseif neobundle#util#is_cygwin() && has_key(build, 'cygwin')
     let cmd = build.cygwin
-  elseif !s:is_windows && has_key(build, 'unix')
+  elseif !neobundle#util#is_windows() && has_key(build, 'unix')
     let cmd = build.unix
   elseif has_key(build, 'others')
     let cmd = build.others
