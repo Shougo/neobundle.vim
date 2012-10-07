@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vim_scripts_org.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 07 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ set cpo&vim
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
 
-let s:repository_cache = {}
+let s:repository_cache = []
 
 function! neobundle#sources#vim_scripts_org#define()"{{{
   return s:source
@@ -53,7 +53,8 @@ function! s:source.gather_candidates(args, context)"{{{
 
   let plugins = s:get_repository_plugins(a:context, repository)
 
-  return map(copy(plugins), "{
+  try
+    return map(copy(plugins), "{
         \ 'word' : v:val.name . ' ' . v:val.description,
         \ 'source__name' : v:val.name,
         \ 'source__path' : v:val.name,
@@ -61,6 +62,17 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'source__options' : [],
         \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.uri,
         \ }")
+  catch
+    call unite#print_error(
+          \ '[neobundle/search:vim-scripts.org] '
+          \ .'Error occured in loading cache.')
+    call unite#print_error(
+          \ '[neobundle/search:vim-scripts.org] '
+          \ .'Please re-make cache by <Plug>(unite_redraw) mapping.')
+    call neobundle#installer#error(v:exception . ' ' . v:throwpoint)
+
+    return []
+  endtry
 endfunction"}}}
 
 " Misc.
@@ -94,7 +106,7 @@ function! s:get_repository_plugins(context, path)"{{{
       call unite#print_message('[neobundle/search:vim-scripts.org] Done!')
     endif
 
-    sandbox let data = eval(readfile(temp)[0])
+    sandbox let data = eval(get(readfile(temp), 0, '[]'))
 
     " Convert cache data.
     call s:Cache.writefile(cache_dir, a:path,
@@ -103,12 +115,12 @@ function! s:get_repository_plugins(context, path)"{{{
     call delete(temp)
   endif
 
-  if !has_key(s:repository_cache, a:path)
-    sandbox let s:repository_cache[a:path] =
-          \ eval(s:Cache.readfile(cache_dir, a:path)[0])
+  if empty(s:repository_cache)
+    sandbox let s:repository_cache =
+          \ eval(get(s:Cache.readfile(cache_dir, a:path), 0, '[]'))
   endif
 
-  return s:repository_cache[a:path]
+  return s:repository_cache
 endfunction"}}}
 
 function! s:convert_vim_scripts_data(data)"{{{

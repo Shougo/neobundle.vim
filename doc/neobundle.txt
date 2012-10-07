@@ -688,6 +688,7 @@ CHANGELOG					*neobundle-changelog*
 - Added type__shallow attribute.
 - Improved log command in git.
 - More documented.
+- Improved error behavior in vim-sripts.org source.
 
 2012-10-06
 - Added vim-sripts.org source.
