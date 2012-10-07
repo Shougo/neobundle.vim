@@ -124,7 +124,7 @@ function! s:type.get_revision_pretty_command(bundle)"{{{
   return "git log -1 --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
-  if !executable('git')
+  if !executable('git') || a:new_rev == '' || a:old_rev == ''
     return ''
   endif
 
