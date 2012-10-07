@@ -627,22 +627,23 @@ https://github.com/Shougo/neobundle-vim-scripts
 
 ToDo
 
-		The recipe has following keys. Most of keys are same to
-		neobundle configuration dictionary:
+		The recipe has the following keys. Most of keys are same to
+		neobundle configuration dictionary.
 
 		name			(String)	(Required)
 		Specify plugin name.
 
 		path			(String)	(Required)
 		The repository URI.
-		Note: You can omit long path.
-		Example: "Shougo/neobundle.vim"
+		Note: You can abbreviate long complete path, such as
+		"Shougo/neobundle.vim" instead of
+		"git://github.com/Shougo/neobundle.vim.git"
 
 		description		(String)	(Optional)
-		String of plugin description.
+		Plugin description to show in neobundle/search.
 
 		author			(String)	(Optional)
-		The script author name.
+		The script author name to show in neobundle/search.
 
 		base			(String)	(Optional)
 		Directory base path.
@@ -657,21 +658,23 @@ ToDo
 		Repository site.
 
 		rtp			(String)	(Optional)
-		Specify runtime path.
+		Runtime path. Some plugin repository doesn't assume the top of
+		the working tree is the runtime path, like under a directory
+		which name is usually vim.
 
 		depends		(List or String)	(Optional)
-		Depends plugins list.
+		Dependency plugins list.
 
 		build			(Dictionary)	(Optional)
-		Specify build script.
+		Build script. e.g. make
 
 ==============================================================================
 FAQ						*neobundle-faq*
 
 Q: I want to manage rsense Vim plugin using neobundle.
-A: Unfortunately, rsense Vim has not plugin directory so neobundle cannot
-manage it. But you can use vim-rsense instead.  It can be managed by
-neobundle.
+A: Unfortunately, rsense Vim doesn't have plugin directory so neobundle cannot
+manage it. But you can use vim-rsense instead of rsense which neobundle can
+manage.
 
 https://github.com/taichouchou2/vim-rsense
 >
@@ -683,6 +686,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-07
 - Shallow clone as default in git.
 - Added type__shallow attribute.
+- More documented.
 
 2012-10-06
 - Added vim-sripts.org source.
