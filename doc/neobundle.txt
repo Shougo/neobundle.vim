@@ -586,8 +586,8 @@ neobundle/search
 		Following source name is available:
 		"vim-script.org"    : Search plugins settings from
 		        "http://vim-scripts.org/".
-		"neobundle-vim-scripts"    : Search plugins settings from
-		        "https://github.com/Shougo/neobundle-vim-scripts".
+		"neobundle-vim-scripts"    : Search plugins settings from the
+		        |neobundle-recipe|.
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
@@ -621,12 +621,29 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 RECIPE						*neobundle-recipe*
 
+neobundle/search source loads recipes from "recipes/*.json" files in
+'runtimepath'.
+
 The standard recipes are in "neobundle-vim-scripts".
 
 https://github.com/Shougo/neobundle-vim-scripts
 
-ToDo
+You can use the recipes using following command in .vimrc.
+>
+	NeoBundle 'Shougo/neobundle-vim-scripts'
+<
 
+The recipe file is json format like this:
+
+>
+	{
+	        'name' : 'neobundle',
+	        'path' : 'Shougo/neobundle',
+	        'description' : 'Ultimate Vim package manager',
+	        'author' : 'Shougo',
+	        'website' : 'https://github.com/Shougo/neobundle.vim'
+	}
+<
 		The recipe has the following keys. Most of keys are same to
 		neobundle configuration dictionary.
 
