@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_vim_scripts.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 07 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,24 +78,12 @@ function! s:get_repository_plugins(context)"{{{
       let data = extend(data, default, 'keep')
 
       " Set options.
-      if has_key(data, 'depends')
-        let data.options.depends = data.depends
-      endif
-      if has_key(data, 'rev')
-        let data.options.rev = data.rev
-      endif
-      if has_key(data, 'type')
-        let data.options.type = data.type
-      endif
-      if has_key(data, 'script_type')
-        let data.options.script_type = data.script_type
-      endif
-      if has_key(data, 'rtp')
-        let data.options.rtp = data.rtp
-      endif
-      if has_key(data, 'base')
-        let data.options.base = data.base
-      endif
+      for key in ['depends', 'rev', 'type', 'script_type',
+            \ 'rtp', 'base', 'build', 'external_commands']
+        if has_key(data, key)
+          let data.options.{key} = data.{key}
+        endif
+      endfor
 
       call add(s:repository_cache, data)
     endfor

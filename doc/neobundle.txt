@@ -732,6 +732,10 @@ The recipe file is json format like this:
 		build			(Dictionary)	(Optional)
 		Build script. e.g. make
 
+		external_commands
+			(Dictionary or List or String)	(Optional)
+		Dependency external commands.
+
 ==============================================================================
 FAQ						*neobundle-faq*
 
