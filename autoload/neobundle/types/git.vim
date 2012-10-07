@@ -91,7 +91,7 @@ function! s:type.get_sync_command(bundle)"{{{
     if get(a:bundle, 'type__shallow', 1)
           \ || a:bundle.uri !~ '^git@github.com:'
       " Use shallow clone.
-      let cmd .= ' --depth=1'
+      let cmd .= ' --depth 1'
     endif
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
