@@ -672,9 +672,9 @@ ToDo
 FAQ						*neobundle-faq*
 
 Q: I want to manage rsense Vim plugin using neobundle.
-A: Unfortunately, rsense Vim has not plugin directory so neobundle cannot
-manage it. But you can use vim-rsense instead.  It can be managed by
-neobundle.
+A: Unfortunately, rsense Vim doesn't have plugin directory so neobundle cannot
+manage it. But you can use vim-rsense instead of rsense which neobundle can
+manage.
 
 https://github.com/taichouchou2/vim-rsense
 >
@@ -686,6 +686,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-07
 - Shallow clone as default in git.
 - Added type__shallow attribute.
+- More documented.
 
 2012-10-06
 - Added vim-sripts.org source.
