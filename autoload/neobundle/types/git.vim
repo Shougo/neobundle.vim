@@ -87,7 +87,12 @@ function! s:type.get_sync_command(bundle)"{{{
   endif
 
   if !isdirectory(a:bundle.path)
-    let cmd = 'git clone --depth=1'
+    let cmd = 'git clone'
+    if !get(a:bundle, 'type__pushable', 0)
+          \ || a:bundle.uri !~ '^git@github.com:'
+      " Use shallow clone.
+      let cmd .= ' --depth=1'
+    endif
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
     let cmd = 'git pull --rebase'

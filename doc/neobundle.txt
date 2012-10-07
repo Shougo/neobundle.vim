@@ -288,6 +288,13 @@ COMMANDS 					*neobundle-commands*
 		For example, "fugitive", "NERDTree", "session.vim".
 		This attribute is valid in |:NeoBundleLazy|.
 
+		type__pushable	(Number)
+		If it is 1, you can "git push" in cloned repository.
+		It is useful, you want to customize repository.
+		If you omit it, 0 is used. But if you used "git@github.com:~"
+		uri, 1 is used.
+		Note: This attribute is available in git type only.
+
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
@@ -673,6 +680,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-07
 - Shallow clone as default in git.
+- Added type__pushable attribute.
 
 2012-10-06
 - Added vim-sripts.org source.
