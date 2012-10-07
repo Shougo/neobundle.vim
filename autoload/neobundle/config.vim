@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Oct 2012.
+" Last Modified: 07 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -470,6 +470,35 @@ endfunction
 function! neobundle#config#save_direct_bundles()
   call writefile([string(s:direct_neobundles)],
         \ neobundle#get_neobundle_dir() . '/.direct_bundles')
+endfunction
+
+function! neobundle#config#check_external_commands(bundle)
+  " Environment check.
+  let external_commands = get(a:bundle, 'external_commands', {})
+  if type(external_commands) == type([])
+        \ || type(external_commands) == type('')
+    let commands = external_commands
+  elseif s:is_windows && has_key(external_commands, 'windows')
+    let commands = build.windows
+  elseif s:is_mac && has_key(external_commands, 'mac')
+    let commands = build.mac
+  elseif s:is_mac && has_key(external_commands, 'cygwin')
+    let commands = build.cygwin
+  elseif !s:is_windows && has_key(external_commands, 'unix')
+    let commands = build.unix
+  elseif has_key(build, 'others')
+    let commands = build.others
+  else
+    " Invalid.
+    return
+  endif
+
+  for command in type(commands) == type([]) ?
+        \ commands : [commands]
+    if !executable(command)
+      call neobundle#util#
+    endif
+  endfor
 endfunction
 
 let &cpo = s:save_cpo

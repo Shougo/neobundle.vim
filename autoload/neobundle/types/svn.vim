@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 07 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,9 +51,7 @@ function! s:type.detect(path)"{{{
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
   if !executable('svn')
-    call neobundle#installer#error(
-          \ '[neobundle] svn command is not installed.')
-    return ''
+    return 'E: svn command is not installed.'
   endif
 
   if !isdirectory(a:bundle.path)
