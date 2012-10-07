@@ -249,11 +249,17 @@ COMMANDS 					*neobundle-commands*
 		Depends plugins list.
 		List items are '{plugin-name}' or ['{plugin-name}', {args}].
 		This plugins are installed automatically.
+		If the {plugin-name} needs options, you must write {args} in
+		the depends list.
 		Note: Type String is syntax sugar for List of {plugin-name}.
 
 		Example:
 >
 		NeoBundle 'Shougo/vimfiler', {'depends' : 'Shougo/unite.vim' }
+		NeoBundle 'Shougo/neocomplcache', {'depends' :
+		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
+		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
+		    \ ]}
 <
 		build			(Dictionary)
 		Specify build script.
