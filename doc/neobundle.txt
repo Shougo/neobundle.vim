@@ -469,7 +469,7 @@ g:neobundle#default_site			*g:neobundle#default_site*
 		The default repository site if site attribute is omitted.
 
 						*g:neobundle_default_site*
-		Note: |g:neobundle_default_site| is obsolute name.
+		Note: |g:neobundle_default_site| is obsolete name.
 
 		Default value is "github".
 
@@ -478,7 +478,7 @@ g:neobundle#log_filename			*g:neobundle#log_filename*
 		to file.
 
 						*g:neobundle_log_filename*
-		Note: |g:neobundle_log_filename| is obsolute name.
+		Note: |g:neobundle_log_filename| is obsolete name.
 
 		Default value is "".
 
@@ -486,7 +486,7 @@ g:neobundle#enable_tail_path			*g:neobundle#enable_tail_path*
 		If it is 1, default "tail_path" attribute will be 1 in bundle.
 
 						*g:neobundle_enable_tail_path*
-		Note: |g:neobundle_enable_tail_path| is obsolute name.
+		Note: |g:neobundle_enable_tail_path| is obsolete name.
 
 		Default value is 0.
 
@@ -494,7 +494,7 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 		The remove file command in |:NeoBundleClean|.
 
 						*g:neobundle_rm_command*
-		Note: |g:neobundle_rm_command| is obsolute name.
+		Note: |g:neobundle_rm_command| is obsolete name.
 
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
@@ -512,7 +512,7 @@ g:neobundle#types#git#default_protocol
 		to "https".
 
 					*g:neobundle_default_git_protocol*
-		Note: |g:neobundle_default_git_protocol| is obsolute name.
+		Note: |g:neobundle_default_git_protocol| is obsolete name.
 
 		Default value is "git".
 
@@ -521,7 +521,7 @@ g:neobundle#types#hg#default_protocol
 		The default protocol used for hg(bitbucket).
 
 					*g:neobundle_default_hg_protocol*
-		Note: |g:neobundle_default_git_protocol| is obsolute name.
+		Note: |g:neobundle_default_git_protocol| is obsolete name.
 
 		Default value is "https".
 
