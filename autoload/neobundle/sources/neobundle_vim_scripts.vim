@@ -45,6 +45,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'word' : v:val.name . ' ' . v:val.description,
         \ 'source__name' : v:val.name,
         \ 'source__description' : v:val.description,
+        \ 'source__script_type' : v:val.script_type,
         \ 'source__options' : v:val.options,
         \ 'source__path' : v:val.path,
         \ 'action__uri' : v:val.website,
@@ -74,6 +75,7 @@ function! s:get_repository_plugins(context)"{{{
             \ 'options' : {},
             \ 'description' : '',
             \ 'website' : '',
+            \ 'script_type' : '',
             \ }
 
       let data = extend(data, default, 'keep')

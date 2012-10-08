@@ -59,6 +59,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'word' : v:val.name . ' ' . v:val.description,
         \ 'source__name' : v:val.name,
         \ 'source__path' : v:val.name,
+        \ 'source__script_type' : s:convert2script_type(v:val.raw_type),
         \ 'source__description' : v:val.description,
         \ 'source__options' : [],
         \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.uri,
@@ -87,6 +88,10 @@ function! s:get_repository_plugins(context, path)"{{{
     call unite#print_message(
           \ '[neobundle/search:vim-scripts.org] Reloading cache from ' . a:path)
     redraw
+
+    if s:Cache.filereadable(cache_dir, a:path)
+      call delete(cache_path)
+    endif
 
     let temp = tempname()
 
@@ -129,10 +134,19 @@ function! s:convert_vim_scripts_data(data)"{{{
         \ 'name' : v:val.n,
         \ 'raw_type' : v:val.t,
         \ 'repository' : v:val.rv,
-        \ 'description' : printf('%-10s %-5s -- %s',
-        \          v:val.t, v:val.rv, v:val.s),
+        \ 'description' : printf('%-5s %s', v:val.rv, v:val.s),
         \ 'uri' : 'https://github.com/vim-scripts/' . v:val.n,
         \ }")
+endfunction"}}}
+
+function! s:convert2script_type(type)"{{{
+  if a:type ==# 'utility'
+    return 'plugin'
+  elseif a:type ==# 'color scheme'
+    return 'colors'
+  else
+    return a:type
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo

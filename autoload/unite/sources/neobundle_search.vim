@@ -77,6 +77,9 @@ function! s:source.gather_candidates(args, context)"{{{
     let source_name = get(source, 'short_name', source.name)
     for candidate in source_candidates
       let candidate.source__source = source_name
+      if !has_key(candidate, 'source__script_type')
+        let candidate.source__script_type = ''
+      endif
     endfor
 
     let candidates += source_candidates
@@ -146,13 +149,17 @@ endfunction"}}}
 function! s:source.source__converter(candidates, context)"{{{
   let max_plugin_name = max(map(copy(a:candidates),
         \ 'len(v:val.source__name)'))
+  let max_script_type = max(map(copy(a:candidates),
+        \ 'len(v:val.source__script_type)'))
   let max_source_name = max(map(copy(a:context.source__source_names),
         \ 'len(v:val)'))
-  let format = '%-'. max_plugin_name .'s %-'. max_source_name .'s %s'
+  let format = '%-'. max_plugin_name .'s %-'.
+        \ max_source_name .'s %-'. max_script_type .'s -- %s'
 
   for candidate in a:candidates
     let candidate.abbr = printf(format,
         \          candidate.source__name, candidate.source__source,
+        \          candidate.source__script_type,
         \          (neobundle#is_installed(candidate.source__name) ?
         \           'Installed' : candidate.source__description))
     let candidate.action__path = candidate.action__uri
