@@ -323,8 +323,6 @@ function! s:lock_revision(bang, bundle, number, max)
     redraw
   endif
 
-  call neobundle#installer#log(message)
-
   if cmd == ''
     " Skipped.
     return 0
@@ -334,6 +332,8 @@ function! s:lock_revision(bang, bundle, number, max)
     call neobundle#installer#error(cmd[3:])
     return -1
   endif
+
+  call neobundle#installer#log(message)
 
   let cwd = getcwd()
   try
