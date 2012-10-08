@@ -283,6 +283,11 @@ function! s:sync(bang, bundle, number, max)
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
 
+    if get(a:bundle, 'rev', '') != ''
+      " Lock revision.
+      call s:lock_revision(a:bang, a:bundle, a:number, a:max)
+    endif
+
     let new_rev = neobundle#installer#get_revision_number(a:bundle)
   finally
     lcd `=cwd`
@@ -294,11 +299,6 @@ function! s:sync(bang, bundle, number, max)
     call neobundle#installer#error(a:bundle.path)
     call neobundle#installer#error(result)
     return -1
-  endif
-
-  if get(a:bundle, 'rev', '') != ''
-    " Lock revision.
-    call s:lock_revision(a:bang, a:bundle, a:number, a:max)
   endif
 
   if old_rev !=# new_rev

@@ -222,6 +222,11 @@ function! s:check_output(context, process)"{{{
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
+  if get(bundle, 'rev', '') != ''
+    " Lock revision.
+    call s:lock_revision(a:context, bundle)
+  endif
+
   let cwd = getcwd()
   try
     let rev = neobundle#installer#get_revision_number(bundle)
@@ -270,11 +275,6 @@ function! s:check_output(context, process)"{{{
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
           \ bundle)
-  endif
-
-  if get(bundle, 'rev', '') != ''
-    " Lock revision.
-    call s:lock_revision(a:context, bundle)
   endif
 
   let a:process.eof = 1
