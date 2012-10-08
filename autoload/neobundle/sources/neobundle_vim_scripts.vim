@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_vim_scripts.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'neobundle-vim-scripts',
+      \ 'short_name' : 'neobundle',
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{

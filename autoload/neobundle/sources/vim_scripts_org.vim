@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vim_scripts_org.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'vim-scripts.org',
+      \ 'short_name' : 'vim.org',
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{

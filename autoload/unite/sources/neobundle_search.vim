@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,12 +74,13 @@ function! s:source.gather_candidates(args, context)"{{{
 
   for source in values(a:context.source__sources)
     let source_candidates = source.gather_candidates(a:args, a:context)
+    let source_name = get(source, 'short_name', source.name)
     for candidate in source_candidates
-      let candidate.source__source = source.name
+      let candidate.source__source = source_name
     endfor
 
     let candidates += source_candidates
-    call add(a:context.source__source_names, source.name)
+    call add(a:context.source__source_names, source_name)
   endfor
 
   return candidates
