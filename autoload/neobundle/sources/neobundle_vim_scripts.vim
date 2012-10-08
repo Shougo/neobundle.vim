@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_vim_scripts.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2012.
+" Last Modified: 08 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,7 +70,7 @@ function! s:get_repository_plugins(context)"{{{
 
       " Initialize.
       let default = {
-            \ 'options' : [],
+            \ 'options' : {},
             \ 'description' : '',
             \ 'website' : '',
             \ }
@@ -81,7 +81,7 @@ function! s:get_repository_plugins(context)"{{{
       for key in ['depends', 'rev', 'type', 'script_type',
             \ 'rtp', 'base', 'build', 'external_commands']
         if has_key(data, key)
-          let data.options.{key} = data.{key}
+          let data.options[key] = data[key]
         endif
       endfor
 

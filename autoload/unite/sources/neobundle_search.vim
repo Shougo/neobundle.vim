@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 08 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,9 +70,16 @@ function! s:source.hooks.on_init(args, context)"{{{
 endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   let candidates = []
+  let a:context.source__source_names = []
 
   for source in values(a:context.source__sources)
-    let candidates += source.gather_candidates(a:args, a:context)
+    let source_candidates = source.gather_candidates(a:args, a:context)
+    for candidate in source_candidates
+      let candidate.source__source = source.name
+    endfor
+
+    let candidates += source_candidates
+    call add(a:context.source__source_names, source.name)
   endfor
 
   return candidates
@@ -94,10 +101,10 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__NeoBundleSearch_Marker
         \ / -- /
         \ contained containedin=uniteSource__NeoBundleSearch_DescriptionLine
-  syntax match uniteSource__NeoBundleSearch_Marker
+  syntax match uniteSource__NeoBundleSearch_Install
         \ / Installed /
         \ contained containedin=uniteSource__NeoBundleSearch
-  highlight default link uniteSource__NeoBundleSearch_Name Statement
+  highlight default link uniteSource__NeoBundleSearch_Install Statement
   highlight default link uniteSource__NeoBundleSearch_Marker Special
   highlight default link uniteSource__NeoBundleSearch_Description Comment
 endfunction"}}}
@@ -138,11 +145,13 @@ endfunction"}}}
 function! s:source.source__converter(candidates, context)"{{{
   let max_plugin_name = max(map(copy(a:candidates),
         \ 'len(v:val.source__name)'))
-  let format = '%-'. max_plugin_name .'s %s'
+  let max_source_name = max(map(copy(a:context.source__source_names),
+        \ 'len(v:val)'))
+  let format = '%-'. max_plugin_name .'s %-'. max_source_name .'s %s'
 
   for candidate in a:candidates
     let candidate.abbr = printf(format,
-        \          candidate.source__name,
+        \          candidate.source__name, candidate.source__source,
         \          (neobundle#is_installed(candidate.source__name) ?
         \           'Installed' : candidate.source__description))
     let candidate.action__path = candidate.action__uri
