@@ -753,6 +753,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-08
 - Fixed update log command.
+- Fixed revision lock.
 
 2012-10-07
 - Shallow clone as default in git.

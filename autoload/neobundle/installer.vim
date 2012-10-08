@@ -252,10 +252,9 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
   endtry
 endfunction
 
-function! s:sync(bang, bundle, number, max, is_revision)
+function! s:sync(bang, bundle, number, max)
   let [cmd, message] =
-        \ neobundle#installer#get_{a:is_revision ?
-        \   'revision_lock' : 'sync'}_command(
+        \ neobundle#installer#get_sync_command(
         \ a:bang, a:bundle, a:number, a:max)
 
   if !has('vim_starting')
@@ -297,9 +296,9 @@ function! s:sync(bang, bundle, number, max, is_revision)
     return -1
   endif
 
-  if !a:is_revision && get(a:bundle, 'rev', '') != ''
+  if get(a:bundle, 'rev', '') != ''
     " Lock revision.
-    call s:sync(a:bang, a:bundle, a:number, a:max, 1)
+    call s:lock_revision(a:bang, a:bundle, a:number, a:max)
   endif
 
   if old_rev !=# new_rev
@@ -315,17 +314,54 @@ function! s:sync(bang, bundle, number, max, is_revision)
   return old_rev == '' || old_rev !=# new_rev
 endfunction
 
+function! s:lock_revision(bang, bundle, number, max)
+  let [cmd, message] =
+        \ neobundle#installer#get_revision_lock_command(
+        \ a:bang, a:bundle, a:number, a:max)
+
+  if !has('vim_starting')
+    redraw
+  endif
+
+  call neobundle#installer#log(message)
+
+  if cmd == ''
+    " Skipped.
+    return 0
+  elseif cmd =~# '^E: '
+    " Errored.
+    call neobundle#installer#error(a:bundle.path)
+    call neobundle#installer#error(cmd[3:])
+    return -1
+  endif
+
+  let cwd = getcwd()
+  try
+    if isdirectory(a:bundle.path)
+      " Cd to bundle path.
+      lcd `=a:bundle.path`
+    endif
+
+    let result = neobundle#util#system(cmd)
+    let status = neobundle#util#get_last_status()
+  finally
+    lcd `=cwd`
+  endtry
+
+  if status
+    call neobundle#installer#error(a:bundle.path)
+    call neobundle#installer#error(result)
+    return -1
+  endif
+endfunction
+
 function! s:install(bang, bundles)
   let i = 1
   let [installed, errored] = [[], []]
   let max = len(a:bundles)
 
   for bundle in a:bundles
-    let _ = s:sync(a:bang, bundle, i, max, 0)
-
-    if get(bundle, 'rev', '') != ''
-      call s:sync(a:bang, bundle, i, max, 1)
-    endif
+    let _ = s:sync(a:bang, bundle, i, max)
 
     if _ > 0
       call add(installed, bundle)
