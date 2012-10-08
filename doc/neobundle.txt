@@ -751,6 +751,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-08
+- Fixed update log command.
+
 2012-10-07
 - Shallow clone as default in git.
 - Added type__shallow attribute.
