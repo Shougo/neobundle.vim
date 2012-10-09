@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,7 +52,7 @@ function! neobundle#util#is_cygwin()"{{{
 endfunction"}}}
 
 " Check vimproc."{{{
-function! s:has_vimproc()"{{{
+function! neobundle#util#has_vimproc()"{{{
   if !exists('s:exists_vimproc')
     try
       call vimproc#version()
@@ -79,14 +79,14 @@ function! neobundle#util#system(str, ...)"{{{
   let input = s:iconv(input, &encoding, 'char')
 
   if a:0 == 0
-    let output = s:has_vimproc() ?
+    let output = neobundle#util#has_vimproc() ?
           \ vimproc#system(command) : system(command)
   elseif a:0 == 1
-    let output = s:has_vimproc() ?
+    let output = neobundle#util#has_vimproc() ?
           \ vimproc#system(command, input) : system(command, input)
   else
     " ignores 3rd argument unless you have vimproc.
-    let output = s:has_vimproc() ?
+    let output = neobundle#util#has_vimproc() ?
           \ vimproc#system(command, input, a:2) : system(command, input)
   endif
 
@@ -95,7 +95,7 @@ function! neobundle#util#system(str, ...)"{{{
   return output
 endfunction"}}}
 function! neobundle#util#get_last_status()"{{{
-  return s:has_vimproc() ?
+  return neobundle#util#has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
 endfunction"}}}
 

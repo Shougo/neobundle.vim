@@ -60,8 +60,8 @@ To update, run this command.
 >
 	:NeoBundleUpdate
 <
-Note: To use unite.vim interface, use this command (required |vimproc| and
-|unite.vim| plugins).
+Note: To use unite.vim interface, use this command (required |unite.vim|
+plugins).
 >
 	:Unite neobundle/update
 <
@@ -499,6 +499,17 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
 		others.
 
+g:neobundle#install_max_processes
+					*g:neobundle#install_max_processes*
+		The max processes number in neobundle/install source
+		asyncronous update.
+
+			*g:unite_source_neobundle_install_max_processes*
+		Note: |g:unite_source_neobundle_install_max_processes| is
+		obsolete name.
+
+		Default value is "5".
+
 g:neobundle#types#raw#calc_hash_command
 				*g:neobundle#types#raw#calc_hash_command*
 		The calc command in raw repository type.
@@ -524,13 +535,6 @@ g:neobundle#types#hg#default_protocol
 		Note: |g:neobundle_default_git_protocol| is obsolete name.
 
 		Default value is "https".
-
-g:unite_source_neobundle_install_max_processes
-			*g:unite_source_neobundle_install_max_processes*
-		The max processes number in neobundle/install source
-		asyncronous update.
-
-		Default value is "5".
 
 ==============================================================================
 EXAMPLES					*neobundle-examples*
@@ -574,19 +578,21 @@ Here let me explain about a source for |unite| provided in neobundle.
 					*neobundle-unite-source-neobundle*
 neobundle
 		Nominates bundles as a candidate.
-		Note: This source requires |vimproc| plugin.
 		
 		Note: In windows
-		If argment is bang(!), print plugins path instead of plugins status.
+		If argment is bang(!), print plugins path instead of plugins
+		status.
 		Note: Others
-		If argment is bang(!), print plugins status instead of plugins path.
+		If argment is bang(!), print plugins status instead of plugins
+		path.
 		
 		http://github.com/Shougo/vimproc
 
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asyncronously.
-		Note: This source requires |vimproc| plugin.
+		
+		Note: To install |vimproc| plugin is recommended.
 		http://github.com/Shougo/vimproc
 
 		If argment is bang(!), install and update all plugins.
@@ -613,7 +619,7 @@ neobundle/log
 neobundle/update
 		Install and update configured plugins asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
-		Note: This source requires |vimproc| plugin.
+		Note: To install |vimproc| plugin is recommended.
 
 		If you use the source with "-auto-quit" option, the unite
 		buffer will close automatically.
@@ -754,6 +760,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-09
 - Improved neobundle/search source.
 - Refactored installer.
+- Implemented asyncronous :NeoBundleUpdate.
 
 2012-10-08
 - Fixed update log command.

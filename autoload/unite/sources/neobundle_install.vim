@@ -27,14 +27,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Variables  "{{{
-call unite#util#set_default(
-      \ 'g:unite_source_neobundle_install_max_processes', 5)
-"}}}
-
 function! unite#sources#neobundle_install#define()"{{{
-  return unite#util#has_vimproc() ?
-        \ [s:source_install, s:source_update] : {}
+  return [s:source_install, s:source_update]
 endfunction"}}}
 
 let s:source_install = {
@@ -71,16 +65,16 @@ function! s:source_install.async_gather_candidates(args, context)"{{{
   if a:context.source__number < a:context.source__max_bundles
     while a:context.source__number < a:context.source__max_bundles
         \ && len(a:context.source__processes) <
-        \      g:unite_source_neobundle_install_max_processes
-      call s:sync(
+        \      g:neobundle#install_max_processes
+      call neobundle#installer#sync(
             \ a:context.source__bundles[a:context.source__number],
-            \ a:context)
+            \ a:context, 1)
     endwhile
   endif
 
   if !empty(a:context.source__processes)
     for process in a:context.source__processes
-      call s:check_output(a:context, process)
+      call neobundle#installer#check_output(a:context, process, 1)
     endfor
 
     " Filter eof processes.
@@ -151,118 +145,6 @@ function! s:init(context, bundle_names)
 
   call neobundle#installer#clear_log()
 endfunction
-
-function! s:sync(bundle, context)"{{{
-  let a:context.source__number += 1
-
-  let num = a:context.source__number
-  let max = a:context.source__max_bundles
-
-  let [cmd, message] =
-        \ neobundle#installer#get_sync_command(
-        \ a:context.source__bang, a:bundle,
-        \ a:context.source__number, a:context.source__max_bundles)
-
-  if cmd == ''
-    " Skipped.
-    call neobundle#installer#log('[neobundle/install] ' . message, 1)
-    return
-  elseif cmd =~# '^E: '
-    " Errored.
-
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, a:bundle.name, 'Error'), 1)
-    call neobundle#installer#error(cmd[3:], 1)
-    call add(a:context.source__errored_bundles,
-          \ a:bundle)
-    return
-  endif
-
-  call neobundle#installer#log('[neobundle/install] ' . message, 1)
-
-  let cwd = getcwd()
-  try
-    if isdirectory(a:bundle.path)
-      " Cd to bundle path.
-      lcd `=a:bundle.path`
-    endif
-
-    let rev = neobundle#installer#get_revision_number(a:bundle)
-
-    let process = {
-          \ 'proc' : vimproc#pgroup_open(vimproc#util#iconv(
-          \            cmd, &encoding, 'char'), 0, 2),
-          \ 'number' : num,
-          \ 'rev' : rev,
-          \ 'bundle' : a:bundle,
-          \ 'output' : '',
-          \ 'eof' : 0,
-          \ }
-  finally
-    lcd `=cwd`
-  endtry
-
-  " Close handles.
-  call process.proc.stdin.close()
-  call process.proc.stderr.close()
-
-  call add(a:context.source__processes, process)
-endfunction"}}}
-
-function! s:check_output(context, process)"{{{
-  let a:process.output .= vimproc#util#iconv(
-        \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
-  if !a:process.proc.stdout.eof
-    return
-  endif
-
-  let [cond, status] = a:process.proc.waitpid()
-  let num = a:process.number
-  let max = a:context.source__max_bundles
-  let bundle = a:process.bundle
-
-  if get(bundle, 'rev', '') != ''
-    " Lock revision.
-    call neobundle#installer#lock_revision(
-          \ a:context.source__bang, bundle, num, max, 1)
-  endif
-
-  let cwd = getcwd()
-
-  let rev = neobundle#installer#get_revision_number(bundle)
-
-  if status && a:process.rev ==# rev
-        \ && (bundle.type !=# 'git' ||
-        \     a:process.output !~# 'up-to-date\|up to date')
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Error'), 1)
-    call neobundle#installer#error(bundle.path, 1)
-    call neobundle#installer#error(
-          \ split(a:process.output, '\n'), 1)
-    call add(a:context.source__errored_bundles,
-          \ bundle)
-  elseif a:process.rev ==# rev
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Skipped'), 1)
-  else
-    call neobundle#installer#update_log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Updated'), 1)
-    let message = neobundle#installer#get_updated_log_message(
-          \ bundle, rev, a:process.rev)
-    call neobundle#installer#update_log(
-          \ '[neobundle/install] ' . message, 1)
-
-    call neobundle#installer#build(bundle)
-    call add(a:context.source__synced_bundles,
-          \ bundle)
-  endif
-
-  let a:process.eof = 1
-endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
