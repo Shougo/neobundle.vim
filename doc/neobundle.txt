@@ -761,6 +761,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved neobundle/search source.
 - Refactored installer.
 - Implemented asyncronous :NeoBundleUpdate.
+- Set multiline in neobundle/search source.
 
 2012-10-08
 - Fixed update log command.

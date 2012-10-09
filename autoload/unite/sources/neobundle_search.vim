@@ -163,6 +163,7 @@ function! s:source.source__converter(candidates, context)"{{{
         \          (neobundle#is_installed(candidate.source__name) ?
         \           'Installed' : candidate.source__description))
     let candidate.action__path = candidate.action__uri
+    let candidate.is_multiline = 1
   endfor
 
   return a:candidates
