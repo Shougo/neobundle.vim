@@ -122,7 +122,7 @@ function! neobundle#installer#build(bundle)
       lcd `=a:bundle.path`
     endif
 
-    let result = neobundle#util#system(cmd)
+    let result = substitute(neobundle#util#system(cmd), '\n$', '', '')
   finally
     lcd `=cwd`
   endtry
