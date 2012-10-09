@@ -753,6 +753,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-09
 - Improved neobundle/search source.
+- Refactored installer.
 
 2012-10-08
 - Fixed update log command.

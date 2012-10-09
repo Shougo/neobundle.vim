@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -285,7 +285,8 @@ function! s:sync(bang, bundle, number, max)
 
     if get(a:bundle, 'rev', '') != ''
       " Lock revision.
-      call s:lock_revision(a:bang, a:bundle, a:number, a:max)
+      call neobundle#installer#lock_revision(
+            \ a:bang, a:bundle, a:number, a:max, 1)
     endif
 
     let new_rev = neobundle#installer#get_revision_number(a:bundle)
@@ -314,26 +315,33 @@ function! s:sync(bang, bundle, number, max)
   return old_rev == '' || old_rev !=# new_rev
 endfunction
 
-function! s:lock_revision(bang, bundle, number, max)
+function! neobundle#installer#lock_revision(bang, bundle, number, max, is_unite)
   let [cmd, message] =
         \ neobundle#installer#get_revision_lock_command(
         \ a:bang, a:bundle, a:number, a:max)
 
-  if !has('vim_starting')
+  if !has('vim_starting') && !a:is_unite
     redraw
   endif
 
   if cmd == ''
     " Skipped.
+    call neobundle#installer#log(
+          \ '[neobundle/install] ' . message, a:is_unite)
     return 0
   elseif cmd =~# '^E: '
     " Errored.
-    call neobundle#installer#error(a:bundle.path)
-    call neobundle#installer#error(cmd[3:])
+    call neobundle#installer#error(a:bundle.path, a:is_unite)
+    call neobundle#installer#error(cmd[3:], a:is_unite)
     return -1
   endif
 
-  call neobundle#installer#log(message)
+  call neobundle#installer#log(
+        \ printf('[neobundle/install] (%'.len(a:max).'d/%d): |%s| %s',
+        \ a:number, a:max, a:bundle.name, 'Locked'), a:is_unite)
+
+  call neobundle#installer#log(
+        \ '[neobundle/install] ' . message, a:is_unite)
 
   let cwd = getcwd()
   try
@@ -349,8 +357,8 @@ function! s:lock_revision(bang, bundle, number, max)
   endtry
 
   if status
-    call neobundle#installer#error(a:bundle.path)
-    call neobundle#installer#error(result)
+    call neobundle#installer#error(a:bundle.path, a:is_unite)
+    call neobundle#installer#error(result, a:is_unite)
     return -1
   endif
 endfunction

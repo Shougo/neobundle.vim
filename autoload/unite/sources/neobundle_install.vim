@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -224,30 +224,13 @@ function! s:check_output(context, process)"{{{
 
   if get(bundle, 'rev', '') != ''
     " Lock revision.
-    call s:lock_revision(a:context, bundle)
+    call neobundle#installer#lock_revision(
+          \ a:context.source__bang, bundle, num, max, 1)
   endif
 
   let cwd = getcwd()
-  try
-    let rev = neobundle#installer#get_revision_number(bundle)
-  catch
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Error'), 1)
-    call neobundle#installer#error(bundle.path, 1)
-    call neobundle#installer#error(v:throwpoint, 1)
-    call neobundle#installer#error(v:exception, 1)
-    call neobundle#installer#error(
-          \ 'Your repository path may be wrong.', 1)
-    call add(a:context.source__errored_bundles,
-          \ bundle)
 
-    let a:process.eof = 1
-
-    return
-  finally
-    lcd `=cwd`
-  endtry
+  let rev = neobundle#installer#get_revision_number(bundle)
 
   if status && a:process.rev ==# rev
         \ && (bundle.type !=# 'git' ||
@@ -270,7 +253,8 @@ function! s:check_output(context, process)"{{{
           \ num, max, bundle.name, 'Updated'), 1)
     let message = neobundle#installer#get_updated_log_message(
           \ bundle, rev, a:process.rev)
-    call neobundle#installer#update_log('[neobundle/install] ' . message, 1)
+    call neobundle#installer#update_log(
+          \ '[neobundle/install] ' . message, 1)
 
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
@@ -278,89 +262,6 @@ function! s:check_output(context, process)"{{{
   endif
 
   let a:process.eof = 1
-endfunction"}}}
-
-function! s:get_revision(context, process)"{{{
-  let num = a:process.number
-  let max = a:context.source__max_bundles
-  let bundle = a:process.bundle
-
-  let cwd = getcwd()
-  try
-    let rev = neobundle#installer#get_revision_number(bundle)
-  catch
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Error'), 1)
-    call neobundle#installer#error(bundle.path, 1)
-    call neobundle#installer#error(v:throwpoint, 1)
-    call neobundle#installer#error(v:exception, 1)
-    call neobundle#installer#error(
-          \ 'Your repository path may be wrong.', 1)
-    call add(a:context.source__errored_bundles,
-          \ bundle)
-
-    let a:process.eof = 1
-
-    return
-  finally
-    lcd `=cwd`
-  endtry
-endfunction"}}}
-
-function! s:lock_revision(context, bundle)"{{{
-  let num = a:context.source__number
-  let max = a:context.source__max_bundles
-
-  let [cmd, message] =
-        \ neobundle#installer#get_revision_lock_command(
-        \ a:context.source__bang, a:bundle,
-        \ a:context.source__number, a:context.source__max_bundles)
-
-  if cmd == ''
-    " Skipped.
-    call neobundle#installer#log('[neobundle/install] ' . message, 1)
-    return
-  elseif cmd =~# '^E: '
-    " Errored.
-
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, a:bundle.name, 'Error'), 1)
-    call neobundle#installer#error(cmd[3:], 1)
-    call add(a:context.source__errored_bundles,
-          \ a:bundle)
-    return
-  endif
-
-  let cwd = getcwd()
-  try
-    if isdirectory(a:bundle.path)
-      " Cd to bundle path.
-      lcd `=a:bundle.path`
-    endif
-
-    let output = neobundle#util#system(cmd)
-
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, a:bundle.name, 'Locked'), 1)
-
-    call neobundle#installer#update_log('[neobundle/install] ' . output, 1)
-  catch
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, a:bundle.name, 'Error'), 1)
-    call neobundle#installer#error(a:bundle.path, 1)
-    call neobundle#installer#error(v:throwpoint, 1)
-    call neobundle#installer#error(v:exception, 1)
-    call neobundle#installer#error(
-          \ 'Your repository path may be wrong.', 1)
-    call add(a:context.source__errored_bundles,
-          \ a:bundle)
-  finally
-    lcd `=cwd`
-  endtry
 endfunction"}}}
 
 let &cpo = s:save_cpo
