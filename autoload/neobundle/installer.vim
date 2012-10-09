@@ -347,7 +347,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
   if get(bundle, 'rev', '') != ''
     " Lock revision.
     call neobundle#installer#lock_revision(
-          \ a:context.source__bang, bundle, num, max, a:is_unite)
+          \ a:process, a:context, a:is_unite)
   endif
 
   let cwd = getcwd()
@@ -386,10 +386,14 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let a:process.eof = 1
 endfunction
 
-function! neobundle#installer#lock_revision(bang, bundle, number, max, is_unite)
+function! neobundle#installer#lock_revision(process, context, is_unite)
+  let num = a:process.number
+  let max = a:context.source__max_bundles
+  let bundle = a:process.bundle
+
   let [cmd, message] =
         \ neobundle#installer#get_revision_lock_command(
-        \ a:bang, a:bundle, a:number, a:max)
+        \ a:context.source__bang, bundle, num, max)
 
   if !has('vim_starting') && !a:is_unite
     redraw!
@@ -402,23 +406,23 @@ function! neobundle#installer#lock_revision(bang, bundle, number, max, is_unite)
     return 0
   elseif cmd =~# '^E: '
     " Errored.
-    call neobundle#installer#error(a:bundle.path, a:is_unite)
+    call neobundle#installer#error(bundle.path, a:is_unite)
     call neobundle#installer#error(cmd[3:], a:is_unite)
     return -1
   endif
 
   call neobundle#installer#log(
-        \ printf('[neobundle/install] (%'.len(a:max).'d/%d): |%s| %s',
-        \ a:number, a:max, a:bundle.name, 'Locked'), a:is_unite)
+        \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+        \ num, max, bundle.name, 'Locked'), a:is_unite)
 
   call neobundle#installer#log(
         \ '[neobundle/install] ' . message, a:is_unite)
 
   let cwd = getcwd()
   try
-    if isdirectory(a:bundle.path)
+    if isdirectory(bundle.path)
       " Cd to bundle path.
-      lcd `=a:bundle.path`
+      lcd `=bundle.path`
     endif
 
     let result = neobundle#util#system(cmd)
@@ -428,7 +432,7 @@ function! neobundle#installer#lock_revision(bang, bundle, number, max, is_unite)
   endtry
 
   if status
-    call neobundle#installer#error(a:bundle.path, a:is_unite)
+    call neobundle#installer#error(bundle.path, a:is_unite)
     call neobundle#installer#error(result, a:is_unite)
     return -1
   endif
