@@ -128,9 +128,17 @@ function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
     return ''
   endif
 
-  return printf("git log %s^..%s --graph --pretty=format:'%%h [%%cr] %%s'",
-        \ a:old_rev, a:new_rev)
-  " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
+  " if the a:old_rev is not the ancestor of two branchs. then do not use %s^.
+  " use %s^ will show one commit message which already shown last time.
+  " Shougo, you can improve this.
+  if system("git merge-base " . a:old_rev . a:new_rev) ==# a:old_rev
+    return printf("git log %s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
+          \ a:old_rev, a:new_rev)
+  else
+    return printf("git log %s^..%s --graph --pretty=format:'%%h [%%cr] %%s'",
+          \ a:old_rev, a:new_rev)
+    " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
+  endif
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
   if !executable('git')
