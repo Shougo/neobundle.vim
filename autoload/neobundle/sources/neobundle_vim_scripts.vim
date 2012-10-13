@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_vim_scripts.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 13 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'source__script_type' : v:val.script_type,
         \ 'source__options' : v:val.options,
         \ 'source__path' : v:val.path,
+        \ 'action__path' : v:val.receipe_path,
         \ 'action__uri' : v:val.website,
         \ }")
 endfunction"}}}
@@ -69,6 +70,8 @@ function! s:get_repository_plugins(context)"{{{
               \ 'The recipe file format is wrong.')
         continue
       endif
+
+      let data.receipe_path = path
 
       " Initialize.
       let default = {

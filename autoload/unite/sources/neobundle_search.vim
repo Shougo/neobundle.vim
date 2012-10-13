@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 13 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -136,8 +136,7 @@ let s:source.action_table.install = {
       \ }
 function! s:source.action_table.install.func(candidates)"{{{
   for candidate in a:candidates
-    execute 'NeoBundleDirectInstall'
-          \ s:get_neobundle_args(candidate)
+    execute 'NeoBundleDirectInstall' s:get_neobundle_args(candidate)
   endfor
 endfunction"}}}
 "}}}
@@ -162,8 +161,10 @@ function! s:source.source__converter(candidates, context)"{{{
         \          candidate.source__script_type,
         \          (neobundle#is_installed(candidate.source__name) ?
         \           'Installed' : candidate.source__description))
-    let candidate.action__path = candidate.action__uri
     let candidate.is_multiline = 1
+    let candidate.kind =
+          \ get(candidate, 'action__path', '') != '' ?
+          \ 'file' : 'common'
   endfor
 
   return a:candidates

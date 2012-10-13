@@ -674,6 +674,7 @@ neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
 	install		Direct install plugins from repository.
 	start		Browse github plugin page
+	open		Open receipe file
 
 	Note: If you used the install action, you cannot customize the bundle
 	settings.
@@ -770,6 +771,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-13
 - Improved log command in git.
 - Added type__update_style attribute in git.
+- Added open action in neobundle-vim-scripts source.
 
 2012-10-09
 - Improved neobundle/search source.
