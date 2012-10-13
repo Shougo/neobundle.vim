@@ -98,6 +98,8 @@ function! s:type.get_sync_command(bundle)"{{{
     let cmd = 'git pull --rebase'
 
     if get(a:bundle, 'rev', '') != ''
+          \ && get(a:bundle, 'type__update_style', 'default')
+          \        ==# 'default'
       " Restore revision.
       let cmd = 'git checkout master && ' . cmd
     endif

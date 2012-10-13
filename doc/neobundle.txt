@@ -344,6 +344,14 @@ COMMANDS 					*neobundle-commands*
 		But the clone speed is faster.
 		Note: This attribute is available in git type only.
 
+		type__update_style	(String)
+		If it is "default", neobundle will update from default
+		branch(master) instead of current branch.
+		If it is "current", neobundle will update from current
+		branch instead of current branch.
+		If you omit it, "default" is used.
+		Note: This attribute is available in git type only.
+
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
@@ -759,6 +767,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-13
 - Improved log command in git.
+- Added type__update_style attribute in git.
 
 2012-10-09
 - Improved neobundle/search source.
