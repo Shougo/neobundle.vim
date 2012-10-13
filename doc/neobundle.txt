@@ -349,6 +349,8 @@ COMMANDS 					*neobundle-commands*
 		branch(master) instead of current branch.
 		If it is "current", neobundle will update from current
 		branch instead of current branch.
+		"default" is useful for user defined branch.
+		"current" is useful for topic branch.
 		If you omit it, "default" is used.
 		Note: This attribute is available in git type only.
 
