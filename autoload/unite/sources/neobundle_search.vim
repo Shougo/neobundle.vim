@@ -27,6 +27,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:Cache = vital#of('unite.vim').import('System.Cache')
+
 function! unite#sources#neobundle_search#define()"{{{
   " Init sources.
   if !exists('s:neobundle_sources')
@@ -46,7 +48,7 @@ function! unite#sources#neobundle_search#define()"{{{
   return s:source
 endfunction"}}}
 
-let s:repository_cache = {}
+let s:plugin_names = []
 
 " Source rec.
 let s:source = {
@@ -71,7 +73,8 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__input = a:context.input
   if a:context.source__input == ''
     let a:context.source__input =
-          \ unite#util#input('Please input search word: ')
+          \ unite#util#input('Please input search word: ', '',
+          \ 'customlist,unite#sources#neobundle_search#complete_plugin_names')
   endif
 
   call unite#print_source_message('Search word: '
@@ -80,6 +83,8 @@ endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   let candidates = []
   let a:context.source__source_names = []
+
+  let s:plugin_names = []
 
   for source in values(a:context.source__sources)
     let source_candidates = source.gather_candidates(a:args, a:context)
@@ -93,7 +98,11 @@ function! s:source.gather_candidates(args, context)"{{{
 
     let candidates += source_candidates
     call add(a:context.source__source_names, source_name)
+
+    let s:plugin_names += map(copy(source_candidates), 'v:val.source__name')
   endfor
+
+  call s:initialize_plugin_names(a:context)
 
   return filter(candidates,
         \ 'stridx(v:val.word, a:context.source__input) >= 0')
@@ -211,6 +220,34 @@ function! s:get_neobundle_args(candidate)
           \  . (empty(a:candidate.source__options) ?
           \    '' : ', ' . string(a:candidate.source__options))
 endfunction
+
+function! unite#sources#neobundle_search#complete_plugin_names(arglead, cmdline, cursorpos)"{{{
+  return filter(s:get_plugin_names(), "stridx(v:val, a:arglead) == 0")
+endfunction"}}}
+
+function! s:initialize_plugin_names(context)"{{{
+  let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
+  let path = 'plugin_names'
+
+  if a:context.is_redraw || !s:Cache.filereadable(cache_dir, path)
+    " Convert cache data.
+    call s:Cache.writefile(cache_dir, path, [string(s:plugin_names)])
+  endif
+
+  return s:get_plugin_names()
+endfunction"}}}
+
+function! s:get_plugin_names()"{{{
+  let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
+  let path = 'plugin_names'
+
+  if empty(s:plugin_names)
+    sandbox let s:plugin_names =
+          \ eval(get(s:Cache.readfile(cache_dir, path), 0, '[]'))
+  endif
+
+  return copy(s:plugin_names)
+endfunction"}}}
 "}}}
 
 let &cpo = s:save_cpo
