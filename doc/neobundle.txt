@@ -768,6 +768,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-16
+- Improved update log.
+
 2012-10-13
 - Improved log command in git.
 - Added type__update_style attribute in git.

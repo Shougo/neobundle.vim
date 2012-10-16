@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 16 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,7 +117,7 @@ function! neobundle#installer#build(bundle)
     return
   endif
 
-  call neobundle#installer#log('Building...')
+  call neobundle#installer#log('[neobundle/install] Building...')
 
   let cwd = getcwd()
   try
@@ -133,7 +133,7 @@ function! neobundle#installer#build(bundle)
   if neobundle#util#get_last_status()
     call neobundle#installer#error(result)
   else
-    call neobundle#installer#log(result)
+    call neobundle#installer#log('[neobundle/install] ' . result)
   endif
 
   return neobundle#util#get_last_status()
@@ -151,7 +151,7 @@ function! neobundle#installer#clean(bang, ...)
   endif
 
   if empty(x_dirs)
-    call neobundle#installer#log("All clean!")
+    call neobundle#installer#log('[neobundle/install] All clean!')
     return
   end
 
