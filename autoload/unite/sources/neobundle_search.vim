@@ -246,7 +246,7 @@ function! s:get_plugin_names()"{{{
           \ eval(get(s:Cache.readfile(cache_dir, path), 0, '[]'))
   endif
 
-  return copy(s:plugin_names)
+  return neobundle#util#uniq(s:plugin_names)
 endfunction"}}}
 "}}}
 
