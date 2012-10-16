@@ -71,7 +71,7 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__input = a:context.input
   if a:context.source__input == ''
     let a:context.source__input =
-          \ input('Please input search word: ', '')
+          \ unite#util#input('Please input search word: ')
   endif
 
   call unite#print_source_message('Search word: '
