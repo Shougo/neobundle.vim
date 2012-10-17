@@ -770,6 +770,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-17
 - Improved error check in neobundle/search.
+- Fixed shallow clone behavior.
 
 2012-10-16
 - Improved update log.
