@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2012.
+" Last Modified: 17 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -241,7 +241,7 @@ function! s:get_plugin_names()"{{{
   let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
   let path = 'plugin_names'
 
-  if empty(s:plugin_names)
+  if empty(s:plugin_names) && s:Cache.filereadable(cache_dir, path)
     sandbox let s:plugin_names =
           \ eval(get(s:Cache.readfile(cache_dir, path), 0, '[]'))
   endif
