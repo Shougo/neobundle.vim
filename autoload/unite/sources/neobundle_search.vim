@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2012.
+" Last Modified: 18 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,11 +76,11 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ unite#util#input('Please input search word: ', '',
           \ 'customlist,unite#sources#neobundle_search#complete_plugin_names')
   endif
-
-  call unite#print_source_message('Search word: '
-        \ . a:context.source__input, s:source.name)
 endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
+  call unite#print_source_message('Search word: '
+        \ . a:context.source__input, s:source.name)
+
   let candidates = []
   let a:context.source__source_names = []
 

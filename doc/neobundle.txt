@@ -605,7 +605,7 @@ neobundle/install
 		Note: To install |vimproc| plugin is recommended.
 		http://github.com/Shougo/vimproc
 
-		If argment is bang(!), install and update all plugins.
+		If argment is bang(!), it will install and update all plugins.
 
 		Source arguments:
 		bundle names(fuzzy searched).
@@ -630,6 +630,8 @@ neobundle/update
 		Install and update configured plugins asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
 		Note: To install |vimproc| plugin is recommended.
+
+		If argment is bang(!), it will be disabled fuzzy search.
 
 		If you use the source with "-auto-quit" option, the unite
 		buffer will close automatically.
@@ -767,6 +769,10 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-18
+- Improved update action behavior.
+- Improved neobundle/search.
 
 2012-10-17
 - Improved error check in neobundle/search.
