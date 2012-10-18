@@ -772,6 +772,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-18
 - Improved update action behavior.
+- Improved neobundle/search.
 
 2012-10-17
 - Improved error check in neobundle/search.
