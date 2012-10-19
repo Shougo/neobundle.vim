@@ -770,6 +770,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-19
+- Improved :NeoBundleSource.
+
 2012-10-18
 - Improved update action behavior.
 - Improved neobundle/search.

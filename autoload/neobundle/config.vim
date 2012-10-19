@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -218,6 +218,10 @@ function! neobundle#config#source(...)
     return
   endif
 
+  redir => filetype_out
+    silent filetype
+  redir END
+
   filetype off
 
   for bundle in bundles
@@ -257,7 +261,16 @@ function! neobundle#config#source(...)
     let s:loaded_neobundles[bundle.name] = 1
   endfor
 
-  silent! filetype plugin indent on
+  if filetype_out =~# 'detection:ON'
+    silent! filetype on
+
+    if filetype_out =~# 'plugin:ON'
+      silent! filetype plugin on
+    endif
+    if filetype_out =~# 'indent:ON'
+      silent! filetype indent on
+    endif
+  endif
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
