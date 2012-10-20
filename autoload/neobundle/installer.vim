@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Oct 2012.
+" Last Modified: 20 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,9 @@ function! neobundle#installer#build(bundle)
 
     let result = substitute(neobundle#util#system(cmd), '\n$', '', '')
   finally
-    lcd `=cwd`
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
   endtry
 
   if neobundle#util#get_last_status()
@@ -232,7 +234,9 @@ function! neobundle#installer#get_revision_number(bundle)
 
     return rev
   finally
-    lcd `=cwd`
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
   endtry
 endfunction
 
@@ -251,7 +255,9 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
           \ neobundle#util#system(log_command) : '')
     return log != '' ? log : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
-    lcd `=cwd`
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
   endtry
 endfunction
 
@@ -315,7 +321,9 @@ function! neobundle#installer#sync(bundle, context, is_unite)
       let process.status = neobundle#util#get_last_status()
     endif
   finally
-    lcd `=cwd`
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
   endtry
 
   if neobundle#util#has_vimproc()
@@ -428,7 +436,9 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
   finally
-    lcd `=cwd`
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
   endtry
 
   if status

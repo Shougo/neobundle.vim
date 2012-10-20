@@ -770,6 +770,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-20
+- Improved restore current directory.
+
 2012-10-19
 - Improved :NeoBundleSource.
 
