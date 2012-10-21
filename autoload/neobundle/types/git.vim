@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,7 +97,7 @@ function! s:type.get_sync_command(bundle)"{{{
   else
     let cmd = 'git pull --rebase'
 
-    if get(a:bundle, 'rev', '') != ''
+    if a:bundle.rev != ''
           \ && get(a:bundle, 'type__update_style', 'default')
           \        ==# 'default'
       " Restore revision.
@@ -111,7 +111,7 @@ function! s:type.get_revision_number_command(bundle)"{{{
     return ''
   endif
 
-  let rev = get(a:bundle, 'rev', '')
+  let rev = a:bundle.rev
   if rev == ''
     let rev = 'HEAD'
   endif
@@ -145,7 +145,19 @@ function! s:type.get_revision_lock_command(bundle)"{{{
     return ''
   endif
 
-  return 'git checkout ' . a:bundle.rev
+  " Compare HEAD revision number.
+  let rev = a:bundle.rev
+  if rev == ''
+    let rev = 'master'
+  endif
+  let rev_sha1 = neobundle#util#system('git rev-parse ' . a:bundle.rev)
+  let head_sha1 = neobundle#util#system('git rev-parse HEAD')
+
+  if rev_sha1 ==# head_sha1
+    return ''
+  endif
+
+  return 'git checkout ' . (rev =~# '^\x\{4,}$' ? '' : '-b ') . rev
 endfunction"}}}
 
 let &cpo = s:save_cpo

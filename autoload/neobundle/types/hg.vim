@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,7 +88,7 @@ function! s:type.get_revision_number_command(bundle)"{{{
   return 'hg heads --quiet --rev default'
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
-  if !executable('hg')
+  if !executable('hg') || a:bundle.rev == ''
     return ''
   endif
 

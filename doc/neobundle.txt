@@ -383,7 +383,9 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
 		      \ {'script_type' : 'plugin'}
 <
-		Neobundle supports revision lock.
+		Neobundle supports revision or (branch) lock.
+		Note: The revision (or branch) is checkouted in
+		install/update.
 		Note: It's manual to restore its revision. Or, set to revision
 		"master".
 >
@@ -769,6 +771,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-21
+- Improved revision lock behavior.
 
 2012-10-20
 - Improved restore current directory.
