@@ -529,8 +529,10 @@ g:neobundle#install_max_processes
 
 g:neobundle#default_options			*g:neobundle#default_options*
 		It is a dictionary for default options if options are omitted.
-		The key is default option name and the value is default
+		The key is default options name and the value is default
 		options.
+		If the key is "_", it is used for omitting default options
+		name.
 		Example:
 >
 		let g:neobundle#default_options =
