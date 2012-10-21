@@ -143,11 +143,13 @@ neobundle#is_installed({bundle-name})
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [[,{revision}] [,{dictionary}]]
+:NeoBundle {repository} ,{revision}, {default} [,{dictionary}]]
 						*:NeoBundle*
 		Configures bundle.
 		The {repository} is repository URI.  The {revision} is
 		revision or branch name. If omitted it, use current latest
-		revision.
+		revision. The {default} is default options
+		name(Cf: |g:neobundle#default_options|).
 		Note: You don't set neobundle setting in .gvimrc!
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
@@ -182,6 +184,9 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 <
+		default			(String)
+		Default option name(Cf: |g:neobundle#default_options|).
+
 		directory		(String)
 		Specify relative directory path from base directory(set by
 		|neobundle#rc()| or "base" attribute). If you omit it, used
@@ -522,6 +527,18 @@ g:neobundle#install_max_processes
 
 		Default value is "5".
 
+g:neobundle#default_options			*g:neobundle#default_options*
+		It is a dictionary for default options if options are omitted.
+		The key is default option name and the value is default
+		options.
+		Example:
+>
+		let g:neobundle#default_options =
+		          \ { 'rev' : {'type__update_style' : 'current'} }
+		NeoBundle 'Shougo/neocomplcache', '', 'rev'
+<
+		Default value is "{}".
+
 g:neobundle#types#raw#calc_hash_command
 				*g:neobundle#types#raw#calc_hash_command*
 		The calc command in raw repository type.
@@ -774,6 +791,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-21
 - Improved revision lock behavior.
+- Added g:neobundle#default_options option.
 
 2012-10-20
 - Improved restore current directory.
