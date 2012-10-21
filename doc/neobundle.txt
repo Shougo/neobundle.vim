@@ -41,14 +41,14 @@ Changelog		|neobundle-changelog|
 INTRODUCTION					*neobundle-introduction*
 
 *neobundle.vim* is the ultimate Vim package manager. This plugin is based on
-Vundle.vim(https://github.com/gmarik/vundle), But I added some features.
+Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
  * Uses |vimproc| when you have it
  * |unite.vim| interface
  * Revision lock
- * Supports svn/Mercurial repository
- * Specify base path
+ * Supports svn/Mercurial repository besides Git
+ * Specifies base path
 
 ==============================================================================
 USAGE						*neobundle-usage*
@@ -68,20 +68,20 @@ plugins).
 This plugin setting is compatible with Vundle.vim :-)
 
 You can search popular plugins and add neobundle settings using Vimpusher web
-service(Registration is required).
+service (Registration is required.)
 	http://www.vimpusher.com/
 Or using vim-scripts.org.
 	http://vim-scripts.org/
 
 Neobundle implemented search plugins system from vim.org scripts (|unite.vim|
-is required).
+is required.)
 >
 	:Unite neobundle/search
 <
 ==============================================================================
 INSTALL						*neobundle-install*
 
-In first, git clone from the repository.
+First of all, git clone the repository.
 
 Note: git command is required.
 >
@@ -506,7 +506,7 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 						*g:neobundle_rm_command*
 		Note: |g:neobundle_rm_command| is obsolete name.
 
-		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
+		Default value is "rmdir /S /Q" on Windows or "rm -rf" in
 		others.
 
 g:neobundle#install_max_processes
@@ -589,7 +589,7 @@ Here let me explain about a source for |unite| provided in neobundle.
 neobundle
 		Nominates bundles as a candidate.
 		
-		Note: In windows
+		Note: On windows
 		If argment is bang(!), print plugins path instead of plugins
 		status.
 		Note: Others
