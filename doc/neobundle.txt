@@ -479,6 +479,8 @@ COMMANDS 					*neobundle-commands*
 		This command registers bundle, and installs it directly.
 		Note: If you used the command, you cannot customize the bundle
 		settings.
+		Note: The settings is saved in ".direct_bundles" in bundle
+		directory.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
@@ -699,6 +701,8 @@ Actions of each sources
 neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
 	install		Direct install plugins from repository.
+			Note: The settings is saved in ".direct_bundles" in
+			bundle directory.
 	start		Browse github plugin page
 	open		Open receipe file
 
