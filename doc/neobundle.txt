@@ -40,7 +40,7 @@ Changelog		|neobundle-changelog|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle.vim* is the ultimate Vim package manager. This plugin is based on
+*neobundle* is the ultimate Vim package manager. This plugin is based on
 Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
