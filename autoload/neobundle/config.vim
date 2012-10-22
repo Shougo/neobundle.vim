@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -218,6 +218,10 @@ function! neobundle#config#source(...)
     return
   endif
 
+  redir => filetype_out
+    silent filetype
+  redir END
+
   filetype off
 
   for bundle in bundles
@@ -257,7 +261,16 @@ function! neobundle#config#source(...)
     let s:loaded_neobundles[bundle.name] = 1
   endfor
 
-  silent! filetype plugin indent on
+  if filetype_out =~# 'detection:ON'
+    silent! filetype on
+
+    if filetype_out =~# 'plugin:ON'
+      silent! filetype plugin on
+    endif
+    if filetype_out =~# 'indent:ON'
+      silent! filetype indent on
+    endif
+  endif
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
@@ -355,6 +368,9 @@ function! neobundle#config#init_bundle(name, opts)
   if !has_key(bundle, 'script_type')
     let bundle.script_type = ''
   endif
+  if !has_key(bundle, 'rev')
+    let bundle.rev = ''
+  endif
 
   if !has_key(bundle, 'type')
     call neobundle#installer#error(
@@ -429,16 +445,46 @@ function! neobundle#config#fuzzy_search(bundle_names)
 endfunction
 
 function! s:parse_options(opts)
-  " TODO: improve this
   if empty(a:opts)
     return {}
   endif
 
-  if type(a:opts[0]) == type({})
-    return a:opts[0]
+  if len(a:opts) == 3
+    " rev, default, options
+    let [rev, default, options] = a:opts
+  elseif len(a:opts) == 2 && type(a:opts[-1]) == type('')
+    " rev, default
+    let [rev, default, options] = a:opts + [{}]
+  elseif len(a:opts) == 2 && type(a:opts[-1]) == type({})
+    " rev, options
+    let [rev, default, options] = [a:opts[0], '', a:opts[1]]
+  elseif len(a:opts) == 1 && type(a:opts[-1]) == type('')
+    " rev
+    let [rev, default, options] = [a:opts[0], '', {}]
+  elseif len(a:opts) == 1 && type(a:opts[-1]) == type({})
+    " options
+    let [rev, default, options] = ['', '', a:opts[0]]
   else
-    return { 'rev': a:opts[0] }
+    call neobundle#installer#error(
+          \ printf('Invalid option : "%s".', string(a:opts)))
+    return {}
   endif
+
+  if rev != ''
+    let options.rev = rev
+  endif
+
+  if !has_key(options, 'default')
+    let options.default = (default == '') ?  '_' : default
+  endif
+
+  " Set default options.
+  if has_key(g:neobundle#default_options, options.default)
+    call extend(options,
+          \ g:neobundle#default_options[options.default], 'keep')
+  endif
+
+  return options
 endfunction
 
 function! s:expand_path(path)

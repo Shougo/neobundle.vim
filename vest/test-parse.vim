@@ -126,6 +126,14 @@ Context types
     Should bundle.uri ==#
           \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim'
   End
+
+  It parses default options.
+    let g:neobundle#default_options =
+          \ { 'rev' : {'type__update_style' : 'current'} }
+    let bundle = neobundle#config#init_bundle(
+          \ 'Shoug/neocomplcache', ['', 'rev', {}])
+    Should bundle.type__update_style ==# 'current'
+  End
 End
 
 Fin

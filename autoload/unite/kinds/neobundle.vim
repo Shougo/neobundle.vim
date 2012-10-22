@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2012.
+" Last Modified: 22 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,7 +74,7 @@ function! s:kind.action_table.reinstall.func(candidates)"{{{
   endfor
 
   " Install.
-  call unite#start([['neobundle/install', '!']
+  call unite#start([['neobundle/update', '!']
         \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
 endfunction"}}}
 let s:kind.action_table.preview = {

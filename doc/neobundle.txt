@@ -41,14 +41,14 @@ Changelog		|neobundle-changelog|
 INTRODUCTION					*neobundle-introduction*
 
 *neobundle.vim* is the ultimate Vim package manager. This plugin is based on
-Vundle.vim(https://github.com/gmarik/vundle), But I added some features.
+Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
  * Uses |vimproc| when you have it
  * |unite.vim| interface
  * Revision lock
- * Supports svn/Mercurial repository
- * Specify base path
+ * Supports svn/Mercurial repository besides Git
+ * Specifies base path
 
 ==============================================================================
 USAGE						*neobundle-usage*
@@ -68,20 +68,20 @@ plugins).
 This plugin setting is compatible with Vundle.vim :-)
 
 You can search popular plugins and add neobundle settings using Vimpusher web
-service(Registration is required).
+service (Registration is required.)
 	http://www.vimpusher.com/
 Or using vim-scripts.org.
 	http://vim-scripts.org/
 
 Neobundle implemented search plugins system from vim.org scripts (|unite.vim|
-is required).
+is required.)
 >
 	:Unite neobundle/search
 <
 ==============================================================================
 INSTALL						*neobundle-install*
 
-In first, git clone from the repository.
+First of all, git clone the repository.
 
 Note: git command is required.
 >
@@ -143,11 +143,13 @@ neobundle#is_installed({bundle-name})
 COMMANDS 					*neobundle-commands*
 
 :NeoBundle {repository} [[,{revision}] [,{dictionary}]]
+:NeoBundle {repository} ,{revision}, {default} [,{dictionary}]]
 						*:NeoBundle*
 		Configures bundle.
 		The {repository} is repository URI.  The {revision} is
 		revision or branch name. If omitted it, use current latest
-		revision.
+		revision. The {default} is default options
+		name(Cf: |g:neobundle#default_options|).
 		Note: You don't set neobundle setting in .gvimrc!
 		Note: If you omit the protocol(ex: git or https) in git type,
 		|g:neobundle_default_git_protocol| is used.
@@ -182,6 +184,9 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 <
+		default			(String)
+		Default option name(Cf: |g:neobundle#default_options|).
+
 		directory		(String)
 		Specify relative directory path from base directory(set by
 		|neobundle#rc()| or "base" attribute). If you omit it, used
@@ -383,7 +388,9 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
 		      \ {'script_type' : 'plugin'}
 <
-		Neobundle supports revision lock.
+		Neobundle supports revision or (branch) lock.
+		Note: The revision (or branch) is checkouted in
+		install/update.
 		Note: It's manual to restore its revision. Or, set to revision
 		"master".
 >
@@ -416,18 +423,21 @@ COMMANDS 					*neobundle-commands*
 		"Shougo/neobundle.vim".
 
 :NeoBundleInstall! [{name}...]			*:NeoBundleInstall!*
-		Installs and updates {name} plugins.
+		Same to |:NeoBundleUpdate|.
+
+:NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
+		Installs and updates {name} plugins. {name} is fuzzy searched.
 		If {name} is omited, all configured plugin is installed
 		and updated.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
-:NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
-		Same to |:NeoBundleInstall!|.
-
-:NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleClean*
+:NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
 		Removes non configured bundles. If {bang} is added, force
 		remove bundles. If {name} are added, remove {name} bundles.
+
+:NeoBundleReinstall {name}...]		 	*:NeoBundleReinstall*
+		Reinstall {name} bundles.
 
 :NeoBundleList 					*:NeoBundleList*
 		Print list of configured bundles.
@@ -506,7 +516,7 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 						*g:neobundle_rm_command*
 		Note: |g:neobundle_rm_command| is obsolete name.
 
-		Default value is "rmdir /S /Q" in Windows or "rm -rf" in
+		Default value is "rmdir /S /Q" on Windows or "rm -rf" in
 		others.
 
 g:neobundle#install_max_processes
@@ -519,6 +529,20 @@ g:neobundle#install_max_processes
 		obsolete name.
 
 		Default value is "5".
+
+g:neobundle#default_options			*g:neobundle#default_options*
+		It is a dictionary for default options if options are omitted.
+		The key is default options name and the value is default
+		options.
+		If the key is "_", it is used for omitting default options
+		name.
+		Example:
+>
+		let g:neobundle#default_options =
+		          \ { 'rev' : {'type__update_style' : 'current'} }
+		NeoBundle 'Shougo/neocomplcache', '', 'rev'
+<
+		Default value is "{}".
 
 g:neobundle#types#raw#calc_hash_command
 				*g:neobundle#types#raw#calc_hash_command*
@@ -589,7 +613,7 @@ Here let me explain about a source for |unite| provided in neobundle.
 neobundle
 		Nominates bundles as a candidate.
 		
-		Note: In windows
+		Note: On windows
 		If argment is bang(!), print plugins path instead of plugins
 		status.
 		Note: Others
@@ -769,6 +793,19 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-22
+- Added :NeoBundleReinstall command.
+
+2012-10-21
+- Improved revision lock behavior.
+- Added g:neobundle#default_options option.
+
+2012-10-20
+- Improved restore current directory.
+
+2012-10-19
+- Improved :NeoBundleSource.
 
 2012-10-18
 - Improved update action behavior.
