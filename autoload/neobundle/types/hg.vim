@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2012.
+" Last Modified: 23 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,15 +41,17 @@ let s:type = {
       \ 'name' : 'hg',
       \ }
 
-function! s:type.detect(path)"{{{
+function! s:type.detect(path, opts)"{{{
   let type = ''
+  let protocol = get(a:opts, 'type__protocol',
+        \ g:neobundle#types#hg#default_protocol)
 
   if a:path =~# '\<\(bb\|bitbucket\):\S\+'
-    let uri = printf('%s://bitbucket.org/%s',
-          \ g:neobundle#types#hg#default_protocol,
-          \ substitute(split(a:path, ':')[-1],
-          \ '^//bitbucket.org/', '', ''))
-
+    let name = substitute(split(a:path, ':')[-1],
+          \   '^//bitbucket.org/', '', '')
+    let uri = (protocol ==# 'ssh') ?
+          \ 'ssh://hg@bitbucket.org:' . name :
+          \ protocol . '://bitbucket.org/' . name
     let name = split(uri, '/')[-1]
 
     let type = 'hg'

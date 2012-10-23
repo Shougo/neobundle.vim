@@ -100,7 +100,8 @@ Context types
           \ [{ 'type' : 'hg'}])
     Should bundle.name ==# 'neobundle.vim'
     Should bundle.type ==# 'hg'
-    Should bundle.uri ==# 'git://github.com/Shougo/neobundle.vim.git'
+    Should bundle.uri ==# g:neobundle#types#git#default_protocol.
+          \ '://github.com/Shougo/neobundle.vim.git'
   End
 
   It parses bitbucket git repos

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: nosync.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Aug 2012.
+" Last Modified: 23 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ let s:type = {
       \ 'name' : 'nosync',
       \ }
 
-function! s:type.detect(path)"{{{
+function! s:type.detect(path, opts)"{{{
   " No auto detect.
   return {}
 endfunction"}}}

@@ -41,21 +41,25 @@ let s:type = {
       \ 'name' : 'git',
       \ }
 
-function! s:type.detect(path)"{{{
+function! s:type.detect(path, opts)"{{{
   let type = ''
+  let protocol = get(a:opts, 'type__protocol',
+        \ g:neobundle#types#git#default_protocol)
 
   if a:path =~# '\<\(gh\|github\):\S\+\|://github.com/'
     if a:path !~ '/'
       " www.vim.org Vim scripts.
       let name = split(a:path, ':')[-1]
-      let uri  = g:neobundle#types#git#default_protocol .
-            \ '://github.com/vim-scripts/'.name
+      let uri  = (protocol ==# 'ssh') ?
+            \ 'git@github.com:vim-scripts/' :
+            \ protocol . '://github.com/vim-scripts/'
+      let uri .= name
     else
-      let uri = (a:path =~# '://github.com/') ? a:path :
-            \ g:neobundle#types#git#default_protocol .
-            \   '://github.com/'.substitute(split(a:path, ':')[-1],
+      let name = substitute(split(a:path, ':')[-1],
             \   '^//github.com/', '', '')
-      let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
+      let uri =  (protocol ==# 'ssh') ?
+            \ 'git@github.com:' . name :
+            \ protocol . '://github.com/'. name
     endif
 
     if uri !~ '\.git\s*$'
@@ -67,18 +71,26 @@ function! s:type.detect(path)"{{{
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
     if a:path =~# '\<\(bb\|bitbucket\):\S\+'
-      let uri = g:neobundle#types#git#default_protocol .
-            \ '://bitbucket.org/'.split(a:path, ':')[-1]
+      let name = substitute(split(a:path, ':')[-1],
+            \   '^//bitbucket.org/', '', '')
+      let uri = (protocol ==# 'ssh') ?
+            \ 'git@bitbucket.org:' . name :
+            \ protocol . '://bitbucket.org/' . name
+
+      if uri !~ '\.git\s*$'
+        " Add .git suffix.
+        let uri .= '.git'
+      endif
     else
       let uri = a:path
     endif
-    let name = split(substitute(uri, '/\?\.git\s*$','','i'), '/')[-1]
 
     let type = 'git'
   endif
 
   return type == '' ?  {} :
-        \ { 'name': name, 'uri': uri, 'type' : type }
+        \ { 'name': substitute(split(uri, '/')[-1],
+        \           '\.git\s*$','','i'), 'uri': uri, 'type' : type }
 endfunction"}}}
 function! s:type.get_sync_command(bundle)"{{{
   if !executable('git')

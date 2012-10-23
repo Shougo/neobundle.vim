@@ -359,6 +359,18 @@ COMMANDS 					*neobundle-commands*
 		If you omit it, "default" is used.
 		Note: This attribute is available in git type only.
 
+		type__protocol		(String)
+		The protocol used for types.
+		"https" and "git" and "ssh" are available in git type.
+		"https" is available in git type.
+		If you omit it, |g:neobundle#types#git#default_protocol|
+		or |g:neobundle#types#hg#default_protocol|is used.
+		Note: This attribute is available in git and hg types only.
+
+		Example:
+>
+		NeoBundle 'ujihisa/neco-ghc', { 'type__protocol' : 'ssh' }
+<
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
@@ -801,6 +813,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-23
 - Improved git parse.
 - Improved get neobundle types.
+- Added type__protocol.
 
 2012-10-22
 - Added :NeoBundleReinstall command.

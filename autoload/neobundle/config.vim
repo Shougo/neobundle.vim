@@ -310,7 +310,7 @@ function! neobundle#config#parse_path(path, ...)
   endif
 
   for type in values(neobundle#config#get_types())
-    let detect = type.detect(path)
+    let detect = type.detect(path, opts)
     if !empty(detect)
       return detect
     endif
