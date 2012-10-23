@@ -142,23 +142,11 @@ function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
   " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle)"{{{
-  if !executable('git')
+  if !executable('git') || a:bundle.rev == ''
     return ''
   endif
 
-  " Compare HEAD revision number.
-  let rev = a:bundle.rev
-  if rev == ''
-    let rev = 'master'
-  endif
-  let rev_sha1 = neobundle#util#system('git rev-parse ' . a:bundle.rev)
-  let head_sha1 = neobundle#util#system('git rev-parse HEAD')
-
-  if rev_sha1 ==# head_sha1
-    return ''
-  endif
-
-  return 'git checkout ' . (rev =~# '^\x\{4,}$' ? '' : '-b ') . rev
+  return 'git checkout ' . rev
 endfunction"}}}
 
 let &cpo = s:save_cpo
