@@ -135,6 +135,23 @@ Context types
           \ 'Shoug/neocomplcache', ['', 'rev', {}])
     Should bundle.type__update_style ==# 'current'
   End
+
+  It parses ssh protocol.
+    let bundle = neobundle#config#init_bundle(
+          \ 'accountname/reponame', [{
+          \ 'site' : 'github', 'type' : 'git', 'type__protocol' : 'ssh' }])
+    Should bundle.uri ==# 'git@github.com:accountname/reponame.git'
+
+    let bundle = neobundle#config#init_bundle(
+          \ 'accountname/reponame', [{
+          \ 'site' : 'bitbucket', 'type' : 'hg', 'type__protocol' : 'ssh' }])
+    Should bundle.uri ==# 'ssh://hg@bitbucket.org/accountname/reponame'
+
+    let bundle = neobundle#config#init_bundle(
+          \ 'accountname/reponame.git', [{
+          \ 'site' : 'bitbucket', 'type' : 'git', 'type__protocol' : 'ssh' }])
+    Should bundle.uri ==# 'git@bitbucket.org:accountname/reponame.git'
+  End
 End
 
 Fin

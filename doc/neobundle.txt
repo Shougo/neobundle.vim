@@ -814,6 +814,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved git parse.
 - Improved get neobundle types.
 - Added type__protocol.
+- Added tests for ssh.
 
 2012-10-22
 - Added :NeoBundleReinstall command.

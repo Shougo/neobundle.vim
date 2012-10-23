@@ -50,7 +50,7 @@ function! s:type.detect(path, opts)"{{{
     let name = substitute(split(a:path, ':')[-1],
           \   '^//bitbucket.org/', '', '')
     let uri = (protocol ==# 'ssh') ?
-          \ 'ssh://hg@bitbucket.org:' . name :
+          \ 'ssh://hg@bitbucket.org/' . name :
           \ protocol . '://bitbucket.org/' . name
     let name = split(uri, '/')[-1]
 
