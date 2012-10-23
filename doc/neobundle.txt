@@ -800,6 +800,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-23
 - Improved git parse.
+- Improved get neobundle types.
 
 2012-10-22
 - Added :NeoBundleReinstall command.

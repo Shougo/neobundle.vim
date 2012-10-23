@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Oct 2012.
+" Last Modified: 23 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,19 +45,6 @@ function! neobundle#config#init()
         call remove(s:loaded_neobundles, bundle.name)
       endif
     endif
-  endfor
-
-  " Load neobundle types.
-  let s:neobundle_types = {}
-  for define in map(split(globpath(&runtimepath,
-        \ 'autoload/neobundle/types/*.vim', 1), '\n'),
-        \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
-    for dict in (type(define) == type([]) ? define : [define])
-      if !empty(dict) && !has_key(s:neobundle_types, dict.name)
-        let s:neobundle_types[dict.name] = dict
-      endif
-    endfor
-    unlet define
   endfor
 
   " Load direct installed bundles.
@@ -295,6 +282,21 @@ function! neobundle#config#rm_bundle(path)
 endfunction
 
 function! neobundle#config#get_types()
+  if !exists('s:neobundle_types')
+    " Load neobundle types.
+    let s:neobundle_types = {}
+    for define in map(split(globpath(&runtimepath,
+          \ 'autoload/neobundle/types/*.vim', 1), '\n'),
+          \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
+      for dict in (type(define) == type([]) ? define : [define])
+        if !empty(dict) && !has_key(s:neobundle_types, dict.name)
+          let s:neobundle_types[dict.name] = dict
+        endif
+      endfor
+      unlet define
+    endfor
+  endif
+
   return s:neobundle_types
 endfunction
 
