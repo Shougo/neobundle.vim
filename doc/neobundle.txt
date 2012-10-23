@@ -798,6 +798,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-23
+- Improved git parse.
+
 2012-10-22
 - Added :NeoBundleReinstall command.
 

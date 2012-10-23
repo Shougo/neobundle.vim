@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2012.
+" Last Modified: 23 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,19 +49,18 @@ function! s:type.detect(path)"{{{
       " www.vim.org Vim scripts.
       let name = split(a:path, ':')[-1]
       let uri  = g:neobundle#types#git#default_protocol .
-            \ '://github.com/vim-scripts/'.name.'.git'
-      let type = 'git'
+            \ '://github.com/vim-scripts/'.name
     else
       let uri = (a:path =~# '://github.com/') ? a:path :
             \ g:neobundle#types#git#default_protocol .
             \   '://github.com/'.substitute(split(a:path, ':')[-1],
             \   '^//github.com/', '', '')
-      if uri !~ '\.git\s*$'
-        " Add .git suffix.
-        let uri .= '.git'
-      endif
-
       let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
+    endif
+
+    if uri !~ '\.git\s*$'
+      " Add .git suffix.
+      let uri .= '.git'
     endif
 
     let type = 'git'
