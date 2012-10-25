@@ -594,6 +594,8 @@ EXAMPLES					*neobundle-examples*
 	  set runtimepath+={path to neobundle directory}
 	endif
 	
+	" let g:neobundle#types#git#default_protocol = 'https'
+	
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
 	" Let neobundle manage neobundle
@@ -807,11 +809,18 @@ https://github.com/taichouchou2/vim-rsense
 >
 	NeoBundle 'taichouchou2/vim-rsense'
 <
+Q: I want to use "https" protocol instead of "git".
+A: Please change |g:neobundle#types#git#default_protocol| value.
+>
+	let g:neobundle#types#git#default_protocol = 'https'
+<
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
 2012-10-25
 - Fixed revision lock error in git.
+- Added FAQ section.
 
 2012-10-23
 - Improved git parse.
