@@ -810,6 +810,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-25
+- Fixed revision lock error in git.
+
 2012-10-23
 - Improved git parse.
 - Improved get neobundle types.
