@@ -341,6 +341,10 @@ function! neobundle#installer#sync(bundle, context, is_unite)
     if neobundle#util#has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
             \            cmd, &encoding, 'char'), 0, 2)
+
+      " Close handles.
+      call process.proc.stdin.close()
+      call process.proc.stderr.close()
     else
       let process.output = neobundle#util#system(cmd)
       let process.status = neobundle#util#get_last_status()
@@ -350,12 +354,6 @@ function! neobundle#installer#sync(bundle, context, is_unite)
       lcd `=cwd`
     endif
   endtry
-
-  if neobundle#util#has_vimproc()
-    " Close handles.
-    call process.proc.stdin.close()
-    call process.proc.stderr.close()
-  endif
 
   call add(a:context.source__processes, process)
 endfunction
