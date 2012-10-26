@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 26 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,11 +56,14 @@ function! neobundle#util#has_vimproc()"{{{
   if !exists('s:exists_vimproc')
     try
       call vimproc#version()
-      let s:exists_vimproc = 1
+      let s:exists_vimproc =
+            \ (exists('g:vimproc_dll_path') && filereadable(g:vimproc_dll_path))
+            \ || (exists('g:vimproc#dll_path') && filereadable(g:vimproc#dll_path))
     catch
       let s:exists_vimproc = 0
     endtry
   endif
+
   return s:exists_vimproc
 endfunction"}}}
 "}}}

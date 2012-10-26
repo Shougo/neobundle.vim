@@ -818,6 +818,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-26
+- Improved vimproc check.
+
 2012-10-25
 - Fixed revision lock error in git.
 - Added FAQ section.
