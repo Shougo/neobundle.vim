@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_vim_scripts.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Oct 2012.
+" Last Modified: 27 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,7 +59,7 @@ function! s:get_repository_plugins(context)"{{{
     " Reload cache.
     let s:repository_cache = []
 
-    for path in split(globpath(&runtimepath, 'recipes/*.json', 1), '\n')
+    for path in split(globpath(&runtimepath, 'recipes/**/*.json', 1), '\n')
       sandbox let data = eval(join(readfile(path)))
 
       if !has_key(data, 'name') || !has_key(data, 'path')
