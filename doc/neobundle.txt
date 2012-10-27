@@ -818,6 +818,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-28
+- Fixed protocol parser.
+
 2012-10-27
 - Fixed dependencies check.
 

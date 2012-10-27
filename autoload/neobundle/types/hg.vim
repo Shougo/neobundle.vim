@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2012.
+" Last Modified: 28 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,8 +43,12 @@ let s:type = {
 
 function! s:type.detect(path, opts)"{{{
   let type = ''
-  let protocol = get(a:opts, 'type__protocol',
-        \ g:neobundle#types#hg#default_protocol)
+
+  let protocol = matchstr(a:path, '^[^:]\+\ze://')
+  if protocol == '' || has_key(a:opts, 'type__protocol')
+    let protocol = get(a:opts, 'type__protocol',
+          \ g:neobundle#types#hg#default_protocol)
+  endif
 
   if a:path =~# '\<\(bb\|bitbucket\):\S\+'
     let name = substitute(split(a:path, ':')[-1],
