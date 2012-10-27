@@ -7,6 +7,7 @@ set cpo&vim
 
 Context types
   let g:neobundle#types#git#default_protocol = 'git'
+  let g:neobundle#types#hg#default_protocol = 'https'
 
   It parses github git repos
     ShouldEqual neobundle#config#parse_path(
@@ -111,6 +112,11 @@ Context types
           \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'),
           \ {'type' : 'git', 'uri' :
           \  'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
+          \  'name' : 'vim-qt-syntax'}
+    ShouldEqual neobundle#config#parse_path(
+          \ 'git://bitbucket.org/kh3phr3n/vim-qt-syntax.git'),
+          \ {'type' : 'git', 'uri' :
+          \  'git://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
           \  'name' : 'vim-qt-syntax'}
     ShouldEqual neobundle#config#parse_path(
           \ 'bitbucket:kh3phr3n/vim-qt-syntax.git'),

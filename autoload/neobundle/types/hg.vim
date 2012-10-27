@@ -45,12 +45,14 @@ function! s:type.detect(path, opts)"{{{
   let type = ''
 
   let protocol = matchstr(a:path, '^[^:]\+\ze://')
-  if protocol == '' || has_key(a:opts, 'type__protocol')
+  if protocol == '' || a:path =~#
+        \'\<\%(bb\|bitbucket\):\S\+'
+        \ || has_key(a:opts, 'type__protocol')
     let protocol = get(a:opts, 'type__protocol',
           \ g:neobundle#types#hg#default_protocol)
   endif
 
-  if a:path =~# '\<\(bb\|bitbucket\):\S\+'
+  if a:path =~# '\<\%(bb\|bitbucket\):'
     let name = substitute(split(a:path, ':')[-1],
           \   '^//bitbucket.org/', '', '')
     let uri = (protocol ==# 'ssh') ?

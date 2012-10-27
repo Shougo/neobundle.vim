@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Oct 2012.
+" Last Modified: 28 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -289,6 +289,7 @@ function! neobundle#config#parse_path(path, ...)
   let opts = get(a:000, 0, {})
   let site = get(opts, 'site', g:neobundle#default_site)
   let path = a:path
+
   if path !~ ':'
     " Add default site.
     let path = site . ':' . path

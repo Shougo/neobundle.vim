@@ -45,12 +45,14 @@ function! s:type.detect(path, opts)"{{{
   let type = ''
 
   let protocol = matchstr(a:path, '^[^:]\+\ze://')
-  if protocol == '' || has_key(a:opts, 'type__protocol')
+  if protocol == '' || a:path =~#
+        \'\<\%(gh\|github\|bb\|bitbucket\):\S\+'
+        \ || has_key(a:opts, 'type__protocol')
     let protocol = get(a:opts, 'type__protocol',
           \ g:neobundle#types#git#default_protocol)
   endif
 
-  if a:path =~# '\<\(gh\|github\):\S\+\|://github.com/'
+  if a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
     if a:path !~ '/'
       " www.vim.org Vim scripts.
       let name = split(a:path, ':')[-1]
@@ -74,7 +76,7 @@ function! s:type.detect(path, opts)"{{{
     let type = 'git'
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
-    if a:path =~# '\<\(bb\|bitbucket\):\S\+'
+    if a:path =~# '\<\%(bb\|bitbucket\):\S\+'
       let name = substitute(split(a:path, ':')[-1],
             \   '^//bitbucket.org/', '', '')
       let uri = (protocol ==# 'ssh') ?
