@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Oct 2012.
+" Last Modified: 27 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,15 +111,8 @@ function! neobundle#config#bundle(arg, ...)
   let s:neobundles[path] = bundle
   let s:loaded_neobundles[bundle.name] = 1
   call s:rtp_add(bundle)
-  for depend in bundle.depends
-    if type(depend) == type('')
-      let depend = string(depend)
-    endif
 
-    call neobundle#config#bundle(depend)
-
-    unlet depend
-  endfor
+  call s:load_depends(bundle)
 
   return bundle
 endfunction
@@ -217,15 +210,7 @@ function! neobundle#config#source(...)
     endif
     call s:rtp_add(bundle)
 
-    for depend in bundle.depends
-      if type(depend) == type('')
-        let depend = string(depend)
-      endif
-
-      call neobundle#config#bundle(depend)
-
-      unlet depend
-    endfor
+    call s:load_depends(bundle)
 
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
@@ -551,6 +536,22 @@ function! neobundle#config#check_external_commands(bundle)
       call neobundle#installer#error(
             \ printf('"%s" needs it.', a:bundle.name))
     endif
+  endfor
+endfunction
+
+function! s:load_depends(bundle)
+  for depend in a:bundle.depends
+    if type(depend) == type('')
+      let depend = string(depend)
+    endif
+
+    " Parse check.
+    let depend_bundle = neobundle#config#bundle(depend, 1)
+    if !has_key(s:neobundles, depend_bundle.path)
+      call neobundle#config#bundle(depend)
+    endif
+
+    unlet depend
   endfor
 endfunction
 

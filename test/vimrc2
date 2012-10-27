@@ -1,0 +1,36 @@
+set nocompatible                " recommend
+
+let testdir = expand('~/neobundle-test/bundles', 1)
+
+filetype off                    " required!
+
+if has('vim_starting')
+  execute 'set' 'runtimepath+='.getcwd()
+endif
+
+call neobundle#rc(expand(testdir, 1))
+
+" Test dependencies.
+" For https://github.com/Shougo/neobundle.vim/issues/45
+
+NeoBundle 'Shougo/vimproc', {
+      \ 'build': {
+      \ 'windows': 'echo "vimproc binary file does not support Windows."',
+      \ 'unix': 'make -f make_unix.mak',
+      \ 'mac': 'make -f make_mac.mak',
+      \ 'cygwin': 'make -f make_cygwin.mak',
+      \ },
+      \ }
+NeoBundle 'Shougo/neocomplcache', { 'depends': ['Shougo/vimproc'] }
+
+filetype plugin indent on       " required!
+
+" Should not break helptags.
+set wildignore+=doc
+
+" Should not break clone.
+set wildignore+=.git
+set wildignore+=.git/*
+set wildignore+=*/.git/*
+
+autocmd VimEnter * NeoBundleUpdate
