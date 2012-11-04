@@ -127,7 +127,7 @@ function! neobundle#installer#build(bundle)
 
     if a:bundle.name ==# 'vimproc' && neobundle#util#is_windows()
           \ && neobundle#util#has_vimproc()
-      let result = s:build_vimproc_dll(bundle, cmd)
+      let result = s:build_vimproc_dll(cmd)
     else
       let result = neobundle#util#system(cmd)
     endif
