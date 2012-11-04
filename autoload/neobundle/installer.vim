@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Oct 2012.
+" Last Modified: 04 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,7 +125,14 @@ function! neobundle#installer#build(bundle)
       lcd `=a:bundle.path`
     endif
 
-    let result = substitute(neobundle#util#system(cmd), '\n$', '', '')
+    if a:bundle.name ==# 'vimproc' && neobundle#util#is_windows()
+          \ && neobundle#util#has_vimproc()
+      let result = s:build_vimproc_dll(bundle, cmd)
+    else
+      let result = neobundle#util#system(cmd)
+    endif
+
+    let result = substitute(result, '\n$', '', '')
   finally
     if isdirectory(cwd)
       lcd `=cwd`
@@ -139,6 +146,31 @@ function! neobundle#installer#build(bundle)
   endif
 
   return neobundle#util#get_last_status()
+endfunction
+
+function! s:build_vimproc_dll(cmd)
+  " Build vimproc in Windows.
+
+  " Save dll name.
+  let dll_path = exists('g:vimproc#dll_path') ?
+        \ g:vimproc#dll_path : g:vimproc_dll_path
+
+  " Rename dll.
+  let temp = tempname()
+  call rename(dll_path, temp)
+
+  " Note: Can't use vimproc function.
+  let result = system(a:cmd)
+
+  if filereadable(dll_path)
+    " Updated. Delete previous dll.
+    call delete(temp)
+  else
+    " Didn't updated. Restore it.
+    call rename(temp, dll_path)
+  endif
+
+  return result
 endfunction
 
 function! neobundle#installer#clean(bang, ...)

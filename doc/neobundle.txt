@@ -294,7 +294,7 @@ COMMANDS 					*neobundle-commands*
 >
 	NeoBundle 'Shougo/vimproc', {
 	      \ 'build' : {
-	      \     'windows' : 'echo "Sorry, cannot update vimproc."',
+	      \     'windows' : 'make -f make_mingw32.mak',
 	      \     'cygwin' : 'make -f make_cygwin.mak',
 	      \     'mac' : 'make -f make_mac.mak',
 	      \     'unix' : 'make -f make_unix.mak',
@@ -817,6 +817,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-11-04
+- Supported vimproc build in Windows(testing).
 
 2012-10-28
 - Fixed protocol parser.
