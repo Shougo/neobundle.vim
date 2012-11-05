@@ -30,6 +30,7 @@ Install			|neobundle-install|
 Interface		|neobundle-interface|
   Functions		  |neobundle-functions|
   Commands		  |neobundle-commands|
+    Options		    |neobundle-options|
   Variables		  |neobundle-variables|
 Configulation Examples	|neobundle-examples|
 Unite sources		|neobundle-unite-sources|
@@ -142,8 +143,8 @@ neobundle#is_installed({bundle-name})
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
-:NeoBundle {repository} [[,{revision}] [,{dictionary}]]
-:NeoBundle {repository} ,{revision}, {default} [,{dictionary}]]
+:NeoBundle {repository} [[,{revision}] [,{options}]]
+:NeoBundle {repository} ,{revision}, {default} [,{options}]]
 						*:NeoBundle*
 		Configures bundle.
 		The {repository} is repository URI.  The {revision} is
@@ -157,8 +158,10 @@ COMMANDS 					*neobundle-commands*
 		Note: If you manage bundle by neobundle, it may be error
 		occurred when update bundles.
 
-		The {dictionary} has following keys:
+						*neobundle-options*
+		The {options} has following keys:
 
+						*neobundle-options-name*
 		name			(String)
 		Specify bundle name. It is used for neobundle management and
 		other commands(Ex: |:NeoBundleUpdate|). If you omit it, used
@@ -184,6 +187,7 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 <
+						*neobundle-options-default*
 		default			(String)
 		Default option name(Cf: |g:neobundle#default_options|).
 
@@ -197,16 +201,19 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'git://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
 <
+						*neobundle-options-tail_path*
 		tail_path		(Number)
 		If it is 1, neobundle add the path to the end of user
 		runtimepath. It is useful not to overwritten user scripts by
 		neobundle.
 
+						*neobundle-options-base_path*
 		base			(String)
 		Directory base path. If you omit it, used |neobundle#rc()|
 		base path. It is useful for loading scripts from different
 		path.
 
+						*neobundle-options-type*
 		type			(String)
 		Specify repository type.  If you omit repository type, it is
 		detected automatically from {repository}.
@@ -223,10 +230,12 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
 <
+					*neobundle-options-script_type*
 		script_type		(String)
 		Specify script type.
 		For example: "indent", "plugin", "ftplugin", ...
 
+						*neobundle-options-site*
 		site			(String)
 		Repository site.  If you omit repository URL and site
 		attribute, it is used |g:neobundle#default_site|.
@@ -237,6 +246,7 @@ COMMANDS 					*neobundle-commands*
 		"github" or "gh"    : github.com (git)
 		"bitbucket" or "bb" : bitbucket.org (hg)
 
+						*neobundle-options-rtp*
 		rtp			(String)
 		Specify runtime path.
 		You may use this option when the repository has Vim plugin
@@ -250,6 +260,7 @@ COMMANDS 					*neobundle-commands*
 		    \ 'rtp': "~/.vim/bundle/vimwiki/src",
 		    \ }
 <
+						*neobundle-options-depends*
 		depends			(List or String)
 		Depends plugins list.
 		List items are '{plugin-name}' or ['{plugin-name}', {args}].
@@ -266,6 +277,7 @@ COMMANDS 					*neobundle-commands*
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
 		    \ ]}
 <
+						*neobundle-options-build*
 		build			(Dictionary)
 		Specify build script.
 		You may use this option if the plugin have to be built.
@@ -301,6 +313,7 @@ COMMANDS 					*neobundle-commands*
 	      \    },
 	      \ }
 <
+						*neobundle-options-augroup*
 		augroup		(String)
 		Specify augroup name in the plugin.
 		Neobundle call |VimEnter| or |GUIEnter| autocmds
@@ -310,6 +323,7 @@ COMMANDS 					*neobundle-commands*
 		For example, "fugitive", "NERDTree", "session.vim".
 		This attribute is valid in |:NeoBundleLazy|.
 
+					*neobundle-options-external_commands*
 		external_commands	(Dictionary or List or String)
 		Depends external commands list.
 		You may use this option if the plugin have to use external
@@ -340,6 +354,7 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'ujihisa/neco-ghc', { 'external_commands' : 'ghc-mod' }
 <
+					*neobundle-options-type__shallow*
 		type__shallow	(Number)
 		If it is 1, neobundle will use "shallow clone" in plugin
 		install.
@@ -349,6 +364,7 @@ COMMANDS 					*neobundle-commands*
 		But the clone speed is faster.
 		Note: This attribute is available in git type only.
 
+					*neobundle-options-type__update_style*
 		type__update_style	(String)
 		If it is "default", neobundle will update from default
 		branch(master) instead of current branch.
@@ -359,6 +375,7 @@ COMMANDS 					*neobundle-commands*
 		If you omit it, "default" is used.
 		Note: This attribute is available in git type only.
 
+					*neobundle-options-type__protocol*
 		type__protocol		(String)
 		The protocol used for types.
 		"https" and "git" and "ssh" are available in git type.
@@ -460,8 +477,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleUpdatesLog 				*:NeoBundleUpdatesLog*
 		Print previous update logs.
 
-:NeoBundleLazy {repository} [, {dictionary}]	*:NeoBundleLazy*
-:NeoExternalBundle {repository} [, {dictionary}]
+:NeoBundleLazy {repository} [, {options}]	*:NeoBundleLazy*
+:NeoExternalBundle {repository} [, {options}]
 						*:NeoExternalBundle*
 		This command register bundle, but don't add to 'runtimepath'.
 		Note: |:NeoExternalBundle| is deprecated name.
@@ -475,7 +492,7 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured
 		by |:NeoBundleLazy|.
 
-:NeoBundleDepends {repository} [, {dictionary}]
+:NeoBundleDepends {repository} [, {options}]
 						*:NeoBundleDepends*
 		This command registers bundle and install the plugin.  It is
 		useful to define Vim plugin dependency.
@@ -486,7 +503,7 @@ COMMANDS 					*neobundle-commands*
 		  NeoBundleDepends 'Shougo/unite.vim.git'
 		endif
 <
-:NeoBundleDirectInstall {repository} [, {dictionary}]
+:NeoBundleDirectInstall {repository} [, {options}]
 						*:NeoBundleDirectInstall*
 		This command registers bundle, and installs it directly.
 		Note: If you used the command, you cannot customize the bundle
@@ -817,6 +834,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-11-05
+- Improved documentation.
 
 2012-11-04
 - Supported vimproc build in Windows(testing).
