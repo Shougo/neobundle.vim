@@ -69,6 +69,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
 3. Install configured bundles:
 
      Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim)
+
 ## Docs
 
 see `:h neobundle`

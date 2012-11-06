@@ -611,6 +611,7 @@ EXAMPLES					*neobundle-examples*
 	  set runtimepath+={path to neobundle directory}
 	endif
 	
+	" Use https protocol over proxy.
 	" let g:neobundle#types#git#default_protocol = 'https'
 	
 	call neobundle#rc(expand('~/.vim/bundle'))
@@ -627,7 +628,7 @@ EXAMPLES					*neobundle-examples*
 
 	" ...
 
-	filetype plugin indent on       " required!
+	filetype plugin indent on       " Required!
 
 	" Installation check.
 	if neobundle#exists_not_installed_bundles()
@@ -826,7 +827,7 @@ https://github.com/taichouchou2/vim-rsense
 >
 	NeoBundle 'taichouchou2/vim-rsense'
 <
-Q: I want to use "https" protocol instead of "git".
+Q: I want to use "https" protocol instead of "git"(over proxy).
 A: Please change |g:neobundle#types#git#default_protocol| value.
 >
 	let g:neobundle#types#git#default_protocol = 'https'
