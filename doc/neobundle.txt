@@ -324,6 +324,14 @@ COMMANDS 					*neobundle-commands*
 		|GUIEnter| events will be skipped. It may cause problems.  For
 		example, "fugitive", "NERDTree", "session.vim".
 		
+		Example:
+>
+	" NERDTree uses augroup NERDTreeHijackNetrw.
+	NeoBundle 'scrooloose/nerdtree', { 'augroup' : 'NERDTreeHijackNetrw'}
+	" fugitive uses augroup fugitive.
+	NeoBundle 'tpope/vim-fugitive', { 'augroup' : 'fugitive'}
+<
+		
 		This attribute is valid in |:NeoBundleLazy|.
 
 					*neobundle-options-external_commands*
