@@ -315,12 +315,15 @@ COMMANDS 					*neobundle-commands*
 <
 						*neobundle-options-augroup*
 		augroup		(String)
-		Specify augroup name in the plugin.
+		Specify augroup name in the plugin using |VimEnter| or
+		|GUIEnter| autocmd events.
 		Neobundle call |VimEnter| or |GUIEnter| autocmds
-		automatically.
-		Note: Some function define autocmds for |VimEnter| or
-		|GUIEnter|.
-		For example, "fugitive", "NERDTree", "session.vim".
+		automatically in |:NeoBundleSource|.
+		Note: Some plugins define autocmds for |VimEnter| or
+		|GUIEnter|. But if you use |:NeoBundleLazy|, |VimEnter| or
+		|GUIEnter| events will be skipped. It may cause problems.  For
+		example, "fugitive", "NERDTree", "session.vim".
+		
 		This attribute is valid in |:NeoBundleLazy|.
 
 					*neobundle-options-external_commands*
