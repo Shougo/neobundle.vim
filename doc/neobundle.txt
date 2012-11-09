@@ -320,9 +320,10 @@ COMMANDS 					*neobundle-commands*
 		Neobundle call |VimEnter| or |GUIEnter| autocmds
 		automatically in |:NeoBundleSource|.
 		Note: Some plugins define autocmds for |VimEnter| or
-		|GUIEnter|. But if you use |:NeoBundleLazy|, |VimEnter| or
-		|GUIEnter| events will be skipped. It may cause problems.  For
-		example, "fugitive", "NERDTree", "session.vim".
+		|GUIEnter|. But if you use |:NeoBundleSource| after loading
+		.vimrc, |VimEnter| or |GUIEnter| events may be skipped. It may
+		cause problems.  For example, "fugitive", "NERDTree",
+		"session.vim".
 		
 		Example:
 >
