@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Oct 2012.
+" Last Modified: 11 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,7 @@ if !exists('s:neobundles')
   let s:neobundles = {}
   let s:loaded_neobundles = {}
   let s:direct_neobundles = {}
+  let s:disabled_neobundles = {}
 endif
 
 function! neobundle#config#init()
@@ -109,10 +110,11 @@ function! neobundle#config#bundle(arg, ...)
   endif
 
   let s:neobundles[path] = bundle
-  let s:loaded_neobundles[bundle.name] = 1
-  call s:rtp_add(bundle)
-
-  call s:load_depends(bundle)
+  if !get(s:disabled_neobundles, bundle.name, 0)
+    let s:loaded_neobundles[bundle.name] = 1
+    call s:rtp_add(bundle)
+    call s:load_depends(bundle)
+  endif
 
   return bundle
 endfunction
@@ -231,6 +233,7 @@ function! neobundle#config#source(...)
     endif
 
     let s:loaded_neobundles[bundle.name] = 1
+    let s:disabled_neobundles[bundle.name] = 0
   endfor
 
   if filetype_out =~# 'detection:ON'
@@ -246,6 +249,19 @@ function! neobundle#config#source(...)
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
+endfunction
+
+function! neobundle#config#disable(arg)
+  let bundle_names = split(a:arg)
+
+  for bundle in neobundle#config#search(bundle_names)
+    call s:rtp_rm(bundle)
+    if has_key(s:loaded_neobundles, bundle.name)
+      call remove(s:loaded_neobundles, bundle.name)
+    endif
+
+    let s:disabled_neobundles[bundle.name] = 1
+  endfor
 endfunction
 
 function! neobundle#config#is_sourced(name)

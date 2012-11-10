@@ -537,6 +537,13 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
+:NeoBundleDisable {name}...			*:NeoBundleDisable*
+		This command disables {name} bundles.
+		If bundle is disabled, it's path will be removed from
+		'runtimepath'.
+		Note: This command must be execute until neobundle loads
+		plugins.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -864,6 +871,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-11-11
 - Added nosync option.
+- Added :NeoBundleDisable command.
 
 2012-11-05
 - Improved documentation.

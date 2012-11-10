@@ -83,6 +83,11 @@ command! -nargs=* -bar
       \ NeoBundleSource
       \ call neobundle#config#source(<f-args>)
 
+command! -nargs=+ -bar
+      \ -complete=customlist,neobundle#complete_bundles
+      \ NeoBundleDisable
+      \ call neobundle#config#disable(<f-args>)
+
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#complete_bundles
       \ NeoBundleInstall
