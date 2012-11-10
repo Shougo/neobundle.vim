@@ -366,6 +366,14 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'ujihisa/neco-ghc', { 'external_commands' : 'ghc-mod' }
 <
+						*neobundle-options-nosync*
+		nosync		(Number)
+		If it is 1, neobundle doesn't update it automatically in
+		|:NeoBundleUpdate| or ":Unite neobundle/update" with no
+		arguments. It is useful for outdated plugins.
+>
+		NeoBundle 'Shougo/neobundle', { 'nosync' : 1 }
+<
 					*neobundle-options-type__shallow*
 		type__shallow	(Number)
 		If it is 1, neobundle will use "shallow clone" in plugin
@@ -468,10 +476,14 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
 		Installs and updates {name} plugins. {name} is fuzzy searched.
-		If {name} is omited, all configured plugin is installed
-		and updated.
+		If {name} is omited, all configured plugin without "nosync"
+		option is installed and updated.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
+
+:NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate*
+		Same to |:NeoBundleUpdate|. But it also updates plugins which
+		has "nosync" option.
 
 :NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
 		Removes non configured bundles. If {bang} is added, force
@@ -697,11 +709,13 @@ neobundle/log
 
 				*neobundle-unite-source-neobundle-update*
 neobundle/update
-		Install and update configured plugins asyncronously.
+		Install and update configured plugins without "nosync" plugins
+		asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
 		Note: To install |vimproc| plugin is recommended.
 
 		If argment is bang(!), it will be disabled fuzzy search.
+		If argment is "all", it will be update all plugins.
 
 		If you use the source with "-auto-quit" option, the unite
 		buffer will close automatically.
@@ -847,6 +861,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-11-11
+- Added nosync option.
 
 2012-11-05
 - Improved documentation.

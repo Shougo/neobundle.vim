@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2012.
+" Last Modified: 11 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,7 @@ let s:source_install = {
       \ }
 
 function! s:source_install.hooks.on_init(args, context)"{{{
-  let bundle_names = filter(copy(a:args), 'v:val != "!"')
+  let bundle_names = filter(copy(a:args), "v:val != '!'")
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
   let a:context.source__not_fuzzy = 0
@@ -123,9 +123,11 @@ let s:source_update.name = 'neobundle/update'
 let s:source_update.description = 'update bundles'
 
 function! s:source_update.hooks.on_init(args, context)"{{{
-  let a:context.source__bang = 1
+  let a:context.source__bang =
+        \ index(a:args, 'all') >= 0 ? 2 : 1
   let a:context.source__not_fuzzy = index(a:args, '!') >= 0
-  call s:init(a:context, a:args)
+  let bundle_names = filter(copy(a:args), "v:val !=# 'all'")
+  call s:init(a:context, bundle_names)
 endfunction"}}}
 
 function! s:init(context, bundle_names)
@@ -143,6 +145,10 @@ function! s:init(context, bundle_names)
         \ a:context.source__not_fuzzy ?
         \ neobundle#config#search(a:bundle_names) :
         \ neobundle#config#fuzzy_search(a:bundle_names)
+  if a:context.source__bang == 1 && empty(a:bundle_names)
+    " Remove nosync bundles.
+    call filter(a:context.source__bundles, "!get(v:val, 'nosync', 0)")
+  endif
 
   let a:context.source__max_bundles =
         \ len(a:context.source__bundles)
