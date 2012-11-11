@@ -53,8 +53,8 @@ function! neobundle#installer#install(bang, bundle_names)
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
   if a:bang == 1 && empty(bundle_names)
-    " Remove nosync bundles.
-    call filter(bundles, "!get(v:val, 'nosync', 0)")
+    " Remove stay_same bundles.
+    call filter(bundles, "!get(v:val, 'stay_same', 0)")
   endif
   if empty(bundles)
     call neobundle#installer#error(

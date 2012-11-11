@@ -146,8 +146,8 @@ function! s:init(context, bundle_names)
         \ neobundle#config#search(a:bundle_names) :
         \ neobundle#config#fuzzy_search(a:bundle_names)
   if a:context.source__bang == 1 && empty(a:bundle_names)
-    " Remove nosync bundles.
-    call filter(a:context.source__bundles, "!get(v:val, 'nosync', 0)")
+    " Remove stay_same bundles.
+    call filter(a:context.source__bundles, "!get(v:val, 'stay_same', 0)")
   endif
 
   let a:context.source__max_bundles =

@@ -366,13 +366,13 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'ujihisa/neco-ghc', { 'external_commands' : 'ghc-mod' }
 <
-						*neobundle-options-nosync*
-		nosync		(Number)
+						*neobundle-options-stay_same*
+		stay_same		(Number)
 		If it is 1, neobundle doesn't update it automatically in
 		|:NeoBundleUpdate| or ":Unite neobundle/update" with no
 		arguments. It is useful for outdated plugins.
 >
-		NeoBundle 'Shougo/neobundle', { 'nosync' : 1 }
+		NeoBundle 'Shougo/neobundle', { 'stay_same' : 1 }
 <
 					*neobundle-options-type__shallow*
 		type__shallow	(Number)
@@ -481,7 +481,7 @@ COMMANDS 					*neobundle-commands*
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
-:NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate*
+:NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate!*
 		Same to |:NeoBundleUpdate|. But it also updates plugins which
 		has "nosync" option.
 
@@ -870,8 +870,8 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 CHANGELOG					*neobundle-changelog*
 
 2012-11-11
-- Added nosync option.
 - Added :NeoBundleDisable command.
+- Added stay_same option.
 
 2012-11-05
 - Improved documentation.
