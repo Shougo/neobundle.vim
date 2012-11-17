@@ -516,6 +516,9 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured
 		by |:NeoBundleLazy|.
 
+:NeoBundleDocs					*:NeoBundleDocs*
+		Execute |:helptags|all bundles manually.
+
 :NeoBundleDepends {repository} [, {options}]
 						*:NeoBundleDepends*
 		This command registers bundle and install the plugin.  It is
