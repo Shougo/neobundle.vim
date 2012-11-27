@@ -567,6 +567,12 @@ g:neobundle#log_filename			*g:neobundle#log_filename*
 
 		Default value is "".
 
+g:neobundle#clear_log                           *g:neobundle#clear_log*
+		If it is 1, the log set in |g:neobundle#log_filename| is cleared
+		on each install and update of plugins.
+
+		Default value is 1.
+
 g:neobundle#enable_tail_path			*g:neobundle#enable_tail_path*
 		If it is 1, default "tail_path" attribute will be 1 in bundle.
 

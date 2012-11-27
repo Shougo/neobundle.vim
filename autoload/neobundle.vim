@@ -45,6 +45,8 @@ endif
 call neobundle#util#set_default(
       \ 'g:neobundle#log_filename', '', 'g:neobundle_log_filename')
 call neobundle#util#set_default(
+      \ 'g:neobundle#clear_log', 1, 'g:neobundle_clear_log')
+call neobundle#util#set_default(
       \ 'g:neobundle#default_site', 'github', 'g:neobundle_default_site')
 call neobundle#util#set_default(
       \ 'g:neobundle#enable_tail_path', 1, 'g:neobundle_enable_tail_path')

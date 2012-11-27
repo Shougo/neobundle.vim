@@ -65,7 +65,9 @@ function! neobundle#installer#install(bang, bundle_names)
     return
   endif
 
-  call neobundle#installer#clear_log()
+  if g:neobundle#clear_log == 1
+    call neobundle#installer#clear_log()
+  endif
   let [installed, errored] = s:install(a:bang, bundles)
   if !has('vim_starting')
     redraw!
