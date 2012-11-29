@@ -872,6 +872,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-11-29
+- Fixed clear log behavior.
+
 2012-11-11
 - Added :NeoBundleDisable command.
 - Added stay_same option.
