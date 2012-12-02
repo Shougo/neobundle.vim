@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Nov 2012.
+" Last Modified: 02 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -573,7 +573,7 @@ endfunction
 function! neobundle#installer#log(msg, ...)
   let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
-        \ a:msg : [a:msg]
+        \ a:msg : split(a:msg)
   call extend(s:log, msg)
 
   if &filetype == 'unite' || is_unite
