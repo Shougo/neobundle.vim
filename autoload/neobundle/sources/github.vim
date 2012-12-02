@@ -91,7 +91,8 @@ function! s:get_github_searches(string) "{{{
   let [true, false, null] = [1,0,"''"]
   sandbox let data = eval(join(readfile(temp)))
   call filter(data.repositories,
-        \ "stridx(v:val.name, a:string) >= 0 && v:val.language ==# 'VimL'")
+        \ "stridx(v:val.username.'/'.v:val.name, a:string) >= 0
+        \   && v:val.language ==# 'VimL'")
 
   call delete(temp)
 
