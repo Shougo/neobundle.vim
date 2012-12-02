@@ -573,7 +573,7 @@ endfunction
 function! neobundle#installer#log(msg, ...)
   let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
-        \ a:msg : split(a:msg)
+        \ a:msg : split(a:msg, '\n')
   call extend(s:log, msg)
 
   if &filetype == 'unite' || is_unite
