@@ -60,14 +60,12 @@ endfunction"}}}
 
 " Misc.
 function! s:get_github_searches(string) "{{{
-  let path = 'https://api.github.com/legacy/repos/search/' . a:string
+  let path = 'https://api.github.com/legacy/repos/search/'
+        \ . a:string . '?language=VimL'
   let temp = tempname()
 
-  if executable('curl')
-    let cmd = 'curl --fail -s -o "' . temp . '" '. path
-  elseif executable('wget')
-    let cmd = 'wget -q -O "' . temp . '" ' . path
-  endif
+  let cmd = printf('%s "%s" "%s"', (executable('curl') ?
+          \ 'curl --fail -s -o' : 'wget -q -O '), temp, path)
 
   call unite#print_message(
         \ '[neobundle/search:github] Searching plugins from github...')
@@ -91,8 +89,7 @@ function! s:get_github_searches(string) "{{{
   let [true, false, null] = [1,0,"''"]
   sandbox let data = eval(join(readfile(temp)))
   call filter(data.repositories,
-        \ "stridx(v:val.username.'/'.v:val.name, a:string) >= 0
-        \   && v:val.language ==# 'VimL'")
+        \ "stridx(v:val.username.'/'.v:val.name, a:string) >= 0")
 
   call delete(temp)
 
