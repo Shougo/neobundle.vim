@@ -137,11 +137,20 @@ Context types
   End
 
   It parses default options.
+    let default_options_save = g:neobundle#default_options
     let g:neobundle#default_options =
-          \ { 'rev' : {'type__update_style' : 'current'} }
+          \ { 'rev' : {'type__update_style' : 'current'},
+          \   '_' : {'type' : 'hg'} }
+
     let bundle = neobundle#config#init_bundle(
-          \ 'Shoug/neocomplcache', ['', 'rev', {}])
+          \ 'Shougo/neocomplcache', ['', 'rev', {}])
     ShouldEqual bundle.type__update_style, 'current'
+
+    let bundle2 = neobundle#config#init_bundle(
+          \ 'Shougo/neocomplcache', [])
+    ShouldEqual bundle2.type, 'hg'
+
+    let g:neobundle#default_options = default_options_save
   End
 
   It parses ssh protocol.
