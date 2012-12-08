@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 08 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,6 +93,9 @@ function! s:source.gather_candidates(args, context) "{{{
       let candidate.source__source = source_name
       if !has_key(candidate, 'source__script_type')
         let candidate.source__script_type = ''
+      endif
+      if !has_key(candidate, 'source__description')
+        let candidate.source__description = ''
       endif
     endfor
 
@@ -219,6 +222,8 @@ function! s:get_neobundle_args(candidate)
   return string(a:candidate.source__path)
           \  . (empty(a:candidate.source__options) ?
           \    '' : ', ' . string(a:candidate.source__options))
+          \  . (a:candidate.source__description == '' ? '' :
+          \      ' " ' . a:candidate.source__description)
 endfunction
 
 function! unite#sources#neobundle_search#complete_plugin_names(arglead, cmdline, cursorpos) "{{{
