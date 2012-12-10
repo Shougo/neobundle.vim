@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 11 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#neobundle#define()"{{{
+function! unite#sources#neobundle#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
   let a:context.source__bang =
         \ index(a:args, '!') >= 0
@@ -47,7 +47,7 @@ function! s:source.hooks.on_init(args, context)"{{{
 endfunction"}}}
 
 " Filters"{{{
-function! s:source.source__converter(candidates, context)"{{{
+function! s:source.source__converter(candidates, context) "{{{
   for candidate in a:candidates
     if candidate.source__uri =~
           \ '^\%(https\?\|git\)://github.com/'
@@ -67,8 +67,8 @@ let s:source.filters =
       \      s:source.source__converter]
 "}}}
 
-function! s:source.gather_candidates(args, context)"{{{
-  let _ = map(a:context.source__bundles, "{
+function! s:source.gather_candidates(args, context) "{{{
+  let _ = map(copy(a:context.source__bundles), "{
         \ 'word' : substitute(v:val.orig_name,
         \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', ''),
         \ 'kind' : 'neobundle',
@@ -91,7 +91,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-function! s:get_commit_status(bang, bundle)"{{{
+function! s:get_commit_status(bang, bundle) "{{{
   if !isdirectory(a:bundle.path)
     return 'Not installed'
   endif
