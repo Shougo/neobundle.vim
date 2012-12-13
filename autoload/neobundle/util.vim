@@ -33,26 +33,26 @@ let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
-function! neobundle#util#substitute_path_separator(path)"{{{
+function! neobundle#util#substitute_path_separator(path) "{{{
   return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
-function! neobundle#util#expand(path)"{{{
+function! neobundle#util#expand(path) "{{{
   return neobundle#util#substitute_path_separator(
         \ expand(escape(a:path, '*?[]"={}'), 1))
 endfunction"}}}
 
-function! neobundle#util#is_windows()"{{{
+function! neobundle#util#is_windows() "{{{
   return s:is_windows
 endfunction"}}}
-function! neobundle#util#is_mac()"{{{
+function! neobundle#util#is_mac() "{{{
   return s:is_mac
 endfunction"}}}
-function! neobundle#util#is_cygwin()"{{{
+function! neobundle#util#is_cygwin() "{{{
   return s:is_cygwin
 endfunction"}}}
 
-" Check vimproc."{{{
-function! neobundle#util#has_vimproc()"{{{
+" Check vimproc. "{{{
+function! neobundle#util#has_vimproc() "{{{
   if !exists('s:exists_vimproc')
     try
       call vimproc#version()
@@ -68,14 +68,14 @@ function! neobundle#util#has_vimproc()"{{{
 endfunction"}}}
 "}}}
 " iconv() wrapper for safety.
-function! s:iconv(expr, from, to)"{{{
+function! s:iconv(expr, from, to) "{{{
   if a:from == '' || a:to == '' || a:from ==? a:to
     return a:expr
   endif
   let result = iconv(a:expr, a:from, a:to)
   return result != '' ? result : a:expr
 endfunction"}}}
-function! neobundle#util#system(str, ...)"{{{
+function! neobundle#util#system(str, ...) "{{{
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
   let command = s:iconv(command, &encoding, 'char')
@@ -97,13 +97,13 @@ function! neobundle#util#system(str, ...)"{{{
 
   return output
 endfunction"}}}
-function! neobundle#util#get_last_status()"{{{
+function! neobundle#util#get_last_status() "{{{
   return neobundle#util#has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
 endfunction"}}}
 
 " Split a comma separated string to a list.
-function! neobundle#util#split_rtp(...)"{{{
+function! neobundle#util#split_rtp(...) "{{{
   let rtp = a:0 ? a:1 : &runtimepath
   if type(rtp) == type([])
     return rtp
@@ -112,12 +112,12 @@ function! neobundle#util#split_rtp(...)"{{{
   return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
 endfunction"}}}
 
-function! neobundle#util#join_rtp(list)"{{{
+function! neobundle#util#join_rtp(list) "{{{
   return join(map(copy(a:list), 's:escape(v:val)'), ',')
 endfunction"}}}
 
 " Removes duplicates from a list.
-function! neobundle#util#uniq(list, ...)"{{{
+function! neobundle#util#uniq(list, ...) "{{{
   let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
   let i = 0
   let seen = {}
@@ -141,7 +141,7 @@ function! neobundle#util#set_default(var, val, ...)  "{{{
           \ {alternate_var} : a:val
   endif
 endfunction"}}}
-function! neobundle#util#set_dictionary_helper(variable, keys, pattern)"{{{
+function! neobundle#util#set_dictionary_helper(variable, keys, pattern) "{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:pattern

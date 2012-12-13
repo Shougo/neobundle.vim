@@ -27,14 +27,14 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition."{{{
+" Global options definition. "{{{
 call neobundle#util#set_default(
       \ 'g:neobundle#types#raw#calc_hash_command',
       \ executable('sha1sum') ? 'sha1sum' :
       \ executable('md5sum') ? 'md5sum' : '')
 "}}}
 
-function! neobundle#types#raw#define()"{{{
+function! neobundle#types#raw#define() "{{{
   return s:type
 endfunction"}}}
 
@@ -42,7 +42,7 @@ let s:type = {
       \ 'name' : 'raw',
       \ }
 
-function! s:type.detect(path, opts)"{{{
+function! s:type.detect(path, opts) "{{{
   " No auto detect.
   let type = ''
 
@@ -57,7 +57,7 @@ function! s:type.detect(path, opts)"{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri' : a:path, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle)"{{{
+function! s:type.get_sync_command(bundle) "{{{
   if a:bundle.script_type == ''
     return 'E: script_type is not found.'
   endif
@@ -82,7 +82,7 @@ function! s:type.get_sync_command(bundle)"{{{
 
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle) "{{{
   if g:neobundle#types#raw#calc_hash_command == ''
     return ''
   endif
@@ -97,7 +97,7 @@ function! s:type.get_revision_number_command(bundle)"{{{
   " Calc hash.
   return g:neobundle#types#raw#calc_hash_command . ' ' . a:bundle.path
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle) "{{{
   " Not supported.
   return ''
 endfunction"}}}

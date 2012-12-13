@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2012.
+" Last Modified: 13 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,13 +27,13 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition."{{{
+" Global options definition. "{{{
 call neobundle#util#set_default(
       \ 'g:neobundle#types#git#default_protocol', 'git',
       \ 'g:neobundle_default_git_protocol')
 "}}}
 
-function! neobundle#types#git#define()"{{{
+function! neobundle#types#git#define() "{{{
   return s:type
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:type = {
       \ 'name' : 'git',
       \ }
 
-function! s:type.detect(path, opts)"{{{
+function! s:type.detect(path, opts) "{{{
   let type = ''
 
   let protocol = matchstr(a:path, '^[^:]\+\ze://')
@@ -98,7 +98,7 @@ function! s:type.detect(path, opts)"{{{
         \ { 'name': substitute(split(uri, '/')[-1],
         \           '\.git\s*$','','i'), 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle)"{{{
+function! s:type.get_sync_command(bundle) "{{{
   if !executable('git')
     return 'E: "git" command is not installed.'
   endif
@@ -125,7 +125,7 @@ function! s:type.get_sync_command(bundle)"{{{
   endif
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle) "{{{
   if !executable('git')
     return ''
   endif
@@ -137,14 +137,14 @@ function! s:type.get_revision_number_command(bundle)"{{{
 
   return 'git rev-parse ' . rev
 endfunction"}}}
-function! s:type.get_revision_pretty_command(bundle)"{{{
+function! s:type.get_revision_pretty_command(bundle) "{{{
   if !executable('git')
     return ''
   endif
 
   return "git log -1 --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
-function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
+function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
   if !executable('git') || a:new_rev == '' || a:old_rev == ''
     return ''
   endif
@@ -159,7 +159,7 @@ function! s:type.get_log_command(bundle, new_rev, old_rev)"{{{
   " Test.
   " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle) "{{{
   if !executable('git') || a:bundle.rev == ''
     return ''
   endif

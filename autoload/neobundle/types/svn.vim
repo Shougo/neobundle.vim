@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#types#svn#define()"{{{
+function! neobundle#types#svn#define() "{{{
   return s:type
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:type = {
       \ 'name' : 'svn',
       \ }
 
-function! s:type.detect(path, opts)"{{{
+function! s:type.detect(path, opts) "{{{
   let type = ''
 
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
@@ -49,7 +49,7 @@ function! s:type.detect(path, opts)"{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle)"{{{
+function! s:type.get_sync_command(bundle) "{{{
   if !executable('svn')
     return 'E: svn command is not installed.'
   endif
@@ -63,14 +63,14 @@ function! s:type.get_sync_command(bundle)"{{{
 
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle) "{{{
   if !executable('svn')
     return ''
   endif
 
   return 'svn info'
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle) "{{{
   if !executable('svn') || a:bundle.rev == ''
     return ''
   endif

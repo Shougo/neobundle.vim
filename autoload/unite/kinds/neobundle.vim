@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#neobundle#define()"{{{
+function! unite#kinds#neobundle#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,12 +38,12 @@ let s:kind = {
       \ 'default_action' : 'update',
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.update = {
       \ 'description' : 'update bundles',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.update.func(candidates)"{{{
+function! s:kind.action_table.update.func(candidates) "{{{
   call unite#start([['neobundle/update', '!']
         \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
 endfunction"}}}
@@ -53,7 +53,7 @@ let s:kind.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.delete.func(candidates)"{{{
+function! s:kind.action_table.delete.func(candidates) "{{{
   call call('neobundle#installer#clean', insert(map(copy(a:candidates),
         \ 'v:val.action__bundle_name'), 0))
 endfunction"}}}
@@ -61,7 +61,7 @@ let s:kind.action_table.reinstall = {
       \ 'description' : 'reinstall bundles',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.reinstall.func(candidates)"{{{
+function! s:kind.action_table.reinstall.func(candidates) "{{{
   for candidate in a:candidates
     " Save info.
     let arg = candidate.action__bundle.orig_arg
@@ -81,7 +81,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'view the plugin documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   " Search help files.
   let readme = get(split(globpath(
         \ a:candidate.action__path, 'doc/*.?*'), '\n'), 0, '')

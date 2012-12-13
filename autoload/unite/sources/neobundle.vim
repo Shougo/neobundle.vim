@@ -46,7 +46,7 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ neobundle#config#search(bundle_names)
 endfunction"}}}
 
-" Filters"{{{
+" Filters "{{{
 function! s:source.source__converter(candidates, context) "{{{
   for candidate in a:candidates
     if candidate.source__uri =~

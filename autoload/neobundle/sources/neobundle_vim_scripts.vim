@@ -29,7 +29,7 @@ set cpo&vim
 
 let s:repository_cache = []
 
-function! neobundle#sources#neobundle_vim_scripts#define()"{{{
+function! neobundle#sources#neobundle_vim_scripts#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -38,7 +38,7 @@ let s:source = {
       \ 'short_name' : 'neobundle',
       \ }
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let plugins = s:get_repository_plugins(a:context)
 
   return map(copy(plugins), "{
@@ -54,7 +54,7 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Misc.
-function! s:get_repository_plugins(context)"{{{
+function! s:get_repository_plugins(context) "{{{
   if a:context.is_redraw || empty(s:repository_cache)
     " Reload cache.
     let s:repository_cache = []

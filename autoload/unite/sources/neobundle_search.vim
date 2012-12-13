@@ -135,7 +135,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__NeoBundleSearch_Description Comment
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.yank = {
       \ 'description' : 'yank plugin settings',
       \ 'is_selectable' : 1,
@@ -163,7 +163,7 @@ function! s:source.action_table.install.func(candidates) "{{{
 endfunction"}}}
 "}}}
 
-" Filters"{{{
+" Filters "{{{
 function! s:source.source__sorter(candidates, context) "{{{
   return s:sort_by(a:candidates, 'v:val.source__name')
 endfunction"}}}
@@ -197,7 +197,7 @@ let s:source.filters =
       \      s:source.source__converter]
 "}}}
 
-" Misc."{{{
+" Misc. "{{{
 function! s:sort_by(list, expr)
   let pairs = map(a:list, printf('[v:val, %s]', a:expr))
   return map(s:sort(pairs,

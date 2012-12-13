@@ -41,7 +41,7 @@ if v:version < 702
   finish
 endif
 
-" Global options definition."{{{
+" Global options definition." "{{{
 call neobundle#util#set_default(
       \ 'g:neobundle#log_filename', '', 'g:neobundle_log_filename')
 call neobundle#util#set_default(

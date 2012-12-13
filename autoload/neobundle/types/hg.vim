@@ -27,13 +27,13 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition."{{{
+" Global options definition. "{{{
 call neobundle#util#set_default(
       \ 'g:neobundle#types#hg#default_protocol', 'https',
       \ 'g:neobundle_default_hg_protocol')
 "}}}
 
-function! neobundle#types#hg#define()"{{{
+function! neobundle#types#hg#define() "{{{
   return s:type
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:type = {
       \ 'name' : 'hg',
       \ }
 
-function! s:type.detect(path, opts)"{{{
+function! s:type.detect(path, opts) "{{{
   let type = ''
 
   let protocol = matchstr(a:path, '^[^:]\+\ze://')
@@ -74,7 +74,7 @@ function! s:type.detect(path, opts)"{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle)"{{{
+function! s:type.get_sync_command(bundle) "{{{
   if !executable('hg')
     return 'E: "hg" command is not installed.'
   endif
@@ -88,14 +88,14 @@ function! s:type.get_sync_command(bundle)"{{{
 
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle) "{{{
   if !executable('hg')
     return ''
   endif
 
   return 'hg heads --quiet --rev default'
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle) "{{{
   if !executable('hg') || a:bundle.rev == ''
     return ''
   endif

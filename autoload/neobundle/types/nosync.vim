@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#types#nosync#define()"{{{
+function! neobundle#types#nosync#define() "{{{
   return s:type
 endfunction"}}}
 
@@ -35,17 +35,17 @@ let s:type = {
       \ 'name' : 'nosync',
       \ }
 
-function! s:type.detect(path, opts)"{{{
+function! s:type.detect(path, opts) "{{{
   " No auto detect.
   return {}
 endfunction"}}}
-function! s:type.get_sync_command(bundle)"{{{
+function! s:type.get_sync_command(bundle) "{{{
   return ''
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle)"{{{
+function! s:type.get_revision_number_command(bundle) "{{{
   return ''
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle)"{{{
+function! s:type.get_revision_lock_command(bundle) "{{{
   return ''
 endfunction"}}}
 

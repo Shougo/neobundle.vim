@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#neobundle_install#define()"{{{
+function! unite#sources#neobundle_install#define() "{{{
   return [s:source_install, s:source_update]
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:source_install = {
       \ 'hooks' : {},
       \ }
 
-function! s:source_install.hooks.on_init(args, context)"{{{
+function! s:source_install.hooks.on_init(args, context) "{{{
   let bundle_names = filter(copy(a:args), "v:val != '!'")
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
@@ -54,7 +54,7 @@ function! s:source_install.hooks.on_init(args, context)"{{{
   endif
 endfunction"}}}
 
-function! s:source_install.hooks.on_close(args, context)"{{{
+function! s:source_install.hooks.on_close(args, context) "{{{
   if !empty(a:context.source__processes)
     for process in a:context.source__processes
       call process.proc.waitpid()
@@ -62,7 +62,7 @@ function! s:source_install.hooks.on_close(args, context)"{{{
   endif
 endfunction"}}}
 
-function! s:source_install.async_gather_candidates(args, context)"{{{
+function! s:source_install.async_gather_candidates(args, context) "{{{
   if a:context.source__number < a:context.source__max_bundles
     while a:context.source__number < a:context.source__max_bundles
         \ && len(a:context.source__processes) <
@@ -113,7 +113,7 @@ function! s:source_install.async_gather_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:source_install.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_install.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['!'] +
         \ neobundle#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
@@ -122,7 +122,7 @@ let s:source_update = deepcopy(s:source_install)
 let s:source_update.name = 'neobundle/update'
 let s:source_update.description = 'update bundles'
 
-function! s:source_update.hooks.on_init(args, context)"{{{
+function! s:source_update.hooks.on_init(args, context) "{{{
   let a:context.source__bang =
         \ index(a:args, 'all') >= 0 ? 2 : 1
   let a:context.source__not_fuzzy = index(a:args, '!') >= 0

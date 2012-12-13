@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#neobundle_log#define()"{{{
+function! unite#sources#neobundle_log#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:source = {
       \ 'description' : 'print previous neobundle install logs',
       \ }
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   return map(copy(neobundle#installer#get_log()), "{
         \ 'word' : v:val,
         \ }")
