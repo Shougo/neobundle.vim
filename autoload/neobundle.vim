@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Nov 2012.
+" Last Modified: 13 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,6 +182,10 @@ function! neobundle#is_installed(...)
         \ get(a:000, 0, []) : [a:1]
 
   return !empty(s:get_installed_bundles(bundle_names))
+endfunction
+
+function! neobundle#is_sourced(name)
+  return neobundle#config#is_sourced(name)
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()
