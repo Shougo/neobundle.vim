@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 14 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -253,9 +253,16 @@ function! neobundle#config#source(...)
 endfunction
 
 function! neobundle#config#disable(arg)
-  let bundle_names = split(a:arg)
+  let bundle_names = neobundle#config#search(split(a:arg))
+  if empty(bundle_names)
+    call neobundle#installer#error(
+          \ '[neobundle/install] Target bundles not found.')
+    call neobundle#installer#error(
+          \ '[neobundle/install] You may use wrong bundle name.')
+    return
+  endif
 
-  for bundle in neobundle#config#search(bundle_names)
+  for bundle in bundle_names
     call s:rtp_rm(bundle)
     if has_key(s:loaded_neobundles, bundle.name)
       call remove(s:loaded_neobundles, bundle.name)
