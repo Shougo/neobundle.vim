@@ -352,7 +352,7 @@ function! s:rtp_add(bundle) abort
       " Join to the tail in runtimepath.
       let rtps = neobundle#util#split_rtp(&runtimepath)
       let n = index(rtps, $VIMRUNTIME)
-      let &runtimepath = neobundle#util#join_rtp(insert(rtps, rtp, n))
+      let &runtimepath = neobundle#util#join_rtp(insert(rtps, rtp, n-1))
     else
       execute 'set rtp^='.fnameescape(rtp)
     endif
