@@ -36,6 +36,8 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init()
+  filetype off
+
   call s:rtp_rm_all_bundles()
 
   for bundle in values(s:neobundles)
