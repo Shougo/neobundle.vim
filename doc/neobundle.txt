@@ -513,6 +513,9 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
 		NeoBundleSource The-NERD-tree
+
+		NeoBundleLazy 'Rip-Rip/clang_complete'
+		autocmd FileType c,cpp NeoBundleSource clang_complete
 <
 :NeoBundleSource [{name}...]			*:NeoBundleSource*
 		|:source| {name} bundles.
