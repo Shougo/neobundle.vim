@@ -513,7 +513,9 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
 		NeoBundleSource The-NERD-tree
-
+<
+		You can use it to load plugins in specific filetype.
+>
 		NeoBundleLazy 'Rip-Rip/clang_complete'
 		autocmd FileType c,cpp NeoBundleSource clang_complete
 <
