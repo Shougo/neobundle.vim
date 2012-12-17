@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Dec 2012.
+" Last Modified: 17 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,12 +60,14 @@ command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+
-      \ -complete=customlist,neobundle#complete_lazy_bundles
-      \ NeoBundleLazy
+command! -nargs=+ NeoBundleLazy
       \ call neobundle#config#lazy_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 command! -nargs=+ NeoExternalBundle NeoBundleLazy <args>
+
+command! -nargs=+ NeoBundleFetch
+      \ call neobundle#config#fetch_bundle(
+      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=1 NeoBundleLocal
       \ call s:neobundle_local(<q-args>)
@@ -151,7 +153,7 @@ endfunction
 
 function! neobundle#complete_lazy_bundles(arglead, cmdline, cursorpos)
   return filter(map(filter(neobundle#config#get_neobundles(),
-        \ '!neobundle#config#is_sourced(v:val.name)'), 'v:val.name'),
+        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''"), 'v:val.name'),
         \ 'stridx(tolower(v:val), tolower(a:arglead)) == 0')
 endfunction
 

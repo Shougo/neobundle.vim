@@ -25,7 +25,7 @@ NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle
      call neobundle#rc(expand('~/.vim/bundle/'))
 
      " Let NeoBundle manage NeoBundle
-     "NeoBundleLazy 'Shougo/neobundle.vim'
+     "NeoBundleFetch 'Shougo/neobundle.vim'
 
      " Recommended to install
      " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile

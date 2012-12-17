@@ -525,6 +525,14 @@ COMMANDS 					*neobundle-commands*
 		Note: This command is used to load the neobundles configured
 		by |:NeoBundleLazy|.
 
+:NeoBundleFetch {repository} [, {options}]	*:NeoBundleFetch*
+		This command register bundle, but don't add to 'runtimepath'.
+		Instead of |:NeoBundleLazy|, you cannot load the bundle with
+		|:NeoBundleSource|. It is useful for managing non-Vim plugins
+		using neobundle.
+>
+		NeoBundleFetch 'davidhalter/jedi'
+<
 :NeoBundleDocs					*:NeoBundleDocs*
 		Execute |:helptags|all bundles manually.
 
@@ -659,7 +667,7 @@ EXAMPLES					*neobundle-examples*
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
 	" Let neobundle manage neobundle
-	"NeoBundleLazy 'Shougo/neobundle.vim'
+	"NeoBundleFetch 'Shougo/neobundle.vim'
 	
 	" Use neobundle standard recipes.
 	NeoBundle 'Shougo/neobundle-vim-scripts'
@@ -881,6 +889,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-12-17
+- Added :NeoBundleFetch.
 
 2012-12-14
 - Improved tail_path behavior.
