@@ -169,6 +169,12 @@ Context types
           \ 'site' : 'bitbucket', 'type' : 'git', 'type__protocol' : 'ssh' }])
     ShouldEqual bundle.uri, 'git@bitbucket.org:accountname/reponame.git'
   End
+
+  It fetches plugins.
+    let bundle = neobundle#config#fetch_bundle(
+          \ string('accountname/reponame.git'))
+    ShouldEqual bundle.rtp, ''
+  End
 End
 
 Fin

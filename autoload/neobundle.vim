@@ -187,7 +187,7 @@ function! neobundle#is_installed(...)
 endfunction
 
 function! neobundle#is_sourced(name)
-  return neobundle#config#is_sourced(name)
+  return neobundle#config#is_sourced(a:name)
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()
