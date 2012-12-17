@@ -31,8 +31,7 @@ let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
-      \   (!isdirectory('/proc') && !executable('xdg-open') &&
-      \     system('uname') =~? '^darwin'))
+      \   (!isdirectory('/proc') && executable('sw_vers')))
 
 function! neobundle#util#substitute_path_separator(path) "{{{
   return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
