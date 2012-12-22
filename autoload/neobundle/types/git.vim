@@ -107,6 +107,7 @@ function! s:type.get_sync_command(bundle) "{{{
     let cmd = 'git clone'
 
     if get(a:bundle, 'type__shallow', 1)
+          \ && get(a:bundle, 'rev', '') ==# ''
           \ && a:bundle.uri !~ '^git@github\.com:'
       " Use shallow clone.
       let cmd .= ' --depth 1'
