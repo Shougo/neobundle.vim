@@ -895,6 +895,7 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 CHANGELOG					*neobundle-changelog*
 
 2012-12-27
+- Fixed shallow behavior when locked revision.
 - Changed recipe files extension.
 - Version 3.0 development is started.
 - Change directory key behavior.
