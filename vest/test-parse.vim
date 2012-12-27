@@ -175,6 +175,16 @@ Context types
           \ string('accountname/reponame.git'))
     ShouldEqual bundle.rtp, ''
   End
+
+  It parses directory
+    let bundle = neobundle#config#init_bundle(
+          \ 'Shougo/neocomplcache', [])
+    ShouldEqual bundle.directory, 'neocomplcache'
+
+    let bundle = neobundle#config#init_bundle(
+          \ 'Shougo/neocomplcache', ['ver.3'])
+    ShouldEqual bundle.directory, 'neocomplcache_ver.3'
+  End
 End
 
 Fin

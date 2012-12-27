@@ -199,6 +199,8 @@ COMMANDS 					*neobundle-commands*
 		Specify relative directory path from base directory(set by
 		|neobundle#rc()| or "base" attribute). If you omit it, used
 		"name" attribute.
+		Note: If you set rev "foo" when the name key is "neobundle",
+		the directory key is "neobundle_foo".
 
 		Example:
 >
@@ -889,6 +891,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-12-27
+- Change directory key behavior.
 
 2012-12-17
 - Added :NeoBundleFetch.
