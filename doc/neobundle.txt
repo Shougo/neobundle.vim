@@ -792,7 +792,7 @@ neobundle/search			*unite-action-neobundle-search*
 			Note: The settings is saved in ".direct_bundles" in
 			bundle directory.
 	start		Browse github plugin page
-	open		Open receipe file
+	open		Open recipe file
 
 	Note: If you used the install action, you cannot customize the bundle
 	settings.
@@ -803,7 +803,7 @@ neobundle/lazy					*unite-action-neobundle-lazy*
 ==============================================================================
 RECIPE						*neobundle-recipe*
 
-neobundle/search source loads recipes from "recipes/*.json" files in
+neobundle/search source loads recipes from "recipes/*.vimrecipe" files in
 'runtimepath'.
 
 The standard recipes are in "neobundle-vim-scripts".
@@ -818,6 +818,7 @@ You can use the recipes using following command in .vimrc.
 The recipe file is json format like this:
 
 >
+	# Vim recipe file for neobundle.
 	{
 	        'name' : 'neobundle',
 	        'path' : 'Shougo/neobundle',
@@ -828,6 +829,7 @@ The recipe file is json format like this:
 <
 		The recipe has the following keys. Most of keys are same to
 		neobundle configuration dictionary.
+		"#" is comment string. But comment must be line head.
 
 		name			(String)	(Required)
 		Specify plugin name.
@@ -893,6 +895,7 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 CHANGELOG					*neobundle-changelog*
 
 2012-12-27
+- Changed recipe files extension.
 - Version 3.0 development is started.
 - Change directory key behavior.
 

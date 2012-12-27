@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2012.
+" Last Modified: 27 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -106,7 +106,7 @@ function! s:type.get_sync_command(bundle) "{{{
   if !isdirectory(a:bundle.path)
     let cmd = 'git clone'
 
-    if get(a:bundle, 'type__shallow', 1)
+    if a:bundle.rev == '' && get(a:bundle, 'type__shallow', 1)
           \ && a:bundle.uri !~ '^git@github\.com:'
       " Use shallow clone.
       let cmd .= ' --depth 1'
