@@ -380,6 +380,11 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundle 'Shougo/neobundle', { 'stay_same' : 1 }
 <
+						*neobundle-options-lazy*
+		lazy			(Number)
+		If it is 1, neobundle doesn't add the path to user
+		runtimepath.
+
 					*neobundle-options-type__shallow*
 		type__shallow	(Number)
 		If it is 1, neobundle will use "shallow clone" in plugin
