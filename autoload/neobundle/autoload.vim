@@ -38,7 +38,8 @@ function! neobundle#autoload#filetype()
         \ "has_key(v:val.autoload, 'filetypes')")
   for filetype in neobundle#util#get_filetypes()
     call neobundle#config#source(filter(copy(bundles),"
-          \ has_key(v:val.autoload.filetypes, filetype)"))
+          \ index(neobundle#util#convert_list(
+          \     v:val.autoload.filetypes), filetype) >= 0"))
   endfor
 endfunction
 

@@ -130,14 +130,16 @@ function! neobundle#config#lazy_bundle(arg)
 
   " Autoload.
   if has_key(bundle, 'autoload')
-    for command in get(bundle.autoload, 'commands', [])
+    for command in neobundle#util#convert_list(
+          \ get(bundle.autoload, 'commands', []))
       " Define dummy commands.
       execute 'command! -nargs=*' command printf(
             \ "call neobundle#autoload#command(%s, %s, <q-args>)",
             \   string(command), string(bundle.name))
     endfor
 
-    for map in get(bundle.autoload, 'mappings', [])
+    for map in neobundle#util#convert_list(
+          \ get(bundle.autoload, 'mappings', []))
       if type(map) == type([])
         let [mode, mapping] = [map[0], map[1]]
       else
@@ -343,7 +345,7 @@ function! neobundle#config#get_types()
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/neobundle/types/*.vim', 1), '\n'),
           \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
-      for dict in (type(define) == type([]) ? define : [define])
+      for dict in neobundle#util#convert_list(define)
         if !empty(dict) && !has_key(s:neobundle_types, dict.name)
           let s:neobundle_types[dict.name] = dict
         endif
@@ -604,8 +606,7 @@ function! neobundle#config#check_external_commands(bundle)
     return
   endif
 
-  for command in (type(commands) == type([]) ?
-        \ commands : [commands])
+  for command in neobundle#util#convert_list(commands)
     if !executable(command)
       call neobundle#installer#error(
             \ printf('external command : "%s" is not found.', command))

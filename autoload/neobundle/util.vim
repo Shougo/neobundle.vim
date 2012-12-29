@@ -155,6 +155,10 @@ function! neobundle#util#get_filetypes() "{{{
   return split(filetype, '\.')
 endfunction"}}}
 
+function! neobundle#util#convert_list(expr) "{{{
+  return type(a:expr) ==# type([]) ? a:expr : [a:expr]
+endfunction"}}}
+
 " Escape a path for runtimepath.
 function! s:escape(path)
   return substitute(a:path, ',\|\\,\@=', '\\\0', 'g')
