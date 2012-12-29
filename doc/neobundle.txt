@@ -507,11 +507,10 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleUpdatesLog 				*:NeoBundleUpdatesLog*
 		Print previous update logs.
 
-:NeoBundleLazy {repository} [, {options}]	*:NeoBundleLazy*
-:NeoExternalBundle {repository} [, {options}]
-						*:NeoExternalBundle*
+:NeoBundleLazy {repository} [[,{revision}] [,{options}]]
+:NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
+						*:NeoBundleLazy*
 		This command register bundle, but don't add to 'runtimepath'.
-		Note: |:NeoExternalBundle| is deprecated name.
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
 		NeoBundleSource The-NERD-tree
@@ -669,7 +668,7 @@ EXAMPLES					*neobundle-examples*
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
 	" Let neobundle manage neobundle
-	"NeoBundleFetch 'Shougo/neobundle.vim'
+	NeoBundleFetch 'Shougo/neobundle.vim'
 	
 	" Use neobundle standard recipes.
 	NeoBundle 'Shougo/neobundle-vim-scripts'
@@ -893,6 +892,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-12-29
+- Deleted :NeoExternalBundle.
 
 2012-12-27
 - Fixed shallow behavior when locked revision.
