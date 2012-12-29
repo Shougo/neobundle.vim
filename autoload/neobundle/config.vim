@@ -22,7 +22,6 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 0.1, for Vim 7.2
 "=============================================================================
 
 let s:save_cpo = &cpo
@@ -128,6 +127,16 @@ function! neobundle#config#lazy_bundle(arg)
     return {}
   endif
   let bundle.lazy = 1
+
+  " Autoload.
+  if has_key(bundle, 'autoload') && has_key(bundle.autoload, 'commands')
+    for command in bundle.autoload.commands
+      " Define dummy commands.
+      execute 'command! -nargs=*' command printf(
+            \ "call neobundle#autoload#command(%s, %s, <q-args>)",
+            \   string(command), string(bundle.name))
+    endfor
+  endif
 
   let path = bundle.path
 
@@ -601,16 +610,6 @@ function! s:load_depends(bundle)
     endif
 
     unlet depend
-  endfor
-endfunction
-
-function! neobundle#config#check_autoload_filetype()
-  let bundles = filter(neobundle#config#get_neobundles(),
-        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''
-        \   && has_key(v:val, 'autoload') && has_key(v:val.autoload, 'filetypes')")
-  for filetype in neobundle#util#get_filetypes()
-    call neobundle#config#source(filter(copy(bundles),"
-          \ has_key(v:val.autoload.filetypes, filetype)"))
   endfor
 endfunction
 

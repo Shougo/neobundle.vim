@@ -43,7 +43,8 @@ endif
 
 augroup neobundle
   autocmd!
-  autocmd Filetype * call neobundle#check_autoload_filetype()
+  autocmd Filetype * call neobundle#autoload#filetype()
+  autocmd FuncUndefined * call neobundle#autoload#function()
 augroup END
 
 " Global options definition." "{{{
