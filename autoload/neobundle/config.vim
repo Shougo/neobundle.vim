@@ -604,6 +604,16 @@ function! s:load_depends(bundle)
   endfor
 endfunction
 
+function! neobundle#config#check_autoload_filetype()
+  let bundles = filter(neobundle#config#get_neobundles(),
+        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''
+        \   && has_key(v:val, 'autoload') && has_key(v:val.autoload, 'filetypes')")
+  for filetype in neobundle#util#get_filetypes()
+    call neobundle#config#source(filter(copy(bundles),"
+          \ has_key(v:val.autoload.filetypes, filetype)"))
+  endfor
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
