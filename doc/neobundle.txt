@@ -616,6 +616,10 @@ OPTIONS 					*neobundle-options*
 	      \ 'mappings' : [
 	      \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
 	      \ }}
+	NeoBundleLazy 'Shougo/vim-vcs', {
+	      \ 'depends' : 'thinca/vim-openbuf',
+	      \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
+	      \   }
 <
 					*neobundle-options-type__shallow*
 		type__shallow	(Number)
@@ -944,6 +948,7 @@ CHANGELOG					*neobundle-changelog*
 - Implemented autoload commands.
 - Implemented autoload mappings.
 - Added neobundle#util#convert_list().
+- Fixed neobundle autocmds.
 
 2012-12-27
 - Fixed shallow behavior when locked revision.

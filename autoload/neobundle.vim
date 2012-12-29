@@ -41,12 +41,6 @@ if v:version < 702
   finish
 endif
 
-augroup neobundle
-  autocmd!
-  autocmd Filetype * call neobundle#autoload#filetype()
-  autocmd FuncUndefined * call neobundle#autoload#function()
-augroup END
-
 " Global options definition." "{{{
 call neobundle#util#set_default(
       \ 'g:neobundle#log_filename', '', 'g:neobundle_log_filename')

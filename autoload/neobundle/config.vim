@@ -35,6 +35,12 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init()
+  augroup neobundle
+    autocmd!
+    autocmd FileType * call neobundle#autoload#filetype()
+    autocmd FuncUndefined * call neobundle#autoload#function()
+  augroup END
+
   filetype off
 
   call s:rtp_rm_all_bundles()
@@ -237,6 +243,12 @@ function! s:parse_arg(arg)
   call neobundle#config#check_external_commands(bundle)
 
   return bundle
+endfunction
+
+function! neobundle#config#source_bundles(bundles)
+  for bundle in a:bundles
+    call neobundle#config#source(bundle.name)
+  endfor
 endfunction
 
 function! neobundle#config#source(...)

@@ -37,7 +37,7 @@ function! neobundle#autoload#filetype()
   let bundles = filter(s:get_autoload_bundles(),
         \ "has_key(v:val.autoload, 'filetypes')")
   for filetype in neobundle#util#get_filetypes()
-    call neobundle#config#source(filter(copy(bundles),"
+    call neobundle#config#source_bundles(filter(copy(bundles),"
           \ index(neobundle#util#convert_list(
           \     v:val.autoload.filetypes), filetype) >= 0"))
   endfor
@@ -46,7 +46,9 @@ endfunction
 function! neobundle#autoload#function()
   let bundles = filter(s:get_autoload_bundles(),
         \ "has_key(v:val.autoload, 'functions') &&
-        \  index(v:val.autoload.functions, expand('<afile>')) >= 0")
+        \  index(neobundle#util#convert_list(
+        \     v:val.autoload.functions), expand('<afile>')) >= 0")
+  call neobundle#config#source_bundles(bundles)
 endfunction
 
 function! neobundle#autoload#command(command, name, args)
