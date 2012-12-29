@@ -56,7 +56,47 @@ function! neobundle#autoload#command(command, name, args)
   execute a:command a:args
 endfunction
 
-function! neobundle#autoload#mapping()
+function! neobundle#autoload#mapping(mapping, name, mode)
+  let input = s:get_input()
+
+  execute a:mode.'unmap' a:mapping
+
+  call neobundle#config#source(a:name)
+  if a:mode ==# 'v' || a:mode ==# 'x'
+    call feedkeys('gv', 'n')
+  elseif a:mode ==# 'o'
+    " TODO: omap
+    " v:prevcount?
+    " Cancel waiting operator mode.
+    " call feedkeys("\<C-\\>\<C-n>", 'n')
+    call feedkeys("\<Esc>", 'n')
+    call feedkeys(v:operator, 'm')
+  endif
+
+  let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
+  call feedkeys(mapping . input, 'm')
+endfunction
+
+function! s:get_input()
+  let input = ''
+  let termstr = "<M-_>"
+
+  call feedkeys(termstr, 'n')
+
+  while 1
+    let input .= nr2char(getchar())
+
+    let idx = stridx(input, termstr)
+    if idx >= 1
+      let input = input[: idx - 1]
+      break
+    elseif idx == 0
+      let input = ''
+      break
+    endif
+  endwhile
+
+  return input
 endfunction
 
 let &cpo = s:save_cpo

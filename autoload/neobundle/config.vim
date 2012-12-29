@@ -129,12 +129,30 @@ function! neobundle#config#lazy_bundle(arg)
   let bundle.lazy = 1
 
   " Autoload.
-  if has_key(bundle, 'autoload') && has_key(bundle.autoload, 'commands')
-    for command in bundle.autoload.commands
+  if has_key(bundle, 'autoload')
+    for command in get(bundle.autoload, 'commands', [])
       " Define dummy commands.
       execute 'command! -nargs=*' command printf(
             \ "call neobundle#autoload#command(%s, %s, <q-args>)",
             \   string(command), string(bundle.name))
+    endfor
+
+    for map in get(bundle.autoload, 'mappings', [])
+      if type(map) == type([])
+        let [mode, mapping] = [map[0], map[1]]
+      else
+        let [mode, mapping] = ['nxo', map]
+      endif
+
+      " Define dummy mappings.
+      for mode in filter(split(mode, '\zs'),
+            \ "index(['n', 'v', 'x', 'o'], v:val) >= 0")
+        execute mode.'noremap <silent>' mapping printf(
+              \ ":<C-u>call neobundle#autoload#mapping(%s, %s, %s)<CR>",
+              \   string(mapping), string(bundle.name), string(mode))
+      endfor
+
+      unlet map
     endfor
   endif
 
