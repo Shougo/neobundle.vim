@@ -136,7 +136,7 @@ function! neobundle#config#lazy_bundle(arg)
 
   " Autoload.
   if has_key(bundle, 'autoload') &&
-        \ !get(s:loaded_neobundles, bundle.name, 0)
+        \ !neobundle#config#is_sourced(bundle.name)
     for command in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
       " Define dummy commands.
