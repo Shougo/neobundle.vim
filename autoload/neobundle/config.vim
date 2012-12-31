@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Dec 2012.
+" Last Modified: 31 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,7 +135,8 @@ function! neobundle#config#lazy_bundle(arg)
   let bundle.lazy = 1
 
   " Autoload.
-  if has_key(bundle, 'autoload')
+  if has_key(bundle, 'autoload') &&
+        \ !get(s:loaded_neobundles, bundle.name, 0)
     for command in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
       " Define dummy commands.
