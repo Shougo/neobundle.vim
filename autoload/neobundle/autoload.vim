@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Dec 2012.
+" Last Modified: 31 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,12 +51,12 @@ function! neobundle#autoload#function()
   call neobundle#config#source_bundles(bundles)
 endfunction
 
-function! neobundle#autoload#command(command, name, args)
+function! neobundle#autoload#command(command, name, args, bang)
   execute 'delcommand' a:command
 
   call neobundle#config#source(a:name)
 
-  execute a:command a:args
+  execute a:command.a:bang a:args
 endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)

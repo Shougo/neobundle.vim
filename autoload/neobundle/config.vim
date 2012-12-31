@@ -140,8 +140,8 @@ function! neobundle#config#lazy_bundle(arg)
     for command in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
       " Define dummy commands.
-      execute 'command! -nargs=*' command printf(
-            \ "call neobundle#autoload#command(%s, %s, <q-args>)",
+      execute 'command! -bang -nargs=*' command printf(
+            \ "call neobundle#autoload#command(%s, %s, <q-args>, expand('<bang>'))",
             \   string(command), string(bundle.name))
     endfor
 
