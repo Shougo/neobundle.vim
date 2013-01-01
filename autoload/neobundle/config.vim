@@ -563,8 +563,12 @@ function! s:add_bundle(bundle)
   let path = bundle.path
   let s:neobundles[path] = bundle
 
-  if !get(s:disabled_neobundles, bundle.name, 0)
-        \ && !bundle.lazy
+  if get(s:disabled_neobundles, bundle.name, 0)
+    return
+  endif
+
+  if !bundle.lazy && (bundle.overwrite ||
+        \ !neobundle#config#is_sourced(bundle.name))
     if has_key(s:neobundles, path)
       call s:rtp_rm(bundle)
     endif
@@ -652,6 +656,7 @@ function! s:init_bundle(bundle)
   let depends = get(bundle, 'depends', [])
   let bundle.depends = neobundle#util#convert_list(depends)
   let bundle.lazy = get(bundle, 'lazy', 0)
+  let bundle.overwrite = get(bundle, 'overwrite', 1)
 
   let bundle.resettable = 1
 
@@ -661,3 +666,4 @@ endfunction
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
+" vim: foldmethod=marker
