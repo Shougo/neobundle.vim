@@ -43,12 +43,12 @@ function! neobundle#config#init()
 
   filetype off
 
-  call s:rtp_rm_all_bundles()
-
   for bundle in values(s:neobundles)
-    if bundle._resettable
+    if bundle.resettable && bundle.name !=# 'neobundle.vim'
       " Reset.
-      call remove(s:neobundles, bundle.path)
+      call s:rtp_rm(bundle)
+
+      call remove(s:neobundles, bundle.name)
       if neobundle#config#is_sourced(bundle.name)
         call remove(s:loaded_neobundles, bundle.name)
       endif
@@ -137,9 +137,8 @@ function! neobundle#config#fetch_bundle(arg)
   " Clear runtimepath.
   let bundle.rtp = ''
 
-  let path = bundle.path
+  call s:add_bundle(bundle)
 
-  let s:neobundles[path] = bundle
   return bundle
 endfunction
 
@@ -149,7 +148,7 @@ function! neobundle#config#depends_bundle(arg)
     return {}
   endif
   let bundle.overwrite = 0
-  let bundle._resettable = 0
+  let bundle.resettable = 0
 
   call s:add_bundle(bundle)
 
@@ -224,7 +223,7 @@ function! neobundle#config#source(...)
   filetype off
 
   for bundle in bundles
-    if has_key(s:neobundles, bundle.path)
+    if has_key(s:neobundles, bundle.name)
       call s:rtp_rm(bundle)
     endif
     call s:rtp_add(bundle)
@@ -293,14 +292,14 @@ function! neobundle#config#is_sourced(name)
 endfunction
 
 function! neobundle#config#rm_bundle(path)
-  if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path])
-    call remove(s:neobundles, a:path)
-  endif
+  for bundle in filter(copy(s:neobundles), 'v:val.path ==# a:path')
+    call s:rtp_rm(bundle)
+    call remove(s:neobundles, bundle.name)
+  endfor
 
   " Delete from s:direct_neobundles.
-  if has_key(s:direct_neobundles, a:path)
-    call remove(s:direct_neobundles, a:path)
+  for bundle in filter(copy(s:direct_neobundles), 'v:val.path ==# a:path')
+    call remove(s:direct_neobundles, bundle.name)
   endif
 
   call neobundle#config#save_direct_bundles()
@@ -548,7 +547,7 @@ function! s:load_depends(bundle)
 
     " Parse check.
     let depend_bundle = neobundle#config#bundle(depend, 1)
-    if !has_key(s:neobundles, depend_bundle.path)
+    if !has_key(s:neobundles, depend_bundle.name)
       call neobundle#config#bundle(depend)
     endif
 
@@ -558,16 +557,16 @@ endfunction
 
 function! s:add_bundle(bundle)
   let bundle = a:bundle
-  let path = bundle.path
-  let s:neobundles[path] = bundle
 
   if get(s:disabled_neobundles, bundle.name, 0)
+        \ || (!bundle.overwrite && has_key(s:neobundles, bundle.name))
     return
   endif
 
-  if !bundle.lazy && (bundle.overwrite ||
-        \ !neobundle#config#is_sourced(bundle.name))
-    if has_key(s:neobundles, path)
+  let s:neobundles[bundle.name] = bundle
+
+  if !bundle.lazy && bundle.rtp != ''
+    if has_key(s:loaded_neobundles, bundle.name)
       call s:rtp_rm(bundle)
     endif
 
@@ -655,8 +654,7 @@ function! s:init_bundle(bundle)
   let bundle.depends = neobundle#util#convert_list(depends)
   let bundle.lazy = get(bundle, 'lazy', 0)
   let bundle.overwrite = get(bundle, 'overwrite', 1)
-
-  let bundle._resettable = 1
+  let bundle.resettable = get(bundle, 'resettable', 1)
 
   return bundle
 endfunction

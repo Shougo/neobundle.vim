@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Dec 2012.
+" Last Modified: 01 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,7 +69,7 @@ command! -nargs=+ NeoBundleFetch
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=1 NeoBundleLocal
-      \ call s:neobundle_local(<q-args>)
+      \ call neobundle#local(<q-args>, {})
 
 command! -nargs=+ NeoBundleDepends
       \ call neobundle#config#depends_bundle(
@@ -166,11 +166,15 @@ function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
         \ 'stridx(v:val, a:arglead) == 0')
 endfunction
 
-function! s:neobundle_local(localdir)
-  for dir in map(split(glob(neobundle#util#expand(a:localdir)
-        \ . '/*'), '\n'), "fnamemodify(v:val, ':t')")
+function! neobundle#local(localdir, options)
+  for dir in map(filter(split(glob(fnamemodify(
+        \ neobundle#util#expand(a:localdir), ':p')
+        \ . '*'), '\n'), "isdirectory(v:val)"),
+        \ "substitute(fnamemodify(v:val, ':p'), '/$', '', '')")
     call neobundle#config#bundle([dir,
-          \ { 'type' : 'nosync', 'base' : a:localdir, }])
+          \ extend({ 'type' : 'nosync',
+          \   'base' : neobundle#util#substitute_path_separator(
+          \              fnamemodify(a:localdir, ':p')), }, a:options)])
   endfor
 endfunction
 
