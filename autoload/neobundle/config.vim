@@ -251,6 +251,8 @@ function! neobundle#config#source(...)
 
     let s:loaded_neobundles[bundle.name] = 1
     let s:disabled_neobundles[bundle.name] = 0
+
+    let bundle.resettable = 0
   endfor
 
   if filetype_out =~# 'detection:ON'
