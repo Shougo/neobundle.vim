@@ -56,6 +56,10 @@ function! neobundle#config#init()
   call neobundle#config#load_direct_bundles()
 endfunction
 
+function! neobundle#config#get(name)
+  return get(s:neobundles, a:name, {})
+endfunction
+
 function! neobundle#config#get_neobundles()
   return sort(values(s:neobundles), 's:compare_names')
 endfunction
@@ -262,6 +266,8 @@ function! neobundle#config#source(...)
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
+
+  call neobundle#call_hook('on_source', bundles)
 endfunction
 
 function! neobundle#config#disable(arg)
@@ -566,6 +572,8 @@ function! s:add_bundle(bundle)
     let s:loaded_neobundles[bundle.name] = 1
     call s:rtp_add(bundle)
     call s:load_depends(bundle)
+
+    call neobundle#call_hook('on_source', [bundle])
   elseif bundle.lazy && has_key(bundle, 'autoload') &&
         \ !neobundle#config#is_sourced(bundle.name)
     for command in neobundle#util#convert_list(
@@ -648,6 +656,7 @@ function! s:init_bundle(bundle)
   let bundle.lazy = get(bundle, 'lazy', 0)
   let bundle.overwrite = get(bundle, 'overwrite', 1)
   let bundle.resettable = get(bundle, 'resettable', 1)
+  let bundle.hooks = get(bundle, 'hooks', {})
 
   return bundle
 endfunction

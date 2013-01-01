@@ -144,11 +144,38 @@ neobundle#is_sourced({bundle-name})
 				*neobundle#is_sourced()*
 		Checks if {bundle-name} bundle is loaded.
 
-neobundle#local({directory}, {options})
-				*neobundle#local()*
+neobundle#local({directory}, {options})		 *neobundle#local()*
 		This command add the sub directories in {directory} to
 		runtimepath. The {options} is following keys:
 		|neobundle-options|
+
+neobundle#get({bundle-name})			 *neobundle#get()*
+		Get {bundle-name} neobundle dictionary.
+		It is useful for setting hooks.
+		Example:
+>
+	NeoBundleLazy 'tyru/open-browser.vim', '', 'same', { 'autoload' : {
+	      \ 'mappings' : '<Plug>(open-browser-wwwsearch)',
+	      \ }}
+	nmap gs <Plug>(open-browser-wwwsearch)
+	
+	let bundle = neobundle#get('open-browser.vim')
+	function! bundle.hooks.on_source(bundle)
+	  nnoremap <Plug>(open-browser-wwwsearch)
+	        \ :<C-u>call <SID>www_search()<CR>
+	  function! s:www_search()
+	    let search_word = input('Please input search word: ', '',
+	          \ 'customlist,wwwsearch#cmd_Wwwsearch_complete')
+	    if search_word != ''
+	      execute 'OpenBrowserSearch' escape(search_word, '"')
+	    endif
+	  endfunction
+	endfunction
+<
+neobundle#call_hook({hook-name})		 *neobundle#call_hook()*
+		Call {hook-name} hooks.
+		Note: If {hook-name} is "on_source", neobundle call
+		"on_source" hooks in sourced bundles.
 
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
@@ -637,6 +664,15 @@ OPTIONS 					*neobundle-options*
 		If it is 0, neobundle doesn't reset the path in
 		|neobundle#rc()|.
 
+						*neobundle-options-hooks*
+		hooks			(Dictionary)
+		Specify hook functions. The following hook functions are
+		defined:
+
+			on_source		*neobundle-hooks-on_source*
+			Called after loaded bundles. It is useful for plugin
+			initilization in lazy bundles.
+
 					*neobundle-options-type__shallow*
 		type__shallow		(Number)
 		If it is 1, neobundle will use "shallow clone" in plugin
@@ -964,6 +1000,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved :NeoBundleDepends behavior.
 - Fixed initilization errors.
 - Added neobundle#local().
+- Added neobundle#get() and neobundle#call_hook().
 
 2012-12-31
 - Fixed for :NeoBundleLazy.

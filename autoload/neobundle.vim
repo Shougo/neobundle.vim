@@ -206,6 +206,21 @@ function! neobundle#get_not_installed_bundles(bundle_names)
         \ "!isdirectory(neobundle#util#expand(v:val.path))")
 endfunction
 
+function! neobundle#get(name)
+  return neobundle#config#get(a:name)
+endfunction
+
+function! neobundle#call_hook(hook_name, ...)
+  let bundles = empty(a:000) ?
+        \ neobundle#config#get_neobundles() : a:1
+  for bundle in filter(copy(bundles),
+        \ "has_key(v:val.hooks, a:hook_name) &&
+        \  (a:hook_name !=# 'on_source' ||
+        \       neobundle#config#is_sourced(v:val.name))")
+    call call(bundle.hooks[a:hook_name], [bundle], bundle)
+  endfor
+endfunction
+
 function! s:get_installed_bundles(bundle_names)
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
