@@ -46,7 +46,7 @@ function! neobundle#config#init()
   call s:rtp_rm_all_bundles()
 
   for bundle in values(s:neobundles)
-    if bundle.resettable
+    if bundle._resettable
       " Reset.
       call remove(s:neobundles, bundle.path)
       if neobundle#config#is_sourced(bundle.name)
@@ -145,15 +145,13 @@ endfunction
 
 function! neobundle#config#depends_bundle(arg)
   let bundle = s:parse_arg(a:arg)
-
-  if empty(bundle) || has_key(s:neobundles, bundle.path)
-    " Ignore.
+  if empty(bundle)
     return {}
   endif
+  let bundle.overwrite = 0
+  let bundle._resettable = 0
 
-  let bundle = neobundle#config#bundle(a:arg)
-  let bundle.resettable = 0
-  let s:loaded_neobundles[bundle.name] = 0
+  call s:add_bundle(bundle)
 
   " Install bundle automatically.
   silent call neobundle#installer#install(0, bundle.name)
@@ -658,7 +656,7 @@ function! s:init_bundle(bundle)
   let bundle.lazy = get(bundle, 'lazy', 0)
   let bundle.overwrite = get(bundle, 'overwrite', 1)
 
-  let bundle.resettable = 1
+  let bundle._resettable = 1
 
   return bundle
 endfunction
