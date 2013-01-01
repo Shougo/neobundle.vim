@@ -49,9 +49,6 @@ function! neobundle#config#init()
       call s:rtp_rm(bundle)
 
       call remove(s:neobundles, bundle.name)
-      if neobundle#config#is_sourced(bundle.name)
-        call remove(s:loaded_neobundles, bundle.name)
-      endif
     endif
   endfor
 
@@ -270,10 +267,6 @@ endfunction
 function! neobundle#config#disable(arg)
   let bundle_names = neobundle#config#search(split(a:arg))
   if empty(bundle_names)
-    call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.')
-    call neobundle#installer#error(
-          \ '[neobundle/install] You may use wrong bundle name.')
     return
   endif
 
