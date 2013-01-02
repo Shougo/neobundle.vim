@@ -599,9 +599,10 @@ function! s:add_bundle(bundle)
 
       " Define dummy mappings.
       for mode in filter(split(mode, '\zs'),
-            \ "index(['n', 'v', 'x', 'o'], v:val) >= 0")
+            \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
         execute mode.'noremap <silent>' mapping printf(
-              \ ":<C-u>call neobundle#autoload#mapping(%s, %s, %s)<CR>",
+              \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
+              \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
               \   string(mapping), string(bundle.name), string(mode))
       endfor
 

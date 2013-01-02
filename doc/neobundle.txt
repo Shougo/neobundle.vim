@@ -996,6 +996,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-02
 - Optimised startup.
+- Supported imap in autoload mappings.
 
 2013-01-01
 - Improved bundle initilization.
