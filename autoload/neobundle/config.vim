@@ -629,7 +629,7 @@ function! s:get_default()
 
   let s:default_bundle.base = neobundle#get_neobundle_dir()
 
-  return copy(s:default_bundle)
+  return deepcopy(s:default_bundle)
 endfunction
 
 function! s:init_bundle(bundle)
