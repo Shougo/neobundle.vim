@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2012.
+" Last Modified: 02 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,27 +53,25 @@ function! s:type.detect(path, opts) "{{{
   endif
 
   if a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
-    if a:path !~ '/'
+    if a:path =~ '/'
+      let name = substitute(split(a:path, ':')[-1],
+            \   '^//github.com/', '', '')
+      let uri =  (protocol ==# 'ssh') ?
+            \ 'git@github.com:' . name :
+            \ protocol . '://github.com/'. name
+    else
       " www.vim.org Vim scripts.
       let name = split(a:path, ':')[-1]
       let uri  = (protocol ==# 'ssh') ?
             \ 'git@github.com:vim-scripts/' :
             \ protocol . '://github.com/vim-scripts/'
       let uri .= name
-    else
-      let name = substitute(split(a:path, ':')[-1],
-            \   '^//github.com/', '', '')
-      let uri =  (protocol ==# 'ssh') ?
-            \ 'git@github.com:' . name :
-            \ protocol . '://github.com/'. name
     endif
 
     if uri !~ '\.git\s*$'
       " Add .git suffix.
       let uri .= '.git'
     endif
-
-    let type = 'git'
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'
@@ -90,13 +88,12 @@ function! s:type.detect(path, opts) "{{{
     else
       let uri = a:path
     endif
-
-    let type = 'git'
+  else
+    return {}
   endif
 
-  return type == '' ?  {} :
-        \ { 'name': substitute(split(uri, '/')[-1],
-        \           '\.git\s*$','','i'), 'uri': uri, 'type' : type }
+  return { 'name': substitute(split(uri, '/')[-1],
+        \           '\.git\s*$','','i'), 'uri': uri, 'type' : 'git' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
   if !executable('git')

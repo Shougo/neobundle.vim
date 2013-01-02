@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Dec 2012.
+" Last Modified: 02 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,11 +34,16 @@ let s:is_mac = !s:is_windows
       \   (!isdirectory('/proc') && executable('sw_vers')))
 
 function! neobundle#util#substitute_path_separator(path) "{{{
-  return (s:is_windows) ? substitute(a:path, '\\', '/', 'g') : a:path
+  return (s:is_windows && a:path =~ '\\') ?
+        \ substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! neobundle#util#expand(path) "{{{
-  return neobundle#util#substitute_path_separator(
-        \ expand(escape(a:path, '*?[]"={}'), 1))
+  let path = expand(escape(a:path, '*?[]={}'), 1)
+  return (s:is_windows && path =~ '\\') ?
+        \ neobundle#util#substitute_path_separator(path) : path
+endfunction"}}}
+function! neobundle#util#expand2(path) "{{{
+  return expand(escape(a:path, '*?[]={}'), 1)
 endfunction"}}}
 
 function! neobundle#util#is_windows() "{{{
@@ -108,12 +113,18 @@ function! neobundle#util#split_rtp(...) "{{{
   if type(rtp) == type([])
     return rtp
   endif
+
+  if rtp !~ '\\'
+    return split(rtp, ',')
+  endif
+
   let split = split(rtp, '\\\@<!\%(\\\\\)*\zs,')
   return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
 endfunction"}}}
 
-function! neobundle#util#join_rtp(list) "{{{
-  return join(map(copy(a:list), 's:escape(v:val)'), ',')
+function! neobundle#util#join_rtp(list, runtimepath, rtp) "{{{
+  return (a:runtimepath !~ '\\' && a:rtp !~ ',') ?
+        \ join(a:list, ',') : join(map(copy(a:list), 's:escape(v:val)'), ',')
 endfunction"}}}
 
 " Removes duplicates from a list.

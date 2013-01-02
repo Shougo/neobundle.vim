@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Jan 2013.
+" Last Modified: 02 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,7 +61,7 @@ function! neobundle#config#get(name)
 endfunction
 
 function! neobundle#config#get_neobundles()
-  return sort(values(s:neobundles), 's:compare_names')
+  return values(s:neobundles)
 endfunction
 
 function! s:compare_names(a, b)
@@ -196,7 +196,9 @@ function! s:parse_arg(arg)
 
   let bundle.orig_arg = a:arg
 
-  call neobundle#config#check_external_commands(bundle)
+  if !empty(bundle.external_commands)
+    call neobundle#config#check_external_commands(bundle)
+  endif
 
   return bundle
 endfunction
@@ -325,6 +327,11 @@ function! neobundle#config#get_types()
   return s:neobundle_types
 endfunction
 
+function! neobundle#config#get_types_list()
+  let types = neobundle#config#get_types()
+  return [types['git']] + values(types)
+endfunction
+
 function! neobundle#config#parse_path(path, ...)
   let opts = get(a:000, 0, {})
   let site = get(opts, 'site', g:neobundle#default_site)
@@ -352,8 +359,8 @@ endfunction
 
 function! s:rtp_rm(bundle)
   let dir = a:bundle.rtp
-  execute 'set rtp-='.fnameescape(neobundle#util#expand(dir))
-  execute 'set rtp-='.fnameescape(neobundle#util#expand(dir.'/after'))
+  execute 'set rtp-='.fnameescape(dir)
+  execute 'set rtp-='.fnameescape(dir.'/after')
 endfunction
 
 function! s:rtp_add_bundles(bundles)
@@ -361,14 +368,14 @@ function! s:rtp_add_bundles(bundles)
 endfunction
 
 function! s:rtp_add(bundle) abort
-  let dir = a:bundle.rtp
-  let rtp = neobundle#util#expand(dir)
+  let rtp = a:bundle.rtp
   if isdirectory(rtp)
     if a:bundle.tail_path
       " Join to the tail in runtimepath.
       let rtps = neobundle#util#split_rtp(&runtimepath)
       let n = index(rtps, $VIMRUNTIME)
-      let &runtimepath = neobundle#util#join_rtp(insert(rtps, rtp, n-1))
+      let &runtimepath = neobundle#util#join_rtp(
+            \ insert(rtps, rtp, n-1), &runtimepath, rtp)
     else
       execute 'set rtp^='.fnameescape(rtp)
     endif
@@ -410,13 +417,9 @@ endfunction
 
 function! neobundle#config#fuzzy_search(bundle_names)
   let _ = []
-  for bundle in neobundle#config#get_neobundles()
-    for name in a:bundle_names
-      if stridx(bundle.name, name) >= 0
-        call add(_, bundle)
-        break
-      endif
-    endfor
+  for name in a:bundle_names
+    let _ += filter(neobundle#config#get_neobundles(),
+          \ 'stridx(v:val.name, name) >= 0')
   endfor
 
   for bundle in copy(_)
@@ -476,7 +479,7 @@ endfunction
 
 function! s:expand_path(path)
   return neobundle#util#substitute_path_separator(
-        \ simplify(neobundle#util#expand(a:path)))
+        \ simplify(neobundle#util#expand2(a:path)))
 endfunction
 
 function! s:redir(cmd)
@@ -511,7 +514,7 @@ endfunction
 
 function! neobundle#config#check_external_commands(bundle)
   " Environment check.
-  let external_commands = get(a:bundle, 'external_commands', {})
+  let external_commands = a:bundle.external_commands
   if type(external_commands) == type([])
         \ || type(external_commands) == type('')
     let commands = external_commands
@@ -607,6 +610,28 @@ function! s:add_bundle(bundle)
   endif
 endfunction
 
+function! s:get_default()
+  if !exists('s:default_bundle')
+    let s:default_bundle = {
+          \ 'uri' : '',
+          \ 'tail_path' : g:neobundle#enable_tail_path,
+          \ 'script_type' : '',
+          \ 'rev' : '',
+          \ 'rtp' : '',
+          \ 'depends' : [],
+          \ 'lazy' : 0,
+          \ 'overwrite' : 1,
+          \ 'resettable' : 1,
+          \ 'hooks' : {},
+          \ 'external_commands' : {},
+          \ }
+  endif
+
+  let s:default_bundle.base = neobundle#get_neobundle_dir()
+
+  return copy(s:default_bundle)
+endfunction
+
 function! s:init_bundle(bundle)
   let bundle = a:bundle
   if !has_key(bundle, 'type')
@@ -616,34 +641,24 @@ function! s:init_bundle(bundle)
     return {}
   endif
 
-  if !has_key(bundle, 'uri')
-    let bundle.uri = path
-  endif
+  let bundle = extend(s:get_default(), bundle)
+
   if !has_key(bundle, 'name')
     let bundle.name =
           \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
   endif
-  if !has_key(bundle, 'tail_path')
-    let bundle.tail_path = g:neobundle#enable_tail_path
-  endif
-  if !has_key(bundle, 'script_type')
-    let bundle.script_type = ''
-  endif
-  if !has_key(bundle, 'rev')
-    let bundle.rev = ''
+  if !has_key(bundle, 'directory')
+    let bundle.directory = bundle.name
   endif
 
-  let bundle.base = s:expand_path(get(bundle, 'base',
-        \ neobundle#get_neobundle_dir()))
-  let bundle.directory = get(bundle, 'directory',
-        \ bundle.name)
+  let bundle.base = s:expand_path(bundle.base)
   if bundle.rev != ''
     let bundle.directory .= '_' . substitute(bundle.rev,
           \ '[^[:alnum:]_.-]', '', 'g')
   endif
   let bundle.path = s:expand_path(bundle.base.'/'.bundle.directory)
 
-  let rtp = get(bundle, 'rtp', '')
+  let rtp = bundle.rtp
   " Check relative path.
   let bundle.rtp = (rtp =~ '^\%(/\|\~\|\a\+:\)') ?
         \ rtp : (bundle.path.'/'.rtp)
@@ -653,12 +668,7 @@ function! s:init_bundle(bundle)
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
 
-  let depends = get(bundle, 'depends', [])
-  let bundle.depends = neobundle#util#convert_list(depends)
-  let bundle.lazy = get(bundle, 'lazy', 0)
-  let bundle.overwrite = get(bundle, 'overwrite', 1)
-  let bundle.resettable = get(bundle, 'resettable', 1)
-  let bundle.hooks = get(bundle, 'hooks', {})
+  let bundle.depends = neobundle#util#convert_list(bundle.depends)
 
   return bundle
 endfunction
