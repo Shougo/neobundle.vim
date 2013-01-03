@@ -68,7 +68,7 @@ command! -nargs=+ NeoBundleFetch
       \ call neobundle#config#fetch_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=1 NeoBundleLocal
+command! -nargs=1 -complete=dir NeoBundleLocal
       \ call neobundle#local(<q-args>, {})
 
 command! -nargs=+ NeoBundleDepends
