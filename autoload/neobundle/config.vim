@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jan 2013.
+" Last Modified: 03 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -204,9 +204,7 @@ function! s:parse_arg(arg)
 endfunction
 
 function! neobundle#config#source_bundles(bundles)
-  for bundle in a:bundles
-    call neobundle#config#source(bundle.name)
-  endfor
+  call neobundle#config#source(map(copy(a:bundles), 'v:val.name'))
 endfunction
 
 function! neobundle#config#source(...)
