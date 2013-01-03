@@ -249,12 +249,15 @@ function! neobundle#config#source(names)
     endfor
 
     if !reset_ftplugin
-      for directory in ['ftplugin', 'indent', 'syntax',
-            \ 'after/ftplugin', 'after/indent', 'after/syntax']
-        if glob(bundle.rtp.'/'.directory.'/**/*.vim') != ''
-          let reset_ftplugin = 1
-          break
-        endif
+      for filetype in split(&filetype, '\.')
+        for directory in ['ftplugin', 'indent', 'syntax',
+              \ 'after/ftplugin', 'after/indent', 'after/syntax']
+          if glob(printf('%s/%s/{%s.vim,%s/**/*.vim,%s_*.vim}',
+                \ bundle.rtp, directory, filetype, filetype, filetype)) != ''
+            let reset_ftplugin = 1
+            break
+          endif
+        endfor
       endfor
     endif
 
