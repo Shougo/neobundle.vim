@@ -198,7 +198,6 @@ COMMANDS 					*neobundle-commands*
 
 		The {options} is following keys: |neobundle-options|
 
-						*neobundle-options*
 :NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
 		Likes pathogen.vim wrapper.  This command add
 		{base-directory-path} directories in runtimepath.
