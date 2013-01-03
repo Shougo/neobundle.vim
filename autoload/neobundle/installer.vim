@@ -99,7 +99,7 @@ function! neobundle#installer#helptags(bundles)
 
   call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
-    call s:helptags(neobundle#get_neobundle_runtime_dir())
+    call s:helptags(neobundle#get_runtime_dir())
     call s:update_tags()
 
     call neobundle#installer#log(
@@ -571,7 +571,7 @@ endfunction
 
 function! s:update_tags()
   let tags = {}
-  for bundle in [{ 'rtp' : neobundle#get_neobundle_runtime_dir()}]
+  for bundle in [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
     for tag in split(globpath(
           \ bundle.rtp, 'doc/{tags,tags-*}'), '\n')

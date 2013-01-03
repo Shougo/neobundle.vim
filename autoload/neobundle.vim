@@ -142,7 +142,7 @@ function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
 endfunction
 
-function! neobundle#get_neobundle_runtime_dir()
+function! neobundle#get_runtime_dir()
   return s:neobundle_runtime_dir
 endfunction
 
