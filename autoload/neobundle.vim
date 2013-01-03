@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jan 2013.
+" Last Modified: 03 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,11 +134,21 @@ function! neobundle#rc(...)
   let s:neobundle_dir =
         \ neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(s:neobundle_dir))
+  execute 'set runtimepath^='.fnameescape(
+        \ neobundle#get_tags_dir())
+
   call neobundle#config#init()
 endfunction
 
 function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
+endfunction
+function! neobundle#get_tags_dir()
+  let dir = neobundle#get_neobundle_dir() . '/.neobundle/doc'
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+  return dir
 endfunction
 
 function! neobundle#source(bundle_names)

@@ -997,6 +997,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-03
 - Improved documentation.
+- Improved :helptags behavior.
 
 2013-01-02
 - Optimised startup.
