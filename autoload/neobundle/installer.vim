@@ -99,11 +99,10 @@ function! neobundle#installer#helptags(bundles)
 
   call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
+    call s:update_tags()
     call neobundle#installer#log(
           \ '[neobundle/install] Helptags: done. '
           \ .len(help_dirs).' bundles processed')
-
-    call s:update_tags()
   endif
 
   return help_dirs
@@ -570,7 +569,7 @@ endfunction
 function! s:update_tags()
   let tags = {}
   for bundle in neobundle#config#get_neobundles()
-    for tag in globpath(bundle.rtp, 'doc/{tags,tags-*}')
+    for tag in split(globpath(bundle.rtp, 'doc/{tags,tags-*}'), '\n')
       let filename = fnamemodify(tag, ':t')
       if !has_key(tags, filename)
         let tags[filename] = []
