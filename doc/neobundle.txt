@@ -146,8 +146,9 @@ neobundle#is_sourced({bundle-name})
 
 neobundle#local({directory}, {options})		 *neobundle#local()*
 		This command add the sub directories in {directory} to
-		runtimepath. The {options} is following keys:
+		runtimepath like |pathogen|. The {options} is following keys:
 		|neobundle-options|
+		Note: |:NeoBundleLocal| is syntax sugar command.
 
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get {bundle-name} neobundle dictionary.
@@ -993,6 +994,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-01-03
+- Improved documentation.
 
 2013-01-02
 - Optimised startup.
