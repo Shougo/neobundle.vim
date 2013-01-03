@@ -32,6 +32,7 @@ if !exists('s:neobundles')
   let s:loaded_neobundles = {}
   let s:direct_neobundles = {}
   let s:disabled_neobundles = {}
+  let s:sourced_neobundles = {}
 endif
 
 function! neobundle#config#init()
@@ -40,6 +41,7 @@ function! neobundle#config#init()
     autocmd FileType * call neobundle#autoload#filetype()
     autocmd FuncUndefined * call neobundle#autoload#function()
     autocmd InsertEnter * call neobundle#autoload#insert()
+    autocmd VimEnter * call s:on_vim_enter()
   augroup END
 
   filetype off
@@ -272,6 +274,7 @@ function! neobundle#config#source(names)
     endif
 
     let s:loaded_neobundles[bundle.name] = 1
+    let s:sourced_neobundles[bundle.name] = 1
     let s:disabled_neobundles[bundle.name] = 0
 
     let bundle.resettable = 0
@@ -315,6 +318,9 @@ function! neobundle#config#disable(arg)
     call s:rtp_rm(bundle)
     if has_key(s:loaded_neobundles, bundle.name)
       call remove(s:loaded_neobundles, bundle.name)
+    endif
+    if has_key(s:sourced_neobundles, bundle.name)
+      call remove(s:sourced_neobundles, bundle.name)
     endif
 
     let s:disabled_neobundles[bundle.name] = 1
@@ -574,6 +580,15 @@ function! neobundle#config#check_external_commands(bundle)
   endfor
 endfunction
 
+function! neobundle#config#set(name, dict)
+  let bundle = extend(neobundle#config#get(a:name), a:dict)
+  if bundle.lazy && !get(s:sourced_neobundles, bundle.name, 0)
+    " Remove runtimepath.
+    call s:rtp_rm(bundle)
+    let s:loaded_neobundles[bundle.name] = 0
+  endif
+endfunction
+
 function! s:load_depends(bundle, lazy)
   for depend in a:bundle.depends
     if type(depend) == type('')
@@ -706,6 +721,13 @@ function! s:init_bundle(bundle)
   let bundle.depends = neobundle#util#convert_list(bundle.depends)
 
   return bundle
+endfunction
+
+function! s:on_vim_enter()
+  " Set sourced flag.
+  for bundle in neobundle#config#get_neobundles()
+    let s:sourced_neobundles[bundle.name] = 1
+  endfor
 endfunction
 
 let &cpo = s:save_cpo

@@ -178,6 +178,9 @@ neobundle#call_hook({hook-name})		 *neobundle#call_hook()*
 		Note: If {hook-name} is "on_source", neobundle call
 		"on_source" hooks in sourced bundles.
 
+neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
+		Change {bundle-name} plugin options.
+
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -1000,6 +1003,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-04
 - Added "insert" flag in autoload.
+- Added neobundle#config().
 
 2013-01-03
 - Improved documentation.

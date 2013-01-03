@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Jan 2013.
+" Last Modified: 04 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,8 +45,9 @@ endfunction
 
 function! neobundle#autoload#insert()
   let bundles = filter(s:get_autoload_bundles(),
-        \ "get(v:val.autoload, 'insert', 1)")
+        \ "get(v:val.autoload, 'insert', 0)")
   if !empty(bundles)
+    echomsg string(bundles)
     call neobundle#config#source_bundles(bundles)
     doautocmd InsertEnter
   endif
