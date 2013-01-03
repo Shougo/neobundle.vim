@@ -695,7 +695,7 @@ function! s:init_bundle(bundle)
 
   if !has_key(bundle, 'name')
     let bundle.name =
-          \ substitute(split(path, '/')[-1], '\.git\s*$','','i')
+          \ substitute(split(bundle.orig_name, '/')[-1], '\.git\s*$','','i')
   endif
   if !has_key(bundle, 'directory')
     let bundle.directory = bundle.name
