@@ -149,6 +149,8 @@ neobundle#local({directory}, {options})		 *neobundle#local()*
 		runtimepath like |pathogen|. The {options} is following keys:
 		|neobundle-options|
 		Note: |:NeoBundleLocal| is syntax sugar command.
+		Note: All plugins in {directory} are loaded instead of
+		|:NeoBundleLocal|.
 
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get {bundle-name} neobundle dictionary.
@@ -180,7 +182,16 @@ neobundle#call_hook({hook-name})		 *neobundle#call_hook()*
 
 neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
 		Change {bundle-name} plugin options.
-
+		Note: To load plugin lazily, you can set "lazy" flag after
+		|:NeoBundle| or |:NeoBundleLocal|.
+>
+	NeoBundle 'Shougo/neocomplcache'
+	call neobundle#config('neocomplcache', {
+	\ 'lazy' : 1,
+	\ 'autoload' : {
+	\   'insert' : 1,
+	\ }})
+<
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
