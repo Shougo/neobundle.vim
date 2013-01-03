@@ -204,13 +204,17 @@ function! s:parse_arg(arg)
 endfunction
 
 function! neobundle#config#source_bundles(bundles)
-  call neobundle#config#source(map(copy(a:bundles), 'v:val.name'))
+  if !empty(a:bundles)
+    call neobundle#config#source(map(copy(a:bundles), 'v:val.name'))
+  endif
 endfunction
 
-function! neobundle#config#source(...)
-  let bundles = empty(a:000) ?
+function! neobundle#config#source(names)
+  let names = neobundle#util#convert_list(a:names)
+  let bundles = empty(names) ?
         \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(a:000)
+        \ neobundle#config#search(names)
+  let reset_ftplugin = get(a:000, 0, 1)
   let bundles = filter(bundles,
         \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''")
   if empty(bundles)
@@ -218,11 +222,14 @@ function! neobundle#config#source(...)
   endif
 
   redir => filetype_out
-    silent filetype
+  silent filetype
   redir END
 
-  filetype off
+  redir => filetype_before
+  silent autocmd FileType
+  redir END
 
+  let reset_ftplugin = 0
   for bundle in bundles
     if has_key(s:neobundles, bundle.name)
       call s:rtp_rm(bundle)
@@ -241,6 +248,16 @@ function! neobundle#config#source(...)
       endfor
     endfor
 
+    if !reset_ftplugin
+      for directory in ['ftplugin', 'indent', 'syntax',
+            \ 'after/ftplugin', 'after/indent', 'after/syntax']
+        if glob(bundle.rtp.'/'.directory.'/**/*.vim') != ''
+          let reset_ftplugin = 1
+          break
+        endif
+      endfor
+    endif
+
     if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
       execute 'doautocmd' bundle.augroup 'VimEnter'
 
@@ -255,19 +272,28 @@ function! neobundle#config#source(...)
     let bundle.resettable = 0
   endfor
 
-  if filetype_out =~# 'detection:ON'
-    silent! filetype on
+  redir => filetype_after
+  silent autocmd FileType
+  redir END
+
+  if filetype_before !=# filetype_after || reset_ftplugin
+    filetype off
+
+    if filetype_out =~# 'detection:ON'
+      silent! filetype on
+    endif
 
     if filetype_out =~# 'plugin:ON'
       silent! filetype plugin on
     endif
+
     if filetype_out =~# 'indent:ON'
       silent! filetype indent on
     endif
-  endif
 
-  " Reload filetype plugins.
-  let &l:filetype = &l:filetype
+    " Reload filetype plugins.
+    let &l:filetype = &l:filetype
+  endif
 
   call neobundle#call_hook('on_source', bundles)
 endfunction

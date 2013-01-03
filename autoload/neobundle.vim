@@ -82,7 +82,7 @@ command! -nargs=+ NeoBundleDirectInstall
 command! -nargs=* -bar
       \ -complete=customlist,neobundle#complete_lazy_bundles
       \ NeoBundleSource
-      \ call neobundle#config#source(<f-args>)
+      \ call neobundle#config#source([<f-args>])
 
 command! -nargs=+ -bar
       \ -complete=customlist,neobundle#complete_bundles
@@ -152,7 +152,7 @@ function! neobundle#get_tags_dir()
 endfunction
 
 function! neobundle#source(bundle_names)
-  return call('neobundle#config#source', a:bundle_names)
+  return neobundle#config#source(a:bundle_names)
 endfunction
 
 function! neobundle#complete_bundles(arglead, cmdline, cursorpos)
