@@ -205,7 +205,8 @@ endfunction
 
 function! neobundle#config#source_bundles(bundles)
   if !empty(a:bundles)
-    call neobundle#config#source(map(copy(a:bundles), 'v:val.name'))
+    call neobundle#config#source(map(copy(a:bundles),
+          \ "type(v:val) == type({}) ? v:val.name : v:val"))
   endif
 endfunction
 
@@ -236,7 +237,7 @@ function! neobundle#config#source(names)
     endif
     call s:rtp_add(bundle)
 
-    call s:load_depends(bundle)
+    call neobundle#config#source_bundles(bundle.depends)
 
     for directory in
           \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
@@ -570,7 +571,7 @@ function! neobundle#config#check_external_commands(bundle)
   endfor
 endfunction
 
-function! s:load_depends(bundle)
+function! s:load_depends(bundle, lazy)
   for depend in a:bundle.depends
     if type(depend) == type('')
       let depend = string(depend)
@@ -578,9 +579,12 @@ function! s:load_depends(bundle)
 
     " Parse check.
     let depend_bundle = neobundle#config#bundle(depend, 1)
+    let depend_bundle.lazy = a:lazy
     if !has_key(s:neobundles, depend_bundle.name)
       call neobundle#config#bundle(depend)
     endif
+
+    call neobundle#config#bundle(depend)
 
     unlet depend
   endfor
@@ -596,6 +600,8 @@ function! s:add_bundle(bundle)
 
   let s:neobundles[bundle.name] = bundle
 
+  call s:load_depends(bundle, bundle.lazy)
+
   if !bundle.lazy && bundle.rtp != ''
     if has_key(s:loaded_neobundles, bundle.name)
       call s:rtp_rm(bundle)
@@ -603,8 +609,6 @@ function! s:add_bundle(bundle)
 
     let s:loaded_neobundles[bundle.name] = 1
     call s:rtp_add(bundle)
-    call s:load_depends(bundle)
-
     call neobundle#call_hook('on_source', [bundle])
   elseif bundle.lazy && has_key(bundle, 'autoload') &&
         \ !neobundle#config#is_sourced(bundle.name)
