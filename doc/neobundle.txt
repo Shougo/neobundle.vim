@@ -635,6 +635,10 @@ OPTIONS 					*neobundle-options*
 			Mappings list. The item is {mapping} or [{mode}, {mapping}].
 			If {mode} is omitted, "nxo" is used.
 
+			insert		(Insert)
+			If it is non zero, neobundle will |:NeoBundleSource|
+			in |InsertEnter| autocmd.
+
 		Example:
 >
 	NeoBundleLazy 'Rip-Rip/clang_complete', {
@@ -993,6 +997,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-01-04
+- Added "insert" flag in autoload.
 
 2013-01-03
 - Improved documentation.

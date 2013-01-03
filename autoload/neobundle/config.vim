@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Jan 2013.
+" Last Modified: 04 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ function! neobundle#config#init()
     autocmd!
     autocmd FileType * call neobundle#autoload#filetype()
     autocmd FuncUndefined * call neobundle#autoload#function()
+    autocmd InsertEnter * call neobundle#autoload#insert()
   augroup END
 
   filetype off
@@ -227,7 +228,7 @@ function! neobundle#config#source(names)
   redir END
 
   redir => filetype_before
-  silent autocmd FileType
+  execute 'silent autocmd FileType' &filetype
   redir END
 
   let reset_ftplugin = 0
@@ -277,10 +278,10 @@ function! neobundle#config#source(names)
   endfor
 
   redir => filetype_after
-  silent autocmd FileType
+  execute 'silent autocmd FileType' &filetype
   redir END
 
-  if filetype_before !=# filetype_after || reset_ftplugin
+  if reset_ftplugin
     filetype off
 
     if filetype_out =~# 'detection:ON'
@@ -297,6 +298,8 @@ function! neobundle#config#source(names)
 
     " Reload filetype plugins.
     let &l:filetype = &l:filetype
+  elseif filetype_before !=# filetype_after
+    execute 'doautocmd FileType' &filetype
   endif
 
   call neobundle#call_hook('on_source', bundles)

@@ -121,11 +121,6 @@ command! -bar NeoBundleLog
 command! -bar NeoBundleUpdatesLog
       \ echo join(neobundle#installer#get_updates_log(), "\n")
 
-augroup neobundle
-  autocmd!
-  autocmd Syntax  vim syntax keyword vimCommand NeoBundle
-augroup END
-
 function! neobundle#rc(...)
   if a:0 > 0
     let s:neobundle_dir = a:1

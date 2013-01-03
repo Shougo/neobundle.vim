@@ -43,6 +43,15 @@ function! neobundle#autoload#filetype()
   endfor
 endfunction
 
+function! neobundle#autoload#insert()
+  let bundles = filter(s:get_autoload_bundles(),
+        \ "get(v:val.autoload, 'insert', 1)")
+  if !empty(bundles)
+    call neobundle#config#source_bundles(bundles)
+    doautocmd InsertEnter
+  endif
+endfunction
+
 function! neobundle#autoload#function()
   let bundles = filter(s:get_autoload_bundles(),
         \ "has_key(v:val.autoload, 'functions') &&
