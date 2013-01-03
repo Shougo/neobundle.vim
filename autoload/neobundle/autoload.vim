@@ -47,7 +47,6 @@ function! neobundle#autoload#insert()
   let bundles = filter(s:get_autoload_bundles(),
         \ "get(v:val.autoload, 'insert', 0)")
   if !empty(bundles)
-    echomsg string(bundles)
     call neobundle#config#source_bundles(bundles)
     doautocmd InsertEnter
   endif
