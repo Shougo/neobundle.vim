@@ -121,6 +121,9 @@ command! -bar NeoBundleLog
 command! -bar NeoBundleUpdatesLog
       \ echo join(neobundle#installer#get_updates_log(), "\n")
 
+let s:neobundle_runtime_dir = neobundle#util#substitute_path_separator(
+      \ fnamemodify(expand('<sfile>'), ':p:h:h'))
+
 function! neobundle#rc(...)
   if a:0 > 0
     let s:neobundle_dir = a:1
@@ -138,6 +141,11 @@ endfunction
 function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
 endfunction
+
+function! neobundle#get_neobundle_runtime_dir()
+  return s:neobundle_runtime_dir
+endfunction
+
 function! neobundle#get_tags_dir()
   let dir = neobundle#get_neobundle_dir() . '/.neobundle/doc'
   if !isdirectory(dir)

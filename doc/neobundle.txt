@@ -1015,6 +1015,7 @@ CHANGELOG					*neobundle-changelog*
 2013-01-04
 - Added "insert" flag in autoload.
 - Added neobundle#config().
+- Improved :NeoBundleDocs.
 
 2013-01-03
 - Improved documentation.

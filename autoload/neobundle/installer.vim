@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Jan 2013.
+" Last Modified: 04 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,7 +99,9 @@ function! neobundle#installer#helptags(bundles)
 
   call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
+    call s:helptags(neobundle#get_neobundle_runtime_dir())
     call s:update_tags()
+
     call neobundle#installer#log(
           \ '[neobundle/install] Helptags: done. '
           \ .len(help_dirs).' bundles processed')
@@ -548,7 +550,8 @@ function! s:install(bang, bundles)
 endfunction
 
 function! s:has_doc(path)
-  return isdirectory(a:path.'/doc')
+  return a:path != '' &&
+        \ isdirectory(a:path.'/doc')
         \   && (!filereadable(a:path.'/doc/tags')
         \       || filewritable(a:path.'/doc/tags'))
         \   && (!filereadable(a:path.'/doc/tags-??')
@@ -568,8 +571,10 @@ endfunction
 
 function! s:update_tags()
   let tags = {}
-  for bundle in neobundle#config#get_neobundles()
-    for tag in split(globpath(bundle.rtp, 'doc/{tags,tags-*}'), '\n')
+  for bundle in [{ 'rtp' : neobundle#get_neobundle_runtime_dir()}]
+        \ + neobundle#config#get_neobundles()
+    for tag in split(globpath(
+          \ bundle.rtp, 'doc/{tags,tags-*}'), '\n')
       let filename = fnamemodify(tag, ':t')
       if !has_key(tags, filename)
         let tags[filename] = []
