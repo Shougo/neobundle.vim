@@ -183,7 +183,8 @@ function! neobundle#local(localdir, options)
   for dir in map(filter(split(glob(fnamemodify(
         \ neobundle#util#expand(a:localdir), ':p')
         \ . '*'), '\n'), "isdirectory(v:val)"),
-        \ "substitute(fnamemodify(v:val, ':p'), '/$', '', '')")
+        \ "neobundle#util#substitute_path_separator(
+        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
     call neobundle#config#bundle([dir,
           \ extend({ 'type' : 'nosync',
           \   'base' : neobundle#util#substitute_path_separator(
