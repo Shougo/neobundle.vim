@@ -800,15 +800,9 @@ EXAMPLES					*neobundle-examples*
 
 	filetype plugin indent on       " Required!
 
-	" Installation check
-	if neobundle#exists_not_installed_bundles()
-	  echomsg 'Not installed bundles:'
-	        \ string(neobundle#get_not_installed_bundle_names())
-	  if confirm('Run NeoBundleInstall now?', "yes\nNo", 2) == 1
-	    NeoBundleInstall
-	  endif
-	  echo ''
-	endif
+	" Installation check.
+	NeoBundleCheck
+
 <
 ==============================================================================
 UNITE SOURCES					*neobundle-unite-sources*
