@@ -60,6 +60,9 @@ command! -nargs=+ NeoBundle
       \ call neobundle#config#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
+command! -bar NeoBundleCheck
+      \ call neobundle#check()
+
 command! -nargs=+ NeoBundleLazy
       \ call neobundle#config#lazy_bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
@@ -237,6 +240,17 @@ function! neobundle#call_hook(hook_name, ...)
         \       neobundle#config#is_sourced(v:val.name))")
     call call(bundle.hooks[a:hook_name], [bundle], bundle)
   endfor
+endfunction
+
+function! neobundle#check()
+  if neobundle#exists_not_installed_bundles()
+    echomsg 'Not installed bundles:'
+          \ string(neobundle#get_not_installed_bundle_names())
+    if confirm('Install bundles now?', "yes\nNo", 2) == 1
+      call neobundle#installer#install(0, '')
+    endif
+    echo ''
+  endif
 endfunction
 
 function! s:get_installed_bundles(bundle_names)
