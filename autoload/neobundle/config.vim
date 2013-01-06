@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Jan 2013.
+" Last Modified: 06 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -340,7 +340,7 @@ function! neobundle#config#rm_bundle(path)
   " Delete from s:direct_neobundles.
   for bundle in filter(copy(s:direct_neobundles), 'v:val.path ==# a:path')
     call remove(s:direct_neobundles, bundle.name)
-  endif
+  endfor
 
   call neobundle#config#save_direct_bundles()
 endfunction
