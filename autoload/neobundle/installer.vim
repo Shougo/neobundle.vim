@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Jan 2013.
+" Last Modified: 11 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -573,8 +573,7 @@ function! s:update_tags()
   let tags = {}
   for bundle in [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
-    for tag in split(globpath(
-          \ bundle.rtp, 'doc/{tags,tags-*}'), '\n')
+    for tag in split(globpath(bundle.rtp, 'doc/*'), '\n')
       let filename = fnamemodify(tag, ':t')
       if !has_key(tags, filename)
         let tags[filename] = []
@@ -585,6 +584,9 @@ function! s:update_tags()
   endfor
 
   for [filename, list] in items(tags)
+    if filename =~# '^tags-\?'
+      call sort(list)
+    endif
     call writefile(list, neobundle#get_tags_dir() . '/' . filename)
   endfor
 endfunction

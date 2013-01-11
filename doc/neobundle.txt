@@ -1010,6 +1010,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-11
 - Fixed depends bundle behavior.
+- Fixed :NeoBundleDocs.
 
 2013-01-04
 - Added "insert" flag in autoload.
