@@ -581,7 +581,12 @@ function! neobundle#config#check_external_commands(bundle)
 endfunction
 
 function! neobundle#config#set(name, dict)
-  let bundle = extend(neobundle#config#get(a:name), a:dict)
+  let bundle = neobundle#config#get(a:name)
+  if empty(bundle)
+    return
+  endif
+
+  let bundle = extend(bundle, a:dict)
   if bundle.lazy && !get(s:sourced_neobundles, bundle.name, 0)
     " Remove runtimepath.
     call s:rtp_rm(bundle)
