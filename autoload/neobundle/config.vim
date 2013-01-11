@@ -599,7 +599,7 @@ function! s:load_depends(bundle, lazy)
     let depend_bundle = neobundle#config#bundle(depend, 1)
     let depend_bundle.lazy = a:lazy
     if !has_key(s:neobundles, depend_bundle.name)
-      call neobundle#config#bundle(depend_bundle)
+      call s:add_bundle(depend_bundle)
     endif
 
     unlet depend
