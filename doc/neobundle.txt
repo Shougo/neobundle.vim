@@ -1012,6 +1012,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-01-11
+- Fixed depends bundle behavior.
+
 2013-01-04
 - Added "insert" flag in autoload.
 - Added neobundle#config().

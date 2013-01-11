@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Jan 2013.
+" Last Modified: 11 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -599,10 +599,8 @@ function! s:load_depends(bundle, lazy)
     let depend_bundle = neobundle#config#bundle(depend, 1)
     let depend_bundle.lazy = a:lazy
     if !has_key(s:neobundles, depend_bundle.name)
-      call neobundle#config#bundle(depend)
+      call neobundle#config#bundle(depend_bundle)
     endif
-
-    call neobundle#config#bundle(depend)
 
     unlet depend
   endfor
