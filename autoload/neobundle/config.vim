@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jan 2013.
+" Last Modified: 13 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -630,7 +630,6 @@ function! s:add_bundle(bundle)
 
     let s:loaded_neobundles[bundle.name] = 1
     call s:rtp_add(bundle)
-    call neobundle#call_hook('on_source', [bundle])
   elseif bundle.lazy && has_key(bundle, 'autoload') &&
         \ !neobundle#config#is_sourced(bundle.name)
     for command in neobundle#util#convert_list(
@@ -732,6 +731,9 @@ function! s:on_vim_enter()
   for bundle in neobundle#config#get_neobundles()
     let s:sourced_neobundles[bundle.name] = 1
   endfor
+
+  " Call hooks.
+  call neobundle#call_hook('on_source')
 endfunction
 
 let &cpo = s:save_cpo

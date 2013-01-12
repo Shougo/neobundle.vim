@@ -1015,6 +1015,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-01-13
+- Improved calling on_source hooks timing.
+
 2013-01-12
 - Arrowed range in autoload commands.
 - Added neobundle#get_hooks().
