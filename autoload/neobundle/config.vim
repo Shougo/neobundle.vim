@@ -586,12 +586,15 @@ function! neobundle#config#set(name, dict)
     return
   endif
 
-  let bundle = extend(bundle, a:dict)
+  let bundle = s:init_bundle(extend(bundle, a:dict))
+  let bundle.overwrite = 1
   if bundle.lazy && !get(s:sourced_neobundles, bundle.name, 0)
-    " Remove runtimepath.
+    " Remove from runtimepath.
     call s:rtp_rm(bundle)
     let s:loaded_neobundles[bundle.name] = 0
   endif
+
+  call s:add_bundle(bundle)
 endfunction
 
 function! s:load_depends(bundle, lazy)

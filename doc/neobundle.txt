@@ -1017,6 +1017,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-13
 - Improved calling on_source hooks timing.
+- Fixed neobundle#set() behavior.
 
 2013-01-12
 - Arrowed range in autoload commands.
