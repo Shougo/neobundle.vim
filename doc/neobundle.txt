@@ -316,6 +316,10 @@ COMMANDS 					*neobundle-commands*
 		Note: This command must be execute until neobundle loads
 		plugins.
 
+:NeoBundleCheck					*:NeoBundleCheck*
+		Check plugins installation. If plugins are not installed, it
+		will execute |:NeoBundleInstall| automatically.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -802,7 +806,6 @@ EXAMPLES					*neobundle-examples*
 
 	" Installation check.
 	NeoBundleCheck
-
 <
 ==============================================================================
 UNITE SOURCES					*neobundle-unite-sources*
