@@ -637,7 +637,8 @@ function! s:add_bundle(bundle)
           \ get(bundle.autoload, 'commands', []))
       " Define dummy commands.
       execute 'command! -bang -range -nargs=*' command printf(
-            \ "call neobundle#autoload#command(%s, %s, <q-args>, expand('<bang>'))",
+            \ "call neobundle#autoload#command(%s, %s, <q-args>,
+            \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
             \   string(command), string(bundle.name))
     endfor
 
