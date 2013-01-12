@@ -619,6 +619,8 @@ function! s:add_bundle(bundle)
 
   if get(s:disabled_neobundles, bundle.name, 0)
         \ || (!bundle.overwrite && has_key(s:neobundles, bundle.name))
+        \ || (bundle.gui && !has('gui_running'))
+        \ || (bundle.terminal && has('gui_running'))
     return
   endif
 
@@ -676,6 +678,8 @@ function! s:get_default()
           \ 'rtp' : '',
           \ 'depends' : [],
           \ 'lazy' : 0,
+          \ 'gui' : 0,
+          \ 'terminal' : 0,
           \ 'overwrite' : 1,
           \ 'resettable' : 1,
           \ 'hooks' : {},
