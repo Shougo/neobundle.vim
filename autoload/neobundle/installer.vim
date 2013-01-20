@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 Jan 2013.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,6 +88,10 @@ function! neobundle#installer#install(bang, bundle_names)
   call neobundle#installer#helptags(installed)
 
   call neobundle#config#reload(installed)
+
+  if !empty(installed)
+    call s:update_ftdetect()
+  endif
 endfunction
 
 function! neobundle#installer#helptags(bundles)
@@ -570,24 +574,38 @@ function! s:helptags(path)
 endfunction
 
 function! s:update_tags()
-  let tags = {}
+  let files = {}
   for bundle in [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
     for tag in split(globpath(bundle.rtp, 'doc/*'), '\n')
       let filename = fnamemodify(tag, ':t')
-      if !has_key(tags, filename)
-        let tags[filename] = []
+      if !has_key(files, filename)
+        let files[filename] = []
       endif
 
-      let tags[filename] += readfile(tag)
+      let files[filename] += readfile(tag)
     endfor
   endfor
 
-  for [filename, list] in items(tags)
+  for [filename, list] in items(files)
     if filename =~# '^tags-\?'
       call sort(list)
     endif
     call writefile(list, neobundle#get_tags_dir() . '/' . filename)
+  endfor
+endfunction
+
+function! s:update_ftdetect()
+  let files = {}
+  for bundle in filter(neobundle#config#get_neobundles(), 'v:val.lazy')
+    for ftdetect in split(globpath(bundle.rtp, 'ftdetect/*'), '\n')
+      let filename = fnamemodify(ftdetect, ':t')
+      let files[filename] = readfile(ftdetect)
+    endfor
+  endfor
+
+  for [filename, list] in items(files)
+    call writefile(list, neobundle#get_ftdetect_dir() . '/' . filename)
   endfor
 endfunction
 

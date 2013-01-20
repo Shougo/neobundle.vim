@@ -1032,6 +1032,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-01-20
+- Fixed ftdetect for lazy.
+
 2013-01-13
 - Improved calling on_source hooks timing.
 - Fixed neobundle#set() behavior.
