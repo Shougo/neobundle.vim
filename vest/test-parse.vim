@@ -185,6 +185,20 @@ Context types
           \ 'Shougo/neocomplcache', ['ver.3'])
     ShouldEqual bundle.directory, 'neocomplcache_ver.3'
   End
+
+  It parses function_prefix
+    ShouldEqual neobundle#config#_parse_function_prefix(
+          \ 'neobundle.vim'), 'neobundle'
+
+    ShouldEqual neobundle#config#_parse_function_prefix(
+          \ 'unite-tag'), 'unite#sources#tag'
+
+    ShouldEqual neobundle#config#_parse_function_prefix(
+          \ 'TweetVim'), 'tweetvim'
+
+    ShouldEqual neobundle#config#_parse_function_prefix(
+          \ 'vim-vcs'), 'vcs'
+  End
 End
 
 Fin

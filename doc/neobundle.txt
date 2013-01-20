@@ -653,6 +653,13 @@ OPTIONS 					*neobundle-options*
 			functions	(List)
 			Functions list.
 
+			function_prefix	(String)
+			Autoload function prefix. {function_prefix}#...
+			functions were loaded automatically.
+			If it is omitted,  is used.
+			Example: If you use "unite.vim", "unite" function
+			prefix is used. 
+
 			mappings	(List)
 			Mappings list. The item is {mapping} or [{mode}, {mapping}].
 			If {mode} is omitted, "nxo" is used.
@@ -1034,6 +1041,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-20
 - Fixed ftdetect for lazy.
+- Implemented function_prefix.
 
 2013-01-13
 - Improved calling on_source hooks timing.

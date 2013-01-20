@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Jan 2013.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -728,9 +728,30 @@ function! s:init_bundle(bundle)
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
 
+  if !has_key(bundle, 'function_prefix')
+        \ && isdirectory(bundle.rtp . '/autoload')
+    let function_prefix = neobundle#config#_parse_function_prefix(bundle.name)
+    if filereadable(printf(
+          \ '%s/autoload/%s.vim', bundle.rtp,
+          \     substitute(function_prefix, '#', '/', 'g')))
+      let bundle.function_prefix = function_prefix
+    endif
+  endif
+
   let bundle.depends = neobundle#util#convert_list(bundle.depends)
 
   return bundle
+endfunction
+
+function! neobundle#config#_parse_function_prefix(name)
+  let function_prefix = tolower(fnamemodify(a:name, ':r'))
+  let function_prefix = substitute(function_prefix,
+        \'^vim-', '','g')
+  let function_prefix = substitute(function_prefix,
+        \'^unite-', 'unite#sources#','g')
+  let function_prefix = substitute(function_prefix,
+        \'-', '_', 'g')
+  return function_prefix
 endfunction
 
 function! s:on_vim_enter()

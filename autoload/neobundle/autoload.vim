@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jan 2013.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,7 +30,13 @@ set cpo&vim
 function! s:get_autoload_bundles()
   return filter(neobundle#config#get_neobundles(),
         \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''
-        \   && has_key(v:val, 'autoload')")
+        \   && v:val.lazy && has_key(v:val, 'autoload')")
+endfunction
+
+function! s:get_lazy_bundles()
+  return filter(neobundle#config#get_neobundles(),
+        \ "!neobundle#config#is_sourced(v:val.name)
+        \ && v:val.rtp != '' && v:val.lazy")
 endfunction
 
 function! neobundle#autoload#filetype()
@@ -53,10 +59,14 @@ function! neobundle#autoload#insert()
 endfunction
 
 function! neobundle#autoload#function()
-  let bundles = filter(s:get_autoload_bundles(),
-        \ "has_key(v:val.autoload, 'functions') &&
-        \  index(neobundle#util#convert_list(
-        \     v:val.autoload.functions), expand('<afile>')) >= 0")
+  let function = expand('<afile>')
+  let function_prefix = get(split(function, '#'), 0, '') . '#'
+
+  let bundles = filter(s:get_lazy_bundles(),
+        \ "get(v:val, 'function_prefix', '').'#' ==# function_prefix ||
+        \  (has_key(get(v:val, 'autoload', {}), 'functions') &&
+        \    index(neobundle#util#convert_list(
+        \     v:val.autoload.functions), function) >= 0)")
   call neobundle#config#source_bundles(bundles)
 endfunction
 
