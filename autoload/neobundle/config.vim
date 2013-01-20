@@ -637,13 +637,19 @@ function! s:add_bundle(bundle)
     call s:rtp_add(bundle)
   elseif bundle.lazy && has_key(bundle, 'autoload') &&
         \ !neobundle#config#is_sourced(bundle.name)
-    for command in neobundle#util#convert_list(
+    for item in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
+      let command = type(item) == type('') ?
+            \ { 'name' : item } : item
+
       " Define dummy commands.
-      execute 'command! -bang -range -nargs=*' command printf(
+      execute 'command! ' . (get(command, 'complete', '') != '' ?
+            \ ('-complete=' . command.complete) : '')
+            \ . ' -bang -range -nargs=*' command.name printf(
             \ "call neobundle#autoload#command(%s, %s, <q-args>,
             \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
-            \   string(command), string(bundle.name))
+            \   string(command.name), string(bundle.name))
+      unlet item
     endfor
 
     for map in neobundle#util#convert_list(
@@ -730,12 +736,8 @@ function! s:init_bundle(bundle)
 
   if !has_key(bundle, 'function_prefix')
         \ && isdirectory(bundle.rtp . '/autoload')
-    let function_prefix = neobundle#config#_parse_function_prefix(bundle.name)
-    if filereadable(printf(
-          \ '%s/autoload/%s.vim', bundle.rtp,
-          \     substitute(function_prefix, '#', '/', 'g')))
-      let bundle.function_prefix = function_prefix
-    endif
+    let bundle.function_prefix =
+          \ neobundle#config#_parse_function_prefix(bundle.name)
   endif
 
   let bundle.depends = neobundle#util#convert_list(bundle.depends)

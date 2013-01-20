@@ -648,7 +648,16 @@ OPTIONS 					*neobundle-options*
 			Filetype list.
 
 			commands	(List) or (String)
-			Command list.
+			Command list. The item can be following dictionary. 
+				name		(String)
+				Command name.
+
+				complete	(String)
+				The type of completion supported for the
+				input.  Refer to |:command-completion| for
+				information.
+
+				Example:
 
 			functions	(List)
 			Functions list.
@@ -686,6 +695,15 @@ OPTIONS 					*neobundle-options*
 	      \ 'depends' : 'thinca/vim-openbuf',
 	      \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
 	      \   }
+	NeoBundleLazy 'Shougo/vimshell',{
+	      \ 'depends' : 'Shougo/vimproc',
+	      \ 'autoload' : {
+	      \   'commands' : [{ 'name' : 'VimShell',
+	      \                   'complete' : 'customlist,vimshell#complete'},
+	      \                 'VimShellExecute', 'VimShellInteractive',
+	      \                 'VimShellTerminal', 'VimShellPop'],
+	      \   'mappings' : ['<Plug>(vimshell_switch)']
+	      \ }})
 <
 						*neobundle-options-overwrite*
 		overwrite		(Number)
@@ -1042,6 +1060,7 @@ CHANGELOG					*neobundle-changelog*
 2013-01-20
 - Fixed ftdetect for lazy.
 - Implemented function_prefix.
+- Implemented complete in autoload commands.
 
 2013-01-13
 - Improved calling on_source hooks timing.
