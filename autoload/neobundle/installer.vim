@@ -588,7 +588,8 @@ endfunction
 function! s:copy_bundle_files(bundles, directory)
   let files = {}
   for bundle in a:bundles
-    for file in split(globpath(bundle.rtp, a:directory.'/*'), '\n')
+    for file in filter(split(globpath(bundle.rtp, a:directory.'/*'), '\n'),
+          \ '!isdirectory(v:val)')
       let filename = fnamemodify(file, ':t')
       let files[filename] = readfile(file)
     endfor
