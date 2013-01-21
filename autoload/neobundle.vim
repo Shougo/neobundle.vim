@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jan 2013.
+" Last Modified: 21 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,10 +158,6 @@ function! neobundle#get_tags_dir()
 endfunction
 
 function! neobundle#get_ftdetect_dir()
-  let dir = neobundle#get_neobundle_dir() . '/.neobundle/ftdetect'
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-  endif
   return dir
 endfunction
 

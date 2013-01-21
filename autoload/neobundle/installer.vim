@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jan 2013.
+" Last Modified: 21 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -574,38 +574,36 @@ function! s:helptags(path)
 endfunction
 
 function! s:update_tags()
-  let files = {}
-  for bundle in [{ 'rtp' : neobundle#get_runtime_dir()}]
+  let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
-    for tag in split(globpath(bundle.rtp, 'doc/*'), '\n')
-      let filename = fnamemodify(tag, ':t')
-      if !has_key(files, filename)
-        let files[filename] = []
-      endif
+  call s:copy_bundle_files(bundles, 'doc')
+endfunction
 
-      let files[filename] += readfile(tag)
+function! s:update_ftdetect()
+  let bundles = filter(neobundle#config#get_neobundles(), 'v:val.lazy')
+  call s:copy_bundle_files(bundles, 'ftdetect')
+  call s:copy_bundle_files(bundles, 'after/ftdetect')
+endfunction
+
+function! s:copy_bundle_files(bundles, directory)
+  let files = {}
+  for bundle in a:bundles
+    for file in split(globpath(bundle.rtp, a:directory.'/*'), '\n')
+      let filename = fnamemodify(file, ':t')
+      let files[filename] = readfile(file)
     endfor
   endfor
+
+  let dir = neobundle#get_neobundle_dir() . '/.neobundle/' . a:directory
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
 
   for [filename, list] in items(files)
     if filename =~# '^tags-\?'
       call sort(list)
     endif
-    call writefile(list, neobundle#get_tags_dir() . '/' . filename)
-  endfor
-endfunction
-
-function! s:update_ftdetect()
-  let files = {}
-  for bundle in filter(neobundle#config#get_neobundles(), 'v:val.lazy')
-    for ftdetect in split(globpath(bundle.rtp, 'ftdetect/*'), '\n')
-      let filename = fnamemodify(ftdetect, ':t')
-      let files[filename] = readfile(ftdetect)
-    endfor
-  endfor
-
-  for [filename, list] in items(files)
-    call writefile(list, neobundle#get_ftdetect_dir() . '/' . filename)
+    call writefile(list, dir . '/' . filename)
   endfor
 endfunction
 

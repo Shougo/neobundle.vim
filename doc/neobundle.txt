@@ -1059,6 +1059,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-21
 - Fixed :NeoBundleSource behavior.
+- Improved copy bundle files.
 
 2013-01-20
 - Fixed ftdetect for lazy.
