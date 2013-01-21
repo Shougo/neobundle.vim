@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jan 2013.
+" Last Modified: 21 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -242,16 +242,6 @@ function! neobundle#config#source(names)
 
     call neobundle#config#source_bundles(bundle.depends)
 
-    for directory in
-          \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
-      for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-        try
-          source `=file`
-        catch /^Vim\%((\a\+)\)\?:E127/
-        endtry
-      endfor
-    endfor
-
     if !reset_ftplugin
       for filetype in split(&filetype, '\.')
         for directory in ['ftplugin', 'indent', 'syntax',
@@ -278,6 +268,15 @@ function! neobundle#config#source(names)
     let s:disabled_neobundles[bundle.name] = 0
 
     let bundle.resettable = 0
+
+    if !has('vim_starting')
+      " Reload script files.
+      for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
+        for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
+          silent! source `=file`
+        endfor
+      endfor
+    endif
   endfor
 
   redir => filetype_after
