@@ -242,6 +242,23 @@ function! neobundle#config#source(names)
 
     call neobundle#config#source_bundles(bundle.depends)
 
+    if exists('g:loaded_neobundle')
+      " Reload script files.
+      for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
+        for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
+          silent! source `=file`
+        endfor
+      endfor
+
+      if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
+        execute 'doautocmd' bundle.augroup 'VimEnter'
+
+        if has('gui_running') && &term ==# 'builtin_gui'
+          execute 'doautocmd' bundle.augroup 'GUIEnter'
+        endif
+      endif
+    endif
+
     if !reset_ftplugin
       for filetype in split(&filetype, '\.')
         for directory in ['ftplugin', 'indent', 'syntax',
@@ -255,28 +272,11 @@ function! neobundle#config#source(names)
       endfor
     endif
 
-    if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
-      execute 'doautocmd' bundle.augroup 'VimEnter'
-
-      if has('gui_running')
-        execute 'doautocmd' bundle.augroup 'GUIEnter'
-      endif
-    endif
-
     let s:loaded_neobundles[bundle.name] = 1
     let s:sourced_neobundles[bundle.name] = 1
     let s:disabled_neobundles[bundle.name] = 0
 
     let bundle.resettable = 0
-
-    if exists('g:loaded_neobundle')
-      " Reload script files.
-      for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
-        for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-          silent! source `=file`
-        endfor
-      endfor
-    endif
   endfor
 
   redir => filetype_after
