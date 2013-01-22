@@ -1060,6 +1060,7 @@ CHANGELOG					*neobundle-changelog*
 2013-01-22
 - Re-Fixed :NeoBundleSource behavior.
 - Fixed for revision in git.
+- Fixed reinstall errors.
 
 2013-01-21
 - Fixed :NeoBundleSource behavior.

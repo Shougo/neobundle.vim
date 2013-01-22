@@ -67,6 +67,10 @@ function! neobundle#config#get_neobundles()
   return values(s:neobundles)
 endfunction
 
+function! neobundle#config#get_direct_neobundles()
+  return values(s:direct_neobundles)
+endfunction
+
 function! s:compare_names(a, b)
   return (a:a.name >? a:b.name) ? 1 : -1
 endfunction
@@ -331,13 +335,15 @@ function! neobundle#config#is_sourced(name)
 endfunction
 
 function! neobundle#config#rm_bundle(path)
-  for bundle in filter(copy(s:neobundles), 'v:val.path ==# a:path')
+  for bundle in filter(neobundle#config#get_neobundles(),
+        \ 'v:val.path ==# a:path')
     call s:rtp_rm(bundle)
     call remove(s:neobundles, bundle.name)
   endfor
 
   " Delete from s:direct_neobundles.
-  for bundle in filter(copy(s:direct_neobundles), 'v:val.path ==# a:path')
+  for bundle in filter(neobundle#config#get_direct_neobundles(),
+        \ 'v:val.path ==# a:path')
     call remove(s:direct_neobundles, bundle.name)
   endfor
 
