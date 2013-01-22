@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Jan 2013.
+" Last Modified: 22 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -269,7 +269,7 @@ function! neobundle#config#source(names)
 
     let bundle.resettable = 0
 
-    if !has('vim_starting')
+    if exists('g:loaded_neobundle')
       " Reload script files.
       for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
         for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
