@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Jan 2013.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -265,10 +265,13 @@ function! neobundle#config#source(names)
 
     if !reset_ftplugin
       for filetype in split(&filetype, '\.')
+        let base = bundle.rtp . '/' . directory
         for directory in ['ftplugin', 'indent', 'syntax',
               \ 'after/ftplugin', 'after/indent', 'after/syntax']
-          if glob(printf('%s/%s/{%s.vim,%s/*/*.vim,%s_*.vim}',
-                \ bundle.rtp, directory, filetype, filetype, filetype)) != ''
+          if filereadable(base.'/'.filetype.'.vim') ||
+                \ (directory =~# 'ftplugin$' &&
+                \   isdirectory(base . '/' . filetype) ||
+                \   glob(base.'/'.filetype.'_*.vim') != '')
             let reset_ftplugin = 1
             break
           endif
