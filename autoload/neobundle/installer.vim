@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Jan 2013.
+" Last Modified: 25 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -601,7 +601,7 @@ function! s:copy_bundle_files(bundles, directory)
   endif
 
   for [filename, list] in items(files)
-    if filename =~# '^tags-\?'
+    if filename =~# '^tags\%(-.*\)\?$'
       call sort(list)
     endif
     call writefile(list, dir . '/' . filename)

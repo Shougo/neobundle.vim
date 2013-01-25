@@ -1057,6 +1057,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-01-25
+- Improved update tags.
+
 2013-01-22
 - Re-Fixed :NeoBundleSource behavior.
 - Fixed for revision in git.
