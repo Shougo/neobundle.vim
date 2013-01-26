@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Jan 2013.
+" Last Modified: 26 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -546,7 +546,7 @@ function! neobundle#config#load_direct_bundles()
   else
     sandbox let s:direct_neobundles =
           \ eval(get(readfile(path), 0, '[]'))
-    call map(s:direct_neobundles, 's:init_bundle(bundle)')
+    call map(s:direct_neobundles, 's:init_bundle(v:val)')
   endif
 
   call extend(s:neobundles, s:direct_neobundles)
@@ -651,7 +651,7 @@ function! s:add_bundle(bundle)
             \ { 'name' : item } : item
 
       " Define dummy commands.
-      execute 'command! ' . (get(command, 'complete', '') != '' ?
+      silent! execute 'command ' . (get(command, 'complete', '') != '' ?
             \ ('-complete=' . command.complete) : '')
             \ . ' -bang -range -nargs=*' command.name printf(
             \ "call neobundle#autoload#command(%s, %s, <q-args>,
@@ -671,7 +671,7 @@ function! s:add_bundle(bundle)
       " Define dummy mappings.
       for mode in filter(split(mode, '\zs'),
             \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
-        execute mode.'noremap <silent>' mapping printf(
+        silent! execute mode.'noremap <unique><silent>' mapping printf(
               \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
               \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
               \   string(mapping), string(bundle.name), string(mode))
