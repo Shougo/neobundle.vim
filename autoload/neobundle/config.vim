@@ -239,6 +239,16 @@ function! neobundle#config#source(names)
 
   let reset_ftplugin = 0
   for bundle in bundles
+    " Unmap dummy mappings.
+    for [mode, mapping] in get(bundle, 'dummy_mappings', [])
+      execute mode.'unmap' mapping
+    endfor
+
+    " Delete dummy commands.
+    for command in get(bundle, 'dummy_commands', [])
+      execute 'delcommand' command
+    endfor
+
     if has_key(s:neobundles, bundle.name)
       call s:rtp_rm(bundle)
     endif
@@ -645,6 +655,7 @@ function! s:add_bundle(bundle)
     call s:rtp_add(bundle)
   elseif bundle.lazy && has_key(bundle, 'autoload') &&
         \ !neobundle#config#is_sourced(bundle.name)
+    let bundle.dummy_commands = []
     for item in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
       let command = type(item) == type('') ?
@@ -658,8 +669,11 @@ function! s:add_bundle(bundle)
             \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
             \   string(command.name), string(bundle.name))
       unlet item
+
+      call add(bundle.dummy_commands, command.name)
     endfor
 
+    let bundle.dummy_mappings = []
     for map in neobundle#util#convert_list(
           \ get(bundle.autoload, 'mappings', []))
       if type(map) == type([])
@@ -675,6 +689,8 @@ function! s:add_bundle(bundle)
               \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
               \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
               \   string(mapping), string(bundle.name), string(mode))
+
+        call add(bundle.dummy_mappings, [mode, mapping])
       endfor
 
       unlet map

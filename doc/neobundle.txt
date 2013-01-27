@@ -1061,6 +1061,7 @@ CHANGELOG					*neobundle-changelog*
 2013-01-27
 - Fixed s:init_bundle() error.
 - Improved update behavior.
+- Fixed autoload problems.
 
 2013-01-25
 - Improved update tags.
