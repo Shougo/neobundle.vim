@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2012.
+" Last Modified: 27 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,9 +102,8 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   endif
 
   call neobundle#installer#log(messages, 1)
-  call neobundle#installer#helptags(
+  call neobundle#installer#update(
         \ a:context.source__synced_bundles)
-  call neobundle#config#reload(a:context.source__synced_bundles)
 
   let a:context.is_async = 0
 
@@ -147,7 +146,8 @@ function! s:init(context, bundle_names)
         \ neobundle#config#fuzzy_search(a:bundle_names)
   if a:context.source__bang == 1 && empty(a:bundle_names)
     " Remove stay_same bundles.
-    call filter(a:context.source__bundles, "!get(v:val, 'stay_same', 0)")
+    let a:context.source__bundles =
+          \ neobundle#installer#get_check_bundles(a:context.source__bundles)
   endif
 
   let a:context.source__max_bundles =

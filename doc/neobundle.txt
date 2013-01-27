@@ -237,14 +237,15 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
 		Installs and updates {name} plugins. {name} is fuzzy searched.
-		If {name} is omited, all configured plugin without "nosync"
-		option is installed and updated.
+		If {name} is omited, all configured plugins without
+		"stay_same" option or outdated plugins are installed and
+		updated.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
 :NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate!*
 		Same to |:NeoBundleUpdate|. But it also updates plugins which
-		has "nosync" option.
+		has "stay_same" option.
 
 :NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
 		Removes non configured bundles. If {bang} is added, force
@@ -900,8 +901,8 @@ neobundle/log
 
 				*neobundle-unite-source-neobundle-update*
 neobundle/update
-		Install and update configured plugins without "nosync" plugins
-		asyncronously.
+		Install and update configured plugins without "stay_same"
+		plugins or outdated plugins asyncronously.
 		Note: This source is same to "neobundle/intall:!" source.
 		Note: To install |vimproc| plugin is recommended.
 
@@ -1059,6 +1060,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-27
 - Fixed s:init_bundle() error.
+- Improved update behavior.
 
 2013-01-25
 - Improved update tags.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Jan 2013.
+" Last Modified: 27 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,8 +53,7 @@ function! neobundle#installer#install(bang, bundle_names)
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
   if a:bang == 1 && empty(bundle_names)
-    " Remove stay_same bundles.
-    call filter(bundles, "!get(v:val, 'stay_same', 0)")
+    let bundles = neobundle#installer#get_check_bundles(bundles)
   endif
   if empty(bundles)
     call neobundle#installer#error(
@@ -85,13 +84,18 @@ function! neobundle#installer#install(bang, bundle_names)
           \ 'Please read error message log by :message command.')
   endif
 
-  call neobundle#installer#helptags(installed)
-
-  call neobundle#config#reload(installed)
+  call neobundle#installer#update(installed)
 
   if !empty(installed)
     call s:update_ftdetect()
   endif
+endfunction
+
+function! neobundle#installer#update(bundles)
+  call neobundle#installer#helptags(a:bundles)
+  call neobundle#config#reload(a:bundles)
+
+  call s:save_updated_time(neobundle#config#get_neobundles())
 endfunction
 
 function! neobundle#installer#helptags(bundles)
@@ -453,6 +457,8 @@ function! neobundle#installer#check_output(context, process, is_unite)
     call neobundle#installer#update_log(
           \ '[neobundle/install] ' . message, a:is_unite)
 
+    let bundle.updated_time = localtime()
+
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
           \ bundle)
@@ -595,16 +601,11 @@ function! s:copy_bundle_files(bundles, directory)
     endfor
   endfor
 
-  let dir = neobundle#get_neobundle_dir() . '/.neobundle/' . a:directory
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-  endif
-
   for [filename, list] in items(files)
     if filename =~# '^tags\%(-.*\)\?$'
       call sort(list)
     endif
-    call writefile(list, dir . '/' . filename)
+    call neobundle#writefile(a:directory . '/' . filename, list)
   endfor
 endfunction
 
@@ -613,6 +614,62 @@ function! s:check_really_clean(dirs)
 
   return input('Are you sure you want to remove '
         \        .len(a:dirs).' bundles? [y/n] : ') =~? 'y'
+endfunction
+
+function! neobundle#installer#get_check_bundles(bundles)
+   let [checked_time, bundles_updated_time] =
+         \ s:load_updated_time(a:bundles)
+
+   let before_one_week = localtime() - 60 * 60 * 24 * 7
+   let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
+
+   " Remove stay_same bundles.
+   let bundles = []
+   for bundle in filter(copy(a:bundles),
+         \ "!get(v:val, 'stay_same', 0)")
+     let bundle.updated_time =
+           \ get(bundles_updated_time, bundle.name, localtime())
+
+     " Check if skip.
+     if bundle.updated_time > before_one_week
+           \ || (bundle.updated_time < before_one_month
+           \     && checked_time < before_one_month)
+           \ || (bundle.updated_time < before_one_week
+           \     && checked_time < before_one_week)
+       call add(bundles, bundle)
+     endif
+   endfor
+
+   return bundles
+endfunction
+
+function! s:save_updated_time(bundles)
+  let bundles_updated_time = {}
+  for bundle in filter(copy(a:bundles),
+        \ "has_key(v:val, 'updated_time')")
+    let bundles_updated_time[bundle.name] = bundle.updated_time
+  endfor
+
+  call neobundle#writefile('updated_time',
+        \ [localtime(), string(bundles_updated_time)])
+endfunction
+
+function! s:load_updated_time(bundles)
+  let checked_time = 0
+  let bundles_updated_time = {}
+
+  let updated_time_path =
+        \ neobundle#get_neobundle_dir() . '/.neobundle/updated_time'
+  if filereadable(updated_time_path)
+    try
+      let list = readfile(updated_time_path)
+      let checked_time = list[0]
+      sandbox let bundles_updated_time = eval(list[1])
+    catch
+    endtry
+  endif
+
+  return [checked_time, bundles_updated_time]
 endfunction
 
 function! neobundle#installer#log(msg, ...)
