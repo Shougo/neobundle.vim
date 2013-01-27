@@ -149,8 +149,6 @@ function! neobundle#installer#build(bundle)
     else
       let result = neobundle#util#system(cmd)
     endif
-
-    let result = substitute(result, '\n$', '', '')
   finally
     if isdirectory(cwd)
       lcd `=cwd`
@@ -269,6 +267,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 
   return [cmd, message]
 endfunction
+
 function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max)
   let repo_dir = neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
@@ -303,16 +302,38 @@ function! neobundle#installer#get_revision_number(bundle)
 
     lcd `=a:bundle.path`
 
-    let rev_cmd = type.get_revision_number_command(a:bundle)
-
-    let rev = substitute(neobundle#util#system(rev_cmd), '\n$', '', '')
-
-    return rev
+    return neobundle#util#system(
+          \ type.get_revision_number_command(a:bundle))
   finally
     if isdirectory(cwd)
       lcd `=cwd`
     endif
   endtry
+
+  return ''
+endfunction
+
+function! s:get_commit_date(bundle)
+  let cwd = getcwd()
+  try
+    let type = neobundle#config#get_types()[a:bundle.type]
+
+    if !isdirectory(a:bundle.path) ||
+          \ !has_key(type, 'get_commit_date_command')
+      return 0
+    endif
+
+    lcd `=a:bundle.path`
+
+    return neobundle#util#system(
+          \ type.get_commit_date_command(a:bundle))
+  finally
+    if isdirectory(cwd)
+      lcd `=cwd`
+    endif
+  endtry
+
+  return ''
 endfunction
 
 function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
@@ -433,6 +454,8 @@ function! neobundle#installer#check_output(context, process, is_unite)
 
   let rev = neobundle#installer#get_revision_number(bundle)
 
+  let updated_time = s:get_commit_date(bundle)
+
   if status && a:process.rev ==# rev
         \ && (bundle.type !=# 'git' ||
         \     a:process.output !~# 'up-to-date\|up to date')
@@ -445,6 +468,10 @@ function! neobundle#installer#check_output(context, process, is_unite)
     call add(a:context.source__errored_bundles,
           \ bundle)
   elseif a:process.rev ==# rev
+    if updated_time != 0
+      let bundle.updated_time = updated_time
+    endif
+
     call neobundle#installer#log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Skipped'), a:is_unite)
@@ -457,7 +484,10 @@ function! neobundle#installer#check_output(context, process, is_unite)
     call neobundle#installer#update_log(
           \ '[neobundle/install] ' . message, a:is_unite)
 
-    let bundle.updated_time = localtime()
+    if updated_time == 0
+      let updated_time = localtime()
+    endif
+    let bundle.updated_time = updated_time
 
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
