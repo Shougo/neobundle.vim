@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2013.
+" Last Modified: 31 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,6 +62,7 @@ function! s:type.detect(path, opts) "{{{
   elseif a:path =~? '[/.]hg[/.@]'
           \ || (a:path =~# '\<https\?://bitbucket\.org/'
           \ || a:path =~# '\<https://code\.google\.com/'
+          \ || get(a:opts, 'type', '') ==# 'hg'
           \    && a:path !~# '.git$')
     let uri = a:path
     let name = split(a:path, '/')[-1]

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jan 2013.
+" Last Modified: 31 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,7 +74,7 @@ function! s:type.detect(path, opts) "{{{
     endif
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
-        \ || get(a:opts, 'type') ==# 'git'
+        \ || get(a:opts, 'type', '') ==# 'git'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'
       let name = substitute(split(a:path, ':')[-1],
             \   '^//bitbucket.org/', '', '')
