@@ -74,6 +74,7 @@ function! s:type.detect(path, opts) "{{{
     endif
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
+        \ || get(a:opts, 'type') ==# 'git'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'
       let name = substitute(split(a:path, ':')[-1],
             \   '^//bitbucket.org/', '', '')
