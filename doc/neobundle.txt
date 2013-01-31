@@ -1060,6 +1060,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-01-31
 - Improved type detection.
+- Fixed check update time behavior.
 
 2013-01-28
 - Fixed redraw behavior.

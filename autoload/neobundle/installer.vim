@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Jan 2013.
+" Last Modified: 31 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -455,6 +455,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let rev = neobundle#installer#get_revision_number(bundle)
 
   let updated_time = s:get_commit_date(bundle)
+  let bundle.checked_time = localtime()
 
   if status && a:process.rev ==# rev
         \ && (bundle.type !=# 'git' ||
@@ -485,7 +486,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
           \ '[neobundle/install] ' . message, a:is_unite)
 
     if updated_time == 0
-      let updated_time = localtime()
+      let updated_time = bundle.checked_time
     endif
     let bundle.updated_time = updated_time
 
@@ -647,8 +648,7 @@ function! s:check_really_clean(dirs)
 endfunction
 
 function! neobundle#installer#get_check_bundles(bundles)
-   let [checked_time, bundles_updated_time] =
-         \ s:load_updated_time(a:bundles)
+   let bundles_updated_time = s:load_updated_time(a:bundles)
 
    let before_one_week = localtime() - 60 * 60 * 24 * 7
    let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
@@ -657,15 +657,16 @@ function! neobundle#installer#get_check_bundles(bundles)
    let bundles = []
    for bundle in filter(copy(a:bundles),
          \ "!get(v:val, 'stay_same', 0)")
-     let bundle.updated_time =
-           \ get(bundles_updated_time, bundle.name, localtime())
+     let [bundle.checked_time, bundle.updated_time] =
+           \ get(bundles_updated_time, bundle.name,
+           \      [localtime(), localtime()])
 
      " Check if skip.
      if bundle.updated_time > before_one_week
            \ || (bundle.updated_time < before_one_month
-           \     && checked_time < before_one_month)
+           \     && bundle.checked_time < before_one_month)
            \ || (bundle.updated_time < before_one_week
-           \     && checked_time < before_one_week)
+           \     && bundle.checked_time < before_one_week)
        call add(bundles, bundle)
      endif
    endfor
@@ -677,15 +678,15 @@ function! s:save_updated_time(bundles)
   let bundles_updated_time = {}
   for bundle in filter(copy(a:bundles),
         \ "has_key(v:val, 'updated_time')")
-    let bundles_updated_time[bundle.name] = bundle.updated_time
+    let bundles_updated_time[bundle.name] =
+          \ [bundle.checked_time, bundle.updated_time]
   endfor
 
   call neobundle#writefile('updated_time',
-        \ [localtime(), string(bundles_updated_time)])
+        \ [string(bundles_updated_time)])
 endfunction
 
 function! s:load_updated_time(bundles)
-  let checked_time = 0
   let bundles_updated_time = {}
 
   let updated_time_path =
@@ -693,13 +694,15 @@ function! s:load_updated_time(bundles)
   if filereadable(updated_time_path)
     try
       let list = readfile(updated_time_path)
-      let checked_time = list[0]
-      sandbox let bundles_updated_time = eval(list[1])
+      sandbox let bundles_updated_time = eval(list[0])
+      if type(bundles_updated_time) != type({})
+        let bundles_updated_time = {}
+      endif
     catch
     endtry
   endif
 
-  return [checked_time, bundles_updated_time]
+  return bundles_updated_time
 endfunction
 
 function! neobundle#installer#log(msg, ...)
