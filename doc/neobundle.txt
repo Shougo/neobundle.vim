@@ -1041,14 +1041,10 @@ The recipe file is json format like this:
 FAQ						*neobundle-faq*
 
 Q: I want to manage rsense Vim plugin using neobundle.
-A: Unfortunately, rsense Vim doesn't have plugin directory so neobundle cannot
-manage it. But you can use vim-rsense instead of rsense which neobundle can
-manage.
+A: Use neocomplcache-rsense. Installation and settings could be found in the doc of neocomplcache-rsense.
 
-https://github.com/taichouchou2/vim-rsense
->
-	NeoBundle 'taichouchou2/vim-rsense'
-<
+https://github.com/Shougo/neocomplcache-rsense
+
 Q: I want to use "https" protocol instead of "git"(over proxy).
 A: Please change |g:neobundle#types#git#default_protocol| value.
 >
