@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Jan 2013.
+" Last Modified: 01 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -227,8 +227,10 @@ function! neobundle#get_not_installed_bundles(bundle_names)
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(a:bundle_names)
 
-  return filter(copy(bundles),
-        \ "!isdirectory(neobundle#util#expand(v:val.path))")
+  return filter(copy(bundles), "
+        \  v:val.rtp != ''
+        \  && !isdirectory(neobundle#util#expand(v:val.path))
+        \  && v:val.type !=# 'nosync'")
 endfunction
 
 function! neobundle#get(name)

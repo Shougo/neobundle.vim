@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Jan 2013.
+" Last Modified: 01 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,6 +65,20 @@ function! neobundle#installer#install(bang, bundle_names)
   endif
 
   call neobundle#installer#clear_log()
+
+  for bundle in filter(copy(bundles),
+        \ 'v:val.uri !=# v:val.installed_uri')
+    " Reinstall.
+
+    " Save info.
+    let arg = bundle.orig_arg
+
+    " Remove.
+    call neobundle#installer#clean(1, bundle.name)
+
+    call call('neobundle#config#bundle', [arg])
+  endfor
+
   let [installed, errored] = s:install(a:bang, bundles)
   if !has('vim_starting')
     redraw
@@ -95,7 +109,7 @@ function! neobundle#installer#update(bundles)
   call neobundle#installer#helptags(a:bundles)
   call neobundle#config#reload(a:bundles)
 
-  call s:save_updated_time(neobundle#config#get_neobundles())
+  call s:save_install_info(neobundle#config#get_neobundles())
 endfunction
 
 function! neobundle#installer#helptags(bundles)
@@ -489,6 +503,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
       let updated_time = bundle.checked_time
     endif
     let bundle.updated_time = updated_time
+    let bundle.installed_uri = bundle.uri
 
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
@@ -648,7 +663,7 @@ function! s:check_really_clean(dirs)
 endfunction
 
 function! neobundle#installer#get_check_bundles(bundles)
-   let bundles_updated_time = s:load_updated_time(a:bundles)
+   let install_info = s:load_install_info(a:bundles)
 
    let before_one_week = localtime() - 60 * 60 * 24 * 7
    let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
@@ -657,12 +672,16 @@ function! neobundle#installer#get_check_bundles(bundles)
    let bundles = []
    for bundle in filter(copy(a:bundles),
          \ "!get(v:val, 'stay_same', 0)")
-     let [bundle.checked_time, bundle.updated_time] =
-           \ get(bundles_updated_time, bundle.name,
-           \      [localtime(), localtime()])
+     let info = get(install_info, bundle.name, {
+           \ 'checked_time' : localtime(),
+           \ 'updated_time' : localtime(),
+           \ 'installed_uri' : bundle.uri})
+     let [bundle.checked_time, bundle.updated_time, bundle.installed_uri] =
+           \ [info.checked_time, info.updated_time, info.installed_uri]
 
      " Check if skip.
-     if bundle.updated_time > before_one_week
+     if bundle.uri !=# bundle.installed_uri
+           \ || bundle.updated_time > before_one_week
            \ || (bundle.updated_time < before_one_month
            \     && bundle.checked_time < before_one_month)
            \ || (bundle.updated_time < before_one_week
@@ -674,35 +693,39 @@ function! neobundle#installer#get_check_bundles(bundles)
    return bundles
 endfunction
 
-function! s:save_updated_time(bundles)
-  let bundles_updated_time = {}
+function! s:save_install_info(bundles)
+  let install_info = {}
   for bundle in filter(copy(a:bundles),
         \ "has_key(v:val, 'updated_time')")
-    let bundles_updated_time[bundle.name] =
-          \ [bundle.checked_time, bundle.updated_time]
+    let install_info[bundle.name] = {
+          \   'checked_time' : bundle.checked_time,
+          \   'updated_time' : bundle.updated_time,
+          \   'installed_uri' : bundle.installed_uri,
+          \ }
   endfor
 
-  call neobundle#writefile('updated_time',
-        \ [string(bundles_updated_time)])
+  call neobundle#writefile('install_info',
+        \ ['1.0', string(install_info)])
 endfunction
 
-function! s:load_updated_time(bundles)
-  let bundles_updated_time = {}
+function! s:load_install_info(bundles)
+  let install_info = {}
 
-  let updated_time_path =
-        \ neobundle#get_neobundle_dir() . '/.neobundle/updated_time'
-  if filereadable(updated_time_path)
+  let install_info_path =
+        \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
+  if filereadable(install_info_path)
     try
-      let list = readfile(updated_time_path)
-      sandbox let bundles_updated_time = eval(list[0])
-      if type(bundles_updated_time) != type({})
-        let bundles_updated_time = {}
+      let list = readfile(install_info_path)
+      let ver = list[0]
+      sandbox let install_info = eval(list[1])
+      if ver !=# '1.0' || type(install_info) != type({})
+        let install_info = {}
       endif
     catch
     endtry
   endif
 
-  return bundles_updated_time
+  return install_info
 endfunction
 
 function! neobundle#installer#log(msg, ...)
