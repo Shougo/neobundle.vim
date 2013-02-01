@@ -1041,7 +1041,9 @@ The recipe file is json format like this:
 FAQ						*neobundle-faq*
 
 Q: I want to manage rsense Vim plugin using neobundle.
-A: Use neocomplcache-rsense. Installation and settings could be found in the doc of neocomplcache-rsense.
+A: Use |neocomplcache-rsense|. Installation and settings could be found in the
+doc of neocomplcache-rsense.
+Note: neocomplcache-rsense depends |neocomplcache| plugin.
 
 https://github.com/Shougo/neocomplcache-rsense
 
