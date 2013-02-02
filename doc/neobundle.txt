@@ -1056,6 +1056,9 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-02-02
+- Improved skipped behavior.
+
 2013-02-01
 - Improved update behavior.
 

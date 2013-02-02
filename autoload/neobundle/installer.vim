@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Feb 2013.
+" Last Modified: 02 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,9 +52,6 @@ function! neobundle#installer#install(bang, bundle_names)
         \ empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
-  if a:bang == 1 && empty(bundle_names)
-    let bundles = neobundle#installer#get_check_bundles(bundles)
-  endif
   if empty(bundles)
     call neobundle#installer#error(
           \ '[neobundle/install] Target bundles not found.')
@@ -62,6 +59,10 @@ function! neobundle#installer#install(bang, bundle_names)
           \ '[neobundle/install] You may use wrong bundle name'.
           \ ' or all bundles are already installed.')
     return
+  endif
+
+  if a:bang
+    call neobundle#installer#_load_install_info(bundles)
   endif
 
   call neobundle#installer#clear_log()
@@ -271,9 +272,10 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 
   let cmd = types[a:bundle.type].get_sync_command(a:bundle)
 
-  if cmd == '' || (is_directory && !a:bang)
-    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
-          \ a:number, a:max, a:bundle.name, 'Skipped')]
+  if cmd == ''
+    return ['', 'Not supported sync action.']
+  elseif (is_directory && !a:bang)
+    return ['', 'Already installed.']
   endif
 
   let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
@@ -295,8 +297,7 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
   let cmd = types[a:bundle.type].get_revision_lock_command(a:bundle)
 
   if cmd == ''
-    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
-          \ a:number, a:max, a:bundle.name, 'Skipped')]
+    return ['', '']
   endif
 
   let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
@@ -377,19 +378,34 @@ function! neobundle#installer#sync(bundle, context, is_unite)
   let num = a:context.source__number
   let max = a:context.source__max_bundles
 
-  let [cmd, message] =
-        \ neobundle#installer#get_sync_command(
-        \ a:context.source__bang, a:bundle,
-        \ a:context.source__number, a:context.source__max_bundles)
+  let before_one_week = localtime() - 60 * 60 * 24 * 7
+  let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
+
+  if a:context.source__bang == 1 &&
+        \ a:bundle.stay_same
+    let [cmd, message] = ['', 'has "stay_same" attribute.']
+  elseif a:context.source__bang == 1 &&
+        \ (a:bundle.updated_time < before_one_week
+        \ || (a:bundle.updated_time < before_one_month
+        \     && a:bundle.checked_time < before_one_month)
+        \ || (a:bundle.updated_time < before_one_week
+        \     && a:bundle.checked_time < before_one_week))
+    let [cmd, message] = ['', 'Outdated plugin.']
+  else
+    let [cmd, message] =
+          \ neobundle#installer#get_sync_command(
+          \ a:context.source__bang, a:bundle,
+          \ a:context.source__number, a:context.source__max_bundles)
+  endif
 
   if !has('vim_starting') && !a:is_unite
-    redraw
+    redraw!
   endif
 
   if cmd == ''
     " Skipped.
-    call neobundle#installer#log(
-          \ '[neobundle/install] ' . message, a:is_unite)
+    call neobundle#installer#log(s:get_skipped_message(
+          \ num, max, a:bundle, '[neobundle/install]', message), a:is_unite)
     return
   elseif cmd =~# '^E: '
     " Errored.
@@ -487,9 +503,9 @@ function! neobundle#installer#check_output(context, process, is_unite)
       let bundle.updated_time = updated_time
     endif
 
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Skipped'), a:is_unite)
+    call neobundle#installer#log(s:get_skipped_message(
+          \ num, max, bundle, '[neobundle/install]',
+          \ 'Same revision.'), a:is_unite)
   else
     call neobundle#installer#update_log(
           \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
@@ -523,7 +539,7 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
         \ a:context.source__bang, bundle, num, max)
 
   if !has('vim_starting') && !a:is_unite
-    redraw
+    redraw!
   endif
 
   if cmd == ''
@@ -662,37 +678,6 @@ function! s:check_really_clean(dirs)
         \        .len(a:dirs).' bundles? [y/n] : ') =~? 'y'
 endfunction
 
-function! neobundle#installer#get_check_bundles(bundles)
-   let install_info = s:load_install_info(a:bundles)
-
-   let before_one_week = localtime() - 60 * 60 * 24 * 7
-   let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
-
-   " Remove stay_same bundles.
-   let bundles = []
-   for bundle in filter(copy(a:bundles),
-         \ "!get(v:val, 'stay_same', 0)")
-     let info = get(install_info, bundle.name, {
-           \ 'checked_time' : localtime(),
-           \ 'updated_time' : localtime(),
-           \ 'installed_uri' : bundle.uri})
-     let [bundle.checked_time, bundle.updated_time, bundle.installed_uri] =
-           \ [info.checked_time, info.updated_time, info.installed_uri]
-
-     " Check if skip.
-     if bundle.uri !=# bundle.installed_uri
-           \ || bundle.updated_time > before_one_week
-           \ || (bundle.updated_time < before_one_month
-           \     && bundle.checked_time < before_one_month)
-           \ || (bundle.updated_time < before_one_week
-           \     && bundle.checked_time < before_one_week)
-       call add(bundles, bundle)
-     endif
-   endfor
-
-   return bundles
-endfunction
-
 function! s:save_install_info(bundles)
   let install_info = {}
   for bundle in filter(copy(a:bundles),
@@ -708,7 +693,7 @@ function! s:save_install_info(bundles)
         \ ['1.0', string(install_info)])
 endfunction
 
-function! s:load_install_info(bundles)
+function! neobundle#installer#_load_install_info(bundles)
   let install_info = {}
 
   let install_info_path =
@@ -725,7 +710,22 @@ function! s:load_install_info(bundles)
     endtry
   endif
 
+  call map(a:bundles, "extend(v:val, get(install_info, v:val.name, {
+        \ 'checked_time' : localtime(),
+        \ 'updated_time' : localtime(),
+        \ 'installed_uri' : v:val.uri,
+        \}))")
+
   return install_info
+endfunction
+
+function! s:get_skipped_message(number, max, bundle, prefix, message)
+  let messages = [a:prefix . printf(' (%'.len(a:max).'d/%d): |%s| %s',
+          \ a:number, a:max, a:bundle.name, 'Skipped')]
+  if a:message != ''
+    call add(messages, a:prefix . ' ' . a:message)
+  endif
+  return messages
 endfunction
 
 function! neobundle#installer#log(msg, ...)
