@@ -1058,6 +1058,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-02
 - Improved skipped behavior.
+- Fixed neobundle#writefile().
 
 2013-02-01
 - Improved update behavior.
