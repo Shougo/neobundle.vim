@@ -1053,6 +1053,11 @@ A: Please change |g:neobundle#types#git#default_protocol| value.
 	let g:neobundle#types#git#default_protocol = 'https'
 <
 
+Q: Vim get freeze when a NeoBundle command get a repository name has a typo.
+A: It is git command feature. Git waits user input if repository name is
+wrong. But if you installed |vimproc|, Vim will not get freeze.
+	https://github.com/Shougo/vimproc
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
