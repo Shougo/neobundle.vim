@@ -1061,6 +1061,9 @@ wrong. But if you installed |vimproc|, Vim will not get freeze.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-02-09
+- Fixed loading depends behavior.
+
 2013-02-02
 - Improved skipped behavior.
 - Fixed neobundle#writefile().
