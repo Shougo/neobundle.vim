@@ -253,8 +253,6 @@ function! neobundle#config#source(names)
       call s:rtp_rm(bundle)
     endif
 
-    call neobundle#config#source_bundles(bundle.depends)
-
     call s:rtp_add(bundle)
 
     if exists('g:loaded_neobundle')
