@@ -1018,7 +1018,10 @@ The recipe file is json format like this:
 
 		script_type		(String)	(Optional)
 		Specify script type.
-
+		Example:
+>
+	NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
+<
 		site			(String)	(Optional)
 		Repository site.
 
@@ -1063,6 +1066,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-10
 - Fixed loading depends.
+- Improved script_type support.
 
 2013-02-09
 - Fixed loading depends behavior.

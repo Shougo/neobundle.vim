@@ -725,6 +725,7 @@ function! s:init_bundle(bundle)
     let bundle.directory .= '_' . substitute(bundle.rev,
           \ '[^[:alnum:]_.-]', '', 'g')
   endif
+
   let bundle.path = s:expand_path(bundle.base.'/'.bundle.directory)
 
   let rtp = bundle.rtp
@@ -735,6 +736,11 @@ function! s:init_bundle(bundle)
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
+  endif
+
+  if bundle.script_type != ''
+    " Add script_type.
+    let bundle.path .= '/' . a:bundle.script_type
   endif
 
   if !has_key(bundle, 'function_prefix')
