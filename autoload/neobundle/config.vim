@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Feb 2013.
+" Last Modified: 10 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -460,12 +460,8 @@ function! neobundle#config#search(bundle_names)
         \ 'index(a:bundle_names, v:val.name) >= 0')
 
   for bundle in copy(_)
-    for depend in bundle.depends
-      if type(depend) == type('')
-        let depend = string(depend)
-      endif
-      call add(_, neobundle#config#bundle(depend, 1))
-    endfor
+    let _ += neobundle#config#search(
+          \ map(copy(bundle.depends), 'v:val.name'))
   endfor
 
   return neobundle#util#uniq(_)
@@ -479,12 +475,8 @@ function! neobundle#config#fuzzy_search(bundle_names)
   endfor
 
   for bundle in copy(_)
-    for depend in bundle.depends
-      if type(depend) == type('')
-        let depend = string(depend)
-      endif
-      call add(_, neobundle#config#bundle(depend, 1))
-    endfor
+    let _ += neobundle#config#search(
+          \ map(copy(bundle.depends), 'v:val.name'))
   endfor
 
   return neobundle#util#uniq(_)
@@ -616,23 +608,6 @@ function! neobundle#config#set(name, dict)
   call s:add_bundle(bundle)
 endfunction
 
-function! s:load_depends(bundle, lazy)
-  for depend in a:bundle.depends
-    if type(depend) == type('')
-      let depend = string(depend)
-    endif
-
-    " Parse check.
-    let depend_bundle = neobundle#config#bundle(depend, 1)
-    let depend_bundle.lazy = a:lazy
-    if !has_key(s:neobundles, depend_bundle.name)
-      call s:add_bundle(depend_bundle)
-    endif
-
-    unlet depend
-  endfor
-endfunction
-
 function! s:add_bundle(bundle)
   let bundle = a:bundle
 
@@ -645,7 +620,11 @@ function! s:add_bundle(bundle)
 
   let s:neobundles[bundle.name] = bundle
 
-  call s:load_depends(bundle, bundle.lazy)
+  " Add depends.
+  for depend in filter(copy(a:bundle.depends),
+        \ '!has_key(s:neobundles, v:val.name)')
+    call s:add_bundle(depend)
+  endfor
 
   if !bundle.lazy && bundle.rtp != ''
     if has_key(s:loaded_neobundles, bundle.name)
@@ -766,7 +745,19 @@ function! s:init_bundle(bundle)
           \ neobundle#config#_parse_function_prefix(bundle.name)
   endif
 
-  let bundle.depends = neobundle#util#convert_list(bundle.depends)
+  " Parse depends.
+  let _ = []
+  for depend in neobundle#util#convert_list(bundle.depends)
+    if type(depend) == type('')
+      let depend = string(depend)
+    endif
+    let depend_bundle = neobundle#config#bundle(depend, 1)
+    let depend_bundle.lazy = bundle.lazy
+    call add(_, depend_bundle)
+
+    unlet depend
+  endfor
+  let bundle.depends = _
   let bundle.installed_uri = bundle.uri
 
   return bundle
