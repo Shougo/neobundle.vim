@@ -1069,6 +1069,7 @@ CHANGELOG					*neobundle-changelog*
 - Fixed loading depends.
 - Improved script_type support.
 - Fixed for infinite loop.
+- Fixed fuzzy search.
 
 2013-02-09
 - Fixed loading depends behavior.

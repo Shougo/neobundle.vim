@@ -477,9 +477,14 @@ function! neobundle#config#search(bundle_names, ...)
 endfunction
 
 function! neobundle#config#fuzzy_search(bundle_names)
+  let bundles = []
+  for name in a:bundle_names
+    let bundles += filter(neobundle#config#get_neobundles(),
+          \ 'stridx(v:val.name, name) >= 0')
+  endfor
+
   let _ = []
-  for bundle in copy(filter(neobundle#config#get_neobundles(),
-          \ 'stridx(v:val.name, name) >= 0'))
+  for bundle in bundles
     let _ += neobundle#config#search(
           \ map(copy(bundle.depends), 'v:val.name'))
     call add(_, bundle)
