@@ -1070,6 +1070,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved script_type support.
 - Fixed for infinite loop.
 - Fixed fuzzy search.
+- Fixed helptags.
 
 2013-02-09
 - Fixed loading depends behavior.

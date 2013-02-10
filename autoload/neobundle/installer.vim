@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 10 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,9 +120,7 @@ function! neobundle#installer#helptags(bundles)
 
   let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
 
-  call map(help_dirs, 's:helptags(v:val.rtp)')
   if !empty(help_dirs)
-    call s:helptags(neobundle#get_runtime_dir())
     call s:update_tags()
 
     call neobundle#installer#log(
@@ -632,19 +630,17 @@ function! s:has_doc(path)
         \       || glob(a:path.'/doc/*.??x') != '')
 endfunction
 
-function! s:helptags(path)
-  try
-    helptags `=a:path . '/doc/'`
-  catch
-    call neobundle#installer#error('Error generating helptags in '.a:path)
-    call neobundle#installer#error(v:exception . ' ' . v:throwpoint)
-  endtry
-endfunction
-
 function! s:update_tags()
   let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
   call s:copy_bundle_files(bundles, 'doc')
+
+  try
+    helptags `=neobundle#get_tags_dir()`
+  catch
+    call neobundle#installer#error('Error generating helptags:')
+    call neobundle#installer#error(v:exception . ' ' . v:throwpoint)
+  endtry
 endfunction
 
 function! s:update_ftdetect()
