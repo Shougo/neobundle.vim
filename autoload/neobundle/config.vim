@@ -155,13 +155,16 @@ function! neobundle#config#depends_bundle(arg)
   if empty(bundle)
     return {}
   endif
-  let bundle.overwrite = 0
-  let bundle.resettable = 0
 
-  call s:add_bundle(bundle)
+  if !has_key(s:neobundles, bundle.name)
+    let bundle.overwrite = 0
+    let bundle.resettable = 0
 
-  " Install bundle automatically.
-  silent call neobundle#installer#install(0, bundle.name)
+    call s:add_bundle(bundle)
+
+    " Install bundle automatically.
+    silent call neobundle#installer#install(0, bundle.name)
+  endif
 
   " Load scripts.
   call neobundle#config#source(bundle.name)
@@ -239,15 +242,21 @@ function! neobundle#config#source(names)
 
   let reset_ftplugin = 0
   for bundle in bundles
+    let s:loaded_neobundles[bundle.name] = 1
+    let s:sourced_neobundles[bundle.name] = 1
+    let s:disabled_neobundles[bundle.name] = 0
+
     " Unmap dummy mappings.
     for [mode, mapping] in get(bundle, 'dummy_mappings', [])
-      execute mode.'unmap' mapping
+      silent! execute mode.'unmap' mapping
     endfor
+    let bundle.dummy_mappings = []
 
     " Delete dummy commands.
     for command in get(bundle, 'dummy_commands', [])
-      execute 'delcommand' command
+      silent! execute 'delcommand' command
     endfor
+    let bundle.dummy_commands = []
 
     if has_key(s:neobundles, bundle.name)
       call s:rtp_rm(bundle)
@@ -287,10 +296,6 @@ function! neobundle#config#source(names)
         endfor
       endfor
     endif
-
-    let s:loaded_neobundles[bundle.name] = 1
-    let s:sourced_neobundles[bundle.name] = 1
-    let s:disabled_neobundles[bundle.name] = 0
 
     let bundle.resettable = 0
   endfor
@@ -453,12 +458,16 @@ function! neobundle#config#init_bundle(name, opts)
   return bundle
 endfunction
 
-function! neobundle#config#search(bundle_names)
+function! neobundle#config#search(bundle_names, ...)
+  " For infinite loop.
+  let self = get(a:000, 0, [])
+
   let _ = []
   for bundle in copy(filter(neobundle#config#get_neobundles(),
-        \ 'index(a:bundle_names, v:val.name) >= 0'))
+        \ 'index(self, v:val.name) < 0 &&
+        \       index(a:bundle_names, v:val.name) >= 0'))
     let _ += neobundle#config#search(
-          \ map(copy(bundle.depends), 'v:val.name'))
+          \ map(copy(bundle.depends), 'v:val.name'), self + [bundle.name])
     call add(_, bundle)
   endfor
 
@@ -470,7 +479,7 @@ function! neobundle#config#fuzzy_search(bundle_names)
   for bundle in copy(filter(neobundle#config#get_neobundles(),
           \ 'stridx(v:val.name, name) >= 0'))
     let _ += neobundle#config#search(
-          \ map(copy(bundle.depends), 'v:val.name'))
+          \ map(copy(bundle.depends), 'v:val.name'), self + [bundle.name])
     call add(_, bundle)
   endfor
 
