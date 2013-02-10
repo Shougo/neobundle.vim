@@ -454,12 +454,12 @@ function! neobundle#config#init_bundle(name, opts)
 endfunction
 
 function! neobundle#config#search(bundle_names)
-  let _ = filter(neobundle#config#get_neobundles(),
-        \ 'index(a:bundle_names, v:val.name) >= 0')
-
-  for bundle in copy(_)
+  let _ = []
+  for bundle in copy(filter(neobundle#config#get_neobundles(),
+        \ 'index(a:bundle_names, v:val.name) >= 0'))
     let _ += neobundle#config#search(
           \ map(copy(bundle.depends), 'v:val.name'))
+    call add(_, bundle)
   endfor
 
   return neobundle#util#uniq(_)
@@ -467,14 +467,11 @@ endfunction
 
 function! neobundle#config#fuzzy_search(bundle_names)
   let _ = []
-  for name in a:bundle_names
-    let _ += filter(neobundle#config#get_neobundles(),
-          \ 'stridx(v:val.name, name) >= 0')
-  endfor
-
-  for bundle in copy(_)
+  for bundle in copy(filter(neobundle#config#get_neobundles(),
+          \ 'stridx(v:val.name, name) >= 0'))
     let _ += neobundle#config#search(
           \ map(copy(bundle.depends), 'v:val.name'))
+    call add(_, bundle)
   endfor
 
   return neobundle#util#uniq(_)
