@@ -490,9 +490,13 @@ OPTIONS 					*neobundle-options*
 <
 					*neobundle-options-script_type*
 		script_type		(String)
-		Specify script type.
+		Specify script type. It is useful for non-official categorized
+		plugins.
 		For example: "indent", "plugin", "ftplugin", ...
-
+		Example:
+>
+		NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
+<
 						*neobundle-options-site*
 		site			(String)
 		Repository site.  If you omit repository URL and site
@@ -1018,10 +1022,7 @@ The recipe file is json format like this:
 
 		script_type		(String)	(Optional)
 		Specify script type.
-		Example:
->
-	NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
-<
+
 		site			(String)	(Optional)
 		Repository site.
 
