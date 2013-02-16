@@ -666,11 +666,13 @@ OPTIONS 					*neobundle-options*
 			Functions list.
 
 			function_prefix	(String)
-			Autoload function prefix. {function_prefix}#...
-			functions were loaded automatically.
-			If omitted,  is used.
+			Autoload function prefix in functions.
+			{function_prefix}#...
+			If the prefix is set, functions were loaded
+			automatically.
+			If omitted it, automatically generated prefix is used.
 			Example: If you use "unite.vim", "unite" function
-			prefix is used. 
+			prefix is used.
 
 			mappings	(List)
 			Mappings list. The items are {mapping} or
