@@ -686,6 +686,12 @@ OPTIONS 					*neobundle-options*
 			on editing non-file.
 			Note: It is useful for explorer behavior plugins.
 			Ex: vimfiler, metarw...
+			Note: To autoload vimfiler, you must disable netrw in
+			.vimrc.
+>
+			" Disable netrw.vim
+			let g:loaded_netrwPlugin = 1
+<
 
 		Examples:
 >
