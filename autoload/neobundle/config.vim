@@ -42,8 +42,12 @@ function! neobundle#config#init()
     autocmd FuncUndefined * call neobundle#autoload#function()
     autocmd InsertEnter * call neobundle#autoload#insert()
     autocmd VimEnter * call s:on_vim_enter()
-    autocmd BufCreate,BufEnter,BufWinEnter
-          \ * call neobundle#autoload#explorer(expand('<amatch>'))
+    autocmd BufCreate
+          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufCreate')
+    autocmd BufEnter
+          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufEnter')
+    autocmd BufWinEnter
+          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufWinEnter')
   augroup END
 
   filetype off

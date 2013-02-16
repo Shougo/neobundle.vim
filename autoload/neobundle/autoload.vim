@@ -96,9 +96,8 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   call feedkeys(mapping . input, 'm')
 endfunction
 
-function! neobundle#autoload#explorer(path)
-  if bufnr('%') != expand('<abuf>')
-        \ || a:path == ''
+function! neobundle#autoload#explorer(path, event)
+  if bufnr('%') != expand('<abuf>') || a:path == ''
     return
   endif
 
@@ -108,9 +107,11 @@ function! neobundle#autoload#explorer(path)
     let path = '~'
   endif
 
-  if !filereadable(s:expand(path))
-    call neobundle#config#source_bundles(filter(s:get_autoload_bundles(),
-        \ "get(v:val.autoload, 'explorer', 0)"))
+  let bundles = filter(s:get_autoload_bundles(),
+        \ "get(v:val.autoload, 'explorer', 0)")
+  if !filereadable(s:expand(path)) && !empty(bundles)
+    call neobundle#config#source_bundles(bundles)
+    execute 'doautocmd' a:event
   endif
 endfunction
 
