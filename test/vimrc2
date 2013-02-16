@@ -46,4 +46,4 @@ set wildignore+=.git
 set wildignore+=.git/*
 set wildignore+=*/.git/*
 
-autocmd VimEnter * NeoBundleUpdate
+autocmd VimEnter * NeoBundleCheck

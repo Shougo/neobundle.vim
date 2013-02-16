@@ -123,4 +123,4 @@ set wildignore+=*/.git/*
 " Fetch only.
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-autocmd VimEnter * NeoBundleInstall
+autocmd VimEnter * NeoBundleCheck
