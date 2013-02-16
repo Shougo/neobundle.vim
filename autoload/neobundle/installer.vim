@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Feb 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -636,7 +636,7 @@ function! s:update_tags()
   call s:copy_bundle_files(bundles, 'doc')
 
   try
-    helptags `=neobundle#get_tags_dir()`
+    execute 'helptags' fnameescape(neobundle#get_tags_dir())
   catch
     call neobundle#installer#error('Error generating helptags:')
     call neobundle#installer#error(v:exception . ' ' . v:throwpoint)

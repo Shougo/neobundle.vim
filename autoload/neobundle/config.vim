@@ -135,7 +135,12 @@ function! neobundle#config#lazy_bundle(arg)
   if empty(bundle)
     return {}
   endif
+
+  " Update lazy flag.
   let bundle.lazy = 1
+  for depend in bundle.depends
+    let depend.lazy = bundle.lazy
+  endfor
 
   call s:add_bundle(bundle)
 
@@ -638,9 +643,13 @@ function! s:add_bundle(bundle)
   let s:neobundles[bundle.name] = bundle
 
   " Add depends.
-  for depend in filter(copy(a:bundle.depends),
-        \ '!has_key(s:neobundles, v:val.name)')
-    call s:add_bundle(depend)
+  for depend in a:bundle.depends
+    if !has_key(s:neobundles, depend.name)
+      call s:add_bundle(depend)
+    elseif !depend.lazy
+      " Load automatically.
+      call neobundle#config#source(depend.name)
+    endif
   endfor
 
   if !bundle.lazy && bundle.rtp != ''

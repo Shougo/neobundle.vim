@@ -1090,6 +1090,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-16
 - Added explorer autoload.
+- Fixed dependencies problems.
 
 2013-02-10
 - Fixed loading depends.

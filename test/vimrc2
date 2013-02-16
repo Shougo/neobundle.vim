@@ -11,17 +11,30 @@ endif
 call neobundle#rc(expand(testdir, 1))
 
 " Test dependencies.
-" For https://github.com/Shougo/neobundle.vim/issues/45
 
-NeoBundle 'Shougo/vimproc', {
-      \ 'build': {
-      \ 'windows': 'echo "vimproc binary file does not support Windows."',
-      \ 'unix': 'make -f make_unix.mak',
-      \ 'mac': 'make -f make_mac.mak',
-      \ 'cygwin': 'make -f make_cygwin.mak',
-      \ },
-      \ }
-NeoBundle 'Shougo/neocomplcache', { 'depends': ['Shougo/vimproc'] }
+" A
+NeoBundleLazy 'Shougo/echodoc'
+NeoBundle 'Shougo/unite-build', { 'depends' : 'Shougo/echodoc' }
+echomsg neobundle#is_sourced('echodoc') == 1
+echomsg neobundle#is_sourced('unite-build') == 1
+
+" B
+NeoBundle 'Shougo/unite-ssh',  { 'depends' : 'Shougo/unite-sudo' }
+NeoBundleLazy 'Shougo/unite-sudo'
+echomsg neobundle#is_sourced('unite-ssh') == 1
+echomsg neobundle#is_sourced('unite-sudo') == 1
+
+" C
+NeoBundleLazy 'Shougo/vimproc', { 'depends': 'Shougo/neocomplcache' }
+NeoBundle 'Shougo/neocomplcache'
+echomsg neobundle#is_sourced('vimproc') == 0
+echomsg neobundle#is_sourced('neocomplcache') == 1
+
+" D
+NeoBundleLazy 'Shougo/vimshell', { 'depends': 'Shougo/vinarise' }
+NeoBundleLazy 'Shougo/vinarise'
+echomsg neobundle#is_sourced('vimshell') == 0
+echomsg neobundle#is_sourced('vinarise') == 0
 
 filetype plugin indent on       " required!
 
