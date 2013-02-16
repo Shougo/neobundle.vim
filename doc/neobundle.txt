@@ -679,6 +679,11 @@ OPTIONS 					*neobundle-options*
 			[{mode}, {mapping}].  If {mode} is omitted, "nxo" is
 			used.
 
+			unite_sources	(List)
+			Unite source name list.
+			Note: To use this feature, you must install latest
+			|unite.vim|.
+
 			insert		(Number)
 			If set to non-zero, neobundle will |:NeoBundleSource|
 			on |InsertEnter| autocmd.
@@ -733,6 +738,11 @@ OPTIONS 					*neobundle-options*
 	      \    'explorer' : 1,
 	      \ }
 	      \ }
+	NeoBundle 'Shougo/junkfile.vim', {
+	      \ 'autoload' : {
+	      \   'commands' : 'JunkfileOpen',
+	      \   'unite_sources' : ['junkfile', 'junkfile/new'],
+	      \ }}
 <
 						*neobundle-options-overwrite*
 		overwrite		(Number)
@@ -1093,6 +1103,7 @@ CHANGELOG					*neobundle-changelog*
 2013-02-16
 - Added explorer autoload.
 - Fixed dependencies problems.
+- Added unite_sources autoload.
 
 2013-02-10
 - Fixed loading depends.

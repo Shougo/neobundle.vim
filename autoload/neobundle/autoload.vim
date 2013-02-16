@@ -115,6 +115,18 @@ function! neobundle#autoload#explorer(path, event)
   endif
 endfunction
 
+function! neobundle#autoload#unite_sources(sources)
+  let bundles = []
+  let sources_bundles = filter(s:get_autoload_bundles(),
+          \ "has_key(v:val.autoload, 'unite_sources')")
+  for source_name in a:sources
+    let bundles += filter(copy(sources_bundles),
+          \ "index(v:val.autoload.unite_sources, source_name) > 0")
+  endfor
+
+  call neobundle#config#source_bundles(neobundle#util#uniq(bundles))
+endfunction
+
 function! s:get_input()
   let input = ''
   let termstr = "<M-_>"
