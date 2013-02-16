@@ -677,9 +677,15 @@ OPTIONS 					*neobundle-options*
 			[{mode}, {mapping}].  If {mode} is omitted, "nxo" is
 			used.
 
-			insert		(Insert)
+			insert		(Number)
 			If set to non-zero, neobundle will |:NeoBundleSource|
 			on |InsertEnter| autocmd.
+
+			explorer	(Number)
+			If set to non-zero, neobundle will |:NeoBundleSource|
+			on editing non-file.
+			Note: It is useful for explorer behavior plugins.
+			Ex: vimfiler, metarw...
 
 		Examples:
 >
@@ -708,6 +714,17 @@ OPTIONS 					*neobundle-options*
 	      \                 'VimShellTerminal', 'VimShellPop'],
 	      \   'mappings' : ['<Plug>(vimshell_switch)']
 	      \ }})
+	NeoBundleLazy 'Shougo/vimfiler', {
+	      \ 'depends' : 'Shougo/unite.vim',
+	      \ 'autoload' : {
+	      \    'commands' : [{ 'name' : 'VimFiler',
+	      \                    'complete' : 'customlist,vimfiler#complete' },
+	      \                  'VimFilerExplorer',
+	      \                  'Edit', 'Read', 'Source', 'Write'],
+	      \    'mappings' : ['<Plug>(vimfiler_switch)'],
+	      \    'explorer' : 1,
+	      \ }
+	      \ }
 <
 						*neobundle-options-overwrite*
 		overwrite		(Number)
@@ -1064,6 +1081,9 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-02-16
+- Added explorer autoload.
 
 2013-02-10
 - Fixed loading depends.

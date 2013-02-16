@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Jan 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -96,6 +96,24 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   call feedkeys(mapping . input, 'm')
 endfunction
 
+function! neobundle#autoload#explorer(path)
+  if bufnr('%') != expand('<abuf>')
+        \ || a:path == ''
+    return
+  endif
+
+  let path = a:path
+  " For ":edit ~".
+  if fnamemodify(path, ':t') ==# '~'
+    let path = '~'
+  endif
+
+  if !filereadable(s:expand(path))
+    call neobundle#config#source_bundles(filter(s:get_autoload_bundles(),
+        \ "get(v:val.autoload, 'explorer', 0)"))
+  endif
+endfunction
+
 function! s:get_input()
   let input = ''
   let termstr = "<M-_>"
@@ -116,6 +134,14 @@ function! s:get_input()
   endwhile
 
   return input
+endfunction
+
+function! s:expand(path)
+  return neobundle#util#substitute_path_separator(
+        \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
+        \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
+        \               '^\$\h\w*', '\=eval(submatch(0))', '') :
+        \ a:path)
 endfunction
 
 let &cpo = s:save_cpo

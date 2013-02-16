@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Feb 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,6 +42,8 @@ function! neobundle#config#init()
     autocmd FuncUndefined * call neobundle#autoload#function()
     autocmd InsertEnter * call neobundle#autoload#insert()
     autocmd VimEnter * call s:on_vim_enter()
+    autocmd BufCreate,BufEnter,BufWinEnter
+          \ * call neobundle#autoload#explorer(expand('<amatch>'))
   augroup END
 
   filetype off
