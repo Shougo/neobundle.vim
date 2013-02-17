@@ -779,6 +779,8 @@ OPTIONS 					*neobundle-options*
 			on_source		*neobundle-hooks-on_source*
 			Called after a bundle is loaded. It is useful for plugin
 			initilization in lazy bundles.
+			Note: In Vim initializing, calling on_source hooks are
+			delayed until |VimEnter|.
 
 					*neobundle-options-type__shallow*
 		type__shallow		(Number)
@@ -1099,6 +1101,9 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-02-17
+- Improved on_source hook behavior.
 
 2013-02-16
 - Added explorer autoload.
