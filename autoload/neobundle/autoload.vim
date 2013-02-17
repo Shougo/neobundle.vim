@@ -127,6 +127,17 @@ function! neobundle#autoload#unite_sources(sources)
   call neobundle#config#source_bundles(neobundle#util#uniq(bundles))
 endfunction
 
+function! neobundle#autoload#get_unite_sources()
+  let _ = []
+  let sources_bundles = filter(s:get_autoload_bundles(),
+          \ "has_key(v:val.autoload, 'unite_sources')")
+  for bundle in sources_bundles
+    let _ += bundle.autoload.unite_sources
+  endfor
+
+  return _
+endfunction
+
 function! s:get_input()
   let input = ''
   let termstr = "<M-_>"

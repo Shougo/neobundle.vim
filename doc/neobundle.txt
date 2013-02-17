@@ -1104,6 +1104,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-17
 - Improved on_source hook behavior.
+- Added neobundle#get_unite_sources().
 
 2013-02-16
 - Added explorer autoload.
