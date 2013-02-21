@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Feb 2013.
+" Last Modified: 22 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -661,8 +661,7 @@ function! s:add_bundle(bundle)
 
     let s:loaded_neobundles[bundle.name] = 1
     call s:rtp_add(bundle)
-  elseif bundle.lazy && has_key(bundle, 'autoload') &&
-        \ !neobundle#config#is_sourced(bundle.name)
+  elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
     for item in neobundle#util#convert_list(
           \ get(bundle.autoload, 'commands', []))
@@ -723,6 +722,7 @@ function! s:get_default()
           \ 'stay_same' : 0,
           \ 'hooks' : {},
           \ 'external_commands' : {},
+          \ 'autoload' : {},
           \ }
   endif
 
@@ -773,9 +773,9 @@ function! s:init_bundle(bundle)
     let bundle.path .= '/' . a:bundle.script_type
   endif
 
-  if !has_key(bundle, 'function_prefix')
+  if !has_key(bundle.autoload, 'function_prefix')
         \ && isdirectory(bundle.rtp . '/autoload')
-    let bundle.function_prefix =
+    let bundle.autoload.function_prefix =
           \ neobundle#config#_parse_function_prefix(bundle.name)
   endif
 
