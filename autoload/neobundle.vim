@@ -261,12 +261,18 @@ endfunction
 
 function! neobundle#check()
   if neobundle#exists_not_installed_bundles()
-    echomsg 'Not installed bundles:'
-          \ string(neobundle#get_not_installed_bundle_names())
-    if confirm('Install bundles now?', "yes\nNo", 2) == 1
-      call neobundle#installer#install(0, '')
+    if neobundle#util#is_windows() &&
+          \ has('gui_running') && has('vim_starting')
+      " Note: :NeoBundleCheck cannot work in Windows GUI startup.
+      autocmd neobundle VimEnter * NeoBundleCheck
+    else
+      echomsg 'Not installed bundles:'
+            \ string(neobundle#get_not_installed_bundle_names())
+      if confirm('Install bundles now?', "yes\nNo", 2) == 1
+        call neobundle#installer#install(0, '')
+      endif
+      echo ''
     endif
-    echo ''
   endif
 endfunction
 

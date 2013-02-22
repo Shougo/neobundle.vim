@@ -324,6 +324,7 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleCheck					*:NeoBundleCheck*
 		Check plugins installation. If plugins are not installed, it
 		will execute |:NeoBundleInstall| automatically.
+		Note: |:NeoBundleCheck| cannot work in Windows GUI startup.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
@@ -1109,6 +1110,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved neobundle source.
 - Improved sort in on_source.
 - Fixed check update.
+- Improved :NeoBundleCheck behavior.
 
 2013-02-22
 - Fixed function_prefix.
