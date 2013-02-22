@@ -418,9 +418,9 @@ OPTIONS 					*neobundle-options*
 
 						*neobundle-options-name*
 		name			(String)
-		Specify the name of the bundle. This is used for neobundle management
-		and other commands (like |:NeoBundleUpdate|). If omitted,
-		the tail of the repository name will be used.
+		Specify the name of the bundle. This is used for neobundle
+		management and other commands (like |:NeoBundleUpdate|). If
+		omitted, the tail of the repository name will be used.
 		Note: Must be unique across all bundles. If a bundle name
 		conflicts with another bundle, neobundle will overwrite the
 		previous settings with the new one. If a repo tail is bound to
@@ -435,6 +435,9 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'git://github.com/bar/foo.git',
 		   \ {'name' : 'bar-foo'}
 <
+		description		(String)
+		Plugin description.
+
 		rev			(String)
 		Specify a revision number or branch/tag name.
 
@@ -1101,6 +1104,9 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-02-23
+- Improved neobundle source.
 
 2013-02-22
 - Fixed function_prefix.
