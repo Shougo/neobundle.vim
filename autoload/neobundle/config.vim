@@ -273,6 +273,7 @@ function! neobundle#config#source(names)
       call s:rtp_rm(bundle)
     endif
 
+    let bundle.neobundle__priority = len(s:neobundles)
     call s:rtp_add(bundle)
 
     if exists('g:loaded_neobundle')
@@ -660,6 +661,7 @@ function! s:add_bundle(bundle)
     endif
 
     let s:loaded_neobundles[bundle.name] = 1
+    let bundle.neobundle__priority = len(s:neobundles)
     call s:rtp_add(bundle)
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []

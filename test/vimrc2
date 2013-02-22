@@ -36,6 +36,9 @@ NeoBundleLazy 'Shougo/vinarise'
 echomsg neobundle#is_sourced('vimshell') == 0
 echomsg neobundle#is_sourced('vinarise') == 0
 
+NeoBundle 'Shougo/vimshell', { 'depends': 'Shougo/vinarise' }
+NeoBundle 'Shougo/vinarise'
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.

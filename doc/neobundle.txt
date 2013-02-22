@@ -1107,6 +1107,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-23
 - Improved neobundle source.
+- Improved sort in on_source.
 
 2013-02-22
 - Fixed function_prefix.
