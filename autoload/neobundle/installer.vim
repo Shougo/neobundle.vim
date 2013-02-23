@@ -770,7 +770,7 @@ function! neobundle#installer#error(msg, ...)
   if &filetype == 'unite' || is_unite
     call unite#print_error(msg)
   else
-    echohl WarningMsg | echomsg join(msg, "\n") | echohl None
+    call neobundle#util#print_error(msg)
   endif
 endfunction
 

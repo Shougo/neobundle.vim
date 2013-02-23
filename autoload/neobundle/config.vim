@@ -622,23 +622,30 @@ function! neobundle#config#set(name, dict)
   endif
 
   let bundle = s:init_bundle(extend(bundle, a:dict))
-  let bundle.overwrite = 1
   if bundle.lazy && !get(s:sourced_neobundles, bundle.name, 0)
     " Remove from runtimepath.
     call s:rtp_rm(bundle)
     let s:loaded_neobundles[bundle.name] = 0
   endif
 
-  call s:add_bundle(bundle)
+  call s:add_bundle(bundle, 1)
 endfunction
 
-function! s:add_bundle(bundle)
+function! s:add_bundle(bundle, ...)
+  let is_force = get(a:000, 0, 0)
   let bundle = a:bundle
 
   if get(s:disabled_neobundles, bundle.name, 0)
-        \ || (!bundle.overwrite && has_key(s:neobundles, bundle.name))
+        \ || (!is_force && has_key(s:neobundles, bundle.name))
         \ || (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))
+    if bundle.overwrite && has_key(s:neobundles, bundle.name)
+          \ && s:neobundles[bundle.name].overwrite
+          \ && s:neobundles[bundle.name].resettable
+      call neobundle#util#print_error(
+            \ 'Duplicate neobundle configuration in ' . bundle.name)
+    endif
+
     return
   endif
 
@@ -788,6 +795,7 @@ function! s:init_bundle(bundle)
     endif
     let depend_bundle = neobundle#config#bundle(depend, 1)
     let depend_bundle.lazy = bundle.lazy
+    let depend_bundle.overwrite = 0
     call add(_, depend_bundle)
 
     unlet depend

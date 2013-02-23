@@ -1113,6 +1113,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved :NeoBundleCheck behavior.
 - Improved autoload of unite sources.
 - Improved tsort.
+- Implemented duplicate configulation check feature.
 
 2013-02-22
 - Fixed function_prefix.
