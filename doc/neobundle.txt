@@ -1111,6 +1111,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved sort in on_source.
 - Fixed check update.
 - Improved :NeoBundleCheck behavior.
+- Improved autoload of unite sources.
 
 2013-02-22
 - Fixed function_prefix.
