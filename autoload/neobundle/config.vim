@@ -273,7 +273,6 @@ function! neobundle#config#source(names)
       call s:rtp_rm(bundle)
     endif
 
-    let bundle.neobundle__priority = len(s:neobundles)
     call s:rtp_add(bundle)
 
     if exists('g:loaded_neobundle')
@@ -661,7 +660,6 @@ function! s:add_bundle(bundle)
     endif
 
     let s:loaded_neobundles[bundle.name] = 1
-    let bundle.neobundle__priority = len(s:neobundles)
     call s:rtp_add(bundle)
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
@@ -809,6 +807,30 @@ function! neobundle#config#_parse_function_prefix(name)
   let function_prefix = substitute(function_prefix,
         \'-', '_', 'g')
   return function_prefix
+endfunction
+
+function! neobundle#config#tsort(bundles)
+  let sorted = []
+  let mark = {}
+  for target in a:bundles
+    call s:tsort_impl(target, a:bundles, mark, sorted)
+  endfor
+
+  return sorted
+endfunction
+
+function! s:tsort_impl(target, bundles, mark, sorted)
+  if has_key(a:mark, a:target.name)
+    return
+  endif
+
+  let a:mark[a:target.name] = 1
+  for depend in get(a:target, 'depends', [])
+    call s:tsort_impl(get(s:neobundles, depend.name, depend),
+          \ a:bundles, a:mark, a:sorted)
+  endfor
+
+  call add(a:sorted, a:target)
 endfunction
 
 function! s:on_vim_enter()

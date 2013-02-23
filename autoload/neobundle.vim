@@ -247,14 +247,15 @@ endfunction
 function! neobundle#call_hook(hook_name, ...)
   let bundles = empty(a:000) ?
         \ neobundle#config#get_neobundles() : a:1
+  let bundles = filter(copy(bundles),
+        \ 'has_key(v:val.hooks, a:hook_name)')
+
   if a:hook_name ==# 'on_source'
-    let bundles = neobundle#util#sort_by(bundles,
-          \ "get(v:val, 'neobundle__priority', 0)")
+    let bundles = neobundle#config#tsort(filter(bundles,
+          \ 'neobundle#config#is_sourced(v:val.name)'))
   endif
-  for bundle in filter(copy(bundles),
-        \ "has_key(v:val.hooks, a:hook_name) &&
-        \  (a:hook_name !=# 'on_source' ||
-        \       neobundle#config#is_sourced(v:val.name))")
+
+  for bundle in bundles
     call call(bundle.hooks[a:hook_name], [bundle], bundle)
   endfor
 endfunction
