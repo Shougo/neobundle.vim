@@ -1109,6 +1109,7 @@ CHANGELOG					*neobundle-changelog*
 2013-02-24
 - Fixed :NeoBundleSource behavior.
 - Added plugin names check.
+- Improved autoload commands and mappings.
 
 2013-02-23
 - Improved neobundle source.

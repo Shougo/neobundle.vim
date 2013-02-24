@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,6 +71,9 @@ function! neobundle#autoload#function()
 endfunction
 
 function! neobundle#autoload#command(command, name, args, bang, line1, line2)
+  " Delete dummy commands.
+  silent! execute 'delcommand' a:command
+
   call neobundle#config#source(a:name)
 
   execute (a:line1 == line('.') && a:line2 == line('.') ?
@@ -78,6 +81,9 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
 endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)
+  " Delete dummy mappings.
+  silent! execute a:mode.'unmap' a:mapping
+
   let input = s:get_input()
 
   call neobundle#config#source(a:name)
