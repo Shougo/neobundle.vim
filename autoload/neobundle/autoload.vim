@@ -82,8 +82,6 @@ endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)
   " Delete dummy mappings.
-  silent! execute a:mode.'unmap' a:mapping
-
   let input = s:get_input()
 
   call neobundle#config#source(a:name)
