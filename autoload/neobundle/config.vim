@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -253,6 +253,11 @@ function! neobundle#config#source(names)
 
   let reset_ftplugin = 0
   for bundle in bundles
+    " Load depends.
+    for depend in bundle.depends
+      call neobundle#config#source(depend.name)
+    endfor
+
     let s:loaded_neobundles[bundle.name] = 1
     let s:sourced_neobundles[bundle.name] = 1
     let s:disabled_neobundles[bundle.name] = 0

@@ -1106,6 +1106,9 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-02-24
+- Fixed :NeoBundleSource behavior.
+
 2013-02-23
 - Improved neobundle source.
 - Improved sort in on_source.
