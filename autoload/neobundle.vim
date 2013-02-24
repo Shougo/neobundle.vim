@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -251,8 +251,9 @@ function! neobundle#call_hook(hook_name, ...)
         \ 'has_key(v:val.hooks, a:hook_name)')
 
   if a:hook_name ==# 'on_source'
-    let bundles = neobundle#config#tsort(filter(bundles,
-          \ 'neobundle#config#is_sourced(v:val.name)'))
+    let bundles = filter(neobundle#config#tsort(filter(bundles,
+          \ 'neobundle#config#is_sourced(v:val.name)')),
+          \ 'has_key(v:val.hooks, a:hook_name)')
   endif
 
   for bundle in bundles

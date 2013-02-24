@@ -46,6 +46,30 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim' }
 echomsg neobundle#get('unite.vim').autoload.commands == 'Unite'
 
+" Dependencies test.
+NeoBundleLazy 'basyura/twibill.vim'
+NeoBundleLazy 'yomi322/neco-tweetvim'
+NeoBundleLazy 'rhysd/tweetvim-advanced-filter'
+NeoBundleLazy 'rhysd/TweetVim', {
+\ 'depends' :
+\ ['basyura/twibill.vim',
+\ 'tyru/open-browser.vim',
+\ 'yomi322/neco-tweetvim',
+\ 'rhysd/tweetvim-advanced-filter'],
+\ 'autoload' : {
+\ 'commands' :
+\ ['TweetVimHomeTimeline',
+\ 'TweetVimMentions',
+\ 'TweetVimSay',
+\ 'TweetVimUserTimeline']
+\ }
+\ }
+
+let s:bundle = neobundle#get("TweetVim")
+function! s:bundle.hooks.on_source(bundle)
+endfunction
+unlet s:bundle
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.
