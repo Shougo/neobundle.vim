@@ -39,6 +39,13 @@ echomsg neobundle#is_sourced('vinarise') == 0
 NeoBundle 'Shougo/vimfiler', { 'depends' : 'foo/var' }
 echomsg neobundle#config#check_not_exists(['vimfiler']) ==# ['var']
 
+NeoBundleLazy 'Shougo/unite.vim', {
+      \ 'depends' : ['Shougo/unite-outline', 'basyura/TweetVim'],
+      \ 'autoload' : { 'commands' : 'Unite' } }
+NeoBundleLazy 'Shougo/unite-outline', {
+      \ 'depends' : 'Shougo/unite.vim' }
+echomsg neobundle#get('unite.vim').autoload.commands == 'Unite'
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.

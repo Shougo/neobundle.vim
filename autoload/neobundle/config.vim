@@ -231,18 +231,26 @@ function! neobundle#config#source_bundles(bundles)
   endif
 endfunction
 
-function! neobundle#config#check_not_exists(names)
+function! neobundle#config#check_not_exists(names, ...)
+  " For infinite loop.
+  let self = get(a:000, 0, [])
+
   let _ = map(neobundle#get_not_installed_bundles(a:names), 'v:val.name')
   for bundle in map(filter(copy(a:names),
-        \ 'has_key(s:neobundles, v:val)'), 's:neobundles[v:val]')
+        \ 'index(self, v:val) < 0 && has_key(s:neobundles, v:val)'),
+        \ 's:neobundles[v:val]')
+    call add(self, bundle.name)
+
     let _ += neobundle#config#check_not_exists(
-          \ map(copy(bundle.depends), 'v:val.name'))
+          \ map(copy(bundle.depends), 'v:val.name'), self)
   endfor
 
   return neobundle#util#uniq(_)
 endfunction
 
-function! neobundle#config#source(names)
+function! neobundle#config#source(names, ...)
+  let is_force = get(a:000, 0, 1)
+
   let names = neobundle#util#convert_list(a:names)
   let bundles = empty(names) ?
         \ neobundle#config#get_neobundles() :
@@ -253,7 +261,6 @@ function! neobundle#config#source(names)
           \ 'Not installed plugin-names are detected : '. string(not_exists))
   endif
 
-  let reset_ftplugin = get(a:000, 0, 1)
   let bundles = filter(bundles,
         \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''")
   if empty(bundles)
@@ -292,7 +299,7 @@ function! neobundle#config#source(names)
 
     call s:rtp_add(bundle)
 
-    if exists('g:loaded_neobundle')
+    if exists('g:loaded_neobundle') || is_force
       " Reload script files.
       for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
         for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
