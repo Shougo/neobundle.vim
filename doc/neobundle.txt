@@ -1103,6 +1103,10 @@ A: It's a git feature. Git awaits user input when the repo name is
 wrong. You can install |vimproc| to keep your Vim from freezing:
 	https://github.com/Shougo/vimproc
 
+Q: Duplicated error was printed when sourcing .vimrc.
+A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| in
+.vimrc.
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
