@@ -231,11 +231,28 @@ function! neobundle#config#source_bundles(bundles)
   endif
 endfunction
 
+function! neobundle#config#check_not_exists(names)
+  let _ = map(neobundle#get_not_installed_bundles(a:names), 'v:val.name')
+  for bundle in map(filter(copy(a:names),
+        \ 'has_key(s:neobundles, v:val)'), 's:neobundles[v:val]')
+    let _ += neobundle#config#check_not_exists(
+          \ map(copy(bundle.depends), 'v:val.name'))
+  endfor
+
+  return neobundle#util#uniq(_)
+endfunction
+
 function! neobundle#config#source(names)
   let names = neobundle#util#convert_list(a:names)
   let bundles = empty(names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(names)
+  let not_exists = neobundle#config#check_not_exists(names)
+  if !empty(not_exists)
+    call neobundle#util#print_error(
+          \ 'Not installed plugin-names are detected : '. string(not_exists))
+  endif
+
   let reset_ftplugin = get(a:000, 0, 1)
   let bundles = filter(bundles,
         \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''")
@@ -253,11 +270,6 @@ function! neobundle#config#source(names)
 
   let reset_ftplugin = 0
   for bundle in bundles
-    " Load depends.
-    for depend in bundle.depends
-      call neobundle#config#source(depend.name)
-    endfor
-
     let s:loaded_neobundles[bundle.name] = 1
     let s:sourced_neobundles[bundle.name] = 1
     let s:disabled_neobundles[bundle.name] = 0
@@ -641,7 +653,8 @@ function! s:add_bundle(bundle, ...)
   let bundle = a:bundle
 
   if get(s:disabled_neobundles, bundle.name, 0)
-        \ || (!is_force && has_key(s:neobundles, bundle.name))
+        \ || (!is_force && has_key(s:neobundles, bundle.name) &&
+        \      s:neobundles[bundle.name].overwrite)
         \ || (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))
     if bundle.overwrite && has_key(s:neobundles, bundle.name)
