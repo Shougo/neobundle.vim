@@ -785,6 +785,8 @@ OPTIONS 					*neobundle-options*
 			initilization in lazy bundles.
 			Note: In Vim initializing, calling on_source hooks are
 			delayed until |VimEnter|.
+			Note: To re-call on_source hook when reloading .vimrc,
+			you must call on_source hook in end of .vimrc.
 
 					*neobundle-options-type__shallow*
 		type__shallow		(Number)
@@ -897,6 +899,13 @@ EXAMPLES					*neobundle-examples*
 
 	" Installation check.
 	NeoBundleCheck
+
+	"...
+
+	if !has('vim_starting')
+	  " Call on_source hook when reloading .vimrc.
+	  call neobundle#call_hook('on_source')
+	endif
 <
 ==============================================================================
 UNITE SOURCES					*neobundle-unite-sources*
