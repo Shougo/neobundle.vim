@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 28 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! neobundle#config#init()
   filetype off
 
   for bundle in values(s:neobundles)
-    if bundle.resettable && bundle.name !=# 'neobundle.vim'
+    if bundle.resettable
       " Reset.
       call s:rtp_rm(bundle)
 
@@ -449,14 +449,14 @@ function! neobundle#config#parse_path(path, ...)
 endfunction
 
 function! s:rtp_rm_all_bundles()
-  call filter(filter(values(s:neobundles),
-        \ "v:val.name !=# 'neobundle.vim'"), 's:rtp_rm(v:val)')
+  call filter(values(s:neobundles), 's:rtp_rm(v:val)')
 endfunction
 
 function! s:rtp_rm(bundle)
-  let dir = a:bundle.rtp
-  execute 'set rtp-='.fnameescape(dir)
-  execute 'set rtp-='.fnameescape(dir.'/after')
+  execute 'set rtp-='.fnameescape(a:bundle.rtp)
+  if isdirectory(a:bundle.rtp.'/after')
+    execute 'set rtp-='.fnameescape(a:bundle.rtp.'/after')
+  endif
 endfunction
 
 function! s:rtp_add_bundles(bundles)
@@ -799,6 +799,10 @@ function! s:init_bundle(bundle)
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
+  endif
+  if bundle.name ==# 'neobundle.vim'
+    " Do not add runtimepath.
+    let bundle.rtp = ''
   endif
 
   if bundle.script_type != ''
