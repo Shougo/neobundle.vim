@@ -1112,6 +1112,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-02-28
 - Fixed :NeoBundleCheck problem.
+- Fixed neobundle#config#check_not_exists().
 
 2013-02-24
 - Fixed :NeoBundleSource behavior.

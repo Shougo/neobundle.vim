@@ -241,8 +241,10 @@ function! neobundle#config#check_not_exists(names, ...)
         \ 's:neobundles[v:val]')
     call add(self, bundle.name)
 
-    let _ += neobundle#config#check_not_exists(
-          \ map(copy(bundle.depends), 'v:val.name'), self)
+    if !empty(bundle.depends)
+      let _ += neobundle#config#check_not_exists(
+            \ map(copy(bundle.depends), 'v:val.name'), self)
+    endif
   endfor
 
   return neobundle#util#uniq(_)
