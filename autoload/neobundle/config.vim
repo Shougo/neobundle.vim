@@ -671,13 +671,6 @@ function! s:add_bundle(bundle, ...)
 
   let prev_bundle = get(s:neobundles, bundle.name, {})
 
-  if !is_force && bundle.overwrite &&
-        \ !empty(prev_bundle) && prev_bundle.overwrite && bundle !=# prev_bundle
-    " Warning.
-    call neobundle#util#print_error(
-          \ 'Overwrite previous neobundle configuration in ' . bundle.name)
-  endif
-
   let s:neobundles[bundle.name] = bundle
 
   " Add depends.
@@ -739,6 +732,14 @@ function! s:add_bundle(bundle, ...)
       unlet map
     endfor
   endif
+
+  if !is_force && bundle.overwrite &&
+        \ !empty(prev_bundle) && prev_bundle.overwrite && bundle !=# prev_bundle
+        \ && prev_bundle.resettable && prev_bundle.overwrite
+    " Warning.
+    call neobundle#util#print_error(
+          \ 'Overwrite previous neobundle configuration in ' . bundle.name)
+  endif
 endfunction
 
 function! s:get_default()
@@ -760,6 +761,8 @@ function! s:get_default()
           \ 'external_commands' : {},
           \ 'autoload' : {},
           \ 'description' : '',
+          \ 'dummy_commands' : [],
+          \ 'dummy_mappings' : [],
           \ }
   endif
 
