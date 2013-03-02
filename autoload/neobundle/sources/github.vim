@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: github.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 02 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,7 +62,7 @@ endfunction"}}}
 function! s:get_github_searches(string) "{{{
   let path = 'https://api.github.com/legacy/repos/search/'
         \ . a:string . '*?language=VimL'
-  let temp = unite#util#substitute_path_separator(tempname())
+  let temp = neobundle#util#substitute_path_separator(tempname())
 
   let cmd = printf('%s "%s" "%s"', (executable('curl') ?
           \ 'curl --fail -s -o' : 'wget -q -O '), temp, path)
