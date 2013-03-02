@@ -94,7 +94,7 @@ function! s:get_repository_plugins(context, path) "{{{
       call delete(cache_path)
     endif
 
-    let temp = tempname()
+    let temp = unite#util#substitute_path_separator(tempname())
 
     if executable('curl')
       let cmd = 'curl --fail -s -o "' . temp . '" '. a:path
