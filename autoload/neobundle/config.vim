@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Feb 2013.
+" Last Modified: 02 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -658,22 +658,24 @@ function! neobundle#config#set(name, dict)
 endfunction
 
 function! s:add_bundle(bundle, ...)
-  let is_force = get(a:000, 0, 0)
   let bundle = a:bundle
+  let is_force = get(a:000, 0, 0)
 
   if get(s:disabled_neobundles, bundle.name, 0)
-        \ || (!is_force && has_key(s:neobundles, bundle.name) &&
-        \      s:neobundles[bundle.name].overwrite)
+        \ || (!is_force && !bundle.overwrite &&
+        \     has_key(s:neobundles, bundle.name))
         \ || (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))
-    if bundle.overwrite && has_key(s:neobundles, bundle.name)
-          \ && s:neobundles[bundle.name].overwrite
-          \ && s:neobundles[bundle.name].resettable
-      call neobundle#util#print_error(
-            \ 'Duplicate neobundle configuration in ' . bundle.name)
-    endif
-
     return
+  endif
+
+  let prev_bundle = get(s:neobundles, bundle.name, {})
+
+  if !is_force && bundle.overwrite &&
+        \ !empty(prev_bundle) && prev_bundle.overwrite && bundle !=# prev_bundle
+    " Warning.
+    call neobundle#util#print_error(
+          \ 'Overwrite previous neobundle configuration in ' . bundle.name)
   endif
 
   let s:neobundles[bundle.name] = bundle

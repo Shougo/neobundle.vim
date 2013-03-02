@@ -1121,6 +1121,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-03-02
 - Improved neobundle source.
+- Improved duplicate warning behavior.
 
 2013-02-28
 - Fixed :NeoBundleCheck problem.
