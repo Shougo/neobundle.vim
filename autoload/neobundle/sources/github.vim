@@ -61,8 +61,8 @@ endfunction"}}}
 " Misc.
 function! s:get_github_searches(string) "{{{
   let path = 'https://api.github.com/legacy/repos/search/'
-        \ . a:string . '?language=VimL'
-  let temp = tempname()
+        \ . a:string . '*?language=VimL'
+  let temp = unite#util#substitute_path_separator(tempname())
 
   let cmd = printf('%s "%s" "%s"', (executable('curl') ?
           \ 'curl --fail -s -o' : 'wget -q -O '), temp, path)
