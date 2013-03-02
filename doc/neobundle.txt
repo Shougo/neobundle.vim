@@ -1119,6 +1119,9 @@ A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| i
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-03-02
+- Improved neobundle source.
+
 2013-02-28
 - Fixed :NeoBundleCheck problem.
 - Fixed neobundle#config#check_not_exists().
