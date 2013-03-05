@@ -1119,6 +1119,9 @@ A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| i
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-03-06
+- Improved load install info.
+
 2013-03-05
 - Fixed for reinstall plugins.
 

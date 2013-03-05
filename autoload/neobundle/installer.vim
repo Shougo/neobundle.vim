@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Mar 2013.
+" Last Modified: 06 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,10 +59,6 @@ function! neobundle#installer#install(bang, bundle_names)
           \ '[neobundle/install] You may use wrong bundle name'.
           \ ' or all bundles are already installed.')
     return
-  endif
-
-  if a:bang
-    call neobundle#installer#_load_install_info(bundles)
   endif
 
   call neobundle#installer#clear_log()
@@ -690,29 +686,27 @@ function! s:save_install_info(bundles)
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
-  let install_info = {}
-
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
-  if filereadable(install_info_path)
+  if !exists('s:install_info') && filereadable(install_info_path)
     try
       let list = readfile(install_info_path)
       let ver = list[0]
-      sandbox let install_info = eval(list[1])
+      sandbox let s:install_info = eval(list[1])
       if ver !=# '1.0' || type(install_info) != type({})
-        let install_info = {}
+        let s:install_info = {}
       endif
     catch
     endtry
   endif
 
-  call map(a:bundles, "extend(v:val, get(install_info, v:val.name, {
+  call map(a:bundles, "extend(v:val, get(s:install_info, v:val.name, {
         \ 'checked_time' : localtime(),
         \ 'updated_time' : localtime(),
         \ 'installed_uri' : v:val.uri,
         \}))")
 
-  return install_info
+  return s:install_info
 endfunction
 
 function! s:get_skipped_message(number, max, bundle, prefix, message)
