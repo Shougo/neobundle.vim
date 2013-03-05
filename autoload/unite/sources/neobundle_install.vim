@@ -145,6 +145,9 @@ function! s:init(context, bundle_names)
         \ neobundle#config#search(a:bundle_names) :
         \ neobundle#config#fuzzy_search(a:bundle_names)
 
+  call neobundle#installer#_load_install_info(
+        \ a:context.source__bundles)
+
   for bundle in filter(copy(a:context.source__bundles),
         \ 'v:val.uri !=# v:val.installed_uri')
     " Reinstall.

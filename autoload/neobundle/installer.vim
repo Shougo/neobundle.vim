@@ -61,6 +61,8 @@ function! neobundle#installer#install(bang, bundle_names)
     return
   endif
 
+  call neobundle#installer#_load_install_info(bundles)
+
   call neobundle#installer#clear_log()
 
   for bundle in filter(copy(bundles),
@@ -671,10 +673,10 @@ function! s:check_really_clean(dirs)
 endfunction
 
 function! s:save_install_info(bundles)
-  let install_info = {}
+  let s:install_info = {}
   for bundle in filter(copy(a:bundles),
         \ "has_key(v:val, 'updated_time')")
-    let install_info[bundle.name] = {
+    let s:install_info[bundle.name] = {
           \   'checked_time' : bundle.checked_time,
           \   'updated_time' : bundle.updated_time,
           \   'installed_uri' : bundle.installed_uri,
@@ -682,7 +684,7 @@ function! s:save_install_info(bundles)
   endfor
 
   call neobundle#writefile('install_info',
-        \ ['1.0', string(install_info)])
+        \ ['1.0', string(s:install_info)])
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
