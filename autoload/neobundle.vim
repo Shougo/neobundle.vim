@@ -231,8 +231,8 @@ function! neobundle#get_not_installed_bundles(bundle_names)
 
   return filter(copy(bundles), "
         \  v:val.rtp != '' && v:val.type !=# 'nosync'
-        \  && (!isdirectory(neobundle#util#expand(v:val.path)))
-        \     || v:val.uri !=# v:val.installed_uri")
+        \  && (!isdirectory(neobundle#util#expand(v:val.path))
+        \ || v:val.uri !=# v:val.installed_uri)")
 endfunction
 
 function! neobundle#get(name)
