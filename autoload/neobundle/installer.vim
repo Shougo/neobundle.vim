@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 05 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -210,7 +210,7 @@ function! neobundle#installer#clean(bang, ...)
     let x_dirs = filter(all_dirs,
           \ "index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
   else
-    let x_dirs = map(neobundle#config#search(a:000), 'v:val.path')
+    let x_dirs = map(neobundle#config#search_simple(a:000), 'v:val.path')
   endif
 
   if empty(x_dirs)
@@ -223,7 +223,7 @@ function! neobundle#installer#clean(bang, ...)
       redraw
     endif
     let result = system(g:neobundle#rm_command . ' ' .
-          \ join(map(x_dirs, '"\"" . v:val . "\""'), ' '))
+          \ join(map(copy(x_dirs), '"\"" . v:val . "\""'), ' '))
     if neobundle#util#get_last_status()
       call neobundle#installer#error(result)
     endif
@@ -235,7 +235,7 @@ function! neobundle#installer#clean(bang, ...)
 endfunction
 
 function! neobundle#installer#reinstall(bundle_names)
-  let bundles = neobundle#config#search(split(a:bundle_names))
+  let bundles = neobundle#config#search_simple(split(a:bundle_names))
 
   if empty(bundles)
     call neobundle#installer#error(
@@ -383,6 +383,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
         \ a:bundle.stay_same
     let [cmd, message] = ['', 'has "stay_same" attribute.']
   elseif a:context.source__bang == 1 &&
+        \ a:bundle.uri ==# a:bundle.installed_uri &&
         \ ((a:bundle.updated_time < before_one_month
         \     && a:bundle.checked_time >= before_one_month)
         \ || (a:bundle.updated_time < before_one_week
