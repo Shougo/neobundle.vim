@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Mar 2013.
+" Last Modified: 10 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,10 +29,7 @@ set cpo&vim
 
 if !exists('s:neobundles')
   let s:neobundles = {}
-  let s:loaded_neobundles = {}
   let s:direct_neobundles = {}
-  let s:disabled_neobundles = {}
-  let s:sourced_neobundles = {}
 endif
 
 function! neobundle#config#init()
@@ -116,6 +113,9 @@ function! neobundle#config#reload(bundles)
       silent! execute source `=script`
     endfor
   endfor
+
+  " Call hooks.
+  call neobundle#call_hook('on_source', a:bundles)
 endfunction
 
 function! neobundle#config#bundle(arg, ...)
@@ -279,9 +279,8 @@ function! neobundle#config#source(names, ...)
 
   let reset_ftplugin = 0
   for bundle in bundles
-    let s:loaded_neobundles[bundle.name] = 1
-    let s:sourced_neobundles[bundle.name] = 1
-    let s:disabled_neobundles[bundle.name] = 0
+    let bundle.sourced = 1
+    let bundle.disabled = 0
 
     " Unmap dummy mappings.
     for [mode, mapping] in get(bundle, 'dummy_mappings', [])
@@ -375,19 +374,17 @@ function! neobundle#config#disable(arg)
 
   for bundle in bundle_names
     call s:rtp_rm(bundle)
-    if has_key(s:loaded_neobundles, bundle.name)
-      call remove(s:loaded_neobundles, bundle.name)
-    endif
-    if has_key(s:sourced_neobundles, bundle.name)
-      call remove(s:sourced_neobundles, bundle.name)
-    endif
-
-    let s:disabled_neobundles[bundle.name] = 1
+    let bundle.sourced = 0
+    let bundle.disabled = 1
   endfor
 endfunction
 
 function! neobundle#config#is_sourced(name)
-  return get(s:loaded_neobundles, a:name, 0)
+  return get(neobundle#config#get(a:name), 'sourced', 0)
+endfunction
+
+function! neobundle#config#is_installed(name)
+  return isdirectory(get(neobundle#config#get(a:name), 'path', ''))
 endfunction
 
 function! neobundle#config#rm_bundle(path)
@@ -653,10 +650,10 @@ function! neobundle#config#set(name, dict)
   endif
 
   let bundle = s:init_bundle(extend(bundle, a:dict))
-  if bundle.lazy && !get(s:sourced_neobundles, bundle.name, 0)
+  if bundle.lazy && bundle.sourced
     " Remove from runtimepath.
     call s:rtp_rm(bundle)
-    let s:loaded_neobundles[bundle.name] = 0
+    let bundle.sourced = 0
   endif
 
   call s:add_bundle(bundle, 1)
@@ -666,7 +663,7 @@ function! s:add_bundle(bundle, ...)
   let bundle = a:bundle
   let is_force = get(a:000, 0, 0)
 
-  if get(s:disabled_neobundles, bundle.name, 0)
+  if bundle.disabled
         \ || (!is_force && !bundle.overwrite &&
         \     has_key(s:neobundles, bundle.name))
         \ || (bundle.gui && !has('gui_running'))
@@ -689,11 +686,11 @@ function! s:add_bundle(bundle, ...)
   endfor
 
   if !bundle.lazy && bundle.rtp != ''
-    if has_key(s:loaded_neobundles, bundle.name)
+    if bundle.sourced
       call s:rtp_rm(bundle)
     endif
 
-    let s:loaded_neobundles[bundle.name] = 1
+    let bundle.sourced = 1
     call s:rtp_add(bundle)
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
@@ -768,6 +765,8 @@ function! s:get_default()
           \ 'description' : '',
           \ 'dummy_commands' : [],
           \ 'dummy_mappings' : [],
+          \ 'sourced' : 0,
+          \ 'disabled' : 0,
           \ }
   endif
 
@@ -819,7 +818,7 @@ function! s:init_bundle(bundle)
 
   if bundle.script_type != ''
     " Add script_type.
-    let bundle.path .= '/' . a:bundle.script_type
+    let bundle.path .= '/' . bundle.script_type
   endif
 
   if !has_key(bundle.autoload, 'function_prefix')
@@ -842,6 +841,10 @@ function! s:init_bundle(bundle)
     unlet depend
   endfor
   let bundle.depends = _
+
+  if neobundle#config#is_sourced(bundle.name)
+    let bundle.sourced = 1
+  endif
 
   return bundle
 endfunction
@@ -882,11 +885,6 @@ function! s:tsort_impl(target, bundles, mark, sorted)
 endfunction
 
 function! s:on_vim_enter()
-  " Set sourced flag.
-  for bundle in neobundle#config#get_neobundles()
-    let s:sourced_neobundles[bundle.name] = 1
-  endfor
-
   " Call hooks.
   call neobundle#call_hook('on_source')
 endfunction

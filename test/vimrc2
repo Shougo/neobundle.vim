@@ -68,7 +68,16 @@ NeoBundleLazy 'rhysd/TweetVim', {
 " Law.
 NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
       \ {'script_type' : 'plugin', 'rev' : '0'}
-NeoBundleReinstall rsense.vim
+" NeoBundleReinstall rsense.vim
+
+" on_source Test.
+NeoBundle 'hoge'
+let bundle = neobundle#get('hoge')
+function! bundle.hooks.on_source(bundle)
+  " Should ignore.
+  echomsg "hoge"
+endfunction
+unlet bundle
 
 let s:bundle = neobundle#get("TweetVim")
 function! s:bundle.hooks.on_source(bundle)

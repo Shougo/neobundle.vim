@@ -208,10 +208,9 @@ function! neobundle#exists_not_installed_bundles()
 endfunction
 
 function! neobundle#is_installed(...)
-  let bundle_names = type(get(a:000, 0, [])) == type([]) ?
-        \ get(a:000, 0, []) : [a:1]
-
-  return !empty(s:get_installed_bundles(bundle_names))
+  return type(get(a:000, 0, [])) == type([]) ?
+        \ !empty(neobundle#_get_installed_bundles(bundle_names)) :
+        \ neobundle#config#is_installed(a:1)
 endfunction
 
 function! neobundle#is_sourced(name)
@@ -282,13 +281,13 @@ function! neobundle#check()
   endif
 endfunction
 
-function! s:get_installed_bundles(bundle_names)
+function! neobundle#_get_installed_bundles(bundle_names)
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(a:bundle_names)
 
   return filter(copy(bundles),
-        \ "isdirectory(neobundle#util#expand(v:val.path))")
+        \ 'neobundle#config#is_installed(v:val.name)')
 endfunction
 
 function! neobundle#get_unite_sources()
