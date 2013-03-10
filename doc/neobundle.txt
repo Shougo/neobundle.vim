@@ -442,6 +442,7 @@ OPTIONS 					*neobundle-options*
 
 		rev			(String)
 		Specify a revision number or branch/tag name.
+		Note: If the type is "raw", rev is hash number.
 
 		Example:
 >
@@ -1122,6 +1123,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-03-10
 - Improved :NeoBundleCheck behavior for Mac OS X.
+- Improved revision check behavior in type raw.
 
 2013-03-06
 - Improved load install info.

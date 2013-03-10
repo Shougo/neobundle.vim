@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Mar 2013.
+" Last Modified: 10 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -529,6 +529,13 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   let num = a:process.number
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
+
+  if bundle.rev == ''
+    " Skipped.
+    return 0
+  endif
+
+  let bundle.new_rev = neobundle#installer#get_revision_number(bundle)
 
   let [cmd, message] =
         \ neobundle#installer#get_revision_lock_command(
