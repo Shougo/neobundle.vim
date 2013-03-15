@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Mar 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -702,7 +702,7 @@ function! neobundle#installer#_load_install_info(bundles)
       let list = readfile(install_info_path)
       let ver = list[0]
       sandbox let s:install_info = eval(list[1])
-      if ver !=# '1.0' || type(install_info) != type({})
+      if ver !=# '1.0' || type(s:install_info) != type({})
         let s:install_info = {}
       endif
     catch
