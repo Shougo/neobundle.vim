@@ -697,16 +697,20 @@ endfunction
 function! neobundle#installer#_load_install_info(bundles)
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
-  if !exists('s:install_info') && filereadable(install_info_path)
-    try
-      let list = readfile(install_info_path)
-      let ver = list[0]
-      sandbox let s:install_info = eval(list[1])
-      if ver !=# '1.0' || type(s:install_info) != type({})
-        let s:install_info = {}
-      endif
-    catch
-    endtry
+  if !exists('s:install_info')
+    let s:install_info = {}
+
+    if filereadable(install_info_path)
+      try
+        let list = readfile(install_info_path)
+        let ver = list[0]
+        sandbox let s:install_info = eval(list[1])
+        if ver !=# '1.0' || type(s:install_info) != type({})
+          let s:install_info = {}
+        endif
+      catch
+      endtry
+    endif
   endif
 
   call map(a:bundles, "extend(v:val, get(s:install_info, v:val.name, {
