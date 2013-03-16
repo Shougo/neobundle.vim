@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Mar 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,6 +30,7 @@ set cpo&vim
 if !exists('s:neobundles')
   let s:neobundles = {}
   let s:direct_neobundles = {}
+  let s:sourced_neobundles = {}
 endif
 
 function! neobundle#config#init()
@@ -263,8 +264,10 @@ function! neobundle#config#source(names, ...)
           \ 'Not installed plugin-names are detected : '. string(not_exists))
   endif
 
+  let rtps = neobundle#util#split_rtp()
   let bundles = filter(bundles,
-        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''")
+        \ "!neobundle#config#is_sourced(v:val.name) &&
+        \ v:val.rtp != '' && index(rtps, v:val.rtp) < 0")
   if empty(bundles)
     return
   endif
@@ -282,16 +285,21 @@ function! neobundle#config#source(names, ...)
     let bundle.sourced = 1
     let bundle.disabled = 0
 
-    " Unmap dummy mappings.
-    for [mode, mapping] in get(bundle, 'dummy_mappings', [])
-      silent! execute mode.'unmap' mapping
-    endfor
-    let bundle.dummy_mappings = []
+    if !get(s:sourced_neobundles, bundle.name, 0)
+      " Unmap dummy mappings.
+      for [mode, mapping] in get(bundle, 'dummy_mappings', [])
+        silent! execute mode.'unmap' mapping
+      endfor
 
-    " Delete dummy commands.
-    for command in get(bundle, 'dummy_commands', [])
-      silent! execute 'delcommand' command
-    endfor
+      " Delete dummy commands.
+      for command in get(bundle, 'dummy_commands', [])
+        silent! execute 'delcommand' command
+      endfor
+
+      let s:sourced_neobundles[bundle.name] = 1
+    endif
+
+    let bundle.dummy_mappings = []
     let bundle.dummy_commands = []
 
     if has_key(s:neobundles, bundle.name)

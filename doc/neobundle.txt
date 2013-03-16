@@ -1121,6 +1121,9 @@ A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| i
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-03-16
+- Fixed :NeoBundleSource.
+
 2013-03-10
 - Improved :NeoBundleCheck behavior for Mac OS X.
 - Improved revision check behavior in type raw.
