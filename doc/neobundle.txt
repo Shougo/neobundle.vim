@@ -1123,6 +1123,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-03-16
 - Fixed :NeoBundleSource.
+- Fixed reload problem.
 
 2013-03-10
 - Improved :NeoBundleCheck behavior for Mac OS X.
