@@ -209,6 +209,12 @@ function! neobundle#installer#clean(bang, ...)
           \ "index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
   else
     let x_dirs = map(neobundle#config#search_simple(a:000), 'v:val.path')
+    if len(x_dirs) > len(a:000)
+      " Check bug.
+      call neobundle#util#print_error('Bug: x_dirs = %s but arguments is %s',
+            \ string(x_dirs), map(copy(a:000), 'v:val.path'))
+      return
+    endif
   endif
 
   if empty(x_dirs)
