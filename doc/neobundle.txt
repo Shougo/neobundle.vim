@@ -961,7 +961,7 @@ neobundle/update
 		Note: This source is the same as "neobundle/intall:!".
 		Note: Installing the |vimproc| plugin is recommended.
 
-		If argument is bang(!), it will be with fuzzy search.
+		If argument is bang(!), it will not be with fuzzy search.
 		If argument is "all", it will update all plugins.
 
 		If you use the source with "-auto-quit" option, the unite
@@ -1130,8 +1130,23 @@ A:
 			\    },
 			\ }
 <
+Q: What's the "outdated" plugin?
+A:
+
+Last update time more than one month -> Automatic updates were disabled
+until one month from last update.
+Last update time more than one week -> Automatic updates were disabled
+until one week from last update.
+Last update time more within one week -> Automatic updates every time.
+Note: If you use update with name or use "all" argument in neobundle/update
+source or use "!" in |:NeoBundleUpdate| command, this feature will be
+disabled.
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-03-22
+- Improved documentation.
 
 2013-03-16
 - Fixed :NeoBundleSource.
