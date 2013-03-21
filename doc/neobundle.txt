@@ -1118,6 +1118,18 @@ Q: Duplicated error was printed when sourcing .vimrc.
 A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| in
 .vimrc.
 
+Q: I want to compile vimproc automatically.
+A:
+>
+	NeoBundle 'Shougo/vimproc', {
+		\ 'build' : {
+			\     'windows' : 'make -f make_mingw32.mak',
+			\     'cygwin' : 'make -f make_cygwin.mak',
+			\     'mac' : 'make -f make_mac.mak',
+			\     'unix' : 'make -f make_unix.mak',
+			\    },
+			\ }
+<
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
