@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,10 +78,16 @@ function! neobundle#installer#install(bang, bundle_names)
     call call('neobundle#config#bundle', [arg])
   endfor
 
-  let [installed, errored] = s:install(a:bang, bundles)
-  if !has('vim_starting')
-    redraw
-  endif
+  let more_save = &more
+  try
+    setlocal nomore
+    let [installed, errored] = s:install(a:bang, bundles)
+    if !has('vim_starting')
+      redraw!
+    endif
+  finally
+    let &more = more_save
+  endtry
 
   call neobundle#installer#log(
         \ "[neobundle/install] Installed/Updated bundles:\n".
@@ -400,10 +406,6 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ a:context.source__number, a:context.source__max_bundles)
   endif
 
-  if !has('vim_starting') && !a:is_unite
-    redraw!
-  endif
-
   if cmd == ''
     " Skipped.
     call neobundle#installer#log(s:get_skipped_message(
@@ -546,10 +548,6 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   let [cmd, message] =
         \ neobundle#installer#get_revision_lock_command(
         \ a:context.source__bang, bundle, num, max)
-
-  if !has('vim_starting') && !a:is_unite
-    redraw!
-  endif
 
   if cmd == ''
     " Skipped.
@@ -746,16 +744,10 @@ function! neobundle#installer#log(msg, ...)
   if &filetype == 'unite' || is_unite
     call unite#print_message(msg)
   else
-    echo join(msg, "\n")
+    call neobundle#util#redraw_echo(msg)
   endif
 
-  if g:neobundle#log_filename != ''
-    " Appends to log file.
-    if filereadable(g:neobundle#log_filename)
-      let msg = readfile(g:neobundle#log_filename) + msg
-    endif
-    call writefile(msg, g:neobundle#log_filename)
-  endif
+  call s:append_log_file(msg)
 endfunction
 
 function! neobundle#installer#update_log(msg, ...)
@@ -786,6 +778,21 @@ function! neobundle#installer#error(msg, ...)
   else
     call neobundle#util#print_error(msg)
   endif
+
+  call s:append_log_file(msg)
+endfunction
+
+function! s:append_log_file(msg)
+  if g:neobundle#log_filename == ''
+    return
+  endif
+
+  let msg = a:msg
+  " Appends to log file.
+  if filereadable(g:neobundle#log_filename)
+    let msg = readfile(g:neobundle#log_filename) + msg
+  endif
+  call writefile(msg, g:neobundle#log_filename)
 endfunction
 
 function! neobundle#installer#get_log()

@@ -1144,6 +1144,9 @@ disabled; it forces updates them.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-03-23
+- Improved updates log behavior.
+
 2013-03-22
 - Improved documentation.
 

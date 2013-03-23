@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -170,15 +170,27 @@ function! neobundle#util#convert_list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
 
-function! neobundle#util#print_error(expr)
+function! neobundle#util#print_error(expr) "{{{
   let msg = neobundle#util#convert_list(a:expr)
   echohl WarningMsg | echomsg join(msg, "\n") | echohl None
-endfunction
+endfunction"}}}
+
+function! neobundle#util#redraw_echo(expr) "{{{
+  let msg = neobundle#util#convert_list(a:expr)
+  let max = len(msg)
+  let i = 0
+  while i < max
+    redraw
+    echo join(msg[i : i+&cmdheight-1], "\n")
+
+    let i += &cmdheight
+  endwhile
+endfunction"}}}
 
 " Escape a path for runtimepath.
-function! s:escape(path)
+function! s:escape(path)"{{{
   return substitute(a:path, ',\|\\,\@=', '\\\0', 'g')
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
