@@ -366,7 +366,7 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 g:neobundle#install_max_processes
 					*g:neobundle#install_max_processes*
 		The max number of processes used for neobundle/install source
-		asyncronous update.
+		asynchronous update.
 
 			*g:unite_source_neobundle_install_max_processes*
 		Note: |g:unite_source_neobundle_install_max_processes| is
@@ -482,7 +482,7 @@ OPTIONS 					*neobundle-options*
 		based on {repository}.
 
 		Available types:
-		"nosync"    : No syncronous
+		"nosync"    : No synchronous
 		"raw"       : Raw plugin file ("script_type" attribute is
 		              needed)
 		"git"       : Git
@@ -588,7 +588,7 @@ OPTIONS 					*neobundle-options*
 		automatically when |:NeoBundleSource| is executed.
 		Note: You'll want to set this option because some plugins
 		rely on autocmds defined for |VimEnter| or |GUIEnter|, but by using 
-		|:NeoBundleSource| after loading .vimrc, those automds may
+		|:NeoBundleSource| after loading .vimrc, those autocmds may
 		get skipped. Some examples are, "fugitive", "NERDTree", and
 		"session.vim".
 		
@@ -784,7 +784,7 @@ OPTIONS 					*neobundle-options*
 
 			on_source		*neobundle-hooks-on_source*
 			Called after a bundle is loaded. It is useful for plugin
-			initilization in lazy bundles.
+			initialization in lazy bundles.
 			Note: In Vim initializing, calling on_source hooks are
 			delayed until |VimEnter|.
 			Note: To re-call on_source hook when reloading .vimrc,
@@ -1187,7 +1187,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved :NeoBundleCheck behavior.
 - Improved autoload of unite sources.
 - Improved tsort.
-- Implemented duplicate configulation check feature.
+- Implemented duplicate configuration check feature.
 
 2013-02-22
 - Fixed function_prefix.
@@ -1276,10 +1276,10 @@ CHANGELOG					*neobundle-changelog*
 - Supported imap in autoload mappings.
 
 2013-01-01
-- Improved bundle initilization.
+- Improved bundle initialization.
 - Added overwrite flag.
 - Improved :NeoBundleDepends behavior.
-- Fixed initilization errors.
+- Fixed initialization errors.
 - Added neobundle#local().
 - Added neobundle#get() and neobundle#call_hook().
 - Fixed neobundle#config#source() behavior.
@@ -1499,7 +1499,7 @@ ChangeLog neobundle 2.1:
 - Added g:neobundle_default_hg_protocol option.
 
 2012-08-24
-- Added initilization check in .gvimrc.
+- Added initialization check in .gvimrc.
 - Fixed neobundle#config#is_sourced().
 - Fixed :NeoBundleDepends.
 - Fixed get revision.
@@ -1521,7 +1521,7 @@ ChangeLog neobundle 2.1:
 - Fixed update.
 
 2012-08-17
-- Implemented asyncronous update.
+- Implemented asynchronous update.
 - Added g:unite_source_neobundle_install_max_processes option.
 - Improved neobundle/update source.
 - Improved documentation.
