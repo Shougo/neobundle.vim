@@ -1146,6 +1146,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-03-23
 - Improved updates log behavior.
+- Fixed reinstalling behavior.
 
 2013-03-22
 - Improved documentation.

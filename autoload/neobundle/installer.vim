@@ -66,8 +66,10 @@ function! neobundle#installer#install(bang, bundle_names)
   call neobundle#installer#clear_log()
 
   for bundle in filter(copy(bundles),
-        \ 'v:val.uri !=# v:val.installed_uri')
+        \ "v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
     " Reinstall.
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
 
     " Save info.
     let arg = bundle.orig_arg

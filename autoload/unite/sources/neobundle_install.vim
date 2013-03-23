@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Mar 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -149,8 +149,10 @@ function! s:init(context, bundle_names)
         \ a:context.source__bundles)
 
   for bundle in filter(copy(a:context.source__bundles),
-        \ 'v:val.uri !=# v:val.installed_uri')
+        \ "v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
     " Reinstall.
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
 
     " Save info.
     let arg = bundle.orig_arg
