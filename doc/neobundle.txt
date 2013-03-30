@@ -436,6 +436,8 @@ OPTIONS 					*neobundle-options*
 		   \ {'name' : 'foo-foo'}
 		NeoBundle 'git://github.com/bar/foo.git',
 		   \ {'name' : 'bar-foo'}
+		NeoBundle 'git://git.code.sf.net/p/atp-vim/code',
+		   \ {'name': 'atp-vim'}
 <
 		description		(String)
 		Plugin description.
@@ -475,7 +477,7 @@ OPTIONS 					*neobundle-options*
 		Directory base path to use. If omitted, the path specified
 		with |neobundle#rc()| will be used. It is useful for loading
 		scripts from a different path.
-
+		Example:
 						*neobundle-options-type*
 		type			(String)
 		Specify the repository type. If omitted, a guess is made
@@ -1143,6 +1145,9 @@ disabled; it forces updates them.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-03-30
+- Fixed redraw_echo().
 
 2013-03-23
 - Improved updates log behavior.
