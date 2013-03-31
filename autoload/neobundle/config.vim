@@ -664,7 +664,8 @@ function! neobundle#config#set(name, dict)
   endif
 
   let bundle = s:init_bundle(extend(bundle, a:dict))
-  if bundle.lazy && bundle.sourced
+  if bundle.lazy && bundle.sourced &&
+        \ !get(s:sourced_neobundles, bundle.name, 0)
     " Remove from runtimepath.
     call s:rtp_rm(bundle)
     let bundle.sourced = 0
