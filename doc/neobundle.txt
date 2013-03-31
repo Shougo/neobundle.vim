@@ -1148,6 +1148,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-03-31
 - Optimized initialization.
+- Fixed neobundle#config#set().
 
 2013-03-30
 - Fixed redraw_echo().
