@@ -824,6 +824,18 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'ujihisa/neco-ghc', { 'type__protocol' : 'ssh' }
 <
+					*neobundle-options-type__filename*
+		type__filename		(String)
+		The downloaded filename.
+		If omitted, uri filename will be used.
+		It is useful for downloading vim.org scripts.
+		Note: This attribute is available in raw type only.
+
+		Examples:
+>
+		NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
+		\ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
+<
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
@@ -1143,6 +1155,9 @@ disabled; it forces updates them.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-04-02
+- Improved raw types.
 
 2013-03-23
 - Improved updates log behavior.

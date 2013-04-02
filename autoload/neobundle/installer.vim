@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,7 +82,9 @@ function! neobundle#installer#install(bang, bundle_names)
 
   let more_save = &more
   try
-    setlocal nomore
+    if !has('vim_starting')
+      setlocal nomore
+    endif
     let [installed, errored] = s:install(a:bang, bundles)
     if !has('vim_starting')
       redraw!

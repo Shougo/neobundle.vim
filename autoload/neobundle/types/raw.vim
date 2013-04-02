@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: raw.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Mar 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,6 +52,10 @@ function! s:type.detect(path, opts) "{{{
     let name = split(a:path, '/')[-1]
 
     let type = 'raw'
+  elseif a:path =~# '^https\?://www\.vim\.org/scripts/download_script.php?src_id=\d\+$'
+    " For www.vim.org
+    let name = 'vim-scripts-' . matchstr(a:path, '\d\+$')
+    let type = 'raw'
   endif
 
   return type == '' ?  {} :
@@ -73,12 +77,13 @@ function! s:type.get_sync_command(bundle) "{{{
     call mkdir(path, 'p')
   endif
 
-  let filename = path . '/' . fnamemodify(a:bundle.uri, ':t')
-  let a:bundle.type__filename = filename
+  let filename = path . '/' . get(a:bundle,
+        \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
+  let a:bundle.type__filepath = filename
   if executable('curl')
-    let cmd = 'curl --fail -s -o "' . filename . '" '. a:bundle.uri
+    let cmd = printf('curl --fail -s -o "%s" "%s"', filename, a:bundle.uri)
   elseif executable('wget')
-    let cmd = 'wget -q -O "' . filename . '" ' . a:bundle.uri
+    let cmd = printf('wget -q -O "%s" "%s", ', filename, a:bundle.uri)
   endif
 
   return cmd
@@ -88,14 +93,13 @@ function! s:type.get_revision_number_command(bundle) "{{{
     return ''
   endif
 
-  let filename = a:bundle.path . '/' . fnamemodify(a:bundle.uri, ':t')
-  if !filereadable(filename)
+  if !filereadable(a:bundle.type__filepath)
     " Not Installed.
     return ''
   endif
 
   " Calc hash.
-  return g:neobundle#types#raw#calc_hash_command . ' ' . a:bundle.type__filename
+  return g:neobundle#types#raw#calc_hash_command . ' ' . a:bundle.type__filepath
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
   let new_rev = matchstr(a:bundle.new_rev, '^\S\+')

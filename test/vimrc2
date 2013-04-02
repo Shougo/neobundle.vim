@@ -2,6 +2,9 @@ set nocompatible                " recommend
 
 let testdir = expand('~/neobundle-test/bundles', 1)
 
+let neobundle#types#git#default_protocol =
+      \ exists('$http_proxy') ? 'https' : 'git'
+
 filetype off                    " required!
 
 if has('vim_starting')
@@ -69,6 +72,9 @@ NeoBundleLazy 'rhysd/TweetVim', {
 NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
       \ {'script_type' : 'plugin', 'rev' : '0'}
 " NeoBundleReinstall rsense.vim
+
+NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
+      \ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
 
 " on_source Test.
 NeoBundle 'hoge'
