@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 30 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -176,6 +176,11 @@ function! neobundle#util#print_error(expr) "{{{
 endfunction"}}}
 
 function! neobundle#util#redraw_echo(expr) "{{{
+  if has('vim_starting')
+    echo join(neobundle#util#convert_list(a:expr), "\n")
+    return
+  endif
+
   let msg = neobundle#util#convert_list(a:expr)
   let max = len(msg)
   let i = 0

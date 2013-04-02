@@ -114,12 +114,17 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 		If {base-path} is omitted, neobundle looks for a "bundle"
 		directory in the default 'runtimepath'.
 		Note: It executes ":filetype off" automatically.
+		Note: You must not call the function inner
+		"has('vim_starting')".
 >
 	set nocompatible
-	set runtimepath+={path to neobundle directory}
+	if has('vim_starting')
+	  set runtimepath+={path to neobundle directory}
+	endif
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
 	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
+	...
 	
 	filetype plugin indent on
 <
@@ -436,6 +441,8 @@ OPTIONS 					*neobundle-options*
 		   \ {'name' : 'foo-foo'}
 		NeoBundle 'git://github.com/bar/foo.git',
 		   \ {'name' : 'bar-foo'}
+		NeoBundle 'git://git.code.sf.net/p/atp-vim/code',
+		   \ {'name': 'atp-vim'}
 <
 		description		(String)
 		Plugin description.
@@ -475,7 +482,7 @@ OPTIONS 					*neobundle-options*
 		Directory base path to use. If omitted, the path specified
 		with |neobundle#rc()| will be used. It is useful for loading
 		scripts from a different path.
-
+		Example:
 						*neobundle-options-type*
 		type			(String)
 		Specify the repository type. If omitted, a guess is made
@@ -1129,6 +1136,17 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 Q: Duplicated error was printed when sourcing .vimrc.
 A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()| in
 .vimrc.
+Note: You must not call |neobundle#rc()| inner "has('vim_starting')".
+>
+	if has('vim_starting')
+	  set runtimepath+={path to neobundle directory}
+	  " This is wrong neobundle#rc().
+	  "call neobundle#rc(expand('~/.vim/bundle'))
+	endif
+	
+	" This is OK.
+	call neobundle#rc(expand('~/.vim/bundle'))
+<
 
 Q: I want to compile vimproc automatically.
 A:
@@ -1158,6 +1176,14 @@ CHANGELOG					*neobundle-changelog*
 
 2013-04-02
 - Improved raw types.
+
+2013-03-31
+- Optimized initialization.
+- Fixed neobundle#config#set().
+- Improved documentation.
+
+2013-03-30
+- Fixed redraw_echo().
 
 2013-03-23
 - Improved updates log behavior.
@@ -1287,7 +1313,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved for depends.
 
 2013-01-02
-- Optimised startup.
+- Optimized startup.
 - Supported imap in autoload mappings.
 
 2013-01-01

@@ -82,9 +82,7 @@ function! neobundle#installer#install(bang, bundle_names)
 
   let more_save = &more
   try
-    if !has('vim_starting')
-      setlocal nomore
-    endif
+    setlocal nomore
     let [installed, errored] = s:install(a:bang, bundles)
     if !has('vim_starting')
       redraw!
