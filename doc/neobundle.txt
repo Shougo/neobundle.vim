@@ -32,7 +32,7 @@ Interface		|neobundle-interface|
   Commands		  |neobundle-commands|
   Variables		  |neobundle-variables|
   Options		    |neobundle-options|
-Configulation Examples	|neobundle-examples|
+Configuration Examples	|neobundle-examples|
 Unite sources		|neobundle-unite-sources|
 Recipe			|neobundle-recipe|
 FAQ			|neobundle-faq|
@@ -96,7 +96,7 @@ Example:
 >
 	set runtimepath+=~/.vim/bundle/neobundle.vim
 <
-Now configure your neobundles. (Refer to |neobundle-examaples|)
+Now configure your neobundles. (Refer to |neobundle-examples|)
 
 Run the |:NeoBundleInstall| command to install your plugins.
 >
@@ -123,7 +123,7 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 	endif
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
-	NeoBundle 'git://github.com/Shougo/neocomplcache-clang.git'
+	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 	...
 	
 	filetype plugin indent on
@@ -546,7 +546,7 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'Shougo/vimfiler', {'depends' : 'Shougo/unite.vim' }
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
-		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
+		    \ [ 'Shougo/neosnippet.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
 		    \ ]}
 <
@@ -849,7 +849,7 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'script_name'
 		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
-		    \ [ 'Shougo/neocomplcache-snippets-complete.git',
+		    \ [ 'Shougo/neosnippet.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
 		    \ ]}
 		NeoBundle 'github:Shougo/vimshell'
@@ -911,7 +911,7 @@ EXAMPLES					*neobundle-examples*
 	NeoBundle 'Shougo/neobundle-vim-scripts'
 	
 	" My Bundles here:
-	" Refer to |:NeoBundle-examaples|.
+	" Refer to |:NeoBundle-examples|.
 	" Note: You don't set neobundle setting in .gvimrc!
 
 	" ...
@@ -977,7 +977,7 @@ neobundle/log
 neobundle/update
 		Install and update configured plugins asynchronously, except
 		for outdated ones or those with the "stay_same" option.
-		Note: This source is the same as "neobundle/intall:!".
+		Note: This source is the same as "neobundle/install:!".
 		Note: Installing the |vimproc| plugin is recommended.
 
 		If argument is bang(!), it will not be with fuzzy search.
@@ -1443,11 +1443,11 @@ ChangeLog neobundle 2.1:
 - Added type__shallow attribute.
 - Improved log command in git.
 - More documented.
-- Improved error behavior in vim-sripts.org source.
+- Improved error behavior in vim-scripts.org source.
 - Added external_commands attribute.
 
 2012-10-06
-- Added vim-sripts.org source.
+- Added vim-scripts.org source.
 - Added neobundle-vim-scripts source.
 - Set options in neobundle-vim-scripts source.
 
