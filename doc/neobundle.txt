@@ -1188,6 +1188,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-04-08
 - Added FAQ section.
+- Improved update documentation behavior.
 
 2013-04-02
 - Improved raw types.

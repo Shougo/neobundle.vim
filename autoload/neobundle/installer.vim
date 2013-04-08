@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Apr 2013.
+" Last Modified: 08 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -661,6 +661,9 @@ function! s:update_ftdetect()
 endfunction
 
 function! s:copy_bundle_files(bundles, directory)
+  " Delete old files.
+  call s:cleandir(a:directory)
+
   let files = {}
   for bundle in a:bundles
     for file in filter(split(globpath(bundle.rtp, a:directory.'/*'), '\n'),
@@ -674,7 +677,7 @@ function! s:copy_bundle_files(bundles, directory)
     if filename =~# '^tags\%(-.*\)\?$'
       call sort(list)
     endif
-    call neobundle#writefile(a:directory . '/' . filename, list)
+    call s:writefile(a:directory . '/' . filename, list)
   endfor
 endfunction
 
@@ -696,7 +699,7 @@ function! s:save_install_info(bundles)
           \ }
   endfor
 
-  call neobundle#writefile('install_info',
+  call s:writefile('install_info',
         \ ['1.0', string(s:install_info)])
 endfunction
 
@@ -809,6 +812,26 @@ function! neobundle#installer#clear_log()
   let s:log = []
   let s:updates_log = []
 endfunction
+
+function! s:writefile(path, list)
+  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
+  let dir = fnamemodify(path, ':h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+
+  return writefile(a:list, path)
+endfunction
+
+function! s:cleandir(path)
+  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
+
+  for file in filter(split(globpath(path,
+        \ a:path.'/*', 1), '\n'), '!isdirectory(v:val)')
+    call delete(file)
+  endfor
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
