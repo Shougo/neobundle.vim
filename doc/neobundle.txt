@@ -1115,6 +1115,18 @@ The recipe files are in json format, like this:
 ==============================================================================
 FAQ						*neobundle-faq*
 
+Q: What's the neobundle advantage for Vundle or other plugin management
+system?
+A:
+   1. improved command name(:Bundle vs :NeoBundle).
+   2. neobundle works if you set 'shellslash' in your .vimrc.
+   3. neobundle supports vimproc(asynchronous update/install).
+   4. neobundle supports unite.vim interface(update/install/search).
+   5. neobundle supports revision lock feature.
+   6. neobundle supports other VCS(Subversion/Git).
+   7. neobundle supports lazy initialization for optimizing startup time.
+   8. and so on...
+
 Q: I want to manage the rsense Vim plugin using neobundle.
 A: Use |neocomplcache-rsense|. Installation and settings can be found in the
 neocomplcache-rsense docs.
@@ -1173,6 +1185,9 @@ disabled; it forces updates them.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-04-08
+- Added FAQ section.
 
 2013-04-02
 - Improved raw types.
