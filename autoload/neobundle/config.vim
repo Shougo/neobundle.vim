@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 18 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,6 +104,7 @@ function! neobundle#config#reload(bundles)
     let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
     if name != '' && name =~ '/autoload/'
           \ && name !~ '/unite.vim/\|/neobundle.vim/'
+          \ && filereadable(s:unify_path(name))
       call add(scripts, s:unify_path(name))
     endif
   endfor
