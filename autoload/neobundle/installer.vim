@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Apr 2013.
+" Last Modified: 22 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -388,18 +388,16 @@ function! neobundle#installer#sync(bundle, context, is_unite)
   let num = a:context.source__number
   let max = a:context.source__max_bundles
 
+  let before_one_day = localtime() - 60 * 60 * 24
   let before_one_week = localtime() - 60 * 60 * 24 * 7
-  let before_one_month = localtime() - 60 * 60 * 24 * 7 * 4
 
   if a:context.source__bang == 1 &&
         \ a:bundle.stay_same
     let [cmd, message] = ['', 'has "stay_same" attribute.']
   elseif a:context.source__bang == 1 &&
         \ a:bundle.uri ==# a:bundle.installed_uri &&
-        \ ((a:bundle.updated_time < before_one_month
-        \     && a:bundle.checked_time >= before_one_month)
-        \ || (a:bundle.updated_time < before_one_week
-        \     && a:bundle.checked_time >= before_one_week))
+        \ ((a:bundle.updated_time < before_one_week
+        \     && a:bundle.checked_time >= before_one_day))
     let [cmd, message] = ['', 'Outdated plugin.']
   else
     let [cmd, message] =

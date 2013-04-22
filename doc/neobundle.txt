@@ -1174,10 +1174,8 @@ A:
 <
 Q: What's the "outdated" plugin?
 A:
-Last update time is older than one month -> Automatic updates are disabled
-until one month from the last update.
 Last update time is older than one week -> Automatic updates are disabled
-until one week from the last update.
+until one day from the last update.
 Last update time is older within one week -> Automatic updates are every time.
 Note: If you use update with name or use "all" argument in neobundle/update
 source or use "!" in |:NeoBundleUpdate| command, this feature will be
@@ -1185,6 +1183,9 @@ disabled; it forces updates them.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-04-22
+- Improved outdated algorithm.
 
 2013-04-08
 - Added FAQ section.
