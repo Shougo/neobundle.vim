@@ -396,8 +396,8 @@ function! neobundle#installer#sync(bundle, context, is_unite)
     let [cmd, message] = ['', 'has "stay_same" attribute.']
   elseif a:context.source__bang == 1 &&
         \ a:bundle.uri ==# a:bundle.installed_uri &&
-        \ (a:bundle.updated_time < before_one_week
-        \     && a:bundle.checked_time >= before_one_day)
+        \ a:bundle.updated_time < before_one_week
+        \     && a:bundle.checked_time >= before_one_day
     let [cmd, message] = ['', 'Outdated plugin.']
   else
     let [cmd, message] =

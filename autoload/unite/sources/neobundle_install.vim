@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 22 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,7 +125,8 @@ function! s:source_update.hooks.on_init(args, context) "{{{
   let a:context.source__bang =
         \ index(a:args, 'all') >= 0 ? 2 : 1
   let a:context.source__not_fuzzy = index(a:args, '!') >= 0
-  let bundle_names = filter(copy(a:args), "v:val !=# 'all'")
+  let bundle_names = filter(copy(a:args),
+        \ "v:val !=# 'all' && v:val !=# '!'")
   call s:init(a:context, bundle_names)
 endfunction"}}}
 
