@@ -388,7 +388,7 @@ g:neobundle#default_options			*g:neobundle#default_options*
 		Example:
 >
 		let g:neobundle#default_options =
-		          \ { 'rev' : {'type__update_style' : 'current'} }
+		          \ { 'rev' : {'rev' : 'ver.8'} }
 		NeoBundle 'Shougo/neocomplcache', '', 'rev'
 <
 		Defaults to "{}".
@@ -807,16 +807,6 @@ OPTIONS 					*neobundle-options*
 		ability to push it.
 		Note: This option is available for git only.
 
-					*neobundle-options-type__update_style*
-		type__update_style	(String)
-		If set to "default", neobundle will update from the default
-		branch (master) instead of current branch.
-		If set to "current", neobundle will update from the current
-		branch instead of current branch.
-		"default" is useful for user-defined branches.
-		"current" is useful for topic branches.
-		If omitted, "default" is used.
-		Note: This attribute is available for git only.
 
 					*neobundle-options-type__protocol*
 		type__protocol		(String)
@@ -1183,6 +1173,9 @@ disabled; it forces updates them.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-04-23
+- Fixed for branch.
 
 2013-04-22
 - Improved outdated algorithm.

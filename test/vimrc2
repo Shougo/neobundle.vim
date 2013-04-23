@@ -29,7 +29,7 @@ echomsg neobundle#is_sourced('unite-sudo') == 1
 
 " C
 NeoBundleLazy 'Shougo/vimproc', { 'depends': 'Shougo/neocomplcache' }
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache', 'ver.8'
 echomsg neobundle#is_sourced('vimproc') == 0
 echomsg neobundle#is_sourced('neocomplcache') == 1
 
