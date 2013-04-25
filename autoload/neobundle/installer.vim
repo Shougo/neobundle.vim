@@ -828,7 +828,7 @@ function! s:cleandir(path)
   let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
 
   for file in filter(split(globpath(path,
-        \ a:path.'/*', 1), '\n'), '!isdirectory(v:val)')
+        \ '*', 1), '\n'), '!isdirectory(v:val)')
     call delete(file)
   endfor
 endfunction
