@@ -209,7 +209,8 @@ function! s:build_vimproc_dll(cmd)
 endfunction
 
 function! neobundle#installer#clean(bang, ...)
-  let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
+  let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.script_type != "" ?
+        \ v:val.base . "/" . v:val.directory : v:val.path')
   let all_dirs = split(neobundle#util#substitute_path_separator(
         \ globpath(neobundle#get_neobundle_dir(), '*')), "\n")
   if get(a:000, 0, '') == ''
