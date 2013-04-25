@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Apr 2013.
+" Last Modified: 25 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -834,6 +834,7 @@ function! s:init_bundle(bundle)
 
   if bundle.script_type != ''
     " Add script_type.
+    " Note: To check by neobundle#config#is_installed().
     let bundle.path .= '/' . bundle.script_type
   endif
 
