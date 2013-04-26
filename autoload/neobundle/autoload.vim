@@ -59,7 +59,7 @@ function! neobundle#autoload#insert()
 endfunction
 
 function! neobundle#autoload#function()
-  let function = expand('<afile>')
+  let function = expand('<amatch>')
   let function_prefix = get(split(function, '#'), 0, '') . '#'
 
   let bundles = filter(s:get_lazy_bundles(),
