@@ -71,6 +71,11 @@ function! neobundle#config#get_neobundles()
   return values(s:neobundles)
 endfunction
 
+function! neobundle#config#get_autoload_bundles()
+  return filter(values(s:neobundles),
+        \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
+endfunction
+
 function! neobundle#config#get_direct_neobundles()
   return values(s:direct_neobundles)
 endfunction

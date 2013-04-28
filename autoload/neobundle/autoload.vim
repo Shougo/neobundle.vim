@@ -27,12 +27,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:get_autoload_bundles()
-  return filter(neobundle#config#get_neobundles(),
-        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''
-        \   && v:val.lazy")
-endfunction
-
 function! s:get_lazy_bundles()
   return filter(neobundle#config#get_neobundles(),
         \ "!neobundle#config#is_sourced(v:val.name)
@@ -40,7 +34,7 @@ function! s:get_lazy_bundles()
 endfunction
 
 function! neobundle#autoload#filetype()
-  let bundles = filter(s:get_autoload_bundles(),
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "has_key(v:val.autoload, 'filetypes')")
   for filetype in neobundle#util#get_filetypes()
     call neobundle#config#source_bundles(filter(copy(bundles),"
@@ -50,7 +44,7 @@ function! neobundle#autoload#filetype()
 endfunction
 
 function! neobundle#autoload#insert()
-  let bundles = filter(s:get_autoload_bundles(),
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "get(v:val.autoload, 'insert', 0)")
   if !empty(bundles)
     call neobundle#config#source_bundles(bundles)
@@ -62,7 +56,7 @@ function! neobundle#autoload#function()
   let function = expand('<amatch>')
   let function_prefix = get(split(function, '#'), 0, '') . '#'
 
-  let bundles = filter(s:get_lazy_bundles(),
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "get(v:val.autoload, 'function_prefix', '').'#' ==# function_prefix ||
         \  (has_key(v:val.autoload, 'functions') &&
         \    index(neobundle#util#convert2list(
@@ -111,7 +105,7 @@ function! neobundle#autoload#explorer(path, event)
     let path = '~'
   endif
 
-  let bundles = filter(s:get_autoload_bundles(),
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "get(v:val.autoload, 'explorer', 0)")
   if !filereadable(s:expand(path)) && !empty(bundles)
     call neobundle#config#source_bundles(bundles)
@@ -121,7 +115,7 @@ endfunction
 
 function! neobundle#autoload#unite_sources(sources)
   let bundles = []
-  let sources_bundles = filter(s:get_autoload_bundles(),
+  let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for source_name in a:sources
     let bundles += filter(copy(sources_bundles),
@@ -134,7 +128,7 @@ endfunction
 
 function! neobundle#autoload#get_unite_sources()
   let _ = []
-  let sources_bundles = filter(s:get_autoload_bundles(),
+  let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for bundle in sources_bundles
     let _ += neobundle#util#convert2list(
