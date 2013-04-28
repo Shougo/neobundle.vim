@@ -184,7 +184,7 @@ function! neobundle#util#redraw_echo(expr) "{{{
   let msg = neobundle#util#convert2list(a:expr)
   for i in range(0, len(msg), &cmdheight)
     redraw
-    echo join(msg[i : i+&cmdheight-1], "\n")
+    echo "\r".join(msg[i : i+&cmdheight-1], "\n")
   endfor
 endfunction"}}}
 
