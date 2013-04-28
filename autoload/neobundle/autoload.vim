@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 28 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ function! neobundle#autoload#filetype()
         \ "has_key(v:val.autoload, 'filetypes')")
   for filetype in neobundle#util#get_filetypes()
     call neobundle#config#source_bundles(filter(copy(bundles),"
-          \ index(neobundle#util#convert_list(
+          \ index(neobundle#util#convert2list(
           \     v:val.autoload.filetypes), filetype) >= 0"))
   endfor
 endfunction
@@ -65,7 +65,7 @@ function! neobundle#autoload#function()
   let bundles = filter(s:get_lazy_bundles(),
         \ "get(v:val.autoload, 'function_prefix', '').'#' ==# function_prefix ||
         \  (has_key(v:val.autoload, 'functions') &&
-        \    index(neobundle#util#convert_list(
+        \    index(neobundle#util#convert2list(
         \     v:val.autoload.functions), function) >= 0)")
   call neobundle#config#source_bundles(bundles)
 endfunction
@@ -125,7 +125,7 @@ function! neobundle#autoload#unite_sources(sources)
           \ "has_key(v:val.autoload, 'unite_sources')")
   for source_name in a:sources
     let bundles += filter(copy(sources_bundles),
-          \ "index(neobundle#util#convert_list(
+          \ "index(neobundle#util#convert2list(
           \    v:val.autoload.unite_sources), source_name) >= 0")
   endfor
 
@@ -137,7 +137,7 @@ function! neobundle#autoload#get_unite_sources()
   let sources_bundles = filter(s:get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for bundle in sources_bundles
-    let _ += neobundle#util#convert_list(
+    let _ += neobundle#util#convert2list(
           \ bundle.autoload.unite_sources)
   endfor
 

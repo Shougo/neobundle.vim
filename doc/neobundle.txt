@@ -1174,6 +1174,9 @@ disabled; it forces updates them.
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-04-28
+- Improved for redraw.
+
 2013-04-23
 - Fixed for branch.
 

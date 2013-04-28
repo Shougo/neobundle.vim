@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 30 Mar 2013.
+" Last Modified: 28 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,30 +166,26 @@ function! neobundle#util#get_filetypes() "{{{
   return split(filetype, '\.')
 endfunction"}}}
 
-function! neobundle#util#convert_list(expr) "{{{
+function! neobundle#util#convert2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
 
 function! neobundle#util#print_error(expr) "{{{
-  let msg = neobundle#util#convert_list(a:expr)
+  let msg = neobundle#util#convert2list(a:expr)
   echohl WarningMsg | echomsg join(msg, "\n") | echohl None
 endfunction"}}}
 
 function! neobundle#util#redraw_echo(expr) "{{{
   if has('vim_starting')
-    echo join(neobundle#util#convert_list(a:expr), "\n")
+    echo join(neobundle#util#convert2list(a:expr), "\n")
     return
   endif
 
-  let msg = neobundle#util#convert_list(a:expr)
-  let max = len(msg)
-  let i = 0
-  while i < max
+  let msg = neobundle#util#convert2list(a:expr)
+  for i in range(0, len(msg), &cmdheight)
     redraw
     echo join(msg[i : i+&cmdheight-1], "\n")
-
-    let i += &cmdheight
-  endwhile
+  endfor
 endfunction"}}}
 
 " Escape a path for runtimepath.

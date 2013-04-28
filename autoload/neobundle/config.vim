@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Apr 2013.
+" Last Modified: 28 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -255,7 +255,7 @@ endfunction
 function! neobundle#config#source(names, ...)
   let is_force = get(a:000, 0, 1)
 
-  let names = neobundle#util#convert_list(a:names)
+  let names = neobundle#util#convert2list(a:names)
   let bundles = empty(names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(names)
@@ -419,7 +419,7 @@ function! neobundle#config#get_types()
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/neobundle/types/*.vim', 1), '\n'),
           \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
-      for dict in neobundle#util#convert_list(define)
+      for dict in neobundle#util#convert2list(define)
         if !empty(dict) && !has_key(s:neobundle_types, dict.name)
           let s:neobundle_types[dict.name] = dict
         endif
@@ -648,7 +648,7 @@ function! neobundle#config#check_external_commands(bundle)
     return
   endif
 
-  for command in neobundle#util#convert_list(commands)
+  for command in neobundle#util#convert2list(commands)
     if !executable(command)
       call neobundle#installer#error(
             \ printf('external command : "%s" is not found.', command))
@@ -710,7 +710,7 @@ function! s:add_bundle(bundle, ...)
     call s:rtp_add(bundle)
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
-    for item in neobundle#util#convert_list(
+    for item in neobundle#util#convert2list(
           \ get(bundle.autoload, 'commands', []))
       let command = type(item) == type('') ?
             \ { 'name' : item } : item
@@ -728,7 +728,7 @@ function! s:add_bundle(bundle, ...)
     endfor
 
     let bundle.dummy_mappings = []
-    for map in neobundle#util#convert_list(
+    for map in neobundle#util#convert2list(
           \ get(bundle.autoload, 'mappings', []))
       if type(map) == type([])
         let [mode, mapping] = [map[0], map[1]]
@@ -846,7 +846,7 @@ function! s:init_bundle(bundle)
 
   " Parse depends.
   let _ = []
-  for depend in neobundle#util#convert_list(bundle.depends)
+  for depend in neobundle#util#convert2list(bundle.depends)
     if type(depend) == type('')
       let depend = string(depend)
     endif
