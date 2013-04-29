@@ -1180,6 +1180,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-04-29
+- Don't save nosync install information.
+
 2013-04-28
 - Improved for redraw.
 

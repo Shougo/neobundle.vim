@@ -692,7 +692,8 @@ endfunction
 function! s:save_install_info(bundles)
   let s:install_info = {}
   for bundle in filter(copy(a:bundles),
-        \ "has_key(v:val, 'updated_time')")
+        \ "v:val.type !=# 'nosync' && has_key(v:val, 'updated_time')")
+    " Note: Don't save nosync type.
     let s:install_info[bundle.name] = {
           \   'checked_time' : bundle.checked_time,
           \   'updated_time' : bundle.updated_time,
