@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,7 @@ let s:source_install = {
       \ 'name' : 'neobundle/install',
       \ 'description' : 'install bundles',
       \ 'hooks' : {},
+      \ 'default_kind' : 'word',
       \ }
 
 function! s:source_install.hooks.on_init(args, context) "{{{
@@ -63,6 +64,8 @@ function! s:source_install.hooks.on_close(args, context) "{{{
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context) "{{{
+  let old_msgs = copy(neobundle#installer#get_log())
+
   if a:context.source__number < a:context.source__max_bundles
     while a:context.source__number < a:context.source__max_bundles
         \ && len(a:context.source__processes) <
@@ -80,36 +83,39 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
 
     " Filter eof processes.
     call filter(a:context.source__processes, '!v:val.eof')
-
-    return []
-  endif
-
-  let messages = []
-  if empty(a:context.source__synced_bundles)
-    let messages += ['[neobundle/install] No new bundles installed.']
   else
-    let messages += ['[neobundle/install] Installed/Updated bundles:']
-          \ + map(copy(a:context.source__synced_bundles),
-          \        'v:val.name')
+    let messages = []
+
+    if empty(a:context.source__synced_bundles)
+      let messages += ['[neobundle/install] No new bundles installed.']
+    else
+      let messages += ['[neobundle/install] Installed/Updated bundles:']
+            \ + map(copy(a:context.source__synced_bundles),
+            \        'v:val.name')
+    endif
+
+    if !empty(a:context.source__errored_bundles)
+      let messages += ['[neobundle/install] Errored bundles:']
+            \ + map(copy(a:context.source__errored_bundles),
+            \        'v:val.name')
+      call neobundle#installer#log(
+            \ 'Please read error message log by :message command.')
+    endif
+
+    call neobundle#installer#log(messages, 1)
+    call neobundle#installer#update(
+          \ a:context.source__synced_bundles)
+
+    " Finish.
+    call neobundle#installer#log('[neobundle/install] Completed.', 1)
+
+    let a:context.is_async = 0
   endif
 
-  if !empty(a:context.source__errored_bundles)
-    let messages += ['[neobundle/install] Errored bundles:']
-          \ + map(copy(a:context.source__errored_bundles),
-          \        'v:val.name')
-    call neobundle#installer#log(
-          \ 'Please read error message log by :message command.')
-  endif
-
-  call neobundle#installer#log(messages, 1)
-  call neobundle#installer#update(
-        \ a:context.source__synced_bundles)
-
-  let a:context.is_async = 0
-
-  " Finish.
-  call neobundle#installer#log('[neobundle/install] Completed.', 1)
-  return []
+  return map(neobundle#installer#get_log()[len(old_msgs) :], "{
+        \ 'word' : v:val,
+        \ 'is_multiline' : 1,
+        \}")
 endfunction"}}}
 
 function! s:source_install.complete(args, context, arglead, cmdline, cursorpos) "{{{

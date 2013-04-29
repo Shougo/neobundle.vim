@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Apr 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -497,9 +497,9 @@ function! neobundle#installer#check_output(context, process, is_unite)
   if status && a:process.rev ==# rev
         \ && (bundle.type !=# 'git' ||
         \     a:process.output !~# 'up-to-date\|up to date')
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-          \ num, max, bundle.name, 'Error'), a:is_unite)
+    let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ num, max, bundle.name, 'Error')
+    call neobundle#installer#log(message, a:is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)
     call neobundle#installer#error(
           \ split(a:process.output, '\n'), a:is_unite)
