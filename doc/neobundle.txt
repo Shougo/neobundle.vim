@@ -976,7 +976,7 @@ neobundle/update
 		If you use the source with "-auto-quit" option, the unite
 		buffer will close automatically.
 >
-		:Unite neobundle/update -auto-quit
+		:Unite neobundle/update -log -auto-quit
 <
 				*neobundle-unite-source-neobundle-search*
 neobundle/search
@@ -1170,6 +1170,12 @@ Last update time is older within one week -> Automatic updates are every time.
 Note: If you use update with name or use "all" argument in neobundle/update
 source or use "!" in |:NeoBundleUpdate| command, this feature will be
 disabled; it forces updates them.
+
+Q: I want to update messages in unite buffer.
+A:
+>
+	Unite -log neobundle/update
+<
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*

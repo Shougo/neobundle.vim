@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2012.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,10 +42,12 @@ let s:kind = {
 let s:kind.action_table.update = {
       \ 'description' : 'update bundles',
       \ 'is_selectable' : 1,
+      \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.update.func(candidates) "{{{
   call unite#start([['neobundle/update', '!']
-        \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
+        \ + map(copy(a:candidates), 'v:val.action__bundle_name')],
+        \ { 'log' : 1 })
 endfunction"}}}
 let s:kind.action_table.delete = {
       \ 'description' : 'delete bundles',
@@ -60,6 +62,7 @@ endfunction"}}}
 let s:kind.action_table.reinstall = {
       \ 'description' : 'reinstall bundles',
       \ 'is_selectable' : 1,
+      \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.reinstall.func(candidates) "{{{
   for candidate in a:candidates
@@ -75,7 +78,8 @@ function! s:kind.action_table.reinstall.func(candidates) "{{{
 
   " Install.
   call unite#start([['neobundle/update', '!']
-        \ + map(copy(a:candidates), 'v:val.action__bundle_name')])
+        \ + map(copy(a:candidates), 'v:val.action__bundle_name')],
+        \ { 'log' : 1 })
 endfunction"}}}
 let s:kind.action_table.preview = {
       \ 'description' : 'view the plugin documentation',
