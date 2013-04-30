@@ -797,17 +797,6 @@ OPTIONS 					*neobundle-options*
 			Note: To re-call on_source hook when reloading .vimrc,
 			you must call on_source hook in end of .vimrc.
 
-					*neobundle-options-type__shallow*
-		type__shallow		(Number)
-		If set to 1, neobundle will use a "shallow clone" when
-		installing the plugin.
-		If omitted, 1 is used. But if the uri is "git@github.com:~",
-		then 0.
-		Note: A shallow clone lets you clone faster, but you lose the
-		ability to push it.
-		Note: This option is available for git only.
-
-
 					*neobundle-options-type__protocol*
 		type__protocol		(String)
 		The protocol used for types.
@@ -1179,6 +1168,9 @@ A:
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-04-30
+- Disabled shallow clones in git.
 
 2013-04-29
 - Don't save nosync install information.
