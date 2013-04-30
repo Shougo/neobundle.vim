@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Apr 2013.
+" Last Modified: 30 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,12 +88,12 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate) "{{{
   " Search help files.
   let readme = get(split(globpath(
-        \ a:candidate.action__path, 'doc/*.?*'), '\n'), 0, '')
+        \ a:candidate.action__path, 'doc/*.?*', 1), '\n'), 0, '')
 
   if readme == ''
     " Search README files.
     let readme = get(split(globpath(
-          \ a:candidate.action__path, 'README*'), '\n'), 0, '')
+          \ a:candidate.action__path, 'README*', 1), '\n'), 0, '')
     if readme == ''
       return
     endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Apr 2013.
+" Last Modified: 30 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -212,7 +212,7 @@ function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
         \ "v:val.base . '/' . v:val.directory")
   let all_dirs = split(neobundle#util#substitute_path_separator(
-        \ globpath(neobundle#get_neobundle_dir(), '*')), "\n")
+        \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n")
   if get(a:000, 0, '') == ''
     let x_dirs = filter(all_dirs,
           \ "index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
@@ -667,7 +667,8 @@ function! s:copy_bundle_files(bundles, directory)
 
   let files = {}
   for bundle in a:bundles
-    for file in filter(split(globpath(bundle.rtp, a:directory.'/*'), '\n'),
+    for file in filter(split(globpath(
+          \ bundle.rtp, a:directory.'/*', 1), '\n'),
           \ '!isdirectory(v:val)')
       let filename = fnamemodify(file, ':t')
       let files[filename] = readfile(file)
@@ -828,8 +829,8 @@ endfunction
 function! s:cleandir(path)
   let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
 
-  for file in filter(split(globpath(path,
-        \ '*', 1), '\n'), '!isdirectory(v:val)')
+  for file in filter(split(globpath(path, '*', 1), '\n'),
+        \ '!isdirectory(v:val)')
     call delete(file)
   endfor
 endfunction
