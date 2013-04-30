@@ -1172,6 +1172,7 @@ CHANGELOG					*neobundle-changelog*
 2013-04-30
 - Disabled shallow clones in git.
 - Fixed initial cursor position in log.
+- Improved syntax highlight.
 
 2013-04-29
 - Don't save nosync install information.
