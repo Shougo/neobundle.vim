@@ -1169,6 +1169,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-02
+- Improved neobundle/log source.
+
 2013-04-30
 - Disabled shallow clones in git.
 - Fixed initial cursor position in log.
