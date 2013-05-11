@@ -1169,6 +1169,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-12
+- Improved log format.
+
 2013-05-11
 - Improved log output.
 
