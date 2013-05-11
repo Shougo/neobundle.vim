@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Apr 2013.
+" Last Modified: 11 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -118,7 +118,8 @@ function! neobundle#autoload#unite_sources(sources)
   let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for source_name in a:sources
-    if source_name == 'source'
+    if source_name ==# 'source'
+      " In source source, load all sources.
       let bundles += copy(sources_bundles)
     else
       let bundles += filter(copy(sources_bundles),
