@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 May 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -161,8 +161,8 @@ function! neobundle#util#set_dictionary_helper(variable, keys, pattern) "{{{
 endfunction"}}}
 
 function! neobundle#util#get_filetypes() "{{{
-  let filetype = exists('*neocomplcache#get_context_filetype') ?
-        \ neocomplcache#get_context_filetype(1) : &filetype
+  let filetype = exists('b:neocomplcache.context_filetype') ?
+        \ b:neocomplcache.context_filetype : &filetype
   return split(filetype, '\.')
 endfunction"}}}
 
