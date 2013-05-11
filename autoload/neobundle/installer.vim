@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 30 Apr 2013.
+" Last Modified: 11 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -749,9 +749,7 @@ function! neobundle#installer#log(msg, ...)
         \ a:msg : split(a:msg, '\n')
   call extend(s:log, msg)
 
-  if &filetype == 'unite' || is_unite
-    call unite#print_message(msg)
-  else
+  if !(&filetype == 'unite' || is_unite)
     call neobundle#util#redraw_echo(msg)
   endif
 
