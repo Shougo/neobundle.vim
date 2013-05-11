@@ -220,16 +220,6 @@ COMMANDS 					*neobundle-commands*
 
 		See |neobundle-options| for what to set in {options}.
 
-:NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
-		This command adds the directories in {base-directory-path} to
-		runtimepath, like pathogen does.
-
-		Note: If you want to use neobundle like pathogen.vim, you
-		should set a different base path from the standard neobundle
-		bundles path.
->
-		NeoBundleLocal ~/.vim/bundle
-
 :NeoBundleInstall [{name}...]			*:NeoBundleInstall*
 		Installs plugins specified by {name}. {name} is
 		fuzzy-searched.  If {name} is omitted, all configured plugins
@@ -271,6 +261,16 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleLazy {repository} [[,{revision}] [,{options}]]
 :NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
+:NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
+		Registers a bundle from the directories in
+		{base-directory-path} like pathogen does.
+
+		Note: If you want to use neobundle like pathogen.vim, you
+		should set a different base path from the standard neobundle
+		bundles path.
+>
+		NeoBundleLocal ~/.vim/bundle
+
 						*:NeoBundleLazy*
 		Registers a bundle, but doesn't add it to 'runtimepath'.
 >
