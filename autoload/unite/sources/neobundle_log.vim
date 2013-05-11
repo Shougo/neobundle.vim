@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/log.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,17 +42,17 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__NeoBundleLog_Message /.*/
         \ contained containedin=uniteSource__NeoBundleLog
   highlight default link uniteSource__NeoBundleLog_Message Comment
-  syntax match uniteSource__NeoBundleLog_Progress /(.*):\s*.*/
+  syntax match uniteSource__NeoBundleLog_Progress /(.\{-}):\s*.*/
         \ contained containedin=uniteSource__NeoBundleLog
   highlight default link uniteSource__NeoBundleLog_Progress String
-  syntax match uniteSource__NeoBundleLog_Source /|.*|/
+  syntax match uniteSource__NeoBundleLog_Source /|.\{-}|/
         \ contained containedin=uniteSource__NeoBundleLog_Progress
   highlight default link uniteSource__NeoBundleLog_Source Type
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   return map(copy(neobundle#installer#get_log()), "{
-        \ 'word' : substitute(v:val, '^\\[.*\\]\\s*', '', ''),
+        \ 'word' : substitute(v:val, '^\\[.\{-}\\]\\s*', '', ''),
         \ }")
 endfunction"}}}
 

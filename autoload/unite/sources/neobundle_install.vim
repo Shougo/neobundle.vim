@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Apr 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,10 +60,10 @@ function! s:source_install.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__NeoBundleInstall_Message /.*/
         \ contained containedin=uniteSource__NeoBundleInstall
   highlight default link uniteSource__NeoBundleInstall_Message Comment
-  syntax match uniteSource__NeoBundleInstall_Progress /(.*):\s*.*/
+  syntax match uniteSource__NeoBundleInstall_Progress /(.\{-}):\s*.*/
         \ contained containedin=uniteSource__NeoBundleInstall
   highlight default link uniteSource__NeoBundleInstall_Progress String
-  syntax match uniteSource__NeoBundleInstall_Source /|.*|/
+  syntax match uniteSource__NeoBundleInstall_Source /|.\{-}|/
         \ contained containedin=uniteSource__NeoBundleInstall_Progress
   highlight default link uniteSource__NeoBundleInstall_Source Type
 endfunction"}}}
@@ -126,7 +126,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   endif
 
   return map(neobundle#installer#get_log()[len(old_msgs) :], "{
-        \ 'word' : substitute(v:val, '^\\[.*\\]\\s*', '', ''),
+        \ 'word' : substitute(v:val, '^\\[.\{-}\\]\\s*', '', ''),
         \ 'is_multiline' : 1,
         \}")
 endfunction"}}}
