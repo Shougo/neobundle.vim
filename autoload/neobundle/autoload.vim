@@ -118,9 +118,13 @@ function! neobundle#autoload#unite_sources(sources)
   let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for source_name in a:sources
-    let bundles += filter(copy(sources_bundles),
-          \ "index(neobundle#util#convert2list(
-          \    v:val.autoload.unite_sources), source_name) >= 0")
+    if source_name == 'source'
+      let bundles += copy(sources_bundles)
+    else
+      let bundles += filter(copy(sources_bundles),
+            \ "index(neobundle#util#convert2list(
+            \    v:val.autoload.unite_sources), source_name) >= 0")
+    endif
   endfor
 
   call neobundle#config#source_bundles(neobundle#util#uniq(bundles))
