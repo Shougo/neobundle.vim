@@ -126,7 +126,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   endif
 
   return map(neobundle#installer#get_log()[len(old_msgs) :], "{
-        \ 'word' : substitute(v:val, '^\\[.\{-}\\]\\s*', '', ''),
+        \ 'word' : substitute(v:val, '^\\[.\\{-}\\]\\s*', '', ''),
         \ 'is_multiline' : 1,
         \}")
 endfunction"}}}
