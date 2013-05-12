@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Apr 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,20 +34,6 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init()
-  augroup neobundle
-    autocmd!
-    autocmd FileType * call neobundle#autoload#filetype()
-    autocmd FuncUndefined * call neobundle#autoload#function()
-    autocmd InsertEnter * call neobundle#autoload#insert()
-    autocmd VimEnter * call s:on_vim_enter()
-    autocmd BufCreate
-          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufCreate')
-    autocmd BufEnter
-          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufEnter')
-    autocmd BufWinEnter
-          \ * call neobundle#autoload#explorer(expand('<amatch>'), 'BufWinEnter')
-  augroup END
-
   filetype off
 
   for bundle in values(s:neobundles)
@@ -61,6 +47,10 @@ function! neobundle#config#init()
 
   " Load direct installed bundles.
   call neobundle#config#load_direct_bundles()
+
+  augroup neobundle
+    autocmd VimEnter * call s:on_vim_enter()
+  augroup END
 endfunction
 
 function! neobundle#config#get(name)

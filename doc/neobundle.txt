@@ -1172,6 +1172,7 @@ CHANGELOG					*neobundle-changelog*
 2013-05-12
 - Improved log format.
 - Improved syntax format.
+- Improved initialization.
 
 2013-05-11
 - Improved log output.

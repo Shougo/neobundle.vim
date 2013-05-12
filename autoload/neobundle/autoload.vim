@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 May 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,10 +27,24 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:get_lazy_bundles()
-  return filter(neobundle#config#get_neobundles(),
-        \ "!neobundle#config#is_sourced(v:val.name)
-        \ && v:val.rtp != '' && v:val.lazy")
+function! neobundle#autoload#init()
+  augroup neobundle
+    autocmd FileType *
+          \ call neobundle#autoload#filetype()
+    autocmd FuncUndefined *
+          \ call neobundle#autoload#function()
+    autocmd InsertEnter *
+          \ call neobundle#autoload#insert()
+    autocmd BufCreate
+          \ * call neobundle#autoload#explorer(
+          \ expand('<amatch>'), 'BufCreate')
+    autocmd BufEnter
+          \ * call neobundle#autoload#explorer(
+          \ expand('<amatch>'), 'BufEnter')
+    autocmd BufWinEnter
+          \ * call neobundle#autoload#explorer(
+          \ expand('<amatch>'), 'BufWinEnter')
+  augroup END
 endfunction
 
 function! neobundle#autoload#filetype()
@@ -171,6 +185,12 @@ function! s:expand(path)
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
+endfunction
+
+function! s:get_lazy_bundles()
+  return filter(neobundle#config#get_neobundles(),
+        \ "!neobundle#config#is_sourced(v:val.name)
+        \ && v:val.rtp != '' && v:val.lazy")
 endfunction
 
 let &cpo = s:save_cpo
