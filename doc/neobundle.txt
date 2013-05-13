@@ -1169,6 +1169,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-13
+- Fixed add bundle behavior.
+
 2013-05-12
 - Improved log format.
 - Improved syntax format.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 May 2013.
+" Last Modified: 13 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -699,6 +699,9 @@ function! s:add_bundle(bundle, ...)
   if !bundle.lazy && bundle.rtp != ''
     if bundle.sourced
       call s:rtp_rm(bundle)
+    elseif !has('vim_starting')
+      " Load automatically.
+      call neobundle#config#source(bundle.name)
     endif
 
     let bundle.sourced = 1
@@ -747,8 +750,9 @@ function! s:add_bundle(bundle, ...)
   endif
 
   if !is_force && bundle.overwrite &&
-        \ !empty(prev_bundle) && prev_bundle.overwrite && bundle !=# prev_bundle
-        \ && prev_bundle.resettable && prev_bundle.overwrite
+        \ !empty(prev_bundle) && prev_bundle.overwrite &&
+        \ bundle !=# prev_bundle &&
+        \ prev_bundle.resettable && prev_bundle.overwrite
     " Warning.
     call neobundle#util#print_error(
           \ 'Overwrite previous neobundle configuration in ' . bundle.name)
