@@ -47,7 +47,7 @@ let s:kind.action_table.update = {
 function! s:kind.action_table.update.func(candidates) "{{{
   call unite#start_temporary([['neobundle/update', '!']
         \ + map(copy(a:candidates), 'v:val.action__bundle_name')],
-        \ { 'log' : 1 })
+        \ { 'log' : 1, 'script' : 1 })
 endfunction"}}}
 let s:kind.action_table.delete = {
       \ 'description' : 'delete bundles',
@@ -79,7 +79,7 @@ function! s:kind.action_table.reinstall.func(candidates) "{{{
   " Install.
   call unite#start_temporary([['neobundle/update', '!']
         \ + map(copy(a:candidates), 'v:val.action__bundle_name')],
-        \ { 'log' : 1 })
+        \ { 'log' : 1, 'script' : 1 })
 endfunction"}}}
 let s:kind.action_table.preview = {
       \ 'description' : 'view the plugin documentation',
