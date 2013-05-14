@@ -182,10 +182,11 @@ function! neobundle#util#redraw_echo(expr) "{{{
   endif
 
   let msg = neobundle#util#convert2list(a:expr)
-  let height = max([1, &cmdheight])
+  let height = max([1, &cmdheight-1])
   for i in range(0, len(msg), height)
     redraw
     echo join(msg[i : i+height-1], "\n")
+    sleep 50m
   endfor
 endfunction"}}}
 
