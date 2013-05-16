@@ -313,10 +313,10 @@ function! neobundle#config#source(names, ...)
       endfor
 
       if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
-        execute 'doautocmd' bundle.augroup 'VimEnter'
+        execute 'silent doautocmd' bundle.augroup 'VimEnter'
 
         if has('gui_running') && &term ==# 'builtin_gui'
-          execute 'doautocmd' bundle.augroup 'GUIEnter'
+          execute 'silent doautocmd' bundle.augroup 'GUIEnter'
         endif
       endif
     endif
