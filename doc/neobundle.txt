@@ -1166,6 +1166,10 @@ A:
 	Unite -log neobundle/update
 <
 
+Q: neobundle.vim is not worked in debian/Ubuntu Linux...
+A: Did you use "debian.vim"? "debian.vim" changes 'runtimepath'.
+So it conflicts with neobundle. You should not use "debian.vim".
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
