@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 16 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,11 +182,10 @@ function! neobundle#util#redraw_echo(expr) "{{{
   endif
 
   let msg = neobundle#util#convert2list(a:expr)
-  let height = max([1, &cmdheight-1])
+  let height = max([1, &cmdheight])
   for i in range(0, len(msg), height)
-    redraw
+    redraw!
     echo join(msg[i : i+height-1], "\n")
-    sleep 50m
   endfor
 endfunction"}}}
 
