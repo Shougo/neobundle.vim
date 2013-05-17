@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 May 2013.
+" Last Modified: 17 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -474,6 +474,8 @@ function! neobundle#installer#check_output(context, process, is_unite)
       return
     endif
 
+    call a:process.proc.stdout.close()
+
     let [_, status] = a:process.proc.waitpid()
   else
     let status = a:process.status
@@ -617,16 +619,16 @@ function! s:install(bang, bundles)
       endwhile
     endif
 
-    if empty(context.source__processes)
-      break
-    endif
-
     for process in context.source__processes
       call neobundle#installer#check_output(context, process, 0)
     endfor
 
     " Filter eof processes.
     call filter(context.source__processes, '!v:val.eof')
+
+    if empty(context.source__processes)
+      break
+    endif
   endwhile
 
   return [context.source__synced_bundles,

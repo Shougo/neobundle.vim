@@ -1173,6 +1173,9 @@ So it conflicts with neobundle. You should not use "debian.vim".
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-17
+- Fixed resource leak.
+
 2013-05-13
 - Fixed add bundle behavior.
 
