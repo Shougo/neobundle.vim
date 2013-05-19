@@ -366,7 +366,7 @@ function! neobundle#config#source(names, ...)
   endif
 
   if exists('g:loaded_neobundle')
-    call neobundle#call_hook('on_source', [bundle])
+    call neobundle#call_hook('on_source', bundles)
   endif
 endfunction
 
