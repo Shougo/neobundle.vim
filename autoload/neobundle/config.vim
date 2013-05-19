@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 May 2013.
+" Last Modified: 19 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -304,6 +304,10 @@ function! neobundle#config#source(names, ...)
 
     call s:rtp_add(bundle)
 
+    if exists('g:loaded_neobundle')
+      call neobundle#call_hook('on_source', [bundle])
+    endif
+
     if exists('g:loaded_neobundle') || is_force
       " Reload script files.
       for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
@@ -312,7 +316,7 @@ function! neobundle#config#source(names, ...)
         endfor
       endfor
 
-      if has_key(bundle, 'augroup') && exists('#'.bundle.augroup)
+      if exists('#'.bundle.augroup.'#VimEnter')
         execute 'silent doautocmd' bundle.augroup 'VimEnter'
 
         if has('gui_running') && &term ==# 'builtin_gui'
@@ -363,10 +367,6 @@ function! neobundle#config#source(names, ...)
     let &l:filetype = &l:filetype
   elseif filetype_before !=# filetype_after
     execute 'doautocmd FileType' &filetype
-  endif
-
-  if exists('g:loaded_neobundle')
-    call neobundle#call_hook('on_source', bundles)
   endif
 endfunction
 
@@ -841,6 +841,9 @@ function! s:init_bundle(bundle)
         \ && isdirectory(bundle.rtp . '/autoload')
     let bundle.autoload.function_prefix =
           \ neobundle#config#_parse_function_prefix(bundle.name)
+  endif
+  if !has_key(bundle, 'augroup')
+    let bundle.augroup = bundle.name
   endif
 
   " Parse depends.
