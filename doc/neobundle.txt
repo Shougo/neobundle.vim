@@ -790,12 +790,12 @@ OPTIONS 					*neobundle-options*
 		defined:
 
 			on_source		*neobundle-hooks-on_source*
-			Called after a bundle is loaded. It is useful for plugin
-			initialization in lazy bundles.
-			Note: In Vim initializing, calling on_source hooks are
+			Called after scripts are sourced. It is useful for
+			plugin initialization in lazy bundles.
+			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
 			Note: To re-call on_source hook when reloading .vimrc,
-			you must call on_source hook in end of .vimrc.
+			you must call the hook in end of .vimrc.
 
 					*neobundle-options-type__protocol*
 		type__protocol		(String)

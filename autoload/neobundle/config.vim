@@ -304,10 +304,6 @@ function! neobundle#config#source(names, ...)
 
     call s:rtp_add(bundle)
 
-    if exists('g:loaded_neobundle')
-      call neobundle#call_hook('on_source', [bundle])
-    endif
-
     if exists('g:loaded_neobundle') || is_force
       " Reload script files.
       for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
@@ -367,6 +363,10 @@ function! neobundle#config#source(names, ...)
     let &l:filetype = &l:filetype
   elseif filetype_before !=# filetype_after
     execute 'doautocmd FileType' &filetype
+  endif
+
+  if exists('g:loaded_neobundle')
+    call neobundle#call_hook('on_source', [bundle])
   endif
 endfunction
 
