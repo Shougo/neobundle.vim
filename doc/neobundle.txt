@@ -1175,6 +1175,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-05-19
 - Fixed neobundle#source().
+- Fixed :NeoBundleClean behavior.
 
 2013-05-17
 - Fixed resource leak.

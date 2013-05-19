@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 May 2013.
+" Last Modified: 19 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -210,12 +210,14 @@ endfunction
 
 function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
-        \ "v:val.base . '/' . v:val.directory")
+        \ "(v:val.script_type != '') ?
+        \  v:val.base . '/' . v:val.directory : v:val.path")
   let all_dirs = split(neobundle#util#substitute_path_separator(
         \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n")
   if get(a:000, 0, '') == ''
     let x_dirs = filter(all_dirs,
-          \ "index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
+          \ "!neobundle#config#is_installed(fnamemodify(v:val, ':t'))
+          \ && index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
   else
     let x_dirs = map(neobundle#config#search_simple(a:000), 'v:val.path')
     if len(x_dirs) > len(a:000)

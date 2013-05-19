@@ -677,8 +677,6 @@ function! s:add_bundle(bundle, ...)
   if bundle.disabled
         \ || (!is_force && !bundle.overwrite &&
         \     has_key(s:neobundles, bundle.name))
-        \ || (bundle.gui && !has('gui_running'))
-        \ || (bundle.terminal && has('gui_running'))
     return
   endif
 
