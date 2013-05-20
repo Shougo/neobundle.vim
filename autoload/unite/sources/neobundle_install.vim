@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -168,20 +168,11 @@ function! s:init(context, bundle_names)
   call neobundle#installer#_load_install_info(
         \ a:context.source__bundles)
 
-  for bundle in filter(copy(a:context.source__bundles),
-        \ "v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
-    " Reinstall.
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
-
-    " Save info.
-    let arg = bundle.orig_arg
-
-    " Remove.
-    call neobundle#installer#clean(1, bundle.name)
-
-    call call('neobundle#config#bundle', [arg])
-  endfor
+  let reinstall_bundles =
+        \ neobundle#installer#get_reinstall_bundles(a:context.source__bundles)
+  if !empty(reinstall_bundles)
+    call neobundle#installer#reinstall(reinstall_bundles)
+  endif
 
   let a:context.source__max_bundles =
         \ len(a:context.source__bundles)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,7 +107,7 @@ command! -nargs=? -bang -bar
 command! -nargs=+ -bang -bar
       \ -complete=customlist,neobundle#complete_bundles
       \ NeoBundleReinstall
-      \ call neobundle#installer#reinstall(<q-args>)
+      \ call neobundle#installer#reinstall_names(<q-args>)
 
 command! -nargs=? -bang -bar
       \ NeoBundleList

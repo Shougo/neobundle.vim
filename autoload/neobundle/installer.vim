@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,20 +65,11 @@ function! neobundle#installer#install(bang, bundle_names)
 
   call neobundle#installer#clear_log()
 
-  for bundle in filter(copy(bundles),
-        \ "v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
-    " Reinstall.
-    call neobundle#installer#log(
-          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
-
-    " Save info.
-    let arg = bundle.orig_arg
-
-    " Remove.
-    call neobundle#installer#clean(1, bundle.name)
-
-    call call('neobundle#config#bundle', [arg])
-  endfor
+  let reinstall_bundles =
+        \ neobundle#installer#get_reinstall_bundles(bundles)
+  if !empty(reinstall_bundles)
+    call neobundle#installer#reinstall(reinstall_bundles)
+  endif
 
   let more_save = &more
   try
@@ -251,7 +242,7 @@ function! neobundle#installer#clean(bang, ...)
   endif
 endfunction
 
-function! neobundle#installer#reinstall(bundle_names)
+function! neobundle#installer#reinstall_names(bundle_names)
   let bundles = neobundle#config#search_simple(split(a:bundle_names))
 
   if empty(bundles)
@@ -262,7 +253,15 @@ function! neobundle#installer#reinstall(bundle_names)
     return
   endif
 
-  for bundle in bundles
+  call neobundle#installer#reinstall(bundles)
+endfunction
+
+function! neobundle#installer#reinstall(bundles)
+  for bundle in a:bundles
+    " Reinstall.
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
+
     " Save info.
     let arg = bundle.orig_arg
 
@@ -274,6 +273,14 @@ function! neobundle#installer#reinstall(bundle_names)
 
   " Install.
   call neobundle#installer#install(0, '')
+
+  call neobundle#installer#update(a:bundles)
+endfunction
+
+function! neobundle#installer#get_reinstall_bundles(bundles)
+  return filter(copy(a:bundles),
+        \ "neobundle#config#is_installed(v:val.name)
+        \  && v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
