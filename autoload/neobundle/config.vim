@@ -434,7 +434,7 @@ endfunction
 function! neobundle#config#parse_path(path, ...)
   let opts = get(a:000, 0, {})
   let site = get(opts, 'site', g:neobundle#default_site)
-  let path = a:path
+  let path = substitute(a:path, '/$', '', '')
 
   if path !~ ':'
     " Add default site.

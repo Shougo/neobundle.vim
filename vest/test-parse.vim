@@ -63,13 +63,23 @@ Context types
           \ {'type' : 'git', 'uri' :
           \ 'git@github.com:Shougo/neocomplcache.git',
           \  'name' : 'neocomplcache'}
+    ShouldEqual neobundle#config#parse_path(
+          \ 'git://git.wincent.com/command-t.git'),
+          \ {'type' : 'git', 'uri' :
+          \  'git://git.wincent.com/command-t.git',
+          \  'name' : 'command-t'}
+    ShouldEqual neobundle#config#parse_path(
+          \ 'https://github.com/Shougo/neocomplcache/'),
+          \ {'type' : 'git', 'uri' :
+          \ 'https://github.com/Shougo/neocomplcache.git',
+          \  'name' : 'neocomplcache'}
   End
 
   It parse svn repos
     ShouldEqual neobundle#config#parse_path(
           \ 'http://svn.macports.org/repository/macports/contrib/mpvim/'),
           \ {'type' : 'svn', 'uri' :
-          \  'http://svn.macports.org/repository/macports/contrib/mpvim/',
+          \  'http://svn.macports.org/repository/macports/contrib/mpvim',
           \  'name' : 'mpvim'}
   End
 

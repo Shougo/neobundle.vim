@@ -90,6 +90,8 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
+NeoBundle 'https://github.com/Shougo/neocomplcache/' " slash is added
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.
