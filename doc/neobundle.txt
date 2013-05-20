@@ -1175,6 +1175,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-05-20
 - Improved reinstall behavior.
+- Fixed neobundle#util#redraw_echo().
 
 2013-05-19
 - Fixed neobundle#source().
