@@ -790,7 +790,7 @@ OPTIONS 					*neobundle-options*
 		defined:
 
 			on_source		*neobundle-hooks-on_source*
-			Called after scripts are sourced. It is useful for
+			Called before scripts are sourced. It is useful for
 			plugin initialization in lazy bundles.
 			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
@@ -1176,6 +1176,7 @@ CHANGELOG					*neobundle-changelog*
 2013-05-20
 - Improved reinstall behavior.
 - Fixed neobundle#util#redraw_echo().
+- Changed on_source timing.
 
 2013-05-19
 - Fixed neobundle#source().

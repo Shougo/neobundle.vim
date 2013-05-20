@@ -241,8 +241,8 @@ function! neobundle#config(name, dict)
 endfunction
 
 function! neobundle#call_hook(hook_name, ...)
-  let bundles = empty(a:000) ?
-        \ neobundle#config#get_neobundles() : a:1
+  let bundles = neobundle#util#convert2list(
+        \ (empty(a:000) ? neobundle#config#get_neobundles() : a:1))
   let bundles = filter(copy(bundles),
         \ 'has_key(v:val.hooks, a:hook_name)')
 
