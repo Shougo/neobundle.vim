@@ -1172,8 +1172,9 @@ A: Did you use "debian.vim"? "debian.vim" changes 'runtimepath'.
 So it conflicts with neobundle. You should not use "debian.vim".
 
 Q: neobundle.vim fails update in submodule repository.
-A: I think the repository was changed to use submodule recently. You must
-reinstall the repository.
+A: neobundle.vim supports submodule repository. But I think the repository was
+changed recently from non-use submodule to use submodule. You must reinstall
+the repository.
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
