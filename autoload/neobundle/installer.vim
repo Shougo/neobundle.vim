@@ -638,6 +638,7 @@ function! s:install(bang, bundles)
     call filter(context.source__processes, '!v:val.eof')
 
     if empty(context.source__processes)
+          \ && context.source__number == context.source__max_bundles
       break
     endif
   endwhile
