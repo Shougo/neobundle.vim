@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 21 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -434,13 +434,23 @@ function! neobundle#config#parse_path(path, ...)
   let site = get(opts, 'site', g:neobundle#default_site)
   let path = substitute(a:path, '/$', '', '')
 
-  if path !~ ':'
+  if path !~ '^/\|^\a:' && path !~ ':'
     " Add default site.
     let path = site . ':' . path
   endif
 
+  let cwd = getcwd()
   for type in values(neobundle#config#get_types())
-    let detect = type.detect(path, opts)
+    try
+      if isdirectory(a:path)
+        execute 'lcd' fnameescape(a:path)
+      endif
+
+      let detect = type.detect(path, opts)
+    finally
+      execute 'lcd' fnameescape(cwd)
+    endtry
+
     if !empty(detect)
       return detect
     endif
@@ -778,6 +788,7 @@ function! s:get_default()
           \ 'dummy_mappings' : [],
           \ 'sourced' : 0,
           \ 'disabled' : 0,
+          \ 'local' : 0,
           \ }
   endif
 
@@ -788,6 +799,10 @@ endfunction
 
 function! s:init_bundle(bundle)
   let bundle = a:bundle
+  if !has_key(bundle, 'type') && get(bundle, 'local', 0)
+    " Default type.
+    let bundle.type = 'nosync'
+  endif
   if !has_key(bundle, 'type')
     call neobundle#installer#error(
           \ printf('Failed parse name "%s" and args %s',

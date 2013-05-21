@@ -1182,6 +1182,8 @@ CHANGELOG					*neobundle-changelog*
 2013-05-21
 - Improved documentation.
 - Improved neobundle#installer#get_reinstall_bundles().
+- Implemented auto detection in neobundle#local().
+- Changed install information(incompatible with old information).
 
 2013-05-20
 - Improved reinstall behavior.

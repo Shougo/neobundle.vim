@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 21 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -192,7 +192,8 @@ function! neobundle#local(localdir, options)
         \ "neobundle#util#substitute_path_separator(
         \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
     call neobundle#config#bundle([dir,
-          \ extend({ 'type' : 'nosync',
+          \ extend({
+          \   'local' : 1,
           \   'base' : neobundle#util#substitute_path_separator(
           \              fnamemodify(a:localdir, ':p')), }, a:options)])
   endfor
@@ -226,7 +227,8 @@ function! neobundle#get_not_installed_bundles(bundle_names)
   return filter(copy(bundles), "
         \  v:val.rtp != '' && v:val.type !=# 'nosync'
         \  && (!isdirectory(neobundle#util#expand(v:val.path))
-        \ || v:val.uri !=# v:val.installed_uri)")
+        \ || (v:val.path ==# v:val.installed_path
+        \     && v:val.uri !=# v:val.installed_uri))")
 endfunction
 
 function! neobundle#get(name)
