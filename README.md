@@ -1,6 +1,6 @@
 ## About
 
-NeoBundle is Vim plugin manager based on Vundle(https://github.com/gmarik/vundle).
+NeoBundle is Vim plugin manager inspired on Vundle(https://github.com/gmarik/vundle).
 
 ## Quick start
 

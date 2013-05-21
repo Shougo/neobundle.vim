@@ -41,7 +41,7 @@ Changelog		|neobundle-changelog|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle* is the ultimate Vim package manager. This plugin is based on
+*neobundle* is the ultimate Vim package manager. This plugin is inspired on
 Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
@@ -50,6 +50,7 @@ For example:
  * Revision lock
  * Supports svn/Mercurial repositories besides Git
  * Can use a different base path
+ * Vundle like syntax
 
 ==============================================================================
 USAGE						*neobundle-usage*
@@ -1172,6 +1173,9 @@ So it conflicts with neobundle. You should not use "debian.vim".
 
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-05-21
+- Improved documentation.
 
 2013-05-20
 - Improved reinstall behavior.
