@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 21 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -280,7 +280,8 @@ endfunction
 function! neobundle#installer#get_reinstall_bundles(bundles)
   return filter(copy(a:bundles),
         \ "neobundle#config#is_installed(v:val.name)
-        \  && v:val.type !=# 'nosync' && v:val.uri !=# v:val.installed_uri")
+        \  && v:val.path ==# v:val.installed_path &&
+        \     v:val.uri !=# v:val.installed_uri")
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
@@ -705,18 +706,18 @@ endfunction
 
 function! s:save_install_info(bundles)
   let s:install_info = {}
-  for bundle in filter(copy(a:bundles),
-        \ "v:val.type !=# 'nosync' && has_key(v:val, 'updated_time')")
+  for bundle in filter(copy(a:bundles), "has_key(v:val, 'updated_time')")
     " Note: Don't save nosync type.
     let s:install_info[bundle.name] = {
           \   'checked_time' : bundle.checked_time,
           \   'updated_time' : bundle.updated_time,
           \   'installed_uri' : bundle.installed_uri,
+          \   'installed_path' : bundle.path,
           \ }
   endfor
 
   call s:writefile('install_info',
-        \ ['1.0', string(s:install_info)])
+        \ ['2.0', string(s:install_info)])
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
@@ -730,7 +731,7 @@ function! neobundle#installer#_load_install_info(bundles)
         let list = readfile(install_info_path)
         let ver = list[0]
         sandbox let s:install_info = eval(list[1])
-        if ver !=# '1.0' || type(s:install_info) != type({})
+        if ver !=# '2.0' || type(s:install_info) != type({})
           let s:install_info = {}
         endif
       catch
@@ -742,6 +743,7 @@ function! neobundle#installer#_load_install_info(bundles)
         \ 'checked_time' : localtime(),
         \ 'updated_time' : localtime(),
         \ 'installed_uri' : v:val.uri,
+        \ 'installed_path' : v:val.path,
         \}))")
 
   return s:install_info

@@ -1181,6 +1181,7 @@ CHANGELOG					*neobundle-changelog*
 
 2013-05-21
 - Improved documentation.
+- Improved neobundle#installer#get_reinstall_bundles().
 
 2013-05-20
 - Improved reinstall behavior.
