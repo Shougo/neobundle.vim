@@ -113,6 +113,7 @@ function! neobundle#config#reload(bundles)
 
   " Call hooks.
   call neobundle#call_hook('on_source', a:bundles)
+  call neobundle#call_hook('on_post_source', a:bundles)
 endfunction
 
 function! neobundle#config#bundle(arg, ...)
@@ -365,6 +366,10 @@ function! neobundle#config#source(names, ...)
     let &l:filetype = &l:filetype
   elseif filetype_before !=# filetype_after
     execute 'doautocmd FileType' &filetype
+  endif
+
+  if exists('g:loaded_neobundle')
+    call neobundle#call_hook('on_post_source', bundles)
   endif
 endfunction
 
@@ -917,6 +922,7 @@ endfunction
 function! s:on_vim_enter()
   " Call hooks.
   call neobundle#call_hook('on_source')
+  call neobundle#call_hook('on_post_source')
 endfunction
 
 let &cpo = s:save_cpo

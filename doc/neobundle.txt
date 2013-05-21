@@ -790,9 +790,18 @@ OPTIONS 					*neobundle-options*
 		Specify hook functions. The following hook functions are
 		defined:
 
-			on_source		*neobundle-hooks-on_source*
+						*neobundle-hooks-on_source*
+			on_source
 			Called before scripts are sourced. It is useful for
 			plugin initialization in lazy bundles.
+			Note: In Vim initializing, calling the hooks are
+			delayed until |VimEnter|.
+			Note: To re-call on_source hook when reloading .vimrc,
+			you must call the hook in end of .vimrc.
+
+					*neobundle-hooks-on_post_source*
+			on_post_source
+			Called after scripts are sourced.
 			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
 			Note: To re-call on_source hook when reloading .vimrc,
@@ -1184,6 +1193,7 @@ CHANGELOG					*neobundle-changelog*
 - Improved neobundle#installer#get_reinstall_bundles().
 - Implemented auto detection in neobundle#local().
 - Changed install information(incompatible with old information).
+- Added on_post_source hook.
 
 2013-05-20
 - Improved reinstall behavior.

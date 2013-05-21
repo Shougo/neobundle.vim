@@ -248,7 +248,7 @@ function! neobundle#call_hook(hook_name, ...)
   let bundles = filter(copy(bundles),
         \ 'has_key(v:val.hooks, a:hook_name)')
 
-  if a:hook_name ==# 'on_source'
+  if a:hook_name ==# 'on_source' || a:hook_name ==# 'on_post_source'
     let bundles = filter(neobundle#config#tsort(filter(bundles,
           \ 'neobundle#config#is_sourced(v:val.name)')),
           \ 'has_key(v:val.hooks, a:hook_name)')
