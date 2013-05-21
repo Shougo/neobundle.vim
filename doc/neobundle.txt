@@ -41,7 +41,7 @@ Changelog		|neobundle-changelog|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle* is the ultimate Vim package manager. This plugin is inspired on
+*neobundle* is the ultimate a Vim package manager. This plugin is inspired by
 Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
