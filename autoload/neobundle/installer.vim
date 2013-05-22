@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 May 2013.
+" Last Modified: 22 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -278,11 +278,24 @@ function! neobundle#installer#reinstall(bundles)
 endfunction
 
 function! neobundle#installer#get_reinstall_bundles(bundles)
-  return filter(copy(a:bundles),
+  let reinstall_bundles = filter(copy(a:bundles),
         \ "neobundle#config#is_installed(v:val.name)
+        \  && v:val.name !=# 'neobundle.vim' &&
+        \     v:val.name !=# 'unite.vim'
         \  && !v:val.local &&
         \     v:val.path ==# v:val.installed_path &&
         \     v:val.uri !=# v:val.installed_uri")
+  if !empty(reinstall_bundles)
+    echomsg 'Reinstall bundles detected: '
+          \ string(map(copy(reinstall_bundles), 'v:val.name'))
+    if confirm('Reinstall bundles now?', "yes\nNo", 2) != 1
+      echo ''
+    endif
+
+    echo ''
+  endif
+
+  return reinstall_bundles
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
