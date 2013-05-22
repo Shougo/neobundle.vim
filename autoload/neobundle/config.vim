@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 May 2013.
+" Last Modified: 22 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -446,15 +446,7 @@ function! neobundle#config#parse_path(path, ...)
 
   let cwd = getcwd()
   for type in values(neobundle#config#get_types())
-    try
-      if isdirectory(a:path)
-        execute 'lcd' fnameescape(a:path)
-      endif
-
-      let detect = type.detect(path, opts)
-    finally
-      execute 'lcd' fnameescape(cwd)
-    endtry
+    let detect = type.detect(path, opts)
 
     if !empty(detect)
       return detect

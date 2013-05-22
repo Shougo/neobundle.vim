@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 May 2013.
+" Last Modified: 22 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,7 +52,7 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#git#default_protocol)
   endif
 
-  if isdirectory('.git')
+  if isdirectory(a:path.'/.git')
     " Local repository.
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'git' }
