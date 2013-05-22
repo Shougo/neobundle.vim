@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2012.
+" Last Modified: 22 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,6 +42,15 @@ function! s:type.detect(path, opts) "{{{
         \ && a:path =~? '[/.]svn[/.]'
     let uri = a:path
     let name = split(uri, '/')[-1]
+
+    let type = 'svn'
+  elseif a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
+    let name = substitute(split(a:path, ':')[-1],
+          \   '^//github.com/', '', '')
+    let uri =  'https://github.com/'. name
+    let uri .= '/trunk'
+
+    let name = split(name, '/')[-1]
 
     let type = 'svn'
   endif

@@ -495,10 +495,12 @@ OPTIONS 					*neobundle-options*
 		              needed)
 		"git"       : Git
 		"hg"        : Mercurial
+		"svn"       : Subversion
 
 		Example:
 >
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
 					*neobundle-options-script_type*
 		script_type		(String)
@@ -1185,11 +1187,17 @@ A: neobundle.vim supports submodule repository. But I think the repository was
 changed recently from non-use submodule to use submodule. You must reinstall
 the repository.
 
+Q: I want to install github plugins with Subversion.
+A:
+>
+		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
+<
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
 2013-05-22
 - Improved reinstall bundles.
+- Supported github in svn type.
 
 2013-05-21
 - Improved documentation.

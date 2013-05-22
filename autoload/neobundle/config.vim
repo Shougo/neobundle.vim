@@ -410,7 +410,7 @@ function! neobundle#config#rm_bundle(path)
   call neobundle#config#save_direct_bundles()
 endfunction
 
-function! neobundle#config#get_types()
+function! neobundle#config#get_types(...)
   if !exists('s:neobundle_types')
     " Load neobundle types.
     let s:neobundle_types = {}
@@ -426,7 +426,10 @@ function! neobundle#config#get_types()
     endfor
   endif
 
-  return s:neobundle_types
+  let type = get(a:000, 0, '')
+
+  return (type == '') ? s:neobundle_types :
+        \ filter(copy(s:neobundle_types), 'v:key ==# type')
 endfunction
 
 function! neobundle#config#get_types_list()
@@ -445,7 +448,8 @@ function! neobundle#config#parse_path(path, ...)
   endif
 
   let cwd = getcwd()
-  for type in values(neobundle#config#get_types())
+  for type in values(neobundle#config#get_types(
+        \ get(opts, 'type', '')))
     let detect = type.detect(path, opts)
 
     if !empty(detect)

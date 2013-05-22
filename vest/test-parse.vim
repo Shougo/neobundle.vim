@@ -81,6 +81,11 @@ Context types
           \ {'type' : 'svn', 'uri' :
           \  'http://svn.macports.org/repository/macports/contrib/mpvim',
           \  'name' : 'mpvim'}
+    ShouldEqual neobundle#config#parse_path(
+          \ 'thinca/vim-localrc', {'type' : 'svn'}),
+          \ {'type' : 'svn', 'uri' :
+          \  'https://github.com/thinca/vim-localrc/trunk',
+          \  'name' : 'vim-localrc'}
   End
 
   It parses bitbucket hg repos
@@ -113,8 +118,7 @@ Context types
           \ [{ 'type' : 'hg'}])
     ShouldEqual bundle.name, 'neobundle.vim'
     ShouldEqual bundle.type, 'hg'
-    ShouldEqual bundle.uri, g:neobundle#types#git#default_protocol.
-          \ '://github.com/Shougo/neobundle.vim.git'
+    ShouldEqual bundle.uri,  'git://github.com/Shougo/neobundle.vim.git'
   End
 
   It parses bitbucket git repos

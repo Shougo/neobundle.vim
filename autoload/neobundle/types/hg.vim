@@ -66,15 +66,15 @@ function! s:type.detect(path, opts) "{{{
   elseif a:path =~? '[/.]hg[/.@]'
           \ || (a:path =~# '\<https\?://bitbucket\.org/'
           \ || a:path =~# '\<https://code\.google\.com/'
-          \ || get(a:opts, 'type', '') ==# 'hg'
-          \    && a:path !~# '.git$')
+          \ || get(a:opts, 'type', '') ==# 'hg')
     let uri = a:path
     let name = split(a:path, '/')[-1]
   else
     return {}
   endif
 
-  return { 'name': name, 'uri': uri, 'type' : 'hg' }
+  return { 'name' : substitute(name, '.git$', '', ''),
+        \  'uri' : uri, 'type' : 'hg' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
   if !executable('hg')
