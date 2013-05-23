@@ -1195,6 +1195,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-23
+- Fixed gui and terminal attributes problem.
+
 2013-05-22
 - Improved reinstall bundles.
 - Supported github in svn type.

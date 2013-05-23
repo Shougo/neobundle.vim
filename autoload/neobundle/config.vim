@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 23 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -703,6 +703,12 @@ function! s:add_bundle(bundle, ...)
       call neobundle#config#source(depend.name)
     endif
   endfor
+
+  if (bundle.gui && !has('gui_running'))
+        \ || (bundle.terminal && has('gui_running'))
+    " Ignore load.
+    return
+  endif
 
   if !bundle.lazy && bundle.rtp != ''
     if bundle.sourced
