@@ -269,6 +269,7 @@ function! neobundle#config#source(names, ...)
     return
   endif
 
+  let filetype_out = ''
   redir => filetype_out
   silent filetype
   redir END
