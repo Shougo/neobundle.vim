@@ -56,6 +56,16 @@ function! s:type.detect(path, opts) "{{{
     " Local repository.
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'git' }
+  elseif a:path =~# '\<gist:\S\+\|://gist.github.com/'
+    let name = split(a:path, ':')[-1]
+    let uri =  (protocol ==# 'ssh') ?
+          \ 'git@gist.github.com:' . split(name, '/')[-1] :
+          \ protocol . '://gist.github.com/'. split(name, '/')[-1]
+
+    if uri !~ '\.git\s*$'
+      " Add .git suffix.
+      let uri .= '.git'
+    endif
   elseif a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
     if a:path =~ '/'
       let name = substitute(split(a:path, ':')[-1],
