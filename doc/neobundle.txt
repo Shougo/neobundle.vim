@@ -260,8 +260,6 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleUpdatesLog 				*:NeoBundleUpdatesLog*
 		Prints previous update logs.
 
-:NeoBundleLazy {repository} [[,{revision}] [,{options}]]
-:NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
 :NeoBundleLocal {base-directory-path}		*:NeoBundleLocal*
 		Registers a bundle from the directories in
 		{base-directory-path} like pathogen does.
@@ -271,7 +269,9 @@ COMMANDS 					*neobundle-commands*
 		bundles path.
 >
 		NeoBundleLocal ~/.vim/bundle
-
+<
+:NeoBundleLazy {repository} [[,{revision}] [,{options}]]
+:NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
 						*:NeoBundleLazy*
 		Registers a bundle, but doesn't add it to 'runtimepath'.
 >
