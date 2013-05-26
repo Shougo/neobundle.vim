@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 26 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,11 +61,6 @@ function! s:type.detect(path, opts) "{{{
     let uri =  (protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
           \ protocol . '://gist.github.com/'. split(name, '/')[-1]
-
-    if uri !~ '\.git\s*$'
-      " Add .git suffix.
-      let uri .= '.git'
-    endif
   elseif a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
     if a:path =~ '/'
       let name = substitute(split(a:path, ':')[-1],
@@ -81,11 +76,6 @@ function! s:type.detect(path, opts) "{{{
             \ protocol . '://github.com/vim-scripts/'
       let uri .= name
     endif
-
-    if uri !~ '\.git\s*$'
-      " Add .git suffix.
-      let uri .= '.git'
-    endif
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
         \ || get(a:opts, 'type', '') ==# 'git'
@@ -95,16 +85,16 @@ function! s:type.detect(path, opts) "{{{
       let uri = (protocol ==# 'ssh') ?
             \ 'git@bitbucket.org:' . name :
             \ protocol . '://bitbucket.org/' . name
-
-      if uri !~ '\.git\s*$'
-        " Add .git suffix.
-        let uri .= '.git'
-      endif
     else
       let uri = a:path
     endif
   else
     return {}
+  endif
+
+  if uri !~ '\.git\s*$'
+    " Add .git suffix.
+    let uri .= '.git'
   endif
 
   return { 'name': substitute(split(uri, '/')[-1],
