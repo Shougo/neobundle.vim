@@ -42,9 +42,15 @@ let s:type = {
       \ }
 
 function! s:type.detect(path, opts) "{{{
+  if isdirectory(a:path.'/.git')
+    " Local repository.
+    return { 'name' : split(a:path, '/')[-1],
+          \  'uri' : a:path, 'type' : 'git' }
+  endif
+
   let type = ''
 
-  let protocol = matchstr(a:path, '^[^:]\+\ze://')
+  let protocol = matchstr(a:path, '^.\{-}\ze://')
   if protocol == '' || a:path =~#
         \'\<\%(gh\|github\|bb\|bitbucket\):\S\+'
         \ || has_key(a:opts, 'type__protocol')
@@ -52,11 +58,7 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#git#default_protocol)
   endif
 
-  if isdirectory(a:path.'/.git')
-    " Local repository.
-    return { 'name' : split(a:path, '/')[-1],
-          \  'uri' : a:path, 'type' : 'git' }
-  elseif a:path =~# '\<gist:\S\+\|://gist.github.com/'
+  if a:path =~# '\<gist:\S\+\|://gist.github.com/'
     let name = split(a:path, ':')[-1]
     let uri =  (protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :

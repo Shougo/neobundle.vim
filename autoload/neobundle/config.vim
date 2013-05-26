@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 May 2013.
+" Last Modified: 26 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -414,28 +414,26 @@ endfunction
 function! neobundle#config#get_types(...)
   if !exists('s:neobundle_types')
     " Load neobundle types.
-    let s:neobundle_types = {}
+    let s:neobundle_types = []
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/neobundle/types/*.vim', 1), '\n'),
           \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
       for dict in neobundle#util#convert2list(define)
-        if !empty(dict) && !has_key(s:neobundle_types, dict.name)
-          let s:neobundle_types[dict.name] = dict
+        if !empty(dict)
+          call add(s:neobundle_types, dict)
         endif
       endfor
       unlet define
     endfor
+
+    let s:neobundle_types = neobundle#util#uniq(
+          \ s:neobundle_types, 'v:val.name')
   endif
 
   let type = get(a:000, 0, '')
 
   return (type == '') ? s:neobundle_types :
-        \ filter(copy(s:neobundle_types), 'v:key ==# type')
-endfunction
-
-function! neobundle#config#get_types_list()
-  let types = neobundle#config#get_types()
-  return [types['git']] + values(types)
+        \ get(filter(copy(s:neobundle_types), 'v:val.name ==# type'), 0, {})
 endfunction
 
 function! neobundle#config#parse_path(path, ...)
@@ -448,9 +446,19 @@ function! neobundle#config#parse_path(path, ...)
     let path = site . ':' . path
   endif
 
-  let cwd = getcwd()
-  for type in values(neobundle#config#get_types(
-        \ get(opts, 'type', '')))
+  if has_key(opts, 'type')
+    let type = neobundle#config#get_types(opts.type)
+    if empty(type)
+      return {}
+    endif
+
+    let types = [type]
+  else
+    let types = exists('s:neobundle_types') ?
+          \ s:neobundle_types : neobundle#config#get_types()
+  endif
+
+  for type in types
     let detect = type.detect(path, opts)
 
     if !empty(detect)

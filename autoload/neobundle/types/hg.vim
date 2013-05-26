@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 26 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,9 +42,15 @@ let s:type = {
       \ }
 
 function! s:type.detect(path, opts) "{{{
+  if isdirectory(a:path.'/.hg')
+    " Local repository.
+    return { 'name' : split(a:path, '/')[-1],
+          \  'uri' : a:path, 'type' : 'hg' }
+  endif
+
   let type = ''
 
-  let protocol = matchstr(a:path, '^[^:]\+\ze://')
+  let protocol = matchstr(a:path, '^.\{-}\ze://')
   if protocol == '' || a:path =~#
         \'\<\%(bb\|bitbucket\):\S\+'
         \ || has_key(a:opts, 'type__protocol')
@@ -52,11 +58,7 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#hg#default_protocol)
   endif
 
-  if isdirectory(a:path.'/.hg')
-    " Local repository.
-    return { 'name' : split(a:path, '/')[-1],
-          \  'uri' : a:path, 'type' : 'hg' }
-  elseif a:path =~# '\<\%(bb\|bitbucket\):'
+  if a:path =~# '\<\%(bb\|bitbucket\):'
     let name = substitute(split(a:path, ':')[-1],
           \   '^//bitbucket.org/', '', '')
     let uri = (protocol ==# 'ssh') ?

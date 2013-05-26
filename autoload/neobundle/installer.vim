@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 26 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -299,15 +299,15 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
 endfunction
 
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
-  let types = neobundle#config#get_types()
-  if !has_key(types, a:bundle.type)
+  let type = neobundle#config#get_types(a:bundle.type)
+  if empty(type)
     return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
           \ a:number, a:max, a:bundle.name, 'Unknown Type')]
   endif
 
   let is_directory = isdirectory(a:bundle.path)
 
-  let cmd = types[a:bundle.type].get_sync_command(a:bundle)
+  let cmd = type.get_sync_command(a:bundle)
 
   if cmd == ''
     return ['', 'Not supported sync action.']
@@ -325,13 +325,13 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
   let repo_dir = neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
 
-  let types = neobundle#config#get_types()
-  if !has_key(types, a:bundle.type)
+  let type = neobundle#config#get_types(a:bundle.type)
+  if empty(type)
     return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
           \ a:number, a:max, a:bundle.name, 'Unknown Type')]
   endif
 
-  let cmd = types[a:bundle.type].get_revision_lock_command(a:bundle)
+  let cmd = type.get_revision_lock_command(a:bundle)
 
   if cmd == ''
     return ['', '']
@@ -346,7 +346,7 @@ endfunction
 function! neobundle#installer#get_revision_number(bundle)
   let cwd = getcwd()
   try
-    let type = neobundle#config#get_types()[a:bundle.type]
+    let type = neobundle#config#get_types(a:bundle.type)
 
     if !isdirectory(a:bundle.path)
       return ''
@@ -368,7 +368,7 @@ endfunction
 function! s:get_commit_date(bundle)
   let cwd = getcwd()
   try
-    let type = neobundle#config#get_types()[a:bundle.type]
+    let type = neobundle#config#get_types(a:bundle.type)
 
     if !isdirectory(a:bundle.path) ||
           \ !has_key(type, 'get_commit_date_command')
@@ -391,7 +391,7 @@ endfunction
 function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
   let cwd = getcwd()
   try
-    let type = neobundle#config#get_types()[a:bundle.type]
+    let type = neobundle#config#get_types(a:bundle.type)
 
     if isdirectory(a:bundle.path)
       lcd `=a:bundle.path`
