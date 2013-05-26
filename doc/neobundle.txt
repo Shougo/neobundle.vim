@@ -522,6 +522,7 @@ OPTIONS 					*neobundle-options*
 		Available sites:
 		"github" or "gh"    : github.com (git)
 		"bitbucket" or "bb" : bitbucket.org (hg)
+		"gist"              : gist.github.com (git)
 
 						*neobundle-options-rtp*
 		rtp			(String)
@@ -862,6 +863,14 @@ OPTIONS 					*neobundle-options*
 		" For raw repository.
 		NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
 		      \ {'script_type' : 'plugin'}
+
+		" For gist repository.
+		NeoBundle 'gist:Shougo/656148', {
+		      \ 'name': 'everything.vim',
+		      \ 'script_type': 'plugin'}
+		NeoBundle 'gist:355360', {
+		      \ 'name': 'ambicmd.vim',
+		      \ 'script_type': 'plugin'}
 <
 		Neobundle supports revision (or branch) lock.
 		Note: The revision (or branch) is checked out in
