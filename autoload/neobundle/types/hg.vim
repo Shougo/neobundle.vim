@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 May 2013.
+" Last Modified: 27 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,18 +64,17 @@ function! s:type.detect(path, opts) "{{{
     let uri = (protocol ==# 'ssh') ?
           \ 'ssh://hg@bitbucket.org/' . name :
           \ protocol . '://bitbucket.org/' . name
-    let name = split(uri, '/')[-1]
   elseif a:path =~? '[/.]hg[/.@]'
           \ || (a:path =~# '\<https\?://bitbucket\.org/'
           \ || a:path =~# '\<https://code\.google\.com/'
           \ || get(a:opts, 'type', '') ==# 'hg')
     let uri = a:path
-    let name = split(a:path, '/')[-1]
   else
     return {}
   endif
 
-  return { 'name' : substitute(name, '.git$', '', ''),
+  return { 'name' : substitute(fnamemodify(
+        \             uri, ':t'), '.git$', '', ''),
         \  'uri' : uri, 'type' : 'hg' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{

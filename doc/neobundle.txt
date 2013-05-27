@@ -360,6 +360,12 @@ g:neobundle#enable_tail_path			*g:neobundle#enable_tail_path*
 
 		Defaults to 0.
 
+	 				*g:neobundle#enable_name_convertion*
+g:neobundle#enable_name_convertion
+		If you set to 1 and omit bundle name,
+		|neobundle-options-regular_name| is used as bundle name.
+		It is useful for absorbing difference of repository name.
+
 g:neobundle#rm_command				*g:neobundle#rm_command*
 		The command used to remove files for |:NeoBundleClean|.
 
@@ -444,6 +450,18 @@ OPTIONS 					*neobundle-options*
 		   \ {'name' : 'bar-foo'}
 		NeoBundle 'git://git.code.sf.net/p/atp-vim/code',
 		   \ {'name': 'atp-vim'}
+<
+					*neobundle-options-regular_name*
+		regular_name			(String)
+		Specify the normalized name of the bundle. This is used for
+		neobundle management for detect depends. If omitted, neobundle
+		will normalize the tail of the repository name.
+		Note: Must be unique across all bundles.
+		Normalized name example:
+		name            : normalized name
+>
+		unite.vim         unite
+		vim-quickrun      quickrun
 <
 		description		(String)
 		Plugin description.
@@ -1203,6 +1221,9 @@ A:
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-05-27
+- Added g:neobundle#enable_name_convertion.
 
 2013-05-23
 - Fixed gui and terminal attributes problem.

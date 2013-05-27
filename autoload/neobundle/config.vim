@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 May 2013.
+" Last Modified: 27 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,7 +98,7 @@ function! neobundle#config#reload(bundles)
   for line in split(s:redir('scriptnames'), "\n")
     let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
     if name != '' && name =~ '/autoload/'
-          \ && name !~ '/unite.vim/\|/neobundle.vim/'
+          \ && name !~ '/unite\%(\.vim\)\?/\|/neobundle\%(\.vim\)\?/'
           \ && filereadable(s:unify_path(name))
       call add(scripts, s:unify_path(name))
     endif
@@ -509,7 +509,7 @@ function! neobundle#config#init_bundle(name, opts)
         \ path, opts), opts)
 
   let bundle.orig_name = a:name
-  let bundle.orig_opts = a:opts
+  let bundle.orig_opts = opts
 
   let bundle = s:init_bundle(bundle)
 
@@ -805,6 +805,8 @@ function! s:get_default()
           \ 'sourced' : 0,
           \ 'disabled' : 0,
           \ 'local' : 0,
+          \ 'orig_name' : '',
+          \ 'orig_opts' : {},
           \ }
   endif
 
@@ -829,9 +831,18 @@ function! s:init_bundle(bundle)
   let bundle = extend(s:get_default(), bundle)
 
   if !has_key(bundle, 'name')
-    let bundle.name =
-          \ substitute(split(bundle.orig_name, '/')[-1], '\.git\s*$','','i')
+    let bundle.name = substitute(fnamemodify(
+          \ bundle.orig_name, ':t'), '\.git\s*$','','i')
   endif
+  if !has_key(bundle, 'normalized_name')
+    let bundle.normalized_name = substitute(fnamemodify(
+          \ bundle.name, ':r'), '^vim-', '', '')
+  endif
+  if !has_key(bundle.orig_opts, 'name') &&
+     \ g:neobundle#enable_name_convertion
+    let bundle.name = bundle.normalized_name
+  endif
+
   if !has_key(bundle, 'directory')
     let bundle.directory = bundle.name
   endif
@@ -853,7 +864,7 @@ function! s:init_bundle(bundle)
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
   endif
-  if bundle.name ==# 'neobundle.vim'
+  if bundle.normalized_name ==# 'neobundle'
     " Do not add runtimepath.
     let bundle.rtp = ''
   endif
@@ -898,9 +909,9 @@ endfunction
 function! neobundle#config#_parse_function_prefix(name)
   let function_prefix = tolower(fnamemodify(a:name, ':r'))
   let function_prefix = substitute(function_prefix,
-        \'^vim-', '','g')
+        \'^vim-', '','')
   let function_prefix = substitute(function_prefix,
-        \'^unite-', 'unite#sources#','g')
+        \'^unite-', 'unite#sources#','')
   let function_prefix = substitute(function_prefix,
         \'-', '_', 'g')
   return function_prefix
