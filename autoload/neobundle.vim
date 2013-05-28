@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 May 2013.
+" Last Modified: 28 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,7 +47,7 @@ call neobundle#util#set_default(
 call neobundle#util#set_default(
       \ 'g:neobundle#enable_tail_path', 1, 'g:neobundle_enable_tail_path')
 call neobundle#util#set_default(
-      \ 'g:neobundle#enable_name_convertion', 0)
+      \ 'g:neobundle#enable_name_conversion', 0)
 call neobundle#util#set_default(
       \ 'g:neobundle#default_options', {})
 "}}}

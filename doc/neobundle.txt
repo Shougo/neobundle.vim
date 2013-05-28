@@ -360,8 +360,8 @@ g:neobundle#enable_tail_path			*g:neobundle#enable_tail_path*
 
 		Defaults to 0.
 
-	 				*g:neobundle#enable_name_convertion*
-g:neobundle#enable_name_convertion
+	 				*g:neobundle#enable_name_conversion*
+g:neobundle#enable_name_conversion
 		If you set to 1 and omit bundle name,
 		|neobundle-options-regular_name| is used as bundle name.
 		It is useful for absorbing difference of repository name.
@@ -1223,7 +1223,7 @@ A:
 CHANGELOG					*neobundle-changelog*
 
 2013-05-27
-- Added g:neobundle#enable_name_convertion.
+- Added g:neobundle#enable_name_conversion.
 
 2013-05-23
 - Fixed gui and terminal attributes problem.

@@ -8,7 +8,7 @@ set cpo&vim
 Context types
   let g:neobundle#types#git#default_protocol = 'git'
   let g:neobundle#types#hg#default_protocol = 'https'
-  let g:neobundle#enable_name_convertion = 0
+  let g:neobundle#enable_name_conversion = 0
 
   It parses github git repos
     ShouldEqual neobundle#config#parse_path(
@@ -215,8 +215,8 @@ Context types
           \ 'vim-vcs'), 'vcs'
   End
 
-  It tests name convertion.
-    let g:neobundle#enable_name_convertion = 1
+  It tests name conversion.
+    let g:neobundle#enable_name_conversion = 1
 
     let bundle = neobundle#config#init_bundle(
           \ 'git://github.com/Shougo/neobundle.vim.git',
@@ -233,7 +233,7 @@ Context types
           \ [{ 'name' : 'vim-qt-syntax'}])
     ShouldEqual bundle.name, 'vim-qt-syntax'
 
-    let g:neobundle#enable_name_convertion = 0
+    let g:neobundle#enable_name_conversion = 0
   End
 End
 
