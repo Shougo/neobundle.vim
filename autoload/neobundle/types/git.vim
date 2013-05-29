@@ -112,7 +112,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'git pull --rebase && git submodule update --init --recursive'
+    let cmd = 'git pull --rebase ' . a:bundle.installed_uri . ' && git submodule update --init --recursive'
   endif
 
   return cmd
