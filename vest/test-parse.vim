@@ -229,6 +229,11 @@ Context types
     ShouldEqual bundle.name, 'qt-syntax'
 
     let bundle = neobundle#config#init_bundle(
+          \ 'https://bitbucket.org/kh3phr3n/qt-syntax-vim.git',
+          \ [{ 'type' : 'hg'}])
+    ShouldEqual bundle.name, 'qt-syntax'
+
+    let bundle = neobundle#config#init_bundle(
           \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
           \ [{ 'name' : 'vim-qt-syntax'}])
     ShouldEqual bundle.name, 'vim-qt-syntax'

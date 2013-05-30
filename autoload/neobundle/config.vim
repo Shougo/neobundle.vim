@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 May 2013.
+" Last Modified: 31 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -836,7 +836,7 @@ function! s:init_bundle(bundle)
   endif
   if !has_key(bundle, 'normalized_name')
     let bundle.normalized_name = substitute(fnamemodify(
-          \ bundle.name, ':r'), '^vim-', '', '')
+          \ bundle.name, ':r'), '^vim-\|-vim$', '', 'g')
   endif
   if !has_key(bundle.orig_opts, 'name') &&
      \ g:neobundle#enable_name_conversion
