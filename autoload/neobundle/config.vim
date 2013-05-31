@@ -835,8 +835,12 @@ function! s:init_bundle(bundle)
           \ bundle.orig_name, ':t'), '\.git\s*$','','i')
   endif
   if !has_key(bundle, 'normalized_name')
-    let bundle.normalized_name = substitute(fnamemodify(
-          \ bundle.name, ':r'), '^vim-\|-vim$', '', 'g')
+    let normalized_name = fnamemodify(bundle.name, ':r')
+    let normalized_name = substitute(normalized_name,
+          \ '^vim-', '', '')
+    let normalized_name = substitute(normalized_name,
+          \ '-vim$', '', '')
+    let bundle.normalized_name = normalized_name
   endif
   if !has_key(bundle.orig_opts, 'name') &&
      \ g:neobundle#enable_name_conversion
