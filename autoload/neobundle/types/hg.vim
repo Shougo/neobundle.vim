@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: hg.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 May 2013.
+" Last Modified: 31 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,8 +73,7 @@ function! s:type.detect(path, opts) "{{{
     return {}
   endif
 
-  return { 'name' : substitute(fnamemodify(
-        \             uri, ':t'), '.git$', '', ''),
+  return { 'name': neobundle#util#name_conversion(uri),
         \  'uri' : uri, 'type' : 'hg' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{

@@ -831,13 +831,8 @@ function! s:init_bundle(bundle)
   let bundle = extend(s:get_default(), bundle)
 
   if !has_key(bundle, 'name')
-    let bundle.name = substitute(fnamemodify(
-          \ bundle.orig_name, ':t'), '\.git\s*$','','i')
+    let bundle.name = neobundle#util#name_conversion(bundle.orig_name)
   endif
-
-  " Path conversion.
-  let bundle.name = substitute(neobundle#util#substitute_path_separator(
-        \ bundle.name), '/$', '', '')
 
   if !has_key(bundle, 'normalized_name')
     let normalized_name = fnamemodify(bundle.name, ':r')
@@ -849,6 +844,7 @@ function! s:init_bundle(bundle)
   endif
   if !has_key(bundle.orig_opts, 'name') &&
      \ g:neobundle#enable_name_conversion
+    " Use normalized name.
     let bundle.name = bundle.normalized_name
   endif
 

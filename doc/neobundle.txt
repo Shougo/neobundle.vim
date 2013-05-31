@@ -1222,6 +1222,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-05-31
+- Fixed name conversion.
+
 2013-05-27
 - Added g:neobundle#enable_name_conversion.
 

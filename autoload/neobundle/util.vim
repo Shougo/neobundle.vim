@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 31 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -187,6 +187,11 @@ function! neobundle#util#redraw_echo(expr) "{{{
     redraw!
     echo join(msg[i : i+height-1], "\n")
   endfor
+endfunction"}}}
+
+function! neobundle#util#name_conversion(path) "{{{
+  return fnamemodify(substitute(neobundle#util#substitute_path_separator(
+        \ a:path), '/$', '', ''), ':t:s?\c\.git\s*$??')
 endfunction"}}}
 
 " Escape a path for runtimepath.
