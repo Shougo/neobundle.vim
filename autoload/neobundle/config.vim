@@ -834,6 +834,11 @@ function! s:init_bundle(bundle)
     let bundle.name = substitute(fnamemodify(
           \ bundle.orig_name, ':t'), '\.git\s*$','','i')
   endif
+
+  " Path conversion.
+  let bundle.name = substitute(neobundle#util#substitute_path_separator(
+        \ bundle.name), '/$', '', '')
+
   if !has_key(bundle, 'normalized_name')
     let normalized_name = fnamemodify(bundle.name, ':r')
     let normalized_name = substitute(normalized_name,
