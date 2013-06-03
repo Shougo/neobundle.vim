@@ -44,6 +44,10 @@ NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/v
      NeoBundle 'rails.vim'
      " Non github repos
      NeoBundle 'git://git.wincent.com/command-t.git'
+     " gist repos
+     NeoBundle 'gist:Shougo/656148', {
+           \ 'name': 'everything.vim',
+           \ 'script_type': 'plugin'}
      " Non git repos
      NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
      NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
