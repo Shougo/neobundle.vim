@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jun 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -509,6 +509,7 @@ function! neobundle#config#init_bundle(name, opts)
         \ path, opts), opts)
 
   let bundle.orig_name = a:name
+  let bundle.orig_path = path
   let bundle.orig_opts = opts
 
   let bundle = s:init_bundle(bundle)

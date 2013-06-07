@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: nosync.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 May 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,28 @@ function! s:type.detect(path, opts) "{{{
   return {}
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
-  return ''
+  if isdirectory(a:bundle.path)
+    return ''
+  endif
+
+  " Try auto install.
+  let path = a:bundle.orig_path
+  let site = get(a:bundle, 'site', g:neobundle#default_site)
+  if path !~ '^/\|^\a:' && path !~ ':'
+    " Add default site.
+    let path = site . ':' . path
+  endif
+
+  for type in neobundle#config#get_types()
+    let detect = type.detect(path, a:bundle.orig_opts)
+
+    if !empty(detect)
+      return type.get_sync_command(
+            \ extend(copy(a:bundle), detect))
+    endif
+  endfor
+
+  return 'E: Failed to auto installation.'
 endfunction"}}}
 function! s:type.get_revision_number_command(bundle) "{{{
   return ''

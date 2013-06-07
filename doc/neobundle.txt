@@ -1222,6 +1222,9 @@ A:
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2013-06-07
+- Added auto install feature in nosync source.
+
 2013-06-06
 - Improved helptags behavior.
 
