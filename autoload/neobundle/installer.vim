@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 06 Jun 2013.
+" Last Modified: 09 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -671,6 +671,9 @@ function! s:update_tags()
         \ + neobundle#config#get_neobundles()
   call s:copy_bundle_files(bundles, 'doc')
 
+  call s:writefile('tags_info',
+        \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
+
   try
     execute 'helptags' fnameescape(neobundle#get_tags_dir())
   catch
@@ -838,6 +841,15 @@ endfunction
 function! neobundle#installer#clear_log()
   let s:log = []
   let s:updates_log = []
+endfunction
+
+function! neobundle#installer#get_tags_info()
+  let path = neobundle#get_neobundle_dir() . '/.neobundle/tags_info'
+  if !filereadable(path)
+    return []
+  endif
+
+  return readfile(path)
 endfunction
 
 function! s:writefile(path, list)

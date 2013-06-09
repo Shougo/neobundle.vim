@@ -329,9 +329,9 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleCheck					*:NeoBundleCheck*
 		Check plugins installation. If plugins are not installed, it
-		will execute |:NeoBundleInstall| automatically.
-		Note: |:NeoBundleCheck| cannot work in Windows or Mac OS X GUI
-		startup.
+		will execute |:NeoBundleInstall| automatically. This command
+		also check documentation directories and will execute
+		|:NeoBundleDocs| automatically.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
@@ -1221,6 +1221,9 @@ A:
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2013-06-09
+- Improved :NeoBundleCheck behavior.
 
 2013-06-08
 - Fixed neobundle#get_not_installed_bundles().
