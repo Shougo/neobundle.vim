@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Jun 2013.
+" Last Modified: 10 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,9 +117,11 @@ function! neobundle#installer#helptags(bundles)
   if !empty(help_dirs)
     call s:update_tags()
 
-    call neobundle#installer#log(
-          \ '[neobundle/install] Helptags: done. '
-          \ .len(help_dirs).' bundles processed')
+    if !has('vim_starting')
+      call neobundle#installer#log(
+            \ '[neobundle/install] Helptags: done. '
+            \ .len(help_dirs).' bundles processed')
+    endif
   endif
 
   return help_dirs
