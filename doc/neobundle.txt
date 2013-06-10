@@ -1219,6 +1219,11 @@ A:
 >
 		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
+Q: E715: Dictionary required (<SNR>5_init_bundle)
+https://github.com/Shougo/neobundle.vim/issues/107
+A: You must delete ".direct_bundles" file in bundle directories(like
+~/.vim/bundle).
+
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
