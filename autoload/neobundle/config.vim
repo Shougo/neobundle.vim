@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 18 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -340,8 +340,6 @@ function! neobundle#config#source(names, ...)
         endfor
       endfor
     endif
-
-    let bundle.resettable = 0
   endfor
 
   redir => filetype_after
@@ -795,7 +793,6 @@ function! s:get_default()
           \ 'gui' : 0,
           \ 'terminal' : 0,
           \ 'overwrite' : 1,
-          \ 'resettable' : 1,
           \ 'stay_same' : 0,
           \ 'hooks' : {},
           \ 'called_hooks' : {},
@@ -882,6 +879,8 @@ function! s:init_bundle(bundle)
     let bundle.path .= '/' . bundle.script_type
   endif
 
+  let bundle.resettable = !bundle.lazy
+
   if !has_key(bundle.autoload, 'function_prefix')
         \ && isdirectory(bundle.rtp . '/autoload')
     let bundle.autoload.function_prefix =
@@ -899,6 +898,7 @@ function! s:init_bundle(bundle)
     endif
     let depend_bundle = neobundle#config#bundle(depend, 1)
     let depend_bundle.lazy = bundle.lazy
+    let depend_bundle.resettable = bundle.resettable
     let depend_bundle.overwrite = 0
     call add(_, depend_bundle)
 
