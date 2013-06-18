@@ -202,16 +202,16 @@ Context types
   End
 
   It parses function_prefix
-    ShouldEqual neobundle#config#_parse_function_prefix(
+    ShouldEqual neobundle#parser#_function_prefix(
           \ 'neobundle.vim'), 'neobundle'
 
-    ShouldEqual neobundle#config#_parse_function_prefix(
+    ShouldEqual neobundle#parser#_function_prefix(
           \ 'unite-tag'), 'unite#sources#tag'
 
-    ShouldEqual neobundle#config#_parse_function_prefix(
+    ShouldEqual neobundle#parser#_function_prefix(
           \ 'TweetVim'), 'tweetvim'
 
-    ShouldEqual neobundle#config#_parse_function_prefix(
+    ShouldEqual neobundle#parser#_function_prefix(
           \ 'vim-vcs'), 'vcs'
   End
 

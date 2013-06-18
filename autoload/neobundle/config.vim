@@ -396,7 +396,7 @@ function! neobundle#config#init_bundle(name, opts)
   let bundle.orig_path = path
   let bundle.orig_opts = opts
 
-  let bundle = s:init_bundle(bundle)
+  let bundle = neobundle#init#_bundle(bundle)
 
   return bundle
 endfunction
@@ -514,7 +514,7 @@ function! neobundle#config#load_direct_bundles()
   else
     sandbox let s:direct_neobundles =
           \ eval(get(readfile(path), 0, '[]'))
-    call map(s:direct_neobundles, 's:init_bundle(v:val)')
+    call map(s:direct_neobundles, 'neobundle#init#_bundle(v:val)')
   endif
 
   call extend(s:neobundles, s:direct_neobundles)
@@ -562,7 +562,7 @@ function! neobundle#config#set(name, dict)
     return
   endif
 
-  let bundle = s:init_bundle(extend(bundle, a:dict))
+  let bundle = neobundle#init#_bundle(extend(bundle, a:dict))
   if bundle.lazy && bundle.sourced &&
         \ !get(s:sourced_neobundles, bundle.name, 0)
     " Remove from runtimepath.
@@ -698,116 +698,6 @@ function! s:get_default()
   let s:default_bundle.base = neobundle#get_neobundle_dir()
 
   return deepcopy(s:default_bundle)
-endfunction
-
-function! s:init_bundle(bundle)
-  let bundle = a:bundle
-  if !has_key(bundle, 'type') && get(bundle, 'local', 0)
-    " Default type.
-    let bundle.type = 'nosync'
-  endif
-  if !has_key(bundle, 'type')
-    call neobundle#installer#error(
-          \ printf('Failed parse name "%s" and args %s',
-          \   a:bundle.orig_name, string(a:bundle.orig_opts)))
-    return {}
-  endif
-
-  let bundle = extend(s:get_default(), bundle)
-
-  if !has_key(bundle, 'name')
-    let bundle.name = neobundle#util#name_conversion(bundle.orig_name)
-  endif
-
-  if !has_key(bundle, 'normalized_name')
-    let normalized_name = fnamemodify(bundle.name, ':r')
-    let normalized_name = substitute(normalized_name,
-          \ '^vim-', '', '')
-    let normalized_name = substitute(normalized_name,
-          \ '-vim$', '', '')
-    let bundle.normalized_name = normalized_name
-  endif
-  if !has_key(bundle.orig_opts, 'name') &&
-     \ g:neobundle#enable_name_conversion
-    " Use normalized name.
-    let bundle.name = bundle.normalized_name
-  endif
-
-  if !has_key(bundle, 'directory')
-    let bundle.directory = bundle.name
-  endif
-
-  let bundle.base = s:expand_path(bundle.base)
-  if bundle.rev != ''
-    let bundle.directory .= '_' . substitute(bundle.rev,
-          \ '[^[:alnum:]_.-]', '', 'g')
-  endif
-
-  let bundle.path = s:expand_path(bundle.base.'/'.bundle.directory)
-
-  let rtp = bundle.rtp
-  " Check relative path.
-  let bundle.rtp = (rtp =~ '^\%(/\|\~\|\a\+:\)') ?
-        \ rtp : (bundle.path.'/'.rtp)
-  let bundle.rtp = s:expand_path(bundle.rtp)
-  if bundle.rtp =~ '[/\\]$'
-    " Chomp.
-    let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
-  endif
-  if bundle.normalized_name ==# 'neobundle'
-    " Do not add runtimepath.
-    let bundle.rtp = ''
-  endif
-
-  if bundle.script_type != ''
-    " Add script_type.
-    " Note: To check by neobundle#config#is_installed().
-    let bundle.path .= '/' . bundle.script_type
-  endif
-
-  let bundle.resettable = !bundle.lazy
-
-  if !has_key(bundle.autoload, 'function_prefix')
-        \ && isdirectory(bundle.rtp . '/autoload')
-    let bundle.autoload.function_prefix =
-          \ neobundle#config#_parse_function_prefix(bundle.name)
-  endif
-  if !has_key(bundle, 'augroup')
-    let bundle.augroup = bundle.name
-  endif
-
-  " Parse depends.
-  let _ = []
-  for depend in neobundle#util#convert2list(bundle.depends)
-    if type(depend) == type('')
-      let depend = string(depend)
-    endif
-    let depend_bundle = neobundle#parser#bundle(depend, 1)
-    let depend_bundle.lazy = bundle.lazy
-    let depend_bundle.resettable = bundle.resettable
-    let depend_bundle.overwrite = 0
-    call add(_, depend_bundle)
-
-    unlet depend
-  endfor
-  let bundle.depends = _
-
-  if neobundle#config#is_sourced(bundle.name)
-    let bundle.sourced = 1
-  endif
-
-  return bundle
-endfunction
-
-function! neobundle#config#_parse_function_prefix(name)
-  let function_prefix = tolower(fnamemodify(a:name, ':r'))
-  let function_prefix = substitute(function_prefix,
-        \'^vim-', '','')
-  let function_prefix = substitute(function_prefix,
-        \'^unite-', 'unite#sources#','')
-  let function_prefix = substitute(function_prefix,
-        \'-', '_', 'g')
-  return function_prefix
 endfunction
 
 function! neobundle#config#tsort(bundles)

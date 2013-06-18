@@ -188,17 +188,7 @@ function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
 endfunction
 
 function! neobundle#local(localdir, options)
-  for dir in map(filter(split(glob(fnamemodify(
-        \ neobundle#util#expand(a:localdir), ':p')
-        \ . '*'), '\n'), "isdirectory(v:val)"),
-        \ "neobundle#util#substitute_path_separator(
-        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
-    call neobundle#parser#bundle([dir,
-          \ extend({
-          \   'local' : 1,
-          \   'base' : neobundle#util#substitute_path_separator(
-          \              fnamemodify(a:localdir, ':p')), }, a:options)])
-  endfor
+  return neobundle#parser#local(a:localdir, a:options)
 endfunction
 
 function! neobundle#exists_not_installed_bundles()

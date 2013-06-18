@@ -135,6 +135,31 @@ function! s:parse_arg(arg) "{{{
   return bundle
 endfunction"}}}
 
+function! neobundle#parser#local(localdir, options)
+  for dir in map(filter(split(glob(fnamemodify(
+        \ neobundle#util#expand(a:localdir), ':p')
+        \ . '*'), '\n'), "isdirectory(v:val)"),
+        \ "neobundle#util#substitute_path_separator(
+        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
+    call neobundle#parser#bundle([dir,
+          \ extend({
+          \   'local' : 1,
+          \   'base' : neobundle#util#substitute_path_separator(
+          \              fnamemodify(a:localdir, ':p')), }, a:options)])
+  endfor
+endfunction
+
+function! neobundle#parser#_function_prefix(name) "{{{
+  let function_prefix = tolower(fnamemodify(a:name, ':r'))
+  let function_prefix = substitute(function_prefix,
+        \'^vim-', '','')
+  let function_prefix = substitute(function_prefix,
+        \'^unite-', 'unite#sources#','')
+  let function_prefix = substitute(function_prefix,
+        \'-', '_', 'g')
+  return function_prefix
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
