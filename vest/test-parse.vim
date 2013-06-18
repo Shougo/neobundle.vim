@@ -186,7 +186,7 @@ Context types
   End
 
   It fetches plugins.
-    let bundle = neobundle#config#fetch_bundle(
+    let bundle = neobundle#parser#fetch(
           \ string('accountname/reponame.git'))
     ShouldEqual bundle.rtp, ''
   End

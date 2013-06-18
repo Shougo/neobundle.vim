@@ -70,16 +70,12 @@ function! neobundle#config#get_direct_neobundles()
   return values(s:direct_neobundles)
 endfunction
 
-function! s:compare_names(a, b)
-  return (a:a.name >? a:b.name) ? 1 : -1
-endfunction
-
 function! neobundle#config#reload(bundles)
   if empty(a:bundles)
     return
   endif
 
-  call s:rtp_add_bundles(a:bundles)
+  call filter(copy(a:bundles), 's:rtp_add(v:val)')
 
   " Delete old g:loaded_xxx variables.
   for var_name in keys(g:)
@@ -114,114 +110,6 @@ function! neobundle#config#reload(bundles)
   " Call hooks.
   call neobundle#call_hook('on_source', a:bundles)
   call neobundle#call_hook('on_post_source', a:bundles)
-endfunction
-
-function! neobundle#config#bundle(arg, ...)
-  let bundle = s:parse_arg(a:arg)
-  let is_parse_only = get(a:000, 0, 0)
-  if empty(bundle) || is_parse_only
-    return bundle
-  endif
-
-  call neobundle#config#add(bundle)
-
-  return bundle
-endfunction
-
-function! neobundle#config#lazy_bundle(arg)
-  let bundle = s:parse_arg(a:arg)
-  if empty(bundle)
-    return {}
-  endif
-
-  " Update lazy flag.
-  let bundle.lazy = 1
-  let bundle.resettable = 0
-  for depend in bundle.depends
-    let depend.lazy = bundle.lazy
-    let depend.resettable = 0
-  endfor
-
-  call neobundle#config#add(bundle)
-
-  return bundle
-endfunction
-
-function! neobundle#config#fetch_bundle(arg)
-  let bundle = s:parse_arg(a:arg)
-  if empty(bundle)
-    return {}
-  endif
-
-  " Clear runtimepath.
-  let bundle.rtp = ''
-
-  call neobundle#config#add(bundle)
-
-  return bundle
-endfunction
-
-function! neobundle#config#depends_bundle(arg)
-  let bundle = s:parse_arg(a:arg)
-  if empty(bundle)
-    return {}
-  endif
-
-  if !has_key(s:neobundles, bundle.name)
-    let bundle.overwrite = 0
-    let bundle.resettable = 0
-
-    call neobundle#config#add(bundle)
-
-    " Install bundle automatically.
-    silent call neobundle#installer#install(0, bundle.name)
-  endif
-
-  " Load scripts.
-  call neobundle#config#source(bundle.name)
-
-  return bundle
-endfunction
-
-function! neobundle#config#direct_bundle(arg)
-  let bundle = neobundle#config#bundle(a:arg)
-
-  if empty(bundle)
-    return {}
-  endif
-
-  let path = bundle.path
-
-  let s:direct_neobundles[path] = bundle
-  call neobundle#config#save_direct_bundles()
-
-  " Direct install.
-  call neobundle#installer#install(0, bundle.name)
-
-  return bundle
-endfunction
-
-function! s:parse_arg(arg)
-  let arg = type(a:arg) == type([]) ?
-   \ string(a:arg) : '[' . a:arg . ']'
-  sandbox let args = eval(arg)
-  if empty(args)
-    return {}
-  endif
-
-  let bundle = neobundle#config#init_bundle(
-        \ args[0], args[1:])
-  if empty(bundle)
-    return {}
-  endif
-
-  let bundle.orig_arg = a:arg
-
-  if !empty(bundle.external_commands)
-    call neobundle#config#check_external_commands(bundle)
-  endif
-
-  return bundle
 endfunction
 
 function! neobundle#config#source_bundles(bundles)
@@ -478,10 +366,6 @@ function! s:rtp_rm(bundle)
   if isdirectory(a:bundle.rtp.'/after')
     execute 'set rtp-='.fnameescape(a:bundle.rtp.'/after')
   endif
-endfunction
-
-function! s:rtp_add_bundles(bundles)
-  call filter(copy(a:bundles), 's:rtp_add(v:val)')
 endfunction
 
 function! s:rtp_add(bundle) abort
@@ -898,7 +782,7 @@ function! s:init_bundle(bundle)
     if type(depend) == type('')
       let depend = string(depend)
     endif
-    let depend_bundle = neobundle#config#bundle(depend, 1)
+    let depend_bundle = neobundle#parser#bundle(depend, 1)
     let depend_bundle.lazy = bundle.lazy
     let depend_bundle.resettable = bundle.resettable
     let depend_bundle.overwrite = 0

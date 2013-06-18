@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Jun 2013.
+" Last Modified: 18 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,29 +57,29 @@ let s:neobundle_dir = get(
       \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
 
 command! -nargs=+ NeoBundle
-      \ call neobundle#config#bundle(
+      \ call neobundle#parser#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -bar NeoBundleCheck
       \ call neobundle#check()
 
 command! -nargs=+ NeoBundleLazy
-      \ call neobundle#config#lazy_bundle(
+      \ call neobundle#parser#lazy(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=+ NeoBundleFetch
-      \ call neobundle#config#fetch_bundle(
+      \ call neobundle#parser#fetch(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=1 -complete=dir NeoBundleLocal
       \ call neobundle#local(<q-args>, {})
 
 command! -nargs=+ NeoBundleDepends
-      \ call neobundle#config#depends_bundle(
+      \ call neobundle#parser#depends(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=+ NeoBundleDirectInstall
-      \ call neobundle#config#direct_bundle(
+      \ call neobundle#parser#direct(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=* -bar
@@ -193,7 +193,7 @@ function! neobundle#local(localdir, options)
         \ . '*'), '\n'), "isdirectory(v:val)"),
         \ "neobundle#util#substitute_path_separator(
         \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
-    call neobundle#config#bundle([dir,
+    call neobundle#parser#bundle([dir,
           \ extend({
           \   'local' : 1,
           \   'base' : neobundle#util#substitute_path_separator(
