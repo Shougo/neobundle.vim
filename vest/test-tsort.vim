@@ -11,7 +11,7 @@ endfunction
 
 function! s:clear_bundles(names)
   for bundle in neobundle#config#search(a:names)
-    call neobundle#config#rm_bundle(bundle.path)
+    call neobundle#config#rm(bundle.path)
   endfor
 endfunction
 

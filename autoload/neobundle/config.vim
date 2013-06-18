@@ -123,7 +123,7 @@ function! neobundle#config#bundle(arg, ...)
     return bundle
   endif
 
-  call s:add_bundle(bundle)
+  call neobundle#config#add(bundle)
 
   return bundle
 endfunction
@@ -140,7 +140,7 @@ function! neobundle#config#lazy_bundle(arg)
     let depend.lazy = bundle.lazy
   endfor
 
-  call s:add_bundle(bundle)
+  call neobundle#config#add(bundle)
 
   return bundle
 endfunction
@@ -154,7 +154,7 @@ function! neobundle#config#fetch_bundle(arg)
   " Clear runtimepath.
   let bundle.rtp = ''
 
-  call s:add_bundle(bundle)
+  call neobundle#config#add(bundle)
 
   return bundle
 endfunction
@@ -169,7 +169,7 @@ function! neobundle#config#depends_bundle(arg)
     let bundle.overwrite = 0
     let bundle.resettable = 0
 
-    call s:add_bundle(bundle)
+    call neobundle#config#add(bundle)
 
     " Install bundle automatically.
     silent call neobundle#installer#install(0, bundle.name)
@@ -393,7 +393,7 @@ function! neobundle#config#is_installed(name)
   return isdirectory(get(neobundle#config#get(a:name), 'path', ''))
 endfunction
 
-function! neobundle#config#rm_bundle(path)
+function! neobundle#config#rm(path)
   for bundle in filter(neobundle#config#get_neobundles(),
         \ 'v:val.path ==# a:path')
     call s:rtp_rm(bundle)
@@ -684,10 +684,10 @@ function! neobundle#config#set(name, dict)
     let bundle.sourced = 0
   endif
 
-  call s:add_bundle(bundle, 1)
+  call neobundle#config#add(bundle, 1)
 endfunction
 
-function! s:add_bundle(bundle, ...)
+function! neobundle#config#add(bundle, ...)
   let bundle = a:bundle
   let is_force = get(a:000, 0, 0)
 
@@ -704,7 +704,7 @@ function! s:add_bundle(bundle, ...)
   " Add depends.
   for depend in a:bundle.depends
     if !has_key(s:neobundles, depend.name)
-      call s:add_bundle(depend)
+      call neobundle#config#add(depend)
     elseif !depend.lazy
       " Load automatically.
       call neobundle#config#source(depend.name)
