@@ -611,8 +611,10 @@ function! neobundle#config#add(bundle, ...)
       call neobundle#config#source(bundle.name)
     endif
 
-    let bundle.sourced = 1
-    call s:rtp_add(bundle)
+    if !bundle.sourced
+      let bundle.sourced = 1
+      call s:rtp_add(bundle)
+    endif
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
     for item in neobundle#util#convert2list(
