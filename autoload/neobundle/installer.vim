@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Jun 2013.
+" Last Modified: 19 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -106,7 +106,7 @@ endfunction
 function! neobundle#installer#update(bundles)
   call neobundle#installer#helptags(
         \ neobundle#config#get_neobundles())
-  call neobundle#config#reload(a:bundles)
+  call s:reload(a:bundles)
 
   call s:save_install_info(neobundle#config#get_neobundles())
 endfunction
@@ -872,6 +872,48 @@ function! s:cleandir(path)
     call delete(file)
   endfor
 endfunction
+
+function! s:reload(bundles) "{{{
+  if empty(a:bundles)
+    return
+  endif
+
+  call filter(copy(a:bundles), 'neobundle#config#rtp_add(v:val)')
+
+  " Delete old g:loaded_xxx variables.
+  for var_name in keys(g:)
+    if var_name =~ '^loaded_'
+      execute 'unlet!' var_name
+    endif
+  endfor
+
+  silent! runtime! ftdetect/**/*.vim
+  silent! runtime! after/ftdetect/**/*.vim
+  silent! runtime! plugin/**/*.vim
+  silent! runtime! after/plugin/**/*.vim
+
+  " Reload autoload scripts.
+  let scripts = []
+  for line in split(s:redir('scriptnames'), "\n")
+    let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
+    if name != '' && name =~ '/autoload/'
+          \ && name !~ '/unite\%(\.vim\)\?/\|/neobundle\%(\.vim\)\?/'
+          \ && filereadable(unite#util#unify_path(name))
+      call add(scripts, unite#util#unify_path(name))
+    endif
+  endfor
+
+  for script in scripts
+    for bundle in filter(copy(a:bundles),
+          \ 'stridx(script, v:val.path) >= 0')
+      silent! execute source `=script`
+    endfor
+  endfor
+
+  " Call hooks.
+  call neobundle#call_hook('on_source', a:bundles)
+  call neobundle#call_hook('on_post_source', a:bundles)
+endfunction"}}}
 
 
 let &cpo = s:save_cpo

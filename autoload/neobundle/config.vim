@@ -33,13 +33,13 @@ if !exists('s:neobundles')
   let s:sourced_neobundles = {}
 endif
 
-function! neobundle#config#init()
+function! neobundle#config#init() "{{{
   filetype off
 
   for bundle in values(s:neobundles)
     if bundle.resettable
       " Reset.
-      call s:rtp_rm(bundle)
+      call neobundle#config#rtp_rm(bundle)
 
       call remove(s:neobundles, bundle.name)
     endif
@@ -51,75 +51,33 @@ function! neobundle#config#init()
   augroup neobundle
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
-endfunction
+endfunction"}}}
 
-function! neobundle#config#get(name)
+function! neobundle#config#get(name) "{{{
   return get(s:neobundles, a:name, {})
-endfunction
+endfunction"}}}
 
-function! neobundle#config#get_neobundles()
+function! neobundle#config#get_neobundles() "{{{
   return values(s:neobundles)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#get_autoload_bundles()
+function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
         \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
-endfunction
+endfunction"}}}
 
-function! neobundle#config#get_direct_neobundles()
+function! neobundle#config#get_direct_neobundles() "{{{
   return values(s:direct_neobundles)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#reload(bundles)
-  if empty(a:bundles)
-    return
-  endif
-
-  call filter(copy(a:bundles), 's:rtp_add(v:val)')
-
-  " Delete old g:loaded_xxx variables.
-  for var_name in keys(g:)
-    if var_name =~ '^loaded_'
-      execute 'unlet!' var_name
-    endif
-  endfor
-
-  silent! runtime! ftdetect/**/*.vim
-  silent! runtime! after/ftdetect/**/*.vim
-  silent! runtime! plugin/**/*.vim
-  silent! runtime! after/plugin/**/*.vim
-
-  " Reload autoload scripts.
-  let scripts = []
-  for line in split(s:redir('scriptnames'), "\n")
-    let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
-    if name != '' && name =~ '/autoload/'
-          \ && name !~ '/unite\%(\.vim\)\?/\|/neobundle\%(\.vim\)\?/'
-          \ && filereadable(s:unify_path(name))
-      call add(scripts, s:unify_path(name))
-    endif
-  endfor
-
-  for script in scripts
-    for bundle in filter(copy(a:bundles),
-          \ 'stridx(script, v:val.path) >= 0')
-      silent! execute source `=script`
-    endfor
-  endfor
-
-  " Call hooks.
-  call neobundle#call_hook('on_source', a:bundles)
-  call neobundle#call_hook('on_post_source', a:bundles)
-endfunction
-
-function! neobundle#config#source_bundles(bundles)
+function! neobundle#config#source_bundles(bundles) "{{{
   if !empty(a:bundles)
     call neobundle#config#source(map(copy(a:bundles),
           \ "type(v:val) == type({}) ? v:val.name : v:val"))
   endif
-endfunction
+endfunction"}}}
 
-function! neobundle#config#check_not_exists(names, ...)
+function! neobundle#config#check_not_exists(names, ...) "{{{
   " For infinite loop.
   let self = get(a:000, 0, [])
 
@@ -136,9 +94,9 @@ function! neobundle#config#check_not_exists(names, ...)
   endfor
 
   return neobundle#util#uniq(_)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#source(names, ...)
+function! neobundle#config#source(names, ...) "{{{
   let is_force = get(a:000, 0, 1)
 
   let names = neobundle#util#convert2list(a:names)
@@ -191,10 +149,10 @@ function! neobundle#config#source(names, ...)
     let bundle.dummy_commands = []
 
     if has_key(s:neobundles, bundle.name)
-      call s:rtp_rm(bundle)
+      call neobundle#config#rtp_rm(bundle)
     endif
 
-    call s:rtp_add(bundle)
+    call neobundle#config#rtp_add(bundle)
 
     if exists('g:loaded_neobundle') || is_force
       call neobundle#call_hook('on_source', bundle)
@@ -260,33 +218,33 @@ function! neobundle#config#source(names, ...)
   if exists('g:loaded_neobundle')
     call neobundle#call_hook('on_post_source', bundles)
   endif
-endfunction
+endfunction"}}}
 
-function! neobundle#config#disable(arg)
+function! neobundle#config#disable(arg) "{{{
   let bundle_names = neobundle#config#search(split(a:arg))
   if empty(bundle_names)
     return
   endif
 
   for bundle in bundle_names
-    call s:rtp_rm(bundle)
+    call neobundle#config#rtp_rm(bundle)
     let bundle.sourced = 0
     let bundle.disabled = 1
   endfor
-endfunction
+endfunction"}}}
 
-function! neobundle#config#is_sourced(name)
+function! neobundle#config#is_sourced(name) "{{{
   return get(neobundle#config#get(a:name), 'sourced', 0)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#is_installed(name)
+function! neobundle#config#is_installed(name) "{{{
   return isdirectory(get(neobundle#config#get(a:name), 'path', ''))
-endfunction
+endfunction"}}}
 
-function! neobundle#config#rm(path)
+function! neobundle#config#rm(path) "{{{
   for bundle in filter(neobundle#config#get_neobundles(),
         \ 'v:val.path ==# a:path')
-    call s:rtp_rm(bundle)
+    call neobundle#config#rtp_rm(bundle)
     call remove(s:neobundles, bundle.name)
   endfor
 
@@ -297,9 +255,9 @@ function! neobundle#config#rm(path)
   endfor
 
   call neobundle#config#save_direct_bundles()
-endfunction
+endfunction"}}}
 
-function! neobundle#config#get_types(...)
+function! neobundle#config#get_types(...) "{{{
   if !exists('s:neobundle_types')
     " Load neobundle types.
     let s:neobundle_types = []
@@ -322,53 +280,20 @@ function! neobundle#config#get_types(...)
 
   return (type == '') ? s:neobundle_types :
         \ get(filter(copy(s:neobundle_types), 'v:val.name ==# type'), 0, {})
-endfunction
+endfunction"}}}
 
-function! neobundle#config#parse_path(path, ...)
-  let opts = get(a:000, 0, {})
-  let site = get(opts, 'site', g:neobundle#default_site)
-  let path = substitute(a:path, '/$', '', '')
+function! neobundle#config#rtp_rm_all_bundles() "{{{
+  call filter(values(s:neobundles), 'neobundle#config#rtp_rm(v:val)')
+endfunction"}}}
 
-  if path !~ '^/\|^\a:' && path !~ ':'
-    " Add default site.
-    let path = site . ':' . path
-  endif
-
-  if has_key(opts, 'type')
-    let type = neobundle#config#get_types(opts.type)
-    if empty(type)
-      return {}
-    endif
-
-    let types = [type]
-  else
-    let types = exists('s:neobundle_types') ?
-          \ s:neobundle_types : neobundle#config#get_types()
-  endif
-
-  for type in types
-    let detect = type.detect(path, opts)
-
-    if !empty(detect)
-      return detect
-    endif
-  endfor
-
-  return {}
-endfunction
-
-function! s:rtp_rm_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_rm(v:val)')
-endfunction
-
-function! s:rtp_rm(bundle)
+function! neobundle#config#rtp_rm(bundle) "{{{
   execute 'set rtp-='.fnameescape(a:bundle.rtp)
   if isdirectory(a:bundle.rtp.'/after')
     execute 'set rtp-='.fnameescape(a:bundle.rtp.'/after')
   endif
-endfunction
+endfunction"}}}
 
-function! s:rtp_add(bundle) abort
+function! neobundle#config#rtp_add(bundle) abort "{{{
   let rtp = a:bundle.rtp
   if isdirectory(rtp)
     if a:bundle.tail_path
@@ -384,24 +309,9 @@ function! s:rtp_add(bundle) abort
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.fnameescape(rtp.'/after')
   endif
-endfunction
+endfunction"}}}
 
-function! neobundle#config#init_bundle(name, opts)
-  let path = substitute(a:name, "['".'"]\+', '', 'g')
-  let opts = s:parse_options(a:opts)
-  let bundle = extend(neobundle#config#parse_path(
-        \ path, opts), opts)
-
-  let bundle.orig_name = a:name
-  let bundle.orig_path = path
-  let bundle.orig_opts = opts
-
-  let bundle = neobundle#init#_bundle(bundle)
-
-  return bundle
-endfunction
-
-function! neobundle#config#search(bundle_names, ...)
+function! neobundle#config#search(bundle_names, ...) "{{{
   " For infinite loop.
   let self = get(a:000, 0, [])
 
@@ -417,14 +327,14 @@ function! neobundle#config#search(bundle_names, ...)
   endfor
 
   return neobundle#util#uniq(_)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#search_simple(bundle_names)
+function! neobundle#config#search_simple(bundle_names) "{{{
   return filter(neobundle#config#get_neobundles(),
         \ 'index(a:bundle_names, v:val.name) >= 0')
-endfunction
+endfunction"}}}
 
-function! neobundle#config#fuzzy_search(bundle_names)
+function! neobundle#config#fuzzy_search(bundle_names) "{{{
   let bundles = []
   for name in a:bundle_names
     let bundles += filter(neobundle#config#get_neobundles(),
@@ -439,74 +349,16 @@ function! neobundle#config#fuzzy_search(bundle_names)
   endfor
 
   return neobundle#util#uniq(_)
-endfunction
+endfunction"}}}
 
-function! s:parse_options(opts)
-  if empty(a:opts)
-    return get(g:neobundle#default_options, '_', {})
-  endif
-
-  if len(a:opts) == 3
-    " rev, default, options
-    let [rev, default, options] = a:opts
-  elseif len(a:opts) == 2 && type(a:opts[-1]) == type('')
-    " rev, default
-    let [rev, default, options] = a:opts + [{}]
-  elseif len(a:opts) == 2 && type(a:opts[-1]) == type({})
-    " rev, options
-    let [rev, default, options] = [a:opts[0], '', a:opts[1]]
-  elseif len(a:opts) == 1 && type(a:opts[-1]) == type('')
-    " rev
-    let [rev, default, options] = [a:opts[0], '', {}]
-  elseif len(a:opts) == 1 && type(a:opts[-1]) == type({})
-    " options
-    let [rev, default, options] = ['', '', a:opts[0]]
-  else
-    call neobundle#installer#error(
-          \ printf('Invalid option : "%s".', string(a:opts)))
-    return {}
-  endif
-
-  if rev != ''
-    let options.rev = rev
-  endif
-
-  if !has_key(options, 'default')
-    let options.default = (default == '') ?  '_' : default
-  endif
-
-  " Set default options.
-  if has_key(g:neobundle#default_options, options.default)
-    call extend(options,
-          \ g:neobundle#default_options[options.default], 'keep')
-  endif
-
-  return options
-endfunction
-
-if neobundle#util#is_windows()
-  function! s:expand_path(path)
-    return neobundle#util#substitute_path_separator(
-          \ simplify(expand(escape(a:path, '*?{}'), 1)))
-  endfunction
-else
-  function! s:expand_path(path)
-    return simplify(expand(escape(a:path, '*?{}'), 1))
-  endfunction
-endif
-
-function! s:redir(cmd)
+function! s:redir(cmd) "{{{
   redir => res
   silent! execute a:cmd
   redir END
   return res
-endfunction
+endfunction"}}}
 
-function! s:unify_path(path)
-  return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
-endfunction
-
-function! neobundle#config#load_direct_bundles()
+function! neobundle#config#load_direct_bundles() "{{{
   let path = neobundle#get_neobundle_dir() . '/.direct_bundles'
 
   if !filereadable(path)
@@ -518,14 +370,14 @@ function! neobundle#config#load_direct_bundles()
   endif
 
   call extend(s:neobundles, s:direct_neobundles)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#save_direct_bundles()
+function! neobundle#config#save_direct_bundles() "{{{
   call writefile([string(s:direct_neobundles)],
         \ neobundle#get_neobundle_dir() . '/.direct_bundles')
-endfunction
+endfunction"}}}
 
-function! neobundle#config#check_external_commands(bundle)
+function! neobundle#config#check_external_commands(bundle) "{{{
   " Environment check.
   let external_commands = a:bundle.external_commands
   if type(external_commands) == type([])
@@ -554,9 +406,9 @@ function! neobundle#config#check_external_commands(bundle)
             \ printf('"%s" needs it.', a:bundle.name))
     endif
   endfor
-endfunction
+endfunction"}}}
 
-function! neobundle#config#set(name, dict)
+function! neobundle#config#set(name, dict) "{{{
   let bundle = neobundle#config#get(a:name)
   if empty(bundle)
     return
@@ -566,14 +418,14 @@ function! neobundle#config#set(name, dict)
   if bundle.lazy && bundle.sourced &&
         \ !get(s:sourced_neobundles, bundle.name, 0)
     " Remove from runtimepath.
-    call s:rtp_rm(bundle)
+    call neobundle#config#rtp_rm(bundle)
     let bundle.sourced = 0
   endif
 
   call neobundle#config#add(bundle, 1)
-endfunction
+endfunction"}}}
 
-function! neobundle#config#add(bundle, ...)
+function! neobundle#config#add(bundle, ...) "{{{
   let bundle = a:bundle
   let is_force = get(a:000, 0, 0)
 
@@ -609,11 +461,11 @@ function! neobundle#config#add(bundle, ...)
       call neobundle#config#source(bundle.name)
     else
       if bundle.sourced
-        call s:rtp_rm(bundle)
+        call neobundle#config#rtp_rm(bundle)
       endif
 
       let bundle.sourced = 1
-      call s:rtp_add(bundle)
+      call neobundle#config#rtp_add(bundle)
     endif
   elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
     let bundle.dummy_commands = []
@@ -666,43 +518,9 @@ function! neobundle#config#add(bundle, ...)
     call neobundle#util#print_error(
           \ 'Overwrite previous neobundle configuration in ' . bundle.name)
   endif
-endfunction
+endfunction"}}}
 
-function! s:get_default()
-  if !exists('s:default_bundle')
-    let s:default_bundle = {
-          \ 'uri' : '',
-          \ 'tail_path' : g:neobundle#enable_tail_path,
-          \ 'script_type' : '',
-          \ 'rev' : '',
-          \ 'rtp' : '',
-          \ 'depends' : [],
-          \ 'lazy' : 0,
-          \ 'gui' : 0,
-          \ 'terminal' : 0,
-          \ 'overwrite' : 1,
-          \ 'stay_same' : 0,
-          \ 'hooks' : {},
-          \ 'called_hooks' : {},
-          \ 'external_commands' : {},
-          \ 'autoload' : {},
-          \ 'description' : '',
-          \ 'dummy_commands' : [],
-          \ 'dummy_mappings' : [],
-          \ 'sourced' : 0,
-          \ 'disabled' : 0,
-          \ 'local' : 0,
-          \ 'orig_name' : '',
-          \ 'orig_opts' : {},
-          \ }
-  endif
-
-  let s:default_bundle.base = neobundle#get_neobundle_dir()
-
-  return deepcopy(s:default_bundle)
-endfunction
-
-function! neobundle#config#tsort(bundles)
+function! neobundle#config#tsort(bundles) "{{{
   let sorted = []
   let mark = {}
   for target in a:bundles
@@ -710,9 +528,9 @@ function! neobundle#config#tsort(bundles)
   endfor
 
   return sorted
-endfunction
+endfunction"}}}
 
-function! s:tsort_impl(target, bundles, mark, sorted)
+function! s:tsort_impl(target, bundles, mark, sorted) "{{{
   if has_key(a:mark, a:target.name)
     return
   endif
@@ -724,13 +542,13 @@ function! s:tsort_impl(target, bundles, mark, sorted)
   endfor
 
   call add(a:sorted, a:target)
-endfunction
+endfunction"}}}
 
-function! s:on_vim_enter()
+function! s:on_vim_enter() "{{{
   " Call hooks.
   call neobundle#call_hook('on_source')
   call neobundle#call_hook('on_post_source')
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
