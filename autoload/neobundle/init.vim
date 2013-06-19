@@ -40,7 +40,7 @@ function! neobundle#init#_bundle(bundle) "{{{
     return {}
   endif
 
-  let bundle = extend(s:get_default(), bundle)
+  let bundle = extend(bundle, s:get_default(), 'keep')
 
   if !has_key(bundle, 'name')
     let bundle.name = neobundle#util#name_conversion(bundle.orig_name)
@@ -65,18 +65,21 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
 
   let bundle.base = s:expand_path(bundle.base)
+  if bundle.base =~ '[/\\]$'
+    " Chomp.
+    let bundle.base = substitute(bundle.base, '[/\\]\+$', '', '')
+  endif
   if bundle.rev != ''
     let bundle.directory .= '_' . substitute(bundle.rev,
           \ '[^[:alnum:]_.-]', '', 'g')
   endif
 
-  let bundle.path = s:expand_path(bundle.base.'/'.bundle.directory)
+  let bundle.path = bundle.base.'/'.bundle.directory
 
   let rtp = bundle.rtp
   " Check relative path.
   let bundle.rtp = (rtp =~ '^\%(/\|\~\|\a\+:\)') ?
-        \ rtp : (bundle.path.'/'.rtp)
-  let bundle.rtp = s:expand_path(bundle.rtp)
+        \ s:expand_path(rtp) : (bundle.path.'/'.rtp)
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
