@@ -356,7 +356,7 @@ endfunction"}}}
 function! neobundle#config#save_direct(arg) "{{{
   let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
   let bundles = filereadable(path) ? readfile(path) : []
-  call writefile(add(bundles, 'NeoBundle ' . string(a:arg)), path)
+  call writefile(add(bundles, 'NeoBundle ' . a:arg), path)
 endfunction"}}}
 
 function! neobundle#config#check_external_commands(bundle) "{{{

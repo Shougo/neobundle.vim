@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Dec 2012.
+" Last Modified: 19 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,7 +153,6 @@ endfunction"}}}
 let s:source.action_table.install = {
       \ 'description' : 'direct install plugins',
       \ 'is_selectable' : 1,
-      \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.install.func(candidates) "{{{

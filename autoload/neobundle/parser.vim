@@ -95,7 +95,7 @@ function! neobundle#parser#depends(arg) "{{{
 endfunction"}}}
 
 function! neobundle#parser#direct(arg) "{{{
-  let bundle = neobundle#parser#bundle(string(a:arg))
+  let bundle = neobundle#parser#bundle(a:arg)
 
   if empty(bundle)
     return {}
