@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Jun 2013.
+" Last Modified: 19 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,9 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.path .= '/' . bundle.script_type
   endif
 
-  let bundle.resettable = !bundle.lazy
+  if !has_key(bundle, 'resettable')
+    let bundle.resettable = !bundle.lazy
+  endif
 
   if !has_key(bundle.autoload, 'function_prefix')
         \ && isdirectory(bundle.rtp . '/autoload')

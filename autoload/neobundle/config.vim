@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Jun 2013.
+" Last Modified: 19 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -604,14 +604,14 @@ function! neobundle#config#add(bundle, ...)
   endif
 
   if !bundle.lazy && bundle.rtp != ''
-    if bundle.sourced
-      call s:rtp_rm(bundle)
-    elseif !has('vim_starting')
+    if !has('vim_starting')
       " Load automatically.
       call neobundle#config#source(bundle.name)
-    endif
+    else
+      if bundle.sourced
+        call s:rtp_rm(bundle)
+      endif
 
-    if !bundle.sourced
       let bundle.sourced = 1
       call s:rtp_add(bundle)
     endif
