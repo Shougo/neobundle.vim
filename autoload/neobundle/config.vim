@@ -29,7 +29,6 @@ set cpo&vim
 
 if !exists('s:neobundles')
   let s:neobundles = {}
-  let s:direct_neobundles = {}
   let s:sourced_neobundles = {}
 endif
 
@@ -64,10 +63,6 @@ endfunction"}}}
 function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
         \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
-endfunction"}}}
-
-function! neobundle#config#get_direct_neobundles() "{{{
-  return values(s:direct_neobundles)
 endfunction"}}}
 
 function! neobundle#config#source_bundles(bundles) "{{{
@@ -247,14 +242,6 @@ function! neobundle#config#rm(path) "{{{
     call neobundle#config#rtp_rm(bundle)
     call remove(s:neobundles, bundle.name)
   endfor
-
-  " Delete from s:direct_neobundles.
-  for bundle in filter(neobundle#config#get_direct_neobundles(),
-        \ 'v:val.path ==# a:path')
-    call remove(s:direct_neobundles, bundle.name)
-  endfor
-
-  call neobundle#config#save_direct_bundles()
 endfunction"}}}
 
 function! neobundle#config#get_types(...) "{{{
@@ -359,22 +346,17 @@ function! s:redir(cmd) "{{{
 endfunction"}}}
 
 function! neobundle#config#load_direct_bundles() "{{{
-  let path = neobundle#get_neobundle_dir() . '/.direct_bundles'
+  let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
 
-  if !filereadable(path)
-    let s:direct_neobundles = {}
-  else
-    sandbox let s:direct_neobundles =
-          \ eval(get(readfile(path), 0, '[]'))
-    call map(s:direct_neobundles, 'neobundle#init#_bundle(v:val)')
+  if filereadable(path)
+    source `=path`
   endif
-
-  call extend(s:neobundles, s:direct_neobundles)
 endfunction"}}}
 
-function! neobundle#config#save_direct_bundles() "{{{
-  call writefile([string(s:direct_neobundles)],
-        \ neobundle#get_neobundle_dir() . '/.direct_bundles')
+function! neobundle#config#save_direct(arg) "{{{
+  let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
+  let bundles = filereadable(path) ? readfile(path) : []
+  call writefile(add(bundles, 'NeoBundle ' . string(a:arg)), path)
 endfunction"}}}
 
 function! neobundle#config#check_external_commands(bundle) "{{{

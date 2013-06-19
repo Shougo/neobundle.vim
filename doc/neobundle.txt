@@ -313,10 +313,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleDirectInstall {repository} [, {options}]
 						*:NeoBundleDirectInstall*
 		Registers a bundle, and installs it directly.
-		Note: If you use the command, you cannot customize the bundle
-		settings.
-		Note: The settings are saved in ".direct_bundles" in bundle
-		directory.
+		Note: The settings are saved in "direct_bundles.vim" in
+		|neobundle#rc()| directory.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <

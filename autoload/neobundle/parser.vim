@@ -95,7 +95,7 @@ function! neobundle#parser#depends(arg) "{{{
 endfunction"}}}
 
 function! neobundle#parser#direct(arg) "{{{
-  let bundle = neobundle#parser#bundle(a:arg)
+  let bundle = neobundle#parser#bundle(string(a:arg))
 
   if empty(bundle)
     return {}
@@ -103,8 +103,7 @@ function! neobundle#parser#direct(arg) "{{{
 
   let path = bundle.path
 
-  let s:direct_neobundles[path] = bundle
-  call neobundle#config#save_direct_bundles()
+  call neobundle#config#save_direct(a:arg)
 
   " Direct install.
   call neobundle#installer#install(0, bundle.name)
