@@ -315,6 +315,9 @@ COMMANDS 					*neobundle-commands*
 		Registers a bundle, and installs it directly.
 		Note: The settings are saved in "direct_bundles.vim" in
 		|neobundle#rc()| directory.
+		Note: To uninstall direct installed bundles, you must delete
+		plugin settings manually in "direct_bundles.vim" in
+		|neobundle#rc()| directory.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
