@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Jun 2013.
+" Last Modified: 20 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,6 +82,8 @@ function! neobundle#installer#install(bang, bundle_names)
     let &more = more_save
   endtry
 
+  call neobundle#installer#update(installed)
+
   call neobundle#installer#log(
         \ "[neobundle/install] Installed/Updated bundles:\n".
         \ join((empty(installed) ?
@@ -95,8 +97,6 @@ function! neobundle#installer#install(bang, bundle_names)
     call neobundle#installer#log(
           \ 'Please read error message log by :message command.')
   endif
-
-  call neobundle#installer#update(installed)
 
   if !empty(installed)
     call s:update_ftdetect()
@@ -680,7 +680,7 @@ function! s:update_tags()
     execute 'helptags' fnameescape(neobundle#get_tags_dir())
   catch
     call neobundle#installer#error('Error generating helptags:')
-    call neobundle#installer#error(v:exception . ' ' . v:throwpoint)
+    call neobundle#installer#error(v:exception)
   endtry
 endfunction
 
