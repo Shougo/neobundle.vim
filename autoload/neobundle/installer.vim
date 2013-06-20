@@ -202,8 +202,9 @@ function! neobundle#installer#clean(bang, ...)
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
         \ "(v:val.script_type != '') ?
         \  v:val.base . '/' . v:val.directory : v:val.path")
-  let all_dirs = split(neobundle#util#substitute_path_separator(
-        \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n")
+  let all_dirs = filter(split(neobundle#util#substitute_path_separator(
+        \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n"),
+        \ 'isdirectory(v:val)')
   if get(a:000, 0, '') == ''
     let x_dirs = filter(all_dirs,
           \ "!neobundle#config#is_installed(fnamemodify(v:val, ':t'))
@@ -913,6 +914,13 @@ function! s:reload(bundles) "{{{
   " Call hooks.
   call neobundle#call_hook('on_source', a:bundles)
   call neobundle#call_hook('on_post_source', a:bundles)
+endfunction"}}}
+
+function! s:redir(cmd) "{{{
+  redir => res
+  silent! execute a:cmd
+  redir END
+  return res
 endfunction"}}}
 
 

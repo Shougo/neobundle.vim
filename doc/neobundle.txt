@@ -317,7 +317,8 @@ COMMANDS 					*neobundle-commands*
 		|neobundle#rc()| directory.
 		Note: To uninstall direct installed bundles, you must delete
 		plugin settings manually in "direct_bundles.vim" in
-		|neobundle#rc()| directory.
+		|neobundle#rc()| directory and execute |:NeoBundleClean|
+		command.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
