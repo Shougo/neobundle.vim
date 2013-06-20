@@ -899,8 +899,8 @@ function! s:reload(bundles) "{{{
     let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
     if name != '' && name =~ '/autoload/'
           \ && name !~ '/unite\%(\.vim\)\?/\|/neobundle\%(\.vim\)\?/'
-          \ && filereadable(unite#util#unify_path(name))
-      call add(scripts, unite#util#unify_path(name))
+          \ && filereadable(neobundle#util#unify_path(name))
+      call add(scripts, neobundle#util#unify_path(name))
     endif
   endfor
 
