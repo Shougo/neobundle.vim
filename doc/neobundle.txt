@@ -322,6 +322,10 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
+:NeoBundleDirectEdit
+						*:NeoBundleDirectEdit*
+		Edit direct installed bundles easily.
+
 :NeoBundleDisable {name}...			*:NeoBundleDisable*
 		Disables bundles specified by {name}.  If a bundle is
 		disabled, its path will be removed from 'runtimepath'.
