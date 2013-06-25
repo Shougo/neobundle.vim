@@ -106,7 +106,8 @@ endfunction
 function! neobundle#installer#update(bundles)
   call neobundle#installer#helptags(
         \ neobundle#config#get_neobundles())
-  call s:reload(a:bundles)
+  call s:reload(filter(copy(a:bundles),
+        \ 'v:val.sourced && !v:val.disabled'))
 
   call s:save_install_info(neobundle#config#get_neobundles())
 endfunction
@@ -889,6 +890,9 @@ function! s:reload(bundles) "{{{
     endif
   endfor
 
+  " Call hooks.
+  call neobundle#call_hook('on_source', a:bundles)
+
   silent! runtime! ftdetect/**/*.vim
   silent! runtime! after/ftdetect/**/*.vim
   silent! runtime! plugin/**/*.vim
@@ -913,7 +917,6 @@ function! s:reload(bundles) "{{{
   endfor
 
   " Call hooks.
-  call neobundle#call_hook('on_source', a:bundles)
   call neobundle#call_hook('on_post_source', a:bundles)
 endfunction"}}}
 
