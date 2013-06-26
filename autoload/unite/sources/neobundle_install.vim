@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 26 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,9 +57,6 @@ function! s:source_install.hooks.on_init(args, context) "{{{
 endfunction"}}}
 
 function! s:source_install.hooks.on_syntax(args, context) "{{{
-  syntax match uniteSource__NeoBundleInstall_Message /.*/
-        \ contained containedin=uniteSource__NeoBundleInstall
-  highlight default link uniteSource__NeoBundleInstall_Message Comment
   syntax match uniteSource__NeoBundleInstall_Progress /(.\{-}):\s*.*/
         \ contained containedin=uniteSource__NeoBundleInstall
   highlight default link uniteSource__NeoBundleInstall_Progress String

@@ -1009,7 +1009,7 @@ neobundle/update
 		If you use the source with "-auto-quit" option, the unite
 		buffer will close automatically.
 >
-		:Unite neobundle/update -log -auto-quit
+		:Unite neobundle/update -log -wrap -auto-quit
 <
 				*neobundle-unite-source-neobundle-search*
 neobundle/search
@@ -1207,7 +1207,7 @@ disabled; it forces updates them.
 Q: I want to update messages in unite buffer.
 A:
 >
-	Unite -log neobundle/update
+	Unite -log -wrap neobundle/update
 <
 
 Q: neobundle.vim is not worked in debian/Ubuntu Linux...
