@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 29 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -270,9 +270,8 @@ function! neobundle#check()
     return
   endif
 
-  if (neobundle#util#is_windows() || neobundle#util#is_mac()) &&
-        \ has('gui_running') && has('vim_starting')
-    " Note: :NeoBundleCheck cannot work in Windows GUI startup.
+  if has('gui_running') && has('vim_starting')
+    " Note: :NeoBundleCheck cannot work in GUI startup.
     autocmd neobundle VimEnter * NeoBundleCheck
   else
     echomsg 'Not installed bundles: '
