@@ -1,3 +1,4 @@
+[![Stories in Ready](http://badge.waffle.io/Shougo/neobundle.vim.png)](http://waffle.io/Shougo/neobundle.vim)  
 ## About
 
 NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/vundle).
