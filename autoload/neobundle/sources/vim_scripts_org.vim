@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vim_scripts_org.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 01 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,7 +63,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'source__script_type' : s:convert2script_type(v:val.raw_type),
         \ 'source__description' : v:val.description,
         \ 'source__options' : [],
-        \ 'action__uri' : 'https://github.com/vim-scripts/' . v:val.uri,
+        \ 'action__uri' : v:val.uri,
         \ }")
   catch
     call unite#print_error(
