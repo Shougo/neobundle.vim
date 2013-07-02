@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jun 2013.
+" Last Modified: 02 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -462,26 +462,28 @@ function! neobundle#config#add(bundle, ...) "{{{
     endfor
 
     let bundle.dummy_mappings = []
-    for map in neobundle#util#convert2list(
+    for item in neobundle#util#convert2list(
           \ get(bundle.autoload, 'mappings', []))
-      if type(map) == type([])
-        let [mode, mapping] = [map[0], map[1]]
+      if type(item) == type([])
+        let [mode, mappings] = [item[0], item[1:]]
       else
-        let [mode, mapping] = ['nxo', map]
+        let [mode, mappings] = ['nxo', [item]]
       endif
 
-      " Define dummy mappings.
-      for mode in filter(split(mode, '\zs'),
-            \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
-        silent! execute mode.'noremap <unique><silent>' mapping printf(
-              \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
-              \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
-              \   string(mapping), string(bundle.name), string(mode))
+      for mapping in mappings
+        " Define dummy mappings.
+        for mode in filter(split(mode, '\zs'),
+              \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
+          silent! execute mode.'noremap <unique><silent>' mapping printf(
+                \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
+                \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
+                \   string(mapping), string(bundle.name), string(mode))
 
-        call add(bundle.dummy_mappings, [mode, mapping])
+          call add(bundle.dummy_mappings, [mode, mapping])
+        endfor
       endfor
 
-      unlet map
+      unlet item
     endfor
   endif
 

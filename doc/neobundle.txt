@@ -716,8 +716,8 @@ OPTIONS 					*neobundle-options*
 
 			mappings	(List)
 			Mappings list. The items are {mapping} or
-			[{mode}, {mapping}].  If {mode} is omitted, "nxo" is
-			used.
+			[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
+			omitted, "nxo" is used.
 
 			unite_sources	(List)
 			Unite source name list.
@@ -778,11 +778,19 @@ OPTIONS 					*neobundle-options*
 	      \    'explorer' : 1,
 	      \ }
 	      \ }
-	NeoBundle 'Shougo/junkfile.vim', {
+	NeoBundleLazy 'Shougo/junkfile.vim', {
 	      \ 'autoload' : {
 	      \   'commands' : 'JunkfileOpen',
 	      \   'unite_sources' : ['junkfile', 'junkfile/new'],
 	      \ }}
+	NeoBundleLazy 'tyru/winmove.vim', { 'autoload' : {
+	      \ 'gui' : 1,
+	      \ 'mappings' : [
+	      \   ['n', '<Plug>(winmove-up)', '<Plug>(winmove-down)',
+	      \         '<Plug>(winmove-left)', '<Plug>(winmove-right)']],
+	      \ },
+	      \ 'augroup' : 'winmove',
+	      \ }
 <
 						*neobundle-options-overwrite*
 		overwrite		(Number)
