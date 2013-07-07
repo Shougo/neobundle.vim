@@ -1,7 +1,8 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 May 2013.
+" AUTHOR:  Robert Nelson     <robert@rnelson.ca>
+" Last Modified: 7 July 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +32,12 @@ set cpo&vim
 call neobundle#util#set_default(
       \ 'g:neobundle#types#git#default_protocol', 'git',
       \ 'g:neobundle_default_git_protocol')
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#git#shallow_clone', 0,
+      \ 'g:neobundle_git_shallow_clone')
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#git#clone_depth', 1,
+      \ 'g:neobundle_git_clone_depth')
 "}}}
 
 function! neobundle#types#git#define() "{{{
@@ -109,6 +116,14 @@ function! s:type.get_sync_command(bundle) "{{{
 
   if !isdirectory(a:bundle.path)
     let cmd = 'git clone --recursive'
+
+    if g:neobundle#types#git#shallow_clone == 1
+        if type(g:neobundle#types#git#clone_depth) == type(0) && g:neobundle#types#git#clone_depth > 0
+            let cmd .= printf(' --depth=%d', g:neobundle#types#git#clone_depth)
+        else
+            echomsg 'g:neobundle_git_clone_depth has invalid value; performing full clone.'
+        end
+    endif
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
