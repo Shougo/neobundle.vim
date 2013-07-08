@@ -1,7 +1,20 @@
-[![Stories in Ready](http://badge.waffle.io/Shougo/neobundle.vim.png)](http://waffle.io/Shougo/neobundle.vim)  
+[![Stories in Ready](http://badge.waffle.io/Shougo/neobundle.vim.png)](http://waffle.io/Shougo/neobundle.vim)
+
 ## About
 
 NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/vundle).
+
+## Advantages
+
+1. improved command name(:Bundle vs :NeoBundle).
+2. neobundle works if you set 'shellslash' in your .vimrc.
+3. neobundle supports vimproc(asynchronous update/install).
+4. neobundle supports unite.vim interface(update/install/search).
+5. neobundle supports revision lock feature.
+6. neobundle supports other VCS(Subversion/Git).
+7. neobundle supports lazy initialization for optimizing startup time.
+8. and so on...
+
 
 ## Quick start
 
