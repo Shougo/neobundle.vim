@@ -465,14 +465,14 @@ function! neobundle#config#add(bundle, ...) "{{{
     for item in neobundle#util#convert2list(
           \ get(bundle.autoload, 'mappings', []))
       if type(item) == type([])
-        let [mode, mappings] = [item[0], item[1:]]
+        let [modes, mappings] = [item[0], item[1:]]
       else
-        let [mode, mappings] = ['nxo', [item]]
+        let [modes, mappings] = ['nxo', [item]]
       endif
 
       for mapping in mappings
         " Define dummy mappings.
-        for mode in filter(split(mode, '\zs'),
+        for mode in filter(split(modes, '\zs'),
               \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
           silent! execute mode.'noremap <unique><silent>' mapping printf(
                 \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
