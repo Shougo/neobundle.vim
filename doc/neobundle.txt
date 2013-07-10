@@ -389,7 +389,7 @@ g:neobundle#install_max_processes
 		Note: |g:unite_source_neobundle_install_max_processes| is
 		obsolete.
 
-		Defaults to "5".
+		Defaults to "4".
 
 g:neobundle#default_options			*g:neobundle#default_options*
 		A dictionary of preconfigured sets of options to use when

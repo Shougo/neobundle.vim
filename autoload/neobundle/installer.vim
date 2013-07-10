@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 10 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ call neobundle#util#set_default(
       \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'),
       \ 'g:neobundle_rm_command')
 call neobundle#util#set_default(
-      \ 'g:neobundle#install_max_processes', 5,
+      \ 'g:neobundle#install_max_processes', 4,
       \ 'g:unite_source_neobundle_install_max_processes')
 
 let s:log = []
