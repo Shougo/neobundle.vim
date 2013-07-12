@@ -820,9 +820,12 @@ OPTIONS 					*neobundle-options*
 
 						*neobundle-options-vim_version*
 		vim_version		(String)
-		Minimum vim version of the plugin supported.
+		Minimal vim version of the plugin supported.
+		It accepts some version formats such as "7" and "7.3" and
+		"7.3.885".
 
 		Example: >
+	" neocomplete requires vim 7.3.885 or above.
 	NeoBundle 'Shougo/neocomplete', {
 	    \ 'depends' : 'Shougo/context_filetype.vim',
 	    \ 'vim_version' : '7.3.885'
