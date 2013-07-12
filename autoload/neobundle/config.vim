@@ -352,37 +352,6 @@ function! neobundle#config#save_direct(arg) "{{{
   call writefile(add(bundles, 'NeoBundle ' . a:arg), path)
 endfunction"}}}
 
-function! neobundle#config#check_external_commands(bundle) "{{{
-  " Environment check.
-  let external_commands = a:bundle.external_commands
-  if type(external_commands) == type([])
-        \ || type(external_commands) == type('')
-    let commands = external_commands
-  elseif neobundle#util#is_windows() && has_key(external_commands, 'windows')
-    let commands = external_commands.windows
-  elseif neobundle#util#is_mac() && has_key(external_commands, 'mac')
-    let commands = external_commands.mac
-  elseif neobundle#util#is_cygwin() && has_key(external_commands, 'cygwin')
-    let commands = external_commands.cygwin
-  elseif !neobundle#util#is_windows() && has_key(external_commands, 'unix')
-    let commands = external_commands.unix
-  elseif has_key(external_commands, 'others')
-    let commands = external_commands.others
-  else
-    " Invalid.
-    return
-  endif
-
-  for command in neobundle#util#convert2list(commands)
-    if !executable(command)
-      call neobundle#installer#error(
-            \ printf('external command : "%s" is not found.', command))
-      call neobundle#installer#error(
-            \ printf('"%s" needs it.', a:bundle.name))
-    endif
-  endfor
-endfunction"}}}
-
 function! neobundle#config#set(name, dict) "{{{
   let bundle = neobundle#config#get(a:name)
   if empty(bundle)
@@ -416,8 +385,10 @@ function! neobundle#config#add(bundle, ...) "{{{
 
   if (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))
-        \ || (bundle.vim_version != '' &&
-        \     s:version_check(bundle.min_version))
+        \ || (bundle.vim_version != ''
+        \     && s:check_version(bundle.min_version))
+        \ || (!empty(bundle.external_commands)
+        \     && s:check_external_commands(bundle))
     " Ignore load.
     return
   endif
@@ -529,7 +500,7 @@ function! s:on_vim_enter() "{{{
   call neobundle#call_hook('on_post_source')
 endfunction"}}}
 
-function! s:version_check(min_version) "{{{
+function! s:check_version(min_version) "{{{
   let versions = split(a:min_version, '\.')
   let major = get(versions, 0, 0)
   let minor = get(versions, 1, 0)
@@ -537,6 +508,34 @@ function! s:version_check(min_version) "{{{
   let version = major * 100 + minor
   return v:version < version ||
         \ (patch != 0 && v:version == version && !has('patch'.patch))
+endfunction"}}}
+
+function! s:check_external_commands(bundle) "{{{
+  " Environment check.
+  let external_commands = a:bundle.external_commands
+  if type(external_commands) == type([])
+        \ || type(external_commands) == type('')
+    let commands = external_commands
+  elseif neobundle#util#is_windows() && has_key(external_commands, 'windows')
+    let commands = external_commands.windows
+  elseif neobundle#util#is_mac() && has_key(external_commands, 'mac')
+    let commands = external_commands.mac
+  elseif neobundle#util#is_cygwin() && has_key(external_commands, 'cygwin')
+    let commands = external_commands.cygwin
+  elseif !neobundle#util#is_windows() && has_key(external_commands, 'unix')
+    let commands = external_commands.unix
+  elseif has_key(external_commands, 'others')
+    let commands = external_commands.others
+  else
+    " Invalid.
+    return 0
+  endif
+
+  for command in neobundle#util#convert2list(commands)
+    if !executable(command)
+      return 1
+    endif
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo
