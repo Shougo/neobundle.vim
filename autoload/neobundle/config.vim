@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jul 2013.
+" Last Modified: 12 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -414,6 +414,14 @@ function! neobundle#config#add(bundle, ...) "{{{
 
   let s:neobundles[bundle.name] = bundle
 
+  if (bundle.gui && !has('gui_running'))
+        \ || (bundle.terminal && has('gui_running'))
+        \ || (bundle.vim_version != '' &&
+        \     s:version_check(bundle.min_version))
+    " Ignore load.
+    return
+  endif
+
   " Add depends.
   for depend in a:bundle.depends
     if !has_key(s:neobundles, depend.name)
@@ -423,12 +431,6 @@ function! neobundle#config#add(bundle, ...) "{{{
       call neobundle#config#source(depend.name)
     endif
   endfor
-
-  if (bundle.gui && !has('gui_running'))
-        \ || (bundle.terminal && has('gui_running'))
-    " Ignore load.
-    return
-  endif
 
   if !bundle.lazy && bundle.rtp != ''
     if !has('vim_starting')
@@ -525,6 +527,16 @@ function! s:on_vim_enter() "{{{
   " Call hooks.
   call neobundle#call_hook('on_source')
   call neobundle#call_hook('on_post_source')
+endfunction"}}}
+
+function! s:version_check(min_version) "{{{
+  let versions = split(a:min_version, '\.')
+  let major = get(versions, 0, 0)
+  let minor = get(versions, 1, 0)
+  let patch = get(versions, 2, 0)
+  let version = major * 100 + minor
+  return v:version < version ||
+        \ (patch != 0 && v:version == version && !has('patch'.patch))
 endfunction"}}}
 
 let &cpo = s:save_cpo

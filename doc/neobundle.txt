@@ -806,8 +806,7 @@ OPTIONS 					*neobundle-options*
 		gui			(Number)
 		If set 1, neobundle will only load the plugin in GUI Vim.
 
-		Example:
->
+		Example: >
 	NeoBundleLazy 'tyru/restart.vim', '', 'same', {
 	      \ 'gui' : 1,
 	      \ 'autoload' : {
@@ -818,6 +817,17 @@ OPTIONS 					*neobundle-options*
 		terminal		(Number)
 		If set to 1, neobundle will only load the plugin in Terminal
 		Vim.
+
+						*neobundle-options-vim_version*
+		vim_version		(String)
+		Minimum vim version of the plugin supported.
+
+		Example: >
+	NeoBundle 'Shougo/neocomplete', {
+	    \ 'depends' : 'Shougo/context_filetype.vim',
+	    \ 'vim_version' : '7.3.885'
+	    \ }
+<
 
 						*neobundle-options-hooks*
 		hooks			(Dictionary)
