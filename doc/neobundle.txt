@@ -414,13 +414,13 @@ g:neobundle#types#raw#calc_hash_command
 g:neobundle#types#git#default_protocol
 				*g:neobundle#types#git#default_protocol*
 		The default protocol used for git (github).
-		Note: If you need to use a proxy server, you may want to
-		change the value to "https".
+		Note: If you need to use neobundle in proxy or firewall, you
+		must use it in "https".
 
 					*g:neobundle_default_git_protocol*
 		Note: |g:neobundle_default_git_protocol| is obsolete.
 
-		Defaults to "git".
+		Defaults to "https".
 
 g:neobundle#types#hg#default_protocol
 				*g:neobundle#types#hg#default_protocol*

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 May 2013.
+" Last Modified: 17 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ set cpo&vim
 
 " Global options definition. "{{{
 call neobundle#util#set_default(
-      \ 'g:neobundle#types#git#default_protocol', 'git',
+      \ 'g:neobundle#types#git#default_protocol', 'https',
       \ 'g:neobundle_default_git_protocol')
 "}}}
 
