@@ -505,9 +505,9 @@ function! s:check_version(min_version) "{{{
   let major = get(versions, 0, 0)
   let minor = get(versions, 1, 0)
   let patch = get(versions, 2, 0)
-  let version = major * 100 + minor
-  return v:version < version ||
-        \ (patch != 0 && v:version == version && !has('patch'.patch))
+  let min_version = major * 100 + minor
+  return v:version < min_version ||
+        \ (patch != 0 && v:version == min_version && !has('patch'.patch))
 endfunction"}}}
 
 function! s:check_external_commands(bundle) "{{{
