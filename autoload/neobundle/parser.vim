@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jul 2013.
+" Last Modified: 20 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -194,6 +194,12 @@ function! neobundle#parser#path(path, ...) "{{{
       return detect
     endif
   endfor
+
+  if isdirectory(path)
+    " Detect nosync type.
+    return { 'name' : split(path, '/')[-1],
+          \  'uri' : path, 'type' : 'nosync' }
+  endif
 
   return {}
 endfunction"}}}
