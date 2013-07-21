@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jul 2013.
+" Last Modified: 21 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -160,7 +160,6 @@ function! neobundle#parser#local(localdir, options) "{{{
     call neobundle#parser#bundle([dir,
           \ extend({
           \   'local' : 1,
-          \   'resettable' : 0,
           \   'base' : neobundle#util#substitute_path_separator(
           \              fnamemodify(a:localdir, ':p')), }, a:options)])
   endfor

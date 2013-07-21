@@ -357,14 +357,6 @@ g:neobundle#log_filename			*g:neobundle#log_filename*
 
 		Defaults to "".
 
-g:neobundle#enable_tail_path			*g:neobundle#enable_tail_path*
-		If set to 1, "tail_path" option will be 1 by default.
-
-						*g:neobundle_enable_tail_path*
-		Note: |g:neobundle_enable_tail_path| is obsolete.
-
-		Defaults to 0.
-
 	 				*g:neobundle#enable_name_conversion*
 g:neobundle#enable_name_conversion
 		If you set to 1 and omit bundle name,
@@ -495,12 +487,6 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'git://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
 <
-						*neobundle-options-tail_path*
-		tail_path		(Number)
-		If set to 1, neobundle adds the bundle's path at the end of
-		user runtimepath. Use it to prevent neobundle from overwriting
-		user scripts.
-
 						*neobundle-options-base_path*
 		base			(String)
 		Directory base path to use. If omitted, the path specified

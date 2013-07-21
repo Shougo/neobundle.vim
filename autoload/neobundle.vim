@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Jul 2013.
+" Last Modified: 21 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,8 +44,6 @@ call neobundle#util#set_default(
       \ 'g:neobundle#log_filename', '', 'g:neobundle_log_filename')
 call neobundle#util#set_default(
       \ 'g:neobundle#default_site', 'github', 'g:neobundle_default_site')
-call neobundle#util#set_default(
-      \ 'g:neobundle#enable_tail_path', 1, 'g:neobundle_enable_tail_path')
 call neobundle#util#set_default(
       \ 'g:neobundle#enable_name_conversion', 0)
 call neobundle#util#set_default(
@@ -138,8 +136,14 @@ function! neobundle#rc(...)
   let s:neobundle_dir =
         \ neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(s:neobundle_dir))
-  execute 'set runtimepath^='.fnameescape(
-        \ fnamemodify(neobundle#get_tags_dir(), ':h'))
+
+  " Join to the tail in runtimepath.
+  let rtp = neobundle#get_rtp_dir()
+  execute 'set rtp-='.fnameescape(rtp)
+  let rtps = neobundle#util#split_rtp(&runtimepath)
+  let n = index(rtps, $VIMRUNTIME)
+  let &runtimepath = neobundle#util#join_rtp(
+        \ insert(rtps, rtp, n-1), &runtimepath, rtp)
 
   augroup neobundle
     autocmd!
@@ -163,6 +167,10 @@ function! neobundle#get_tags_dir()
     call mkdir(dir, 'p')
   endif
   return dir
+endfunction
+
+function! neobundle#get_rtp_dir()
+  return s:neobundle_dir . '/.neobundle'
 endfunction
 
 function! neobundle#source(bundle_names)
