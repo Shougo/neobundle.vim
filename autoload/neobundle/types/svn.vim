@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 22 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,6 +36,11 @@ let s:type = {
       \ }
 
 function! s:type.detect(path, opts) "{{{
+  if isdirectory(a:path)
+    " Local directory.
+    return {}
+  endif
+
   let type = ''
 
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
