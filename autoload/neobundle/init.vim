@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Jul 2013.
+" Last Modified: 12 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,14 +74,12 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ '[^[:alnum:]_.-]', '', 'g')
   endif
 
-  let bundle.path = (bundle.uri =~ '^\%([/~]\|\a\+:\)') ?
-        \ bundle.uri :
-        \ bundle.base.'/'.bundle.directory
+  let bundle.path = bundle.base.'/'.bundle.directory
 
   let rtp = bundle.rtp
   " Check relative path.
-  let bundle.rtp = (rtp !~ '^\%([/~]\|\a\+:\)') ?
-        \ (bundle.path.'/'.rtp) : s:expand_path(rtp)
+  let bundle.rtp = (rtp =~ '^\%(/\|\~\|\a\+:\)') ?
+        \ s:expand_path(rtp) : (bundle.path.'/'.rtp)
   if bundle.rtp =~ '[/\\]$'
     " Chomp.
     let bundle.rtp = substitute(bundle.rtp, '[/\\]\+$', '', '')
