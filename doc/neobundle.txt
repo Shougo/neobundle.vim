@@ -1262,9 +1262,17 @@ Q: I want to add absolute path in runtimepath with |:NeoBundle| and
 |:NeoBundleLazy|.
 https://github.com/Shougo/neobundle.vim/issues/136
 
-A:
-You can use "nosync" type. >
+A: You can use "nosync" type. >
 	NeoBundle '/absolute/path/to/plugin', { 'type' : 'nosync' }
+
+Q: For example, I would like to register the IR_Black colorscheme from it's
+original URL, without cloning one of the many mirror repo.
+https://github.com/Shougo/neobundle.vim/issues/140
+
+A: This feature is already implemented. >
+	NeoBundle 'http://blog.toddwerth.com/entry_files/8/ir_black.vim', {
+	\ 'name': 'ir_black.vim',
+	\ 'script_type': 'colors'}
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
