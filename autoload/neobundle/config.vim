@@ -414,49 +414,54 @@ function! neobundle#config#add(bundle, ...) "{{{
       let bundle.sourced = 1
       call neobundle#config#rtp_add(bundle)
     endif
-  elseif bundle.lazy && !neobundle#config#is_sourced(bundle.name)
-    let bundle.dummy_commands = []
-    for item in neobundle#util#convert2list(
-          \ get(bundle.autoload, 'commands', []))
-      let command = type(item) == type('') ?
-            \ { 'name' : item } : item
+  elseif bundle.lazy
+    if neobundle#config#is_sourced(bundle.name)
+      " Already sourced.
+      call neobundle#config#rtp_add(bundle)
+    else
+      let bundle.dummy_commands = []
+      for item in neobundle#util#convert2list(
+            \ get(bundle.autoload, 'commands', []))
+        let command = type(item) == type('') ?
+              \ { 'name' : item } : item
 
-      " Define dummy commands.
-      silent! execute 'command ' . (get(command, 'complete', '') != '' ?
-            \ ('-complete=' . command.complete) : '')
-            \ . ' -bang -range -nargs=*' command.name printf(
-            \ "call neobundle#autoload#command(%s, %s, <q-args>,
-            \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
-            \   string(command.name), string(bundle.name))
-      unlet item
+        " Define dummy commands.
+        silent! execute 'command ' . (get(command, 'complete', '') != '' ?
+              \ ('-complete=' . command.complete) : '')
+              \ . ' -bang -range -nargs=*' command.name printf(
+              \ "call neobundle#autoload#command(%s, %s, <q-args>,
+              \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
+              \   string(command.name), string(bundle.name))
+        unlet item
 
-      call add(bundle.dummy_commands, command.name)
-    endfor
-
-    let bundle.dummy_mappings = []
-    for item in neobundle#util#convert2list(
-          \ get(bundle.autoload, 'mappings', []))
-      if type(item) == type([])
-        let [modes, mappings] = [item[0], item[1:]]
-      else
-        let [modes, mappings] = ['nxo', [item]]
-      endif
-
-      for mapping in mappings
-        " Define dummy mappings.
-        for mode in filter(split(modes, '\zs'),
-              \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
-          silent! execute mode.'noremap <unique><silent>' mapping printf(
-                \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
-                \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
-                \   string(mapping), string(bundle.name), string(mode))
-
-          call add(bundle.dummy_mappings, [mode, mapping])
-        endfor
+        call add(bundle.dummy_commands, command.name)
       endfor
 
-      unlet item
-    endfor
+      let bundle.dummy_mappings = []
+      for item in neobundle#util#convert2list(
+            \ get(bundle.autoload, 'mappings', []))
+        if type(item) == type([])
+          let [modes, mappings] = [item[0], item[1:]]
+        else
+          let [modes, mappings] = ['nxo', [item]]
+        endif
+
+        for mapping in mappings
+          " Define dummy mappings.
+          for mode in filter(split(modes, '\zs'),
+                \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
+            silent! execute mode.'noremap <unique><silent>' mapping printf(
+                  \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
+                  \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
+                  \   string(mapping), string(bundle.name), string(mode))
+
+            call add(bundle.dummy_mappings, [mode, mapping])
+          endfor
+        endfor
+
+        unlet item
+      endfor
+    endif
   endif
 
   if !is_force && bundle.overwrite &&
