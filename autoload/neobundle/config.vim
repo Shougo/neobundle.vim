@@ -36,7 +36,7 @@ function! neobundle#config#init() "{{{
   filetype off
 
   for bundle in values(s:neobundles)
-    if !bundle.resettable ||
+    if (!bundle.resettable && !bundle.lazy) ||
           \ (bundle.sourced && bundle.lazy
           \ && neobundle#is_sourced(bundle.name))
       call neobundle#config#rtp_add(bundle)
