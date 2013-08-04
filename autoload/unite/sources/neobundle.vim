@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 May 2013.
+" Last Modified: 04 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,11 +123,11 @@ function! s:get_commit_status(bang, bundle) "{{{
 
   let cwd = getcwd()
 
-  lcd `=a:bundle.path`
+  call neobundle#util#cd(a:bundle.path)
 
   let output = neobundle#util#system(cmd)
 
-  lcd `=cwd`
+  call neobundle#util#cd(cwd)
 
   if neobundle#util#get_last_status()
     return printf('Error(%d) occured when executing "%s"',

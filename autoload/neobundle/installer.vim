@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Jul 2013.
+" Last Modified: 04 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -150,7 +150,7 @@ function! neobundle#installer#build(bundle)
   let cwd = getcwd()
   try
     if isdirectory(a:bundle.path)
-      lcd `=a:bundle.path`
+      call neobundle#util#cd(a:bundle.path)
     endif
 
     if a:bundle.name ==# 'vimproc' && neobundle#util#is_windows()
@@ -161,7 +161,7 @@ function! neobundle#installer#build(bundle)
     endif
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 
@@ -354,13 +354,13 @@ function! neobundle#installer#get_revision_number(bundle)
       return ''
     endif
 
-    lcd `=a:bundle.path`
+    call neobundle#util#cd(a:bundle.path)
 
     return neobundle#util#system(
           \ type.get_revision_number_command(a:bundle))
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 
@@ -377,13 +377,13 @@ function! s:get_commit_date(bundle)
       return 0
     endif
 
-    lcd `=a:bundle.path`
+    call neobundle#util#cd(a:bundle.path)
 
     return neobundle#util#system(
           \ type.get_commit_date_command(a:bundle))
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 
@@ -396,7 +396,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
     let type = neobundle#config#get_types(a:bundle.type)
 
     if isdirectory(a:bundle.path)
-      lcd `=a:bundle.path`
+      call neobundle#util#cd(a:bundle.path)
     endif
 
     let log_command = has_key(type, 'get_log_command') ?
@@ -406,7 +406,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
     return log != '' ? log : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 endfunction
@@ -459,7 +459,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
   try
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
-      lcd `=a:bundle.path`
+      call neobundle#util#cd(a:bundle.path)
     endif
 
     let rev = neobundle#installer#get_revision_number(a:bundle)
@@ -485,7 +485,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
     endif
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 
@@ -604,14 +604,14 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   try
     if isdirectory(bundle.path)
       " Cd to bundle path.
-      lcd `=bundle.path`
+      call neobundle#util#cd(bundle.path)
     endif
 
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
   finally
     if isdirectory(cwd)
-      lcd `=cwd`
+      call neobundle#util#cd(cwd)
     endif
   endtry
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Jun 2013.
+" Last Modified: 04 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -200,6 +200,10 @@ endfunction"}}}
 
 function! neobundle#util#unify_path(path) "{{{
   return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
+endfunction"}}}
+
+function! neobundle#util#cd(path) "{{{
+  execute 'lcd' fnameescape(a:path)
 endfunction"}}}
 
 let &cpo = s:save_cpo
