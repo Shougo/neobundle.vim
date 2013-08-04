@@ -264,7 +264,7 @@ function! neobundle#installer#reinstall(bundles)
           \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
 
     " Save info.
-    let arg = bundle.orig_arg
+    let arg = copy(bundle.orig_arg)
 
     " Remove.
     call neobundle#installer#clean(1, bundle.name)
