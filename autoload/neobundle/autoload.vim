@@ -89,6 +89,8 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
 endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)
+  let cnt = v:count > 0 ? v:count : ''
+
   " Delete dummy mappings.
   let input = s:get_input()
 
@@ -103,6 +105,8 @@ function! neobundle#autoload#mapping(mapping, name, mode)
     call feedkeys("\<Esc>", 'n')
     call feedkeys(v:operator, 'm')
   endif
+
+  call feedkeys(cnt, 'n')
 
   let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
   call feedkeys(mapping . input, 'm')
