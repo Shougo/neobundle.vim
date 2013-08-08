@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Aug 2013.
+" Last Modified: 08 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -472,8 +472,8 @@ function! neobundle#config#add(bundle, ...) "{{{
         \ !empty(prev_bundle) && prev_bundle.overwrite &&
         \ bundle.orig_arg !=# prev_bundle.orig_arg &&
         \ prev_bundle.resettable && prev_bundle.overwrite
-    echomsg string(bundle.orig_arg)
-    echomsg string(prev_bundle.orig_arg)
+    " echomsg string(bundle.orig_arg)
+    " echomsg string(prev_bundle.orig_arg)
     " Warning.
     call neobundle#util#print_error(
           \ 'Overwrite previous neobundle configuration in ' . bundle.name)
