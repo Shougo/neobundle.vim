@@ -1,4 +1,4 @@
-[![Stories in Ready](http://badge.waffle.io/Shougo/neobundle.vim.png)](http://waffle.io/Shougo/neobundle.vim)
+[![Stories in Ready](https://badge.waffle.io/Shougo/neobundle.vim.png)](https://waffle.io/Shougo/neobundle.vim)
 
 ## About
 
