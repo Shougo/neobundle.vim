@@ -128,6 +128,8 @@ function! neobundle#autoload#explorer(path, event)
     return
   endif
 
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
+        \ "get(v:val.autoload, 'explorer', 0)")
   if !empty(bundles)
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
