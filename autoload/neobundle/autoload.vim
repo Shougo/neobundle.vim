@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Jun 2013.
+" Last Modified: 12 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,9 +123,12 @@ function! neobundle#autoload#explorer(path, event)
     let path = '~'
   endif
 
-  let bundles = filter(neobundle#config#get_autoload_bundles(),
-        \ "get(v:val.autoload, 'explorer', 0)")
-  if !filereadable(s:expand(path)) && !empty(bundles)
+  let path = s:expand(path)
+  if !(isdirectory(path) || (!filereadable(path) && path =~ '^\h\w\+://'))
+    return
+  endif
+
+  if !empty(bundles)
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
   endif
