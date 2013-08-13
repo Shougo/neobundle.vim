@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Aug 2013.
+" Last Modified: 13 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,7 +115,9 @@ function! neobundle#init#_bundle(bundle) "{{{
     if type(depend) == type('')
       let depend = string(depend)
     endif
-    let depend_bundle = neobundle#parser#bundle(depend, 1)
+
+    let depend_bundle = type(depend) == type({}) ?
+          \ depend : neobundle#parser#bundle(depend, 1)
     let depend_bundle.lazy = bundle.lazy
     let depend_bundle.resettable = bundle.resettable
     let depend_bundle.overwrite = 0
