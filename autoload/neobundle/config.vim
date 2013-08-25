@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Aug 2013.
+" Last Modified: 25 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,7 +153,9 @@ function! neobundle#config#source(names, ...) "{{{
       call neobundle#call_hook('on_source', bundle)
 
       " Reload script files.
-      for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
+      for directory in filter(
+            \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
+            \ "isdirectory(bundle.rtp.'/'.v:val)")
         for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
           silent! source `=file`
         endfor
@@ -170,9 +172,9 @@ function! neobundle#config#source(names, ...) "{{{
 
     if !reset_ftplugin
       for filetype in split(&filetype, '\.')
-        let base = bundle.rtp . '/' . directory
         for directory in ['ftplugin', 'indent', 'syntax',
               \ 'after/ftplugin', 'after/indent', 'after/syntax']
+          let base = bundle.rtp . '/' . directory
           if filereadable(base.'/'.filetype.'.vim') ||
                 \ (directory =~# 'ftplugin$' &&
                 \   isdirectory(base . '/' . filetype) ||
@@ -464,6 +466,14 @@ function! neobundle#config#add(bundle, ...) "{{{
         endfor
 
         unlet item
+      endfor
+
+      " Load ftdetect.
+      for directory in filter(['ftdetect', 'after/ftdetect'],
+            \ "isdirectory(bundle.rtp.'/'.v:val)")
+        for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
+          silent! source `=file`
+        endfor
       endfor
     endif
   endif
