@@ -4,6 +4,8 @@
 
 NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/vundle).
 
+Requirements: Vim 7.2.051 or above.
+
 ## Advantages
 
 1. improved command name(:Bundle vs :NeoBundle).
