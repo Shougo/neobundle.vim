@@ -1296,8 +1296,11 @@ https://github.com/Shougo/neobundle.vim/issues/157
 A: You must write :NeoBundle lines before filetype plugin indent on and syntax
 enable.
 >
-	NeoBundle 'tomasr/molokai'
 	filetype plugin indent on
+
+	NeoBundle 'tomasr/molokai'
+	...
+
 	syntax enable
 	colorscheme molokai
 <
