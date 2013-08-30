@@ -812,10 +812,15 @@ OPTIONS 					*neobundle-options*
 		It accepts some version formats such as "7" and "7.3" and
 		"7.3.885".
 
+						*neobundle-options-disabled*
+		disabled		(Number)
+		If set to 1, neobundle will disable the plugin.
+
 		Example: >
 	" neocomplete requires vim 7.3.885 or above.
 	NeoBundle 'Shougo/neocomplete', {
 	    \ 'depends' : 'Shougo/context_filetype.vim',
+	    \ 'disabled' : !has('lua'),
 	    \ 'vim_version' : '7.3.885'
 	    \ }
 <
