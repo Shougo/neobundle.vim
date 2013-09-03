@@ -706,6 +706,9 @@ OPTIONS 					*neobundle-options*
 			Mappings list. The items are {mapping} or
 			[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
 			omitted, "nxo" is used.
+			Note: You can use plugin prefix mappings.
+			For example, you can use "<Plug>(ref-" instead of
+			"<Plug>(ref-back)" and so on.
 
 			unite_sources	(List)
 			Unite source name list.
@@ -740,7 +743,7 @@ OPTIONS 					*neobundle-options*
 	      \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
 	NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
 	      \ 'mappings' : [
-	      \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
+	      \   '<Plug>(smartword-'']
 	      \ }}
 	NeoBundleLazy 'Shougo/vim-vcs', {
 	      \ 'depends' : 'thinca/vim-openbuf',
@@ -753,7 +756,7 @@ OPTIONS 					*neobundle-options*
 	      \                   'complete' : 'customlist,vimshell#complete'},
 	      \                 'VimShellExecute', 'VimShellInteractive',
 	      \                 'VimShellTerminal', 'VimShellPop'],
-	      \   'mappings' : ['<Plug>(vimshell_switch)']
+	      \   'mappings' : ['<Plug>(vimshell_']
 	      \ }})
 	NeoBundleLazy 'Shougo/vimfiler', {
 	      \ 'depends' : 'Shougo/unite.vim',
@@ -762,7 +765,7 @@ OPTIONS 					*neobundle-options*
 	      \                    'complete' : 'customlist,vimfiler#complete' },
 	      \                  'VimFilerExplorer',
 	      \                  'Edit', 'Read', 'Source', 'Write'],
-	      \    'mappings' : ['<Plug>(vimfiler_switch)'],
+	      \    'mappings' : ['<Plug>(vimfiler_'],
 	      \    'explorer' : 1,
 	      \ }
 	      \ }
@@ -774,8 +777,7 @@ OPTIONS 					*neobundle-options*
 	NeoBundleLazy 'tyru/winmove.vim', { 'autoload' : {
 	      \ 'gui' : 1,
 	      \ 'mappings' : [
-	      \   ['n', '<Plug>(winmove-up)', '<Plug>(winmove-down)',
-	      \         '<Plug>(winmove-left)', '<Plug>(winmove-right)']],
+	      \   ['n', '<Plug>(winmove-']],
 	      \ },
 	      \ 'augroup' : 'winmove',
 	      \ }
