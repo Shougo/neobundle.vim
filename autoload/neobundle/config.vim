@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Aug 2013.
+" Last Modified: 05 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -291,9 +291,8 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
   if isdirectory(rtp)
     " Join to the tail in runtimepath.
     let rtps = neobundle#util#split_rtp(&runtimepath)
-    let n = index(rtps, neobundle#get_rtp_dir())
     let &runtimepath = neobundle#util#join_rtp(
-          \ insert(rtps, rtp, n), &runtimepath, rtp)
+          \ insert(rtps, rtp), &runtimepath, rtp)
   endif
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.fnameescape(rtp.'/after')
