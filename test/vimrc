@@ -1,12 +1,9 @@
-set nocompatible                " recommend
-
-let testdir = expand('~/neobundle-test/bundles', 1)
-
-filetype off                    " required!
-
 if has('vim_starting')
+  set nocompatible                " recommend
   execute 'set' 'runtimepath+='.getcwd()
 endif
+
+let testdir = expand('~/neobundle-test/bundles', 1)
 
 call neobundle#rc(expand(testdir, 1))
 

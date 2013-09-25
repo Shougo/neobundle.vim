@@ -1,15 +1,12 @@
-set nocompatible                " recommend
+if has('vim_starting')
+  set nocompatible
+  execute 'set' 'runtimepath+='.getcwd()
+endif
 
 let testdir = expand('~/neobundle-test/bundles', 1)
 
 let neobundle#types#git#default_protocol =
       \ exists('$http_proxy') ? 'https' : 'git'
-
-filetype off                    " required!
-
-if has('vim_starting')
-  execute 'set' 'runtimepath+='.getcwd()
-endif
 
 call neobundle#rc(expand(testdir, 1))
 

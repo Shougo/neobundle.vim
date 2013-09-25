@@ -119,8 +119,8 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 		Note: You must not call the function inner
 		"has('vim_starting')".
 >
-	set nocompatible
 	if has('vim_starting')
+	  set nocompatible
 	  set runtimepath+={path to neobundle directory}
 	endif
 	call neobundle#rc(expand('~/.vim/bundle'))
@@ -932,9 +932,8 @@ OPTIONS 					*neobundle-options*
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
-	set nocompatible                " Recommend
-	
 	if has('vim_starting')
+	  set nocompatible                " Recommend
 	  set runtimepath+={path to neobundle directory}
 	endif
 	

@@ -1,8 +1,7 @@
 " Sample installation test.
 
-set nocompatible               " Be iMproved
-
 if has('vim_starting')
+  set nocompatible               " Be iMproved
   set runtimepath+=.
 endif
 
