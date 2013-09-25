@@ -937,8 +937,8 @@ EXAMPLES					*neobundle-examples*
 	  set runtimepath+={path to neobundle directory}
 	endif
 	
-	" Use https protocol over proxy.
-	" let g:neobundle#types#git#default_protocol = 'https'
+	" Use git protocol.
+	" let g:neobundle#types#git#default_protocol = 'git'
 	
 	call neobundle#rc(expand('~/.vim/bundle'))
 	
