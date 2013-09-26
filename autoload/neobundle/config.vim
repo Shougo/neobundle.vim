@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Sep 2013.
+" Last Modified: 26 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -350,6 +350,12 @@ function! neobundle#config#load_direct_bundles() "{{{
 endfunction"}}}
 
 function! neobundle#config#save_direct(arg) "{{{
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
+    return
+  endif
+
   let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
   let bundles = filereadable(path) ? readfile(path) : []
   call writefile(add(bundles, 'NeoBundle ' . a:arg), path)

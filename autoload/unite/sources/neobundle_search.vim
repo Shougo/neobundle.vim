@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle_search.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jun 2013.
+" Last Modified: 26 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,6 +78,12 @@ function! s:source.hooks.on_init(args, context) "{{{
   endif
 endfunction"}}}
 function! s:source.gather_candidates(args, context) "{{{
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
+    return []
+  endif
+
   call unite#print_source_message('Search word: '
         \ . a:context.source__input, s:source.name)
 

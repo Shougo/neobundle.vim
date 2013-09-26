@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Aug 2013.
+" Last Modified: 26 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,13 @@ function! neobundle#util#is_mac() "{{{
 endfunction"}}}
 function! neobundle#util#is_cygwin() "{{{
   return s:is_cygwin
+endfunction"}}}
+
+" Sudo check.
+function! neobundle#util#is_sudo() "{{{
+  return $SUDO_USER != '' && $USER !=# $SUDO_USER
+      \ && $HOME !=# expand('~'.$USER)
+      \ && $HOME ==# expand('~'.$SUDO_USER)
 endfunction"}}}
 
 " Check vimproc. "{{{

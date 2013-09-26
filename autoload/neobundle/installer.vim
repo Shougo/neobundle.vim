@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Aug 2013.
+" Last Modified: 26 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,12 @@ let s:log = []
 let s:updates_log = []
 
 function! neobundle#installer#install(bang, bundle_names)
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
+    return
+  endif
+
   let bundle_dir = neobundle#get_neobundle_dir()
   if !isdirectory(bundle_dir)
     call mkdir(bundle_dir, 'p')
@@ -104,6 +110,12 @@ function! neobundle#installer#install(bang, bundle_names)
 endfunction
 
 function! neobundle#installer#update(bundles)
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
+    return
+  endif
+
   call neobundle#installer#helptags(
         \ neobundle#config#get_neobundles())
   call s:reload(filter(copy(a:bundles),
@@ -113,6 +125,12 @@ function! neobundle#installer#update(bundles)
 endfunction
 
 function! neobundle#installer#helptags(bundles)
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
+    return
+  endif
+
   let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
 
   if !empty(help_dirs)
@@ -200,6 +218,11 @@ function! s:build_vimproc_dll(cmd)
 endfunction
 
 function! neobundle#installer#clean(bang, ...)
+  if neobundle#util#is_sudo()
+    call neobundle#util#print_error('"sudo vim" is detected. This feature is disabled.')
+    return
+  endif
+
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
         \ "(v:val.script_type != '') ?
         \  v:val.base . '/' . v:val.directory : v:val.path")
