@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Sep 2013.
+" Last Modified: 29 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,8 @@ call neobundle#util#set_default(
 call neobundle#util#set_default(
       \ 'g:neobundle#install_max_processes', 4,
       \ 'g:unite_source_neobundle_install_max_processes')
+call neobundle#util#set_default(
+      \ 'g:neobundle#install_process_timeout', 60)
 
 let s:log = []
 let s:updates_log = []
@@ -494,6 +496,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'output' : '',
           \ 'status' : -1,
           \ 'eof' : 0,
+          \ 'start_time' : localtime(),
           \ }
     if neobundle#util#has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
@@ -516,10 +519,13 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
+  let is_timeout = (localtime() - a:process.start_time)
+        \             >= g:neobundle#install_process_timeout
+
   if neobundle#util#has_vimproc()
     let a:process.output .= vimproc#util#iconv(
           \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
-    if !a:process.proc.stdout.eof
+    if !a:process.proc.stdout.eof && !is_timeout
       return
     endif
 
@@ -545,15 +551,17 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let updated_time = s:get_commit_date(bundle)
   let bundle.checked_time = localtime()
 
-  if status && a:process.rev ==# rev
-        \ && (bundle.type !=# 'git' ||
-        \     a:process.output !~# 'up-to-date\|up to date')
+  if is_timeout
+        \ || (status && a:process.rev ==# rev
+        \     && (bundle.type !=# 'git' ||
+        \     a:process.output !~# 'up-to-date\|up to date'))
     let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#log(message, a:is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)
     call neobundle#installer#error(
-          \ split(a:process.output, '\n'), a:is_unite)
+          \ (is_timeout ? 'Process timeout.' :
+          \    split(a:process.output, '\n')), a:is_unite)
     call add(a:context.source__errored_bundles,
           \ bundle)
   elseif a:process.rev ==# rev
