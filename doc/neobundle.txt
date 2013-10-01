@@ -150,7 +150,7 @@ neobundle#is_sourced({bundle-name})
 				*neobundle#is_sourced()*
 		Checks if bundle {bundle-name} is loaded.
 
-neobundle#local({directory}, {options})		 *neobundle#local()*
+neobundle#local({directory}, [{options}])		 *neobundle#local()*
 		Adds the subdirectories in {directory} to
 		runtimepath, like |pathogen| does. See |neobundle-options| for
 		keys to set in {options}.
@@ -162,7 +162,6 @@ neobundle#local({directory}, {options})		 *neobundle#local()*
 		" Load plugin from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle", {})
 <
-
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get the neobundle options dictionary for {bundle-name}.
 		Useful for setting hooks.
