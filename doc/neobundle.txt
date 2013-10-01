@@ -157,6 +157,11 @@ neobundle#local({directory}, {options})		 *neobundle#local()*
 		Note: |:NeoBundleLocal| is a shortcut for this function.
 		Note: Unlike |:NeoBundleLocal|, all plugins in {directory}
 		get loaded.
+>
+	
+		" Load plugin from "~/.vim/bundle".
+		call neobundle#local("~/.vim/bundle", {})
+<
 
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get the neobundle options dictionary for {bundle-name}.
