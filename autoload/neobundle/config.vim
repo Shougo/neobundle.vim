@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Sep 2013.
+" Last Modified: 04 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -382,8 +382,7 @@ function! neobundle#config#add(bundle, ...) "{{{
   let bundle = a:bundle
   let is_force = get(a:000, 0, bundle.local)
 
-  if bundle.disabled
-        \ || (!is_force && !bundle.overwrite &&
+  if (!is_force && !bundle.overwrite &&
         \     has_key(s:neobundles, bundle.name))
     return
   endif
@@ -399,7 +398,8 @@ function! neobundle#config#add(bundle, ...) "{{{
   endif
   let s:neobundles[bundle.name] = bundle
 
-  if (bundle.gui && !has('gui_running'))
+  if bundle.disabled
+        \ || (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))
         \ || (bundle.vim_version != ''
         \     && s:check_version(bundle.vim_version))
