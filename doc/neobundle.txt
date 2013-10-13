@@ -719,7 +719,13 @@ OPTIONS 					*neobundle-options*
 			Note: You can use plugin prefix mappings.
 			For example, you can use "<Plug>(ref-" instead of
 			"<Plug>(ref-back)" and so on.
-
+			Note: But you cannot use lazy <Plug> mappings twice.
+			For example: >
+			NeoBundleLazy 'osyo-manga/vim-anzu', {'autoload': {'mappings': '<Plug>(anzu-'}}
+			  " Not working!!
+			  nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
+			  nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
+<
 			unite_sources	(List)
 			Unite source name list.
 			Note: To use this feature, you must install latest
