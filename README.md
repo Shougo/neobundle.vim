@@ -51,7 +51,7 @@ Requirements: Vim 7.2.051 or above.
      " Note: You don't set neobundle setting in .gvimrc!
      " Original repos on github
      NeoBundle 'tpope/vim-fugitive'
-     NeoBundle 'Lokaltog/vim-easymotion'
+     NeoBundle 'Lokaltog/vim-easymotion', '09c0cea8'   " This plugin is locked at revision 09c0cea8 
      NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
      " vim-scripts repos
      NeoBundle 'L9'
