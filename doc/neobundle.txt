@@ -1098,13 +1098,13 @@ RECIPE						*neobundle-recipe*
 neobundle/search source loads recipes from "recipes/*.vimrecipe" files in
 'runtimepath'.
 
-The standard recipes are in "neobundle-vim-scripts".
+The standard recipes are in "neobundle-vim-receipes".
 
-https://github.com/Shougo/neobundle-vim-scripts
+https://github.com/Shougo/neobundle-vim-receipes
 
 You can use the recipes with the following command in .vimrc.
 >
-	NeoBundle 'Shougo/neobundle-vim-scripts'
+	NeoBundle 'Shougo/neobundle-vim-receipes'
 <
 
 The recipe files are in json format, like this:
