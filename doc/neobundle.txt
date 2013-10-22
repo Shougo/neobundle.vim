@@ -124,10 +124,10 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 	  set runtimepath+={path to neobundle directory}
 	endif
 	call neobundle#rc(expand('~/.vim/bundle'))
-	
+
 	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 	...
-	
+
 	filetype plugin indent on
 <
 neobundle#source({bundle-names})		*neobundle#source()*
@@ -158,7 +158,6 @@ neobundle#local({directory}, [{options}])		 *neobundle#local()*
 		Note: Unlike |:NeoBundleLocal|, all plugins in {directory}
 		get loaded.
 >
-	
 		" Load plugin from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle", {})
 <
@@ -171,7 +170,7 @@ neobundle#get({bundle-name})			 *neobundle#get()*
 	      \ 'mappings' : '<Plug>(open-browser-wwwsearch)',
 	      \ }}
 	nmap gs <Plug>(open-browser-wwwsearch)
-	
+
 	let bundle = neobundle#get('open-browser.vim')
 	function! bundle.hooks.on_source(bundle)
 	  nnoremap <Plug>(open-browser-wwwsearch)
@@ -346,8 +345,9 @@ COMMANDS 					*neobundle-commands*
 
 						*:NeoBundleRecipe*
 :NeoBundleRecipe {recipe-name} [, {options}]
-		Registers a bundle from recipe.  This command is
-		useful if you don't want to set bundle options.
+		Registers a bundle from "recipes/{recipe-name}.vimrecipe" file
+		in 'runtimepath'.  This command is useful if you don't want to
+		set bundle options.
 		Note: You must install recipes(|neobundle-recipe|) before
 		executing it.
 >
@@ -510,8 +510,8 @@ OPTIONS 					*neobundle-options*
 <
 						*neobundle-options-default*
 		recipe			(String)
-		Use default options from the recipe file. (See
-		|:NeoBundleRecipe|).
+		Use default options from the "recipes/{recipe-name}.vimrecipe"
+		file in 'runtimepath'. (See |:NeoBundleRecipe|).
 
 		Example:
 >
@@ -637,11 +637,11 @@ OPTIONS 					*neobundle-options*
 		Neobundle will call their |VimEnter| or |GUIEnter| autocmds
 		automatically when |:NeoBundleSource| is executed.
 		Note: You'll want to set this option because some plugins
-		rely on autocmds defined for |VimEnter| or |GUIEnter|, but by using 
-		|:NeoBundleSource| after loading .vimrc, those autocmds may
-		get skipped. Some examples are, "fugitive", "NERDTree", and
-		"session.vim".
-		
+		rely on autocmds defined for |VimEnter| or |GUIEnter|, but by
+		using |:NeoBundleSource| after loading .vimrc, those autocmds
+		may get skipped. Some examples are, "fugitive", "NERDTree",
+		and "session.vim".
+
 		Examples:
 >
 	" NERDTree uses augroup NERDTreeHijackNetrw.
@@ -649,7 +649,6 @@ OPTIONS 					*neobundle-options*
 	" fugitive uses augroup fugitive.
 	NeoBundle 'tpope/vim-fugitive', { 'augroup' : 'fugitive'}
 <
-		
 		This option is also valid in |:NeoBundleLazy|.
 
 					*neobundle-options-external_commands*
@@ -707,7 +706,7 @@ OPTIONS 					*neobundle-options*
 			Filetype list.
 
 			commands	(List) or (String)
-			Command list. The item can be following dictionary. 
+			Command list. The item can be following dictionary.
 				name		(String)
 				Command name.
 
@@ -970,18 +969,18 @@ EXAMPLES					*neobundle-examples*
 	  set nocompatible                " Recommend
 	  set runtimepath+={path to neobundle directory}
 	endif
-	
+
 	" Use git protocol.
 	" let g:neobundle#types#git#default_protocol = 'git'
-	
+
 	call neobundle#rc(expand('~/.vim/bundle'))
-	
+
 	" Let neobundle manage neobundle
 	NeoBundleFetch 'Shougo/neobundle.vim'
-	
+
 	" Use neobundle standard recipes.
 	NeoBundle 'Shougo/neobundle-vim-recipes'
-	
+
 	" My Bundles here:
 	" Refer to |:NeoBundle-examples|.
 	" Note: You don't set neobundle setting in .gvimrc!
@@ -1008,20 +1007,20 @@ Here let me explain about a source for |unite| provided in neobundle.
 					*neobundle-unite-source-neobundle*
 neobundle
 		Nominates bundles as a candidate.
-		
+
 		Note: On windows
 		If argument is bang(!), print plugins path instead of plugins
 		status.
 		Note: Other platforms
 		If argument is bang(!), print plugins status instead of plugins
 		path.
-		
+
 		http://github.com/Shougo/vimproc
 
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asynchronously.
-		
+
 		Note: To install |vimproc| plugin is recommended.
 		http://github.com/Shougo/vimproc
 
@@ -1069,7 +1068,7 @@ neobundle/search
 
 		Source arguments:
 		source names.
-		
+
 		Following source names are available:
 		"vim-script.org" :
 			Search plugins settings from "http://vim-scripts.org/".
@@ -1138,9 +1137,10 @@ The recipe files are in json format, like this:
 	}
 <
 		A recipe has the following keys. Most of keys are the same as
-		those used in the neobundle configuration dictionary.
+		those used in the neobundle configuration
+		dictionary(|neobundle-options|).
 		"#" starts a comment string, but they must start at the
-		beginning of the line. 
+		beginning of the line.
 
 		name			(String)	(Required)
 		Specify plugin name.
@@ -1173,6 +1173,9 @@ The recipe files are in json format, like this:
 		Runtime path. Some plugin repositories contain the
 		vim plugins in a subdirectory, whose name is usually
 		"vim".
+
+		autoload		(Dictionary)	(Optional)
+		Autoload rules. See |neobundle-options-autoload|.
 
 		depends		(List or String)	(Optional)
 		Dependency plugins list.
@@ -1232,7 +1235,7 @@ Note: You must not call |neobundle#rc()| inner "has('vim_starting')".
 	  " This is wrong neobundle#rc().
 	  "call neobundle#rc(expand('~/.vim/bundle'))
 	endif
-	
+
 	" This is OK.
 	call neobundle#rc(expand('~/.vim/bundle'))
 <
