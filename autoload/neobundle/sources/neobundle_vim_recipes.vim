@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: neobundle_vim_scripts.vim
+" FILE: neobundle_vim_recipes.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 22 Oct 2013.
 " License: MIT license  {{{
