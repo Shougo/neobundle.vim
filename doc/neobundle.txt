@@ -209,9 +209,9 @@ neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
+						*:NeoBundle*
 :NeoBundle {repository} [[,{revision}] [,{options}]]
 :NeoBundle {repository} ,{revision}, {default} [,{options}]]
-						*:NeoBundle*
 		Configures a bundle.
 		{repository} is the repository URI. {revision} is the desired
 		revision or branch name. If omitted, the current latest
@@ -275,9 +275,9 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleLocal ~/.vim/bundle
 <
+						*:NeoBundleLazy*
 :NeoBundleLazy {repository} [[,{revision}] [,{options}]]
 :NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
-						*:NeoBundleLazy*
 		Registers a bundle, but doesn't add it to 'runtimepath'.
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
@@ -305,8 +305,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleDocs					*:NeoBundleDocs*
 		Execute |:helptags| for all bundles manually.
 
-:NeoBundleDepends {repository} [, {options}]
 						*:NeoBundleDepends*
+:NeoBundleDepends {repository} [, {options}]
 		Registers a bundle and installs the plugin.  This command is
 		useful for defining Vim plugin dependencies.
 		Note: This command does not overwrite user neobundle
@@ -316,8 +316,8 @@ COMMANDS 					*neobundle-commands*
 		  NeoBundleDepends 'Shougo/unite.vim.git'
 		endif
 <
-:NeoBundleDirectInstall {repository} [, {options}]
 						*:NeoBundleDirectInstall*
+:NeoBundleDirectInstall {repository} [, {options}]
 		Registers a bundle, and installs it directly.
 		Note: The settings are saved in "direct_bundles.vim" in
 		|neobundle#rc()| directory.
@@ -328,8 +328,8 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
-:NeoBundleDirectEdit
 						*:NeoBundleDirectEdit*
+:NeoBundleDirectEdit
 		Edit direct installed bundles easily.
 
 :NeoBundleDisable {name}...			*:NeoBundleDisable*
@@ -344,6 +344,15 @@ COMMANDS 					*neobundle-commands*
 		also check documentation directories and will execute
 		|:NeoBundleDocs| automatically.
 
+						*:NeoBundleRecipe*
+:NeoBundleRecipe {recipe-name} [, {options}]
+		Registers a bundle from recipe.  This command is
+		useful if you don't want to set bundle options.
+		Note: You must install recipes(|neobundle-recipe|) before
+		executing it.
+>
+		NeoBundleRecipe 'vimproc'
+<
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -498,6 +507,15 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'git://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
+<
+						*neobundle-options-default*
+		recipe			(String)
+		Use default options from the recipe file. (See
+		|:NeoBundleRecipe|).
+
+		Example:
+>
+		NeoBundle 'Shougo/unite.vim', {'recipe' : 'unite'}
 <
 						*neobundle-options-base_path*
 		base			(String)
@@ -962,7 +980,7 @@ EXAMPLES					*neobundle-examples*
 	NeoBundleFetch 'Shougo/neobundle.vim'
 	
 	" Use neobundle standard recipes.
-	NeoBundle 'Shougo/neobundle-vim-scripts'
+	NeoBundle 'Shougo/neobundle-vim-recipes'
 	
 	" My Bundles here:
 	" Refer to |:NeoBundle-examples|.
@@ -1055,7 +1073,7 @@ neobundle/search
 		Following source names are available:
 		"vim-script.org" :
 			Search plugins settings from "http://vim-scripts.org/".
-		"neobundle-vim-scripts" :
+		"neobundle-vim-recipes" :
 			Search plugins settings from the |neobundle-recipe|.
 		"github"  :
 			Search plugins settings from "http://github.org/".

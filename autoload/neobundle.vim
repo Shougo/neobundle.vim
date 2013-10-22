@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Oct 2013.
+" Last Modified: 22 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,6 +67,10 @@ command! -nargs=+ NeoBundleLazy
 
 command! -nargs=+ NeoBundleFetch
       \ call neobundle#parser#fetch(
+      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
+
+command! -nargs=+ NeoBundleRecipe
+      \ call neobundle#parser#recipe(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 command! -nargs=1 -complete=dir NeoBundleLocal
@@ -136,6 +140,9 @@ function! neobundle#rc(...)
   let s:neobundle_dir =
         \ neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(s:neobundle_dir))
+  if s:neobundle_dir =~ '/$'
+    let s:neobundle_dir = s:neobundle_dir[: -2]
+  endif
 
   " Join to the tail in runtimepath.
   let rtp = neobundle#get_rtp_dir()

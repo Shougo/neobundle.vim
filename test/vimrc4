@@ -1,0 +1,23 @@
+" Recipe installation test.
+
+if has('vim_starting')
+  set nocompatible               " Be iMproved
+  set runtimepath+=.
+endif
+
+call neobundle#rc(expand('~/test-bundle/'))
+
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Recommended to install
+" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+NeoBundle 'Shougo/vimproc'
+
+" Use recipe.
+NeoBundle 'Shougo/neobundle-vim-recipes'
+NeoBundleRecipe 'vinarise'
+NeoBundle 'Shougo/neocomplcache-snippets-complete',
+      \ { 'recipe' : 'neocomplcache-snippets-complete'}
+
+filetype plugin indent on     " Required!

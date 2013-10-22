@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Aug 2013.
+" Last Modified: 22 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,6 +66,35 @@ function! neobundle#parser#fetch(arg) "{{{
 
   " Clear runtimepath.
   let bundle.rtp = ''
+
+  call neobundle#config#add(bundle)
+
+  return bundle
+endfunction"}}}
+
+function! neobundle#parser#recipe(arg) "{{{
+  " Parse args.
+  let arg = type(a:arg) == type([]) ?
+   \ string(a:arg) : '[' . a:arg . ']'
+  sandbox let args = eval(arg)
+  if empty(args)
+    return {}
+  endif
+
+  let recipe = args[0]
+  let recipe_bundle = neobundle#parser#_parse_recipe(recipe)
+  if empty(recipe_bundle)
+    return {}
+  endif
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ recipe_bundle.path,
+        \ [extend(recipe_bundle, get(args, 1, {}))])
+  if empty(bundle)
+    return {}
+  endif
+
+  let bundle.orig_arg = copy(a:arg)
 
   call neobundle#config#add(bundle)
 
@@ -140,8 +169,15 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   let path = neobundle#util#expand(
         \ substitute(a:name, "['".'"]\+', '', 'g'))
   let opts = s:parse_options(a:opts)
+  if !has_key(opts, 'recipe')
+    let opts.recipe = ''
+  endif
   let bundle = extend(neobundle#parser#path(
         \ path, opts), opts)
+  if bundle.recipe != ''
+    call extend(bundle,
+          \ neobundle#parser#_parse_recipe(bundle.recipe), 'keep')
+  endif
 
   let bundle.orig_name = a:name
   let bundle.orig_path = path
@@ -256,6 +292,62 @@ function! s:parse_options(opts) "{{{
   endif
 
   return options
+endfunction"}}}
+
+function! neobundle#parser#_parse_recipe(recipe) "{{{
+  let recipe = a:recipe
+  if recipe !~ '\.vimrecipe$'
+    let recipe .= '.vimrecipe'
+  endif
+
+  if recipe !~ '^/\|^\w\+:'
+    " Search from runtimepath.
+    let path = get(split(globpath(&runtimepath,
+        \ 'recipes/' . recipe, 1), '\n'), 0, '')
+    if path == ''
+      " Use name conversion.
+      let recipe = neobundle#util#name_conversion(a:recipe)
+      if recipe !~ '\.vimrecipe$'
+        let recipe .= '.vimrecipe'
+      endif
+
+      let path = get(split(globpath(&runtimepath,
+            \ 'recipes/' . recipe, 1), '\n'), 0, '')
+    endif
+  else
+    let path = recipe
+  endif
+
+  if !filereadable(path)
+    call neobundle#util#print_error(printf(
+          \ '[neobundle] The recipe file "%s" is not found.', a:recipe))
+    return {}
+  endif
+
+  sandbox let data = eval(join(filter(readfile(path),
+          \ "v:val !~ '^\\s*\\%(#.*\\)\\?$'"), ''))
+
+  if !has_key(data, 'name') || !has_key(data, 'path')
+    call neobundle#util#print_error(
+          \ '[neobundle] ' . path)
+    call neobundle#util#print_error(
+          \ '[neobundle] The recipe file format is wrong.')
+    return {}
+  endif
+
+  let data.receipe_path = path
+
+  " Initialize.
+  let default = {
+        \ 'options' : {},
+        \ 'description' : '',
+        \ 'website' : '',
+        \ 'script_type' : '',
+        \ }
+
+  let data = extend(data, default, 'keep')
+
+  return data
 endfunction"}}}
 
 let &cpo = s:save_cpo
