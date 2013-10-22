@@ -29,7 +29,7 @@ set cpo&vim
 
 let s:repository_cache = []
 
-function! neobundle#sources#neobundle_vim_scripts#define() "{{{
+function! neobundle#sources#neobundle_vim_recipes#define() "{{{
   return s:source
 endfunction"}}}
 
