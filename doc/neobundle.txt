@@ -508,7 +508,7 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'git://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
 <
-						*neobundle-options-default*
+						*neobundle-options-recipe*
 		recipe			(String)
 		Use default options from the "recipes/{recipe-name}.vimrecipe"
 		file in 'runtimepath'. (See |:NeoBundleRecipe|).
