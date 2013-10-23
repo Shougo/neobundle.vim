@@ -84,8 +84,22 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
 
   call neobundle#config#source(a:name)
 
-  execute (a:line1 == line('.') && a:line2 == line('.') ?
-        \ '' : a:line1.','.a:line2).a:command.a:bang a:args
+  if a:line1 != a:line2
+    let range = a:line1.','.a:line2
+    execute range.a:command.a:bang a:args
+  elseif a:line1 != line('.')
+    let range = a:line1.','.a:line2
+    try
+      execute range.a:command.a:bang a:args
+    catch /^Vim\%((\a\+)\)\=:E492/
+      " E492: Not an editor command
+      execute a:command.a:bang a:args
+    endtry
+  else
+    let range = ''
+    execute range.a:command.a:bang a:args
+  endif
+
 endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)
