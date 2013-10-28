@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Sep 2013.
+" Last Modified: 28 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,7 +95,7 @@ function! neobundle#util#system(str, ...) "{{{
 
   if a:0 == 0
     let output = neobundle#util#has_vimproc() ?
-          \ vimproc#system(command) : system(command)
+          \ vimproc#system(command) : system(command, "\<C-d>")
   elseif a:0 == 1
     let output = neobundle#util#has_vimproc() ?
           \ vimproc#system(command, input) : system(command, input)
