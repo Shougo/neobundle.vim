@@ -1359,10 +1359,13 @@ A: You must not call |neobundle#rc()| inner "has('vim_starting')".
 	call neobundle#rc(expand('~/.vim/bundle'))
 >
 
-Q: Timeout on github makes Vim terribly slow if the repository is not found.
+Q: Timeout on github makes Vim terribly slow if the repository is not found in
+console Vim.
 https://github.com/Shougo/neobundle.vim/issues/175
 
-A: It is protocol problem in your environment. You should change
+A: |vimproc| and |system()| uses input redirection.  But git ignores it when
+you used https protocol in console Vim. So it freezes. I think it is bad
+feature in git. I cannot fix it.  You should change
 |g:neobundle#types#git#default_protocol| to "git".
 
 ==============================================================================
