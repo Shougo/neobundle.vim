@@ -332,7 +332,7 @@ COMMANDS 					*neobundle-commands*
 		Note: This command does not overwrite user neobundle
 		configuration.
 >
-		if exists(':NeoBundleDepends')
+		if exists(':NeoBundleDepends') == 2
 		  NeoBundleDepends 'Shougo/unite.vim.git'
 		endif
 <
