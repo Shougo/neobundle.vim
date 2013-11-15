@@ -194,9 +194,12 @@ neobundle#call_hook({hook-name})		 *neobundle#call_hook()*
 		"on_source" hooks in sourced bundles.
 
 neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
+neobundle#config({dict})
 		Change plugin options for {bundle-name}.
 		Note: To lazy-load a plugin, you can set the "lazy" flag after
 		calling |:NeoBundle| or |:NeoBundleLocal|.
+		It you omit {bundle-name}, it uses |neobundle#tapped|
+		variable.
 >
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {
@@ -204,7 +207,24 @@ neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
 	\ 'autoload' : {
 	\   'insert' : 1,
 	\ }})
+
+	" Use neobundle#tap()
+	if neobundle#tap('neocomplete')
+	  " Some settings...
+	  function! neobundle#tapped.hooks.on_source(bundle)
+	    " Some settings...
+	  endfunction
+	  call neobundle#untap()
+	endif
 <
+neobundle#tap({bundle-name})		 *neobundle#tap()*
+		Initialize |neobundle#tapped| variable as {bundle-name}
+		bundle.
+		It returns non-zero if {bundle-name} is exists.
+
+neobundle#untap()		 *neobundle#untap()*
+		Clear current |neobundle#tapped| variable.
+
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -355,6 +375,9 @@ COMMANDS 					*neobundle-commands*
 <
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
+
+neobundle#tapped				*neobundle#tapped*
+		Current bundle variable set by |neobundle#tap()|.
 
 g:neobundle#default_site			*g:neobundle#default_site*
 		The default repository site if "site" option is omitted.

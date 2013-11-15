@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Oct 2013.
+" Last Modified: 15 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,6 +53,7 @@ call neobundle#util#set_default(
 let s:neobundle_dir = get(
       \ filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
       \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
+let g:neobundle#tapped = {}
 
 command! -nargs=+ NeoBundle
       \ call neobundle#parser#bundle(
@@ -248,8 +249,19 @@ function! neobundle#get_hooks(name)
   return get(neobundle#config#get(a:name), 'hooks', {})
 endfunction
 
-function! neobundle#config(name, dict)
-  return neobundle#config#set(a:name, a:dict)
+function! neobundle#tap(name) "{{{
+  let g:neobundle#tapped = neobundle#get(a:name)
+  return !empty(g:neobundle#tapped)
+endfunction"}}}
+function! neobundle#untap() "{{{
+  let g:neobundle#tapped = {}
+endfunction"}}}
+
+function! neobundle#config(arg, ...)
+  " Use neobundle#tapped or name.
+  return type(a:arg) == type({}) ?
+        \ neobundle#config#set(g:neobundle#tapped.name, a:arg) :
+        \ neobundle#config#set(a:arg, a:1)
 endfunction
 
 function! neobundle#call_hook(hook_name, ...)
