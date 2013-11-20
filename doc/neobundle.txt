@@ -459,6 +459,13 @@ g:neobundle#types#git#default_protocol
 
 		Defaults to "https".
 
+				*g:neobundle#types#git#enable_submodule*
+g:neobundle#types#git#enable_submodule
+		If it is non-zero, neobundle enables git submodule support.
+		But it may be slow in Windows environment.
+
+		Defaults to 1.
+
 				*g:neobundle#types#hg#default_protocol*
 g:neobundle#types#hg#default_protocol
 		The default protocol used for hg (bitbucket).

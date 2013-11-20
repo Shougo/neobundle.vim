@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2013.
+" Last Modified: 20 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,8 @@ set cpo&vim
 call neobundle#util#set_default(
       \ 'g:neobundle#types#git#default_protocol', 'https',
       \ 'g:neobundle_default_git_protocol')
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#git#enable_submodule', 1)
 "}}}
 
 function! neobundle#types#git#define() "{{{
@@ -110,11 +112,17 @@ function! s:type.get_sync_command(bundle) "{{{
   endif
 
   if !isdirectory(a:bundle.path)
-    let cmd = 'git clone --recursive'
+    let cmd = 'git clone'
+    if g:neobundle#types#git#enable_submodule
+      let cmd .= ' --recursive'
+    endif
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'git pull --rebase && git submodule update --init --recursive'
+    let cmd = 'git pull --rebase'
+    if g:neobundle#types#git#enable_submodule
+      let cmd .= ' && git submodule update --init --recursive'
+    endif
   endif
 
   return cmd
