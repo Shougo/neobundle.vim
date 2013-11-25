@@ -225,13 +225,13 @@ function! neobundle#installer#clean(bang, ...)
     return
   endif
 
-  let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
-        \ "(v:val.script_type != '') ?
-        \  v:val.base . '/' . v:val.directory : v:val.path")
-  let all_dirs = filter(split(neobundle#util#substitute_path_separator(
-        \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n"),
-        \ 'isdirectory(v:val)')
   if get(a:000, 0, '') == ''
+    let all_dirs = filter(split(neobundle#util#substitute_path_separator(
+          \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n"),
+          \ 'isdirectory(v:val)')
+    let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
+          \ "(v:val.script_type != '') ?
+          \  v:val.base . '/' . v:val.directory : v:val.path")
     let x_dirs = filter(all_dirs,
           \ "!neobundle#config#is_installed(fnamemodify(v:val, ':t'))
           \ && index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
