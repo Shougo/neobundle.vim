@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Sep 2013.
+" Last Modified: 25 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -519,20 +519,23 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
-  let is_timeout = (localtime() - a:process.start_time)
-        \             >= g:neobundle#install_process_timeout
-
   if neobundle#util#has_vimproc()
+    let is_timeout = (localtime() - a:process.start_time)
+          \             >= g:neobundle#install_process_timeout
     let a:process.output .= vimproc#util#iconv(
           \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
     if !a:process.proc.stdout.eof && !is_timeout
       return
     endif
-
     call a:process.proc.stdout.close()
+
+    if is_timeout
+      call a:process.proc.kill()
+    endif
 
     let [_, status] = a:process.proc.waitpid()
   else
+    let is_timeout = 0
     let status = a:process.status
   endif
 
