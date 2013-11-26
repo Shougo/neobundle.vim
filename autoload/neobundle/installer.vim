@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Nov 2013.
+" Last Modified: 26 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -918,13 +918,6 @@ function! s:reload(bundles) "{{{
 
   call filter(copy(a:bundles), 'neobundle#config#rtp_add(v:val)')
 
-  " Delete old g:loaded_xxx variables.
-  for var_name in keys(g:)
-    if var_name =~ '^loaded_'
-      execute 'unlet!' var_name
-    endif
-  endfor
-
   " Call hooks.
   call neobundle#call_hook('on_source', a:bundles)
 
@@ -932,24 +925,6 @@ function! s:reload(bundles) "{{{
   silent! runtime! after/ftdetect/**/*.vim
   silent! runtime! plugin/**/*.vim
   silent! runtime! after/plugin/**/*.vim
-
-  " Reload autoload scripts.
-  let scripts = []
-  for line in split(s:redir('scriptnames'), "\n")
-    let name = matchstr(line, '^\s*\d\+:\s\+\zs.\+\ze\s*$')
-    if name != '' && name =~ '/autoload/'
-          \ && name !~ '/unite\%(\.vim\)\?/\|/neobundle\%(\.vim\)\?/'
-          \ && filereadable(neobundle#util#unify_path(name))
-      call add(scripts, neobundle#util#unify_path(name))
-    endif
-  endfor
-
-  for script in scripts
-    for bundle in filter(copy(a:bundles),
-          \ 'stridx(script, v:val.path) >= 0')
-      silent! execute source `=script`
-    endfor
-  endfor
 
   " Call hooks.
   call neobundle#call_hook('on_post_source', a:bundles)
