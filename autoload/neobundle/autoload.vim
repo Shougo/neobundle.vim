@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Oct 2013.
+" Last Modified: 26 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -171,6 +171,13 @@ function! neobundle#autoload#get_unite_sources()
   endfor
 
   return _
+endfunction
+
+function! neobundle#autoload#source(bundle_name)
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
+        \ "index(neobundle#util#convert2list(
+        \   get(v:val.autoload, 'on_source', [])), a:bundle_name) >= 0")
+  call neobundle#config#source_bundles(bundles)
 endfunction
 
 function! s:get_input()

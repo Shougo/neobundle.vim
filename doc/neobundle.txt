@@ -749,7 +749,7 @@ OPTIONS 					*neobundle-options*
 
 				Example:
 
-			functions	(List)
+			functions	(List) or (String)
 			Functions list.
 
 			function_prefix	(String)
@@ -761,7 +761,7 @@ OPTIONS 					*neobundle-options*
 			Example: If you use "unite.vim", "unite" function
 			prefix is used.
 
-			mappings	(List)
+			mappings	(List) or (String)
 			Mappings list. The items are {mapping} or
 			[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
 			omitted, "nxo" is used.
@@ -775,7 +775,7 @@ OPTIONS 					*neobundle-options*
 			  nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
 			  nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
 <
-			unite_sources	(List)
+			unite_sources	(List) or (String)
 			Unite source name list.
 			Note: To use this feature, you must install latest
 			|unite.vim|.
@@ -790,11 +790,23 @@ OPTIONS 					*neobundle-options*
 			Note: It is useful for explorer behavior plugins.
 			Ex: vimfiler, metarw...
 			Note: To autoload vimfiler, you must disable netrw in
-			.vimrc.
->
+			.vimrc. >
 			" Disable netrw.vim
 			let g:loaded_netrwPlugin = 1
 <
+			on_source	(List) or (String)
+			Load the bundle when the list bundles are loaded.
+			For example: >
+			if neobundle#tap('plugin-B.vim') " {{{
+			  call neobundle#config({
+			        \   'autoload' : {
+			        \     'on_source' : [ 'plugin-A.vim' ]
+			        \   }
+			        \ })
+			  call neobundle#untap()
+			endif
+<
+			plugin-B is loaded before plugin-A is loaded.
 
 		Examples:
 >
