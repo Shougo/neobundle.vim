@@ -797,7 +797,7 @@ OPTIONS 					*neobundle-options*
 			on_source	(List) or (String)
 			Load the bundle when the list bundles are loaded.
 			For example: >
-			if neobundle#tap('plugin-B.vim') " {{{
+			if neobundle#tap('plugin-B.vim')
 			  call neobundle#config({
 			        \   'autoload' : {
 			        \     'on_source' : [ 'plugin-A.vim' ]
