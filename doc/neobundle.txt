@@ -103,7 +103,11 @@ Now configure your neobundles. (Refer to |neobundle-examples|)
 Run the |:NeoBundleInstall| command to install your plugins.
 >
 	$ vim +NeoBundleInstall +q
-<
+
+or
+
+	$ . ~/.vim/bundle/neobundle.vim/bin/neoinstall
+
 ==============================================================================
 INTERFACE					*neobundle-interface*
 

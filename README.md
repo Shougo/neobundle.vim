@@ -83,6 +83,8 @@ Requirements: Vim 7.2.051 or above.
 
      Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim)
 
+     Or Command run `bin/neoinstall`
+
 ## Docs
 
 see `:h neobundle`
