@@ -7,6 +7,6 @@ if [[ ! -e $VIMRC ]]; then
         VIMRC=$HOME/.vim/vimrc
 fi
 
-vim -N -u $VIMRC -c "try | NeoBundleUpdate | catch | qall! | endtry" -c "qall!" \
+vim -N -u $VIMRC -c "try | NeoBundleUpdate | finally | qall! | endtry" \
         -U NONE -i NONE -V1 -e -s
 echo ''
