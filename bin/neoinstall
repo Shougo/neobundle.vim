@@ -1,13 +1,12 @@
 #!/bin/bash
 
-vim -N -u NONE -i NONE -V1 -e -s \
---cmd "
-source ~/.vimrc
-try
-  NeoBundleUpdate
-catch
-  qall!
-endtry
-qall!
-"
+# Detect .vimrc path.
+VIMRC=$HOME/.vimrc
+
+if [[ ! -e $VIMRC ]]; then
+        VIMRC=$HOME/.vim/vimrc
+fi
+
+vim -N -u $VIMRC -c "try | NeoBundleUpdate | catch | qall! | endtry" -c "qall!" \
+        -U NONE -i NONE -V1 -e -s
 echo ''
