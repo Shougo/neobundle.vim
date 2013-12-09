@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Nov 2013.
+" Last Modified: 09 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -464,11 +464,17 @@ function! neobundle#config#add(bundle, ...) "{{{
         for mapping in mappings
           " Define dummy mappings.
           for mode in filter(split(modes, '\zs'),
-                \ "index(['n', 'v', 'x', 'o', 'i'], v:val) >= 0")
-            silent! execute mode.'noremap <unique><silent>' mapping printf(
-                  \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
-                  \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
-                  \   string(mapping), string(bundle.name), string(mode))
+                \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
+            if mode ==# 'c'
+              silent! execute mode.'noremap <unique><silent>' mapping printf(
+                    \ '<C-r>=neobundle#autoload#cmapping(%s, %s)<CR>',
+                    \   string(mapping), string(bundle.name))
+            else
+              silent! execute mode.'noremap <unique><silent>' mapping printf(
+                    \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
+                    \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
+                    \   string(mapping), string(bundle.name), string(mode))
+            endif
 
             call add(bundle.dummy_mappings, [mode, mapping])
           endfor

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Nov 2013.
+" Last Modified: 09 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,6 +102,7 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   let input = s:get_input()
 
   call neobundle#config#source(a:name)
+
   if a:mode ==# 'v' || a:mode ==# 'x'
     call feedkeys('gv', 'n')
   elseif a:mode ==# 'o'
@@ -116,7 +117,17 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   call feedkeys(cnt, 'n')
 
   let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
+endfunction
+
+function! neobundle#autoload#cmapping(mapping, name)
+  " Delete dummy mappings.
+  let input = s:get_input()
+
+  call neobundle#config#source(a:name)
+
+  let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
   call feedkeys(mapping . input, 'm')
+  return ''
 endfunction
 
 function! neobundle#autoload#explorer(path, event)
