@@ -117,16 +117,8 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   call feedkeys(cnt, 'n')
 
   let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
-endfunction
-
-function! neobundle#autoload#cmapping(mapping, name)
-  " Delete dummy mappings.
-  let input = s:get_input()
-
-  call neobundle#config#source(a:name)
-
-  let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
   call feedkeys(mapping . input, 'm')
+
   return ''
 endfunction
 

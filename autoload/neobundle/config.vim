@@ -465,16 +465,11 @@ function! neobundle#config#add(bundle, ...) "{{{
           " Define dummy mappings.
           for mode in filter(split(modes, '\zs'),
                 \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
-            if mode ==# 'c'
-              silent! execute mode.'noremap <unique><silent>' mapping printf(
-                    \ '<C-r>=neobundle#autoload#cmapping(%s, %s)<CR>',
-                    \   string(mapping), string(bundle.name))
-            else
-              silent! execute mode.'noremap <unique><silent>' mapping printf(
-                    \ (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>").
-                    \   "call neobundle#autoload#mapping(%s, %s, %s)<CR>",
-                    \   string(mapping), string(bundle.name), string(mode))
-            endif
+            silent! execute mode.'noremap <unique><silent>' mapping printf(
+                  \ (mode ==# 'c' ? "\<C-r>=" :
+                  \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
+                  \   "neobundle#autoload#mapping(%s, %s, %s)<CR>",
+                  \   string(mapping), string(bundle.name), string(mode))
 
             call add(bundle.dummy_mappings, [mode, mapping])
           endfor
