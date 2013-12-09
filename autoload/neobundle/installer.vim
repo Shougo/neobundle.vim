@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Nov 2013.
+" Last Modified: 09 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -179,6 +179,13 @@ function! neobundle#installer#build(bundle)
     else
       let result = neobundle#util#system(cmd)
     endif
+  catch
+    " Build error from vimproc.
+    let message = (v:exception !~# '^Vim:')?
+          \ v:exception : v:exception . ' ' . v:throwpoint
+    call neobundle#installer#error(message)
+
+    return 1
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
