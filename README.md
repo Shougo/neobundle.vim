@@ -43,29 +43,19 @@ Requirements: Vim 7.2.051 or above.
      NeoBundleFetch 'Shougo/neobundle.vim'
 
      " Recommended to install
-     " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-     NeoBundle 'Shougo/vimproc'
+     "NeoBundle 'Shougo/vimproc', {
+     " \ 'build' : {
+     " \     'windows' : 'make -f make_mingw32.mak',
+     " \     'cygwin' : 'make -f make_cygwin.mak',
+     " \     'mac' : 'make -f make_mac.mak',
+     " \     'unix' : 'make -f make_unix.mak',
+     " \    },
+     " \ }
 
      " My Bundles here:
+     " Refer to |:NeoBundle-examples|.
      "
      " Note: You don't set neobundle setting in .gvimrc!
-     " Original repos on github
-     NeoBundle 'tpope/vim-fugitive'
-     NeoBundle 'Lokaltog/vim-easymotion', '09c0cea8'   " This plugin is locked at revision 09c0cea8 
-     NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-     " vim-scripts repos
-     NeoBundle 'L9'
-     NeoBundle 'FuzzyFinder'
-     NeoBundle 'rails.vim'
-     " Non github repos
-     NeoBundle 'git://git.wincent.com/command-t.git'
-     " gist repos
-     NeoBundle 'gist:Shougo/656148', {
-           \ 'name': 'everything.vim',
-           \ 'script_type': 'plugin'}
-     " Non git repos
-     NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-     NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
      " ...
 
