@@ -294,8 +294,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
     " Join to the tail in runtimepath.
     let rtps = neobundle#util#split_rtp(&runtimepath)
     let &runtimepath = neobundle#util#join_rtp(
-          \ insert(rtps, rtp,
-          \   (a:bundle.lazy ? 0 : index(rtps, neobundle#get_rtp_dir()))),
+          \ insert(rtps, rtp, index(rtps, neobundle#get_rtp_dir())),
           \ &runtimepath, rtp)
   endif
   if isdirectory(rtp.'/after')
