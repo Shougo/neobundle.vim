@@ -730,6 +730,51 @@ OPTIONS 					*neobundle-options*
 		If set to 1, neobundle doesn't add the path to user
 		runtimepath.
 
+						*neobundle-options-overwrite*
+		overwrite		(Number)
+		If set to 1, neobundle doesn't overwrite the path to user
+		runtimepath.
+
+						*neobundle-options-resettable*
+		resettable		(Number)
+		If set to 0, neobundle doesn't reset the path in
+		|neobundle#rc()|.
+
+						*neobundle-options-gui*
+		gui			(Number)
+		If set 1, neobundle will only load the plugin in GUI Vim.
+
+		Example: >
+	NeoBundleLazy 'tyru/restart.vim', '', 'same', {
+	      \ 'gui' : 1,
+	      \ 'autoload' : {
+	      \  'commands' : 'Restart'
+	      \ }}
+<
+						*neobundle-options-terminal*
+		terminal		(Number)
+		If set to 1, neobundle will only load the plugin in Terminal
+		Vim.
+
+						*neobundle-options-vim_version*
+		vim_version		(String)
+		Minimal vim version of the plugin supported.
+		It accepts some version formats such as "7" and "7.3" and
+		"7.3.885".
+
+						*neobundle-options-disabled*
+		disabled		(Number)
+		If set to 1, neobundle will disable the plugin.
+
+		Example: >
+	" neocomplete requires vim 7.3.885 or above.
+	NeoBundle 'Shougo/neocomplete', {
+	    \ 'depends' : 'Shougo/context_filetype.vim',
+	    \ 'disabled' : !has('lua'),
+	    \ 'vim_version' : '7.3.885'
+	    \ }
+<
+
 						*neobundle-options-autoload*
 		autoload		(Dictionary)
 		Specify autoload conditions.
@@ -740,6 +785,9 @@ OPTIONS 					*neobundle-options*
 
 			filetypes	(List) or (String)
 			Filetype list.
+
+			filename_patterns	(List) or (String)
+			Filename regex pattern list.
 
 			commands	(List) or (String)
 			Command list. The item can be following dictionary.
@@ -774,10 +822,11 @@ OPTIONS 					*neobundle-options*
 			"<Plug>(ref-back)" and so on.
 			Note: But you cannot use lazy <Plug> mappings twice.
 			For example: >
-			NeoBundleLazy 'osyo-manga/vim-anzu', {'autoload': {'mappings': '<Plug>(anzu-'}}
-			  " Not working!!
-			  nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
-			  nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
+			NeoBundleLazy 'osyo-manga/vim-anzu', {
+			  \'autoload': {'mappings': '<Plug>(anzu-'}}
+			" Not working!!
+			nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
+			nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
 <
 			unite_sources	(List) or (String)
 			Unite source name list.
@@ -862,52 +911,10 @@ OPTIONS 					*neobundle-options*
 	      \ },
 	      \ 'augroup' : 'winmove',
 	      \ }
+	NeoBundleLazy 'sophacles/vim-processing', { 'autoload' : {
+	      \'filename_patterns': '\.pde$'
+	      \}}
 <
-						*neobundle-options-overwrite*
-		overwrite		(Number)
-		If set to 1, neobundle doesn't overwrite the path to user
-		runtimepath.
-
-						*neobundle-options-resettable*
-		resettable		(Number)
-		If set to 0, neobundle doesn't reset the path in
-		|neobundle#rc()|.
-
-						*neobundle-options-gui*
-		gui			(Number)
-		If set 1, neobundle will only load the plugin in GUI Vim.
-
-		Example: >
-	NeoBundleLazy 'tyru/restart.vim', '', 'same', {
-	      \ 'gui' : 1,
-	      \ 'autoload' : {
-	      \  'commands' : 'Restart'
-	      \ }}
-<
-						*neobundle-options-terminal*
-		terminal		(Number)
-		If set to 1, neobundle will only load the plugin in Terminal
-		Vim.
-
-						*neobundle-options-vim_version*
-		vim_version		(String)
-		Minimal vim version of the plugin supported.
-		It accepts some version formats such as "7" and "7.3" and
-		"7.3.885".
-
-						*neobundle-options-disabled*
-		disabled		(Number)
-		If set to 1, neobundle will disable the plugin.
-
-		Example: >
-	" neocomplete requires vim 7.3.885 or above.
-	NeoBundle 'Shougo/neocomplete', {
-	    \ 'depends' : 'Shougo/context_filetype.vim',
-	    \ 'disabled' : !has('lua'),
-	    \ 'vim_version' : '7.3.885'
-	    \ }
-<
-
 						*neobundle-options-hooks*
 		hooks			(Dictionary)
 		Specify hook functions. The following hook functions are

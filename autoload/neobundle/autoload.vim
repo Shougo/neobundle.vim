@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Dec 2013.
+" Last Modified: 12 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,18 +33,22 @@ function! neobundle#autoload#init()
           \ call neobundle#autoload#filetype()
     autocmd FuncUndefined *
           \ call neobundle#autoload#function()
+    autocmd BufNewFile,BufRead *
+          \ call neobundle#autoload#filename(expand('<afile>'))
     autocmd InsertEnter *
           \ call neobundle#autoload#insert()
     autocmd BufCreate
           \ * call neobundle#autoload#explorer(
-          \ expand('<amatch>'), 'BufCreate')
+          \ expand('<afile>'), 'BufCreate')
     autocmd BufEnter
           \ * call neobundle#autoload#explorer(
-          \ expand('<amatch>'), 'BufEnter')
+          \ expand('<afile>'), 'BufEnter')
     autocmd BufWinEnter
           \ * call neobundle#autoload#explorer(
-          \ expand('<amatch>'), 'BufWinEnter')
+          \ expand('<afile>'), 'BufWinEnter')
   augroup END
+
+  call neobundle#autoload#filename(bufname('%'))
 endfunction
 
 function! neobundle#autoload#filetype()
@@ -55,6 +59,22 @@ function! neobundle#autoload#filetype()
           \ index(neobundle#util#convert2list(
           \     v:val.autoload.filetypes), filetype) >= 0"))
   endfor
+endfunction
+
+function! neobundle#autoload#filename(filename)
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
+        \ "has_key(v:val.autoload, 'filename_patterns')")
+  if !empty(bundles)
+    echomsg string(bundles)
+    echomsg string(filter(copy(bundles),"
+          \ len(filter(copy(neobundle#util#convert2list(
+          \  v:val.autoload.filename_patterns)),
+          \  'a:filename =~? v:val')) > 0"))
+    call neobundle#config#source_bundles(filter(copy(bundles),"
+          \ len(filter(copy(neobundle#util#convert2list(
+          \  v:val.autoload.filename_patterns)),
+          \  'a:filename =~? v:val')) > 0"))
+  endif
 endfunction
 
 function! neobundle#autoload#insert()
