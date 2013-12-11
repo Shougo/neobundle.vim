@@ -780,6 +780,8 @@ OPTIONS 					*neobundle-options*
 		Specify autoload conditions.
 		If you set it, neobundle will execute |:NeoBundleSource|
 		automatically when the conditions are met.
+		Note: You can omit "autoload" dictionary. It is useful for
+		|:NeoBundleLazy| command.
 
 		This dictionary accepts the following keys:
 
@@ -803,15 +805,6 @@ OPTIONS 					*neobundle-options*
 
 			functions	(List) or (String)
 			Functions list.
-
-			function_prefix	(String)
-			Autoload function prefix in functions.
-			{function_prefix}#...
-			If the prefix is set, functions were loaded
-			automatically.
-			If omitted it, automatically generated prefix is used.
-			Example: If you use "unite.vim", "unite" function
-			prefix is used.
 
 			mappings	(List) or (String)
 			Mappings list. The items are {mapping} or
@@ -861,6 +854,15 @@ OPTIONS 					*neobundle-options*
 <
 			plugin-B is loaded before plugin-A is loaded.
 
+			function_prefix	(String)
+			Autoload function prefix in functions.
+			{function_prefix}#...
+			If the prefix is set, functions were loaded
+			automatically.
+			If omitted it, automatically generated prefix is used.
+			Example: If you use "unite.vim", "unite" function
+			prefix is used.
+
 		Examples:
 >
 	NeoBundleLazy 'Rip-Rip/clang_complete', {
@@ -905,15 +907,18 @@ OPTIONS 					*neobundle-options*
 	      \   'unite_sources' : ['junkfile', 'junkfile/new'],
 	      \ }}
 	NeoBundleLazy 'tyru/winmove.vim', { 'autoload' : {
-	      \ 'gui' : 1,
 	      \ 'mappings' : [
 	      \   ['n', '<Plug>(winmove-']],
 	      \ },
+	      \ 'gui' : 1,
 	      \ 'augroup' : 'winmove',
 	      \ }
 	NeoBundleLazy 'sophacles/vim-processing', { 'autoload' : {
 	      \'filename_patterns': '\.pde$'
 	      \}}
+	" Omit autoload dictionary.
+	NeoBundleLazy 'LeafCage/cmdlineplus.vim', {
+	      \ 'mappings': [['c', '<Plug>(cmdlineplus-']]}
 <
 						*neobundle-options-hooks*
 		hooks			(Dictionary)

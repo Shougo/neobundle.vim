@@ -65,11 +65,6 @@ function! neobundle#autoload#filename(filename)
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "has_key(v:val.autoload, 'filename_patterns')")
   if !empty(bundles)
-    echomsg string(bundles)
-    echomsg string(filter(copy(bundles),"
-          \ len(filter(copy(neobundle#util#convert2list(
-          \  v:val.autoload.filename_patterns)),
-          \  'a:filename =~? v:val')) > 0"))
     call neobundle#config#source_bundles(filter(copy(bundles),"
           \ len(filter(copy(neobundle#util#convert2list(
           \  v:val.autoload.filename_patterns)),

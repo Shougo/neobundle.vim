@@ -64,6 +64,19 @@ function! neobundle#init#_bundle(bundle) "{{{
           \   a:bundle.orig_name, string(a:bundle.orig_opts)))
     return {}
   endif
+  if !has_key(bundle, 'autoload')
+    " Auto set autoload keys.
+    let bundle.autoload = {}
+
+    for key in filter([
+          \ 'filetypes', 'filename_patterns',
+          \ 'commands', 'functions', 'mappings', 'unite_sources',
+          \ 'insert', 'explorer', 'on_source', 'function_prefix',
+          \ ], 'has_key(bundle, v:val)')
+      let bundle.autoload[key] = bundle[key]
+      call remove(bundle, key)
+    endfor
+  endif
 
   let bundle = extend(bundle, s:get_default(), 'keep')
 
