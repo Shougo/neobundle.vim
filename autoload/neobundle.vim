@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 15 Nov 2013.
+" Last Modified: 12 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,10 +50,10 @@ call neobundle#util#set_default(
       \ 'g:neobundle#default_options', {})
 "}}}
 
-let s:neobundle_dir = get(
-      \ filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
-      \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
 let g:neobundle#tapped = {}
+let s:neobundle_dir = ''
+let s:neobundle_runtime_dir = neobundle#util#substitute_path_separator(
+      \ fnamemodify(expand('<sfile>'), ':p:h:h'))
 
 command! -nargs=+ NeoBundle
       \ call neobundle#parser#bundle(
@@ -130,35 +130,15 @@ command! -bar NeoBundleUpdatesLog
 command! -bar NeoBundleDirectEdit
       \ execute 'edit' fnameescape(neobundle#get_neobundle_dir()).'/direct_bundles.vim'
 
-let s:neobundle_runtime_dir = neobundle#util#substitute_path_separator(
-      \ fnamemodify(expand('<sfile>'), ':p:h:h'))
-
 function! neobundle#rc(...)
-  if a:0 > 0
-    let s:neobundle_dir = a:1
-  endif
+  let path = (a:0 > 0) ? a:1 :
+        \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
+        \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
+  return neobundle#init#_rc(path)
+endfunction
 
-  let s:neobundle_dir =
-        \ neobundle#util#substitute_path_separator(
-        \ neobundle#util#expand(s:neobundle_dir))
-  if s:neobundle_dir =~ '/$'
-    let s:neobundle_dir = s:neobundle_dir[: -2]
-  endif
-
-  " Join to the tail in runtimepath.
-  let rtp = neobundle#get_rtp_dir()
-  execute 'set rtp-='.fnameescape(rtp)
-  let rtps = neobundle#util#split_rtp(&runtimepath)
-  let n = index(rtps, $VIMRUNTIME)
-  let &runtimepath = neobundle#util#join_rtp(
-        \ insert(rtps, rtp, n-1), &runtimepath, rtp)
-
-  augroup neobundle
-    autocmd!
-  augroup END
-
-  call neobundle#config#init()
-  call neobundle#autoload#init()
+function! neobundle#set_neobundle_dir(path)
+  let s:neobundle_dir = a:path
 endfunction
 
 function! neobundle#get_neobundle_dir()

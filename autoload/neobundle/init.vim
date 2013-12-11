@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Oct 2013.
+" Last Modified: 12 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,31 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+function! neobundle#init#_rc(path) "{{{
+  let path =
+        \ neobundle#util#substitute_path_separator(
+        \ neobundle#util#expand(a:path))
+  if path =~ '/$'
+    let path = path[: -2]
+  endif
+  call neobundle#set_neobundle_dir(path)
+
+  " Join to the tail in runtimepath.
+  let rtp = neobundle#get_rtp_dir()
+  execute 'set rtp-='.fnameescape(rtp)
+  let rtps = neobundle#util#split_rtp(&runtimepath)
+  let n = index(rtps, $VIMRUNTIME)
+  let &runtimepath = neobundle#util#join_rtp(
+        \ insert(rtps, rtp, n-1), &runtimepath, rtp)
+
+  augroup neobundle
+    autocmd!
+  augroup END
+
+  call neobundle#config#init()
+  call neobundle#autoload#init()
+endfunction"}}}
 
 function! neobundle#init#_bundle(bundle) "{{{
   let bundle = a:bundle
