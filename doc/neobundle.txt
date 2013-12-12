@@ -105,9 +105,14 @@ Run the |:NeoBundleInstall| command to install your plugins.
 	$ vim +NeoBundleInstall +q
 
 or
-
+>
 	$ . ~/.vim/bundle/neobundle.vim/bin/neoinstall
-
+<
+Note: neoinstall can take arguments(install/update plugin names).
+>
+	# Build vimproc before install plugins
+	$ . ~/.vim/bundle/neobundle.vim/bin/neoinstall vimproc.vim
+<
 ==============================================================================
 INTERFACE					*neobundle-interface*
 
@@ -376,7 +381,7 @@ COMMANDS 					*neobundle-commands*
 		Note: You must install recipes(|neobundle-recipe|) before
 		executing it.
 >
-		NeoBundleRecipe 'vimproc'
+		NeoBundleRecipe 'vimproc.vim'
 <
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
@@ -657,7 +662,7 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-	      NeoBundle 'Shougo/vimproc', {
+	      NeoBundle 'Shougo/vimproc.vim', {
 	      \ 'build' : {
 	      \     'windows' : 'make -f make_mingw32.mak',
 	      \     'cygwin' : 'make -f make_cygwin.mak',
@@ -882,7 +887,7 @@ OPTIONS 					*neobundle-options*
 	      \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
 	      \   }
 	NeoBundleLazy 'Shougo/vimshell',{
-	      \ 'depends' : 'Shougo/vimproc',
+	      \ 'depends' : 'Shougo/vimproc.vim',
 	      \ 'autoload' : {
 	      \   'commands' : [{ 'name' : 'VimShell',
 	      \                   'complete' : 'customlist,vimshell#complete'},
@@ -1075,14 +1080,14 @@ neobundle
 		If argument is bang(!), print plugins status instead of plugins
 		path.
 
-		http://github.com/Shougo/vimproc
+		http://github.com/Shougo/vimproc.vim
 
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asynchronously.
 
 		Note: To install |vimproc| plugin is recommended.
-		http://github.com/Shougo/vimproc
+		http://github.com/Shougo/vimproc.vim
 
 		If argument is bang(!), it will install and update all plugins.
 
@@ -1282,7 +1287,7 @@ Q: Vim freezes when a NeoBundle command is run with a typo in the repo name.
 
 A: It's a git feature. Git awaits user input when the repo name is
 wrong. You can install |vimproc| to keep your Vim from freezing:
-	https://github.com/Shougo/vimproc
+	https://github.com/Shougo/vimproc.vim
 
 Q: Duplicated error was printed when sourcing .vimrc.
 
@@ -1304,7 +1309,7 @@ Q: I want to compile vimproc automatically.
 
 A:
 >
-	NeoBundle 'Shougo/vimproc', {
+	NeoBundle 'Shougo/vimproc.vim', {
 		\ 'build' : {
 			\     'windows' : 'make -f make_mingw32.mak',
 			\     'cygwin' : 'make -f make_cygwin.mak',
