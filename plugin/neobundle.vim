@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2013.
+" Last Modified: 13 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,18 +24,25 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 if exists('g:loaded_neobundle')
+  let &cpo = s:save_cpo
+  unlet s:save_cpo
+
   finish
 elseif v:version < 702 || (v:version == 702 && !has('patch51'))
   " Neobundle uses glob()/globpath() another parameter.
   " It is implemented in Vim 7.2.051.
   echoerr 'neobundle does not work this version of Vim "' . v:version . '".'
         \ .' You must use Vim 7.2.051 or later.'
+
+  let &cpo = s:save_cpo
+  unlet s:save_cpo
+
   finish
 endif
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 let g:loaded_neobundle = 1
 
