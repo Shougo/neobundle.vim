@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Dec 2013.
+" Last Modified: 17 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,8 +99,7 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
 
   call neobundle#config#source(a:name)
 
-  let range = (a:line1 != a:line2 || a:line1 != line('.')) ?
-        \ '' : (a:line1.','.a:line2)
+  let range = (a:line1 != a:line2) ? "'<,'>" : ''
 
   try
     execute range.a:command.a:bang a:args
