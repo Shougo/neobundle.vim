@@ -1,6 +1,7 @@
 @echo off
-FOR /F "usebackq" %%t IN (`where vim`) DO SET _VIM=%%t
+for /F "usebackq" %%t in (`where vim`) do SET _VIM=%%t
 set VIM=%_VIM:\vim.exe=%
+if "%HOME%"=="" set HOME=%USERPROFILE%
 set _VIMRC=%HOME%\_vimrc
 if exist %_VIMRC% goto EXEC_NEOBUNDLE_INSTALL
 if not exist %_VIMRC% goto DOTVIMRC
