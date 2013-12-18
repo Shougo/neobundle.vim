@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Dec 2013.
+" Last Modified: 09 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,8 +34,6 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init() "{{{
-  " https://github.com/Shougo/neobundle.vim/issues/192
-  filetype on
   filetype off
 
   for bundle in values(s:neobundles)
@@ -196,7 +194,6 @@ function! neobundle#config#source(names, ...) "{{{
   redir END
 
   if reset_ftplugin
-    filetype on
     filetype off
 
     if filetype_out =~# 'detection:ON'
