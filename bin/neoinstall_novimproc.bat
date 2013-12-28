@@ -23,7 +23,7 @@ if not exist %VIMRC% goto NO_EXEC_NEOBUNDLE_INSTALL
 
 @echo on
 :EXEC_NEOBUNDLE_INSTALL
-vim -N -u %VIMRC% --cmd "let g:vimproc#disable = 1" -c "try | NeoBundleInstall! %* | finally | qall! | endtry" -U NONE -i NONE -V1 -e -s
+vim -N -u %VIMRC% --cmd "let g:vimproc#disable = 1" -c "try | NeoBundleUpdate! %* | finally | qall! | endtry" -U NONE -i NONE -V1 -e -s
 
 
 :NO_EXEC_NEOBUNDLE_INSTALL
