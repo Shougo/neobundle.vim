@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Dec 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -275,7 +275,7 @@ function! neobundle#installer#reinstall(bundles)
   endfor
 
   " Install.
-  call neobundle#installer#install(0, '')
+  call neobundle#installer#install(0, a:bundles)
 
   call neobundle#installer#update(a:bundles)
 endfunction
