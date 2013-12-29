@@ -45,14 +45,36 @@ function! neobundle#vamkr#init() "{{{
 
   let s:vamkr.id2name = neobundle#vamkr#parse(head .
         \ 'script-id-to-name-log.json')
+
   let s:vamkr.vimorgsources = neobundle#vamkr#parse(head .
         \ 'vimorgsources.json')
-  let s:vamkr.scm_generated = neobundle#vamkr#parse(head .
-        \ 'scm_generated.json')
+  let snr_to_name = {}
+  call map(copy(s:vamkr.vimorgsources),
+        \ 'extend(snr_to_name, {v:val.vim_script_nr : v:key})')
   let s:vamkr.patchinfo = neobundle#vamkr#parse(head .
         \ 'patchinfo.vim')
-  let s:vamkr.scmsources = neobundle#vamkr#parse(head .
+
+  " Parse scheme
+  let [scm, scmnr]= neobundle#vamkr#parse(head .
         \ 'scmsources.vim')
+  let scm_generated = neobundle#vamkr#parse(head .
+        \ 'scm_generated.json')
+  call extend(scm, scm_generated, 'keep')
+
+  call map(scmnr, "extend(scm, {snr_to_name[v:key] :
+        \  extend(v:val, {'vim_script_nr': v:key})})")
+
+  let s:vamkr.scm = scm
+endfunction"}}}
+
+function! neobundle#vamkr#get(name) "{{{
+  if empty(s:vamkr)
+    call neobundle#vamkr#init()
+  endif
+
+  " Search from number.
+  return has_key(s:vamkr.scm, a:name) ? s:vamkr.scm[a:name]
+        \ : get(s:vamkr.vimorgsources, a:name, {})
 endfunction"}}}
 
 function! neobundle#vamkr#parse(path) "{{{
