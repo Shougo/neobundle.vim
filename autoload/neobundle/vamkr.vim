@@ -63,6 +63,15 @@ function! neobundle#vamkr#init() "{{{
 
   call map(scmnr, "extend(scm, {snr_to_name[v:key] :
         \  extend(v:val, {'vim_script_nr': v:key})})")
+  " Change dependencies.
+  for depdict in map(filter(values(scm),
+        \ "has_key(get(v:val, 'addon-info', {}), 'dependencies')"),
+        \ "v:val['addon-info'].dependencies")
+    for depname in filter(keys(depdict), 'v:val[0] is# "%"')
+      call remove(depdict, depname)
+      let depdict[snr_to_name[depname[1:]]] = {}
+    endfor
+  endfor
 
   let s:vamkr.scm = scm
 endfunction"}}}
