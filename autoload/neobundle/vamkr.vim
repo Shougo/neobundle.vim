@@ -24,13 +24,36 @@
 " }}}
 "=============================================================================
 
-let s:repository_cache = []
+let s:vamkr = {}
 
 if !exists('*vamkr#AddCopyHook')
   " Dummy function.
-  function! vamkr#AddCopyHook(...)
+  function! vamkr#AddCopyHook(repository, files)
+    for [filename, type] in items(a:files)
+      " Todo: Support multiple files?
+      let a:repository.url .= '/' . type . '/' . filename
+    endfor
+
+    " echomsg string(a:repository)
+    return a:repository
   endfunction
 endif
+
+function! neobundle#vamkr#init() "{{{
+  let head = 'https://raw.github.com/MarcWeber/'
+        \.'vim-addon-manager-known-repositories/master/db/'
+
+  let s:vamkr.id2name = neobundle#vamkr#parse(head .
+        \ 'script-id-to-name-log.json')
+  let s:vamkr.vimorgsources = neobundle#vamkr#parse(head .
+        \ 'vimorgsources.json')
+  let s:vamkr.scm_generated = neobundle#vamkr#parse(head .
+        \ 'scm_generated.json')
+  let s:vamkr.patchinfo = neobundle#vamkr#parse(head .
+        \ 'patchinfo.vim')
+  let s:vamkr.scmsources = neobundle#vamkr#parse(head .
+        \ 'scmsources.vim')
+endfunction"}}}
 
 function! neobundle#vamkr#parse(path) "{{{
   let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
@@ -79,16 +102,6 @@ function! neobundle#vamkr#parse(path) "{{{
 
   return data
 endfunction"}}}
-
-" Test.
-let head = 'https://raw.github.com/MarcWeber/vim-addon-manager-known-repositories/master/db/'
-
-call neobundle#vamkr#parse(head . 'script-id-to-name-log.json')
-call neobundle#vamkr#parse(head . 'vimorgsources.json')
-call neobundle#vamkr#parse(head . 'scm_generated.json')
-
-call neobundle#vamkr#parse(head . 'patchinfo.vim')
-call neobundle#vamkr#parse(head . 'scmsources.vim')
 
 " __END__
 " vim: foldmethod=marker
