@@ -91,13 +91,27 @@ function! neobundle#vamkr#parse(path) "{{{
   endif
 
   if fnamemodify(a:path, ':e') == 'vim'
-    " Vim script.
-    unlet! g:r
-    sandbox execute 'source' fnameescape(cache_path)
-    sandbox let data = g:r
-  else
+    try
+      execute "function! s:Vim()\n".join(
+            \ readfile(cache_path, 'b'), "\n")."\nreturn r\nendfunction"
+
+      sandbox let data = s:Vim()
+    catch
+      throw 'Execute error: '.v:exception
+            \ .' error location ('.a:path.'): '.v:throwpoint
+    finally
+      silent! delfunction s:Vim
+    endtry
+  elseif fnamemodify(a:path, ':e') == 'json'
     " JSON.
-    sandbox let data = eval(join(readfile(cache_path)))
+    try
+      sandbox let data = eval(join(readfile(cache_path, 'b'), ''))
+    catch
+      throw 'Failed to read json file: '.a:path
+            \ .': '.v:exception.' '.v:throwpoint
+    endtry
+  else
+    throw 'Unknown path: ' . a:path
   endif
 
   return data
