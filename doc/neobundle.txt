@@ -340,17 +340,6 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleDocs					*:NeoBundleDocs*
 		Execute |:helptags| for all bundles manually.
 
-						*:NeoBundleDepends*
-:NeoBundleDepends {repository} [, {options}]
-		Registers a bundle and installs the plugin.  This command is
-		useful for defining Vim plugin dependencies.
-		Note: This command does not overwrite user neobundle
-		configuration.
->
-		if exists(':NeoBundleDepends') == 2
-		  NeoBundleDepends 'Shougo/unite.vim.git'
-		endif
-<
 						*:NeoBundleDirectInstall*
 :NeoBundleDirectInstall {repository} [, {options}]
 		Registers a bundle, and installs it directly.

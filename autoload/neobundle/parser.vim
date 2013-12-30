@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 22 Oct 2013.
+" Last Modified: 30 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,28 +97,6 @@ function! neobundle#parser#recipe(arg) "{{{
   let bundle.orig_arg = copy(a:arg)
 
   call neobundle#config#add(bundle)
-
-  return bundle
-endfunction"}}}
-
-function! neobundle#parser#depends(arg) "{{{
-  let bundle = s:parse_arg(a:arg)
-  if empty(bundle)
-    return {}
-  endif
-
-  if !neobundle#config#is_installed(bundle.name)
-    let bundle.overwrite = 0
-    let bundle.resettable = 0
-
-    call neobundle#config#add(bundle)
-
-    " Install bundle automatically.
-    silent call neobundle#installer#install(0, bundle.name)
-  endif
-
-  " Load scripts.
-  call neobundle#config#source(bundle.name)
 
   return bundle
 endfunction"}}}
