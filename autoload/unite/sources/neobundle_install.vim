@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle/install.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,16 +44,7 @@ function! s:source_install.hooks.on_init(args, context) "{{{
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
   let a:context.source__not_fuzzy = 0
-
   call s:init(a:context, bundle_names)
-
-  if empty(a:context.source__bundles)
-    let a:context.is_async = 0
-    call neobundle#installer#log(
-          \ '[neobundle/install] Bundles not found.', 1)
-    call neobundle#installer#log(
-          \ '[neobundle/install] You may use wrong bundle name.', 1)
-  endif
 endfunction"}}}
 
 function! s:source_install.hooks.on_syntax(args, context) "{{{
@@ -175,6 +166,17 @@ function! s:init(context, bundle_names)
         \ len(a:context.source__bundles)
 
   call neobundle#installer#clear_log()
+
+  if empty(a:context.source__bundles)
+    let a:context.is_async = 0
+    call neobundle#installer#error(
+          \ '[neobundle/install] Target bundles not found.' .
+          \ ' You may use wrong bundle name.', 1)
+  else
+    call neobundle#installer#log(
+          \ '[neobundle/install] Update started: ' .
+          \     strftime('(%Y/%m/%d %H:%M:%S)'))
+  endif
 endfunction
 
 let &cpo = s:save_cpo

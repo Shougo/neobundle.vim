@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,6 +72,10 @@ function! neobundle#installer#install(bang, bundle_names)
   call neobundle#installer#_load_install_info(bundles)
 
   call neobundle#installer#clear_log()
+
+  call neobundle#installer#error(
+        \ '[neobundle/install] Update started: ' .
+        \     strftime('(%Y/%m/%d %H:%M:%S)'))
 
   let reinstall_bundles =
         \ neobundle#installer#get_reinstall_bundles(bundles)
@@ -198,7 +202,8 @@ endfunction
 
 function! neobundle#installer#clean(bang, ...)
   if neobundle#util#is_sudo()
-    call neobundle#util#print_error('"sudo vim" is detected. This feature is disabled.')
+    call neobundle#util#print_error(
+          \ '"sudo vim" is detected. This feature is disabled.')
     return
   endif
 
