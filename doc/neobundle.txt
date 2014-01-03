@@ -170,8 +170,6 @@ neobundle#local({directory}, [{options}])		 *neobundle#local()*
 		runtimepath, like |pathogen| does. See |neobundle-options| for
 		keys to set in {options}.
 		Note: |:NeoBundleLocal| is a shortcut for this function.
-		Note: Unlike |:NeoBundleLocal|, all plugins in {directory}
-		get loaded.
 >
 		" Load plugin from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle", {})
