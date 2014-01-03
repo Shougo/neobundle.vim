@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 30 Dec 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,8 +183,8 @@ function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
 endfunction
 
 function! neobundle#local(localdir, ...)
-  let options = get(a:000, 0, {})
-  return neobundle#parser#local(a:localdir, options)
+  return neobundle#parser#local(
+        \ a:localdir, get(a:000, 0, {}), get(a:000, 1, []))
 endfunction
 
 function! neobundle#exists_not_installed_bundles()

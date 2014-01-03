@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 30 Dec 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,12 +166,13 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#local(localdir, options) "{{{
-  for dir in map(filter(split(glob(fnamemodify(
+function! neobundle#parser#local(localdir, options, names) "{{{
+  for dir in filter(map(filter(split(glob(fnamemodify(
         \ neobundle#util#expand(a:localdir), ':p')
         \ . '*'), '\n'), "isdirectory(v:val)"),
         \ "neobundle#util#substitute_path_separator(
-        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))")
+        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))"),
+        \ "empty(a:names) || index(a:names, fnamemodify(v:val, ':t')) >= 0")
     call neobundle#parser#bundle([dir,
           \ extend({
           \   'local' : 1,

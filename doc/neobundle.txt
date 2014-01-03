@@ -157,22 +157,27 @@ neobundle#exists_not_installed_bundles()
 neobundle#get_not_installed_bundle_names()
 		Returns the names of bundles that are not installed.
 
-				*neobundle#is_installed()*
+						*neobundle#is_installed()*
 neobundle#is_installed({bundle-name})
 		Checks if bundle {bundle-name} is installed.
 
-				*neobundle#is_sourced()*
+						*neobundle#is_sourced()*
 neobundle#is_sourced({bundle-name})
 		Checks if bundle {bundle-name} is loaded.
 
-neobundle#local({directory}, [{options}])		 *neobundle#local()*
+						 *neobundle#local()*
+neobundle#local({directory}, [{options}, [{names}]])
 		Adds the subdirectories in {directory} to
 		runtimepath, like |pathogen| does. See |neobundle-options| for
 		keys to set in {options}.
+		If {names} is given, {names} directories are only loaded.
 		Note: |:NeoBundleLocal| is a shortcut for this function.
 >
 		" Load plugin from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle", {})
+		" Load plugin1 and plugin2 from "~/.vim/bundle".
+		call neobundle#local("~/.vim/bundle",
+		\   {}, ['plugin1', 'plugin2'])
 <
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get the neobundle options dictionary for {bundle-name}.
