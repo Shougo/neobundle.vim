@@ -24,7 +24,7 @@ Requirements: Vim 7.2.051 or above.
 
      ```
      $ mkdir -p ~/.vim/bundle
-     $ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+     $ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
      ```
 
 2. Configure bundles:
