@@ -346,18 +346,18 @@ COMMANDS 					*neobundle-commands*
 						*:NeoBundleDirectInstall*
 :NeoBundleDirectInstall {repository} [, {options}]
 		Registers a bundle, and installs it directly.
-		Note: The settings are saved in "direct_bundles.vim" in
+		Note: The settings are saved in "extra_bundles.vim" in
 		|neobundle#rc()| directory.
 		Note: To uninstall direct installed bundles, you must delete
-		plugin settings manually in "direct_bundles.vim" in
+		plugin settings manually in "extra_bundles.vim" in
 		|neobundle#rc()| directory and execute |:NeoBundleClean|
 		command.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
-						*:NeoBundleDirectEdit*
-:NeoBundleDirectEdit
-		Edit direct installed bundles easily.
+						*:NeoBundleEditExtra*
+:NeoBundleEditExtra
+		Edit extra bundles configuration easily.
 
 :NeoBundleDisable {name}...			*:NeoBundleDisable*
 		Disables bundles specified by {name}.  If a bundle is
@@ -1161,8 +1161,8 @@ Actions for each of the sources
 neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings (Default action).
 	install		Direct install plugins from repository.
-			Note: The settings is saved in ".direct_bundles" in
-			bundle directory.
+			Note: The settings are saved in "extra_bundles.vim" in
+			|neobundle#rc()| directory.
 	start		Browse github plugin page.
 	open		Open the recipe file.
 

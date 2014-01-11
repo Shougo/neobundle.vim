@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 09 Dec 2013.
+" Last Modified: 12 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,8 +49,8 @@ function! neobundle#config#init() "{{{
     endif
   endfor
 
-  " Load direct installed bundles.
-  call neobundle#config#load_direct_bundles()
+  " Load extra bundles configuration.
+  call neobundle#config#load_extra_bundles()
 
   augroup neobundle
     autocmd VimEnter * call s:on_vim_enter()
@@ -342,8 +342,8 @@ function! neobundle#config#fuzzy_search(bundle_names) "{{{
   return neobundle#util#uniq(_)
 endfunction"}}}
 
-function! neobundle#config#load_direct_bundles() "{{{
-  let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
+function! neobundle#config#load_extra_bundles() "{{{
+  let path = neobundle#get_neobundle_dir() . '/extra_bundles.vim'
 
   if filereadable(path)
     source `=path`
@@ -357,7 +357,7 @@ function! neobundle#config#save_direct(arg) "{{{
     return
   endif
 
-  let path = neobundle#get_neobundle_dir() . '/direct_bundles.vim'
+  let path = neobundle#get_neobundle_dir() . '/extra_bundles.vim'
   let bundles = filereadable(path) ? readfile(path) : []
   call writefile(add(bundles, 'NeoBundle ' . a:arg), path)
 endfunction"}}}

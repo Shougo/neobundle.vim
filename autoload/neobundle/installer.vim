@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Jan 2014.
+" Last Modified: 12 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,8 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+let s:install_info_version = '3.0'
 
 call neobundle#util#set_default(
       \ 'g:neobundle#rm_command',
@@ -480,7 +482,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'eof' : 0,
           \ 'start_time' : localtime(),
           \ }
-    if neobundle#util#has_vimproc()
+    if s:has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
             \            cmd, &encoding, 'char'), 0, 2)
 
@@ -501,7 +503,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
-  if neobundle#util#has_vimproc()
+  if s:has_vimproc() && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= g:neobundle#install_process_timeout
     let a:process.output .= vimproc#util#iconv(
@@ -570,6 +572,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     endif
     let bundle.updated_time = updated_time
     let bundle.installed_uri = bundle.uri
+    let bundle.revisions[updated_time] = rev
 
     call neobundle#installer#build(bundle)
     call add(a:context.source__synced_bundles,
@@ -745,11 +748,12 @@ function! s:save_install_info(bundles)
           \   'updated_time' : bundle.updated_time,
           \   'installed_uri' : bundle.installed_uri,
           \   'installed_path' : bundle.path,
+          \   'revisions' : {},
           \ }
   endfor
 
   call s:writefile('install_info',
-        \ ['2.0', string(s:install_info)])
+        \ [s:install_info_version, string(s:install_info)])
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
@@ -763,7 +767,8 @@ function! neobundle#installer#_load_install_info(bundles)
         let list = readfile(install_info_path)
         let ver = list[0]
         sandbox let s:install_info = eval(list[1])
-        if ver !=# '2.0' || type(s:install_info) != type({})
+        if ver !=# s:install_info_version
+              \ || type(s:install_info) != type({})
           let s:install_info = {}
         endif
       catch
@@ -776,6 +781,7 @@ function! neobundle#installer#_load_install_info(bundles)
         \ 'updated_time' : localtime(),
         \ 'installed_uri' : v:val.uri,
         \ 'installed_path' : v:val.path,
+        \ 'revisions' : {},
         \}))")
 
   return s:install_info
@@ -915,6 +921,20 @@ function! s:redir(cmd) "{{{
   return res
 endfunction"}}}
 
+function! s:has_vimproc()
+  if get(g:, 'vimproc#disable', 0)
+    return 0
+  endif
+
+  if !exists('*vimproc#version')
+    try
+      call vimproc#version()
+    catch
+    endtry
+  endif
+
+  return exists('*vimproc#version')
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

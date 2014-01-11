@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Dec 2013.
+" Last Modified: 12 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,9 +65,11 @@ endfunction"}}}
 
 " Check vimproc. "{{{
 function! neobundle#util#has_vimproc() "{{{
-  if exists('g:vimproc#disable')
+  if get(g:, 'vimproc#disable', 0)
     return 0
-  elseif !exists('s:exists_vimproc')
+  endif
+
+  if !exists('s:exists_vimproc')
     try
       call vimproc#version()
     catch
