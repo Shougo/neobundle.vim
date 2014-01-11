@@ -65,22 +65,14 @@ endfunction"}}}
 
 " Check vimproc. "{{{
 function! neobundle#util#has_vimproc() "{{{
-  if get(g:, 'vimproc#disable', 0)
-    return 0
-  endif
-
-  if !exists('s:exists_vimproc')
+  if !exists('*vimproc#version')
     try
       call vimproc#version()
     catch
     endtry
-
-    let s:exists_vimproc =
-          \ (exists('g:vimproc_dll_path') && filereadable(g:vimproc_dll_path))
-          \ || (exists('g:vimproc#dll_path') && filereadable(g:vimproc#dll_path))
   endif
 
-  return s:exists_vimproc
+  return exists('*vimproc#version')
 endfunction"}}}
 "}}}
 " iconv() wrapper for safety.

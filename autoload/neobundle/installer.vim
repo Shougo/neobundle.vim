@@ -71,6 +71,8 @@ function! neobundle#installer#install(bang, bundle_names)
     return
   endif
 
+  call sort(bundles, 's:cmp_vimproc')
+
   call neobundle#installer#_load_install_info(bundles)
 
   call neobundle#installer#clear_log()
@@ -482,7 +484,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'eof' : 0,
           \ 'start_time' : localtime(),
           \ }
-    if s:has_vimproc()
+    if neobundle#util#has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
             \            cmd, &encoding, 'char'), 0, 2)
 
@@ -503,7 +505,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
-  if s:has_vimproc() && has_key(a:process, 'proc')
+  if neobundle#util#has_vimproc() && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= g:neobundle#install_process_timeout
     let a:process.output .= vimproc#util#iconv(
@@ -921,20 +923,10 @@ function! s:redir(cmd) "{{{
   return res
 endfunction"}}}
 
-function! s:has_vimproc()
-  if get(g:, 'vimproc#disable', 0)
-    return 0
-  endif
-
-  if !exists('*vimproc#version')
-    try
-      call vimproc#version()
-    catch
-    endtry
-  endif
-
-  return exists('*vimproc#version')
-endfunction
+" Vimproc is first.
+function! s:cmp_vimproc(a, b) "{{{
+  return !(a:a.name ==# 'vimproc' || a:a.name ==# 'vimproc.vim')
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
