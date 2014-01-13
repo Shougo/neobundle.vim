@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jan 2014.
+" Last Modified: 13 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -750,7 +750,7 @@ function! s:save_install_info(bundles)
           \   'updated_time' : bundle.updated_time,
           \   'installed_uri' : bundle.installed_uri,
           \   'installed_path' : bundle.path,
-          \   'revisions' : {},
+          \   'revisions' : bundle.revisions,
           \ }
   endfor
 
