@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Dec 2013.
+" Last Modified: 17 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -192,6 +192,7 @@ function! s:get_default() "{{{
           \ 'rtp' : '',
           \ 'depends' : [],
           \ 'lazy' : 0,
+          \ 'force' : 0,
           \ 'gui' : 0,
           \ 'terminal' : 0,
           \ 'overwrite' : 1,

@@ -733,6 +733,13 @@ OPTIONS 					*neobundle-options*
 		If set to 1, neobundle doesn't add the path to user
 		runtimepath.
 
+						*neobundle-options-force*
+		force			(Number)
+		If set to 1, neobundle will load plugin files in the plugin
+		repository forcelly.
+		Note: It is useful for using Bundle within bundle.
+		https://github.com/Shougo/neobundle.vim/issues/199
+
 						*neobundle-options-overwrite*
 		overwrite		(Number)
 		If set to 1, neobundle doesn't overwrite the path to user
