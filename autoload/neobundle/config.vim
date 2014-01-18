@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Jan 2014.
+" Last Modified: 19 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -427,6 +427,10 @@ function! neobundle#config#add(bundle, ...) "{{{
     else
       let bundle.sourced = 1
       call neobundle#config#rtp_add(bundle)
+
+      if bundle.force
+        runtime! plugin/**/*.vim
+      endif
     endif
   elseif bundle.lazy
     if neobundle#config#is_sourced(bundle.name)
