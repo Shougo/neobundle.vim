@@ -42,16 +42,6 @@ Requirements: Vim 7.2.051 or above.
      " Let NeoBundle manage NeoBundle
      NeoBundleFetch 'Shougo/neobundle.vim'
 
-     " Recommended to install
-     "NeoBundle 'Shougo/vimproc', {
-     " \ 'build' : {
-     " \     'windows' : 'make -f make_mingw32.mak',
-     " \     'cygwin' : 'make -f make_cygwin.mak',
-     " \     'mac' : 'make -f make_mac.mak',
-     " \     'unix' : 'make -f make_unix.mak',
-     " \    },
-     " \ }
-
      " My Bundles here:
      NeoBundle 'Shougo/neosnippet.vim'
      NeoBundle 'Shougo/neosnippet-snippets.vim'
