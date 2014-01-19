@@ -261,7 +261,7 @@ function! neobundle#installer#reinstall_names(bundle_names)
     call neobundle#installer#error(
           \ '[neobundle/install] Target bundles not found.')
     call neobundle#installer#error(
-          \ '[neobundle/install] You may use wrong bundle name.')
+          \ '[neobundle/install] You may have used the wrong bundle name.')
     return
   endif
 
