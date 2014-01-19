@@ -62,7 +62,8 @@ Requirements: Vim 7.2.051 or above.
      " :NeoBundleInstall(!)    - install(update) bundles
      " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
-     " Installation check.
+     " If there are uninstalled bundles found on startup,
+     " this will conveniently prompt you to install them.
      NeoBundleCheck
      ```
 3. Install configured bundles:
