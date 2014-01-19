@@ -66,8 +66,8 @@ function! neobundle#installer#install(bang, bundle_names)
     call neobundle#installer#error(
           \ '[neobundle/install] Target bundles not found.')
     call neobundle#installer#error(
-          \ '[neobundle/install] You may use wrong bundle name'.
-          \ ' or all bundles are already installed.')
+          \ '[neobundle/install] You may have used the wrong bundle name,'.
+          \ ' or all of the bundles are already installed.')
     return
   endif
 
