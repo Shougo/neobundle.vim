@@ -53,6 +53,12 @@ Requirements: Vim 7.2.051 or above.
      " \ }
 
      " My Bundles here:
+     NeoBundle 'Shougo/neosnippet.vim'
+     NeoBundle 'Shougo/neosnippet-snippets.vim'
+     NeoBundle 'tpope/vim-fugitive.vim'
+     NeoBundle 'kien/ctrlp.vim'
+     NeoBundle 'flazz/vim-colorschemes'
+
      " Refer to |:NeoBundle-examples|.
      "
      " Note: You don't set neobundle setting in .gvimrc!
