@@ -108,7 +108,7 @@ function! neobundle#installer#install(bang, bundle_names)
 
   if !empty(errored)
     call neobundle#installer#log(
-          \ "[neobundle/install] Errored bundles:\n".join(
+          \ "[neobundle/install] Error installing bundles:\n".join(
           \ map(copy(errored), 'v:val.name')), "\n")
     call neobundle#installer#log(
           \ 'Please read error message log by :message command.')
