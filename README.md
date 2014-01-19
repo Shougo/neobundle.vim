@@ -34,12 +34,16 @@ Requirements: Vim 7.2.051 or above.
      ```vim
      if has('vim_starting')
        set nocompatible               " Be iMproved
+
+       " Required:
        set runtimepath+=~/.vim/bundle/neobundle.vim/
      endif
 
+     " Required:
      call neobundle#rc(expand('~/.vim/bundle/'))
 
      " Let NeoBundle manage NeoBundle
+     " Required:
      NeoBundleFetch 'Shougo/neobundle.vim'
 
      " My Bundles here:
@@ -55,8 +59,9 @@ Requirements: Vim 7.2.051 or above.
 
      " ...
 
-     filetype plugin indent on     " Required!
-     "
+     " Required:
+     filetype plugin indent on
+
      " Brief help
      " :NeoBundleList          - list configured bundles
      " :NeoBundleInstall(!)    - install(update) bundles
