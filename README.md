@@ -68,12 +68,6 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
      NeoBundle 'kien/ctrlp.vim'
      NeoBundle 'flazz/vim-colorschemes'
 
-     " Refer to |:NeoBundle-examples|.
-     "
-     " Note: You don't set neobundle setting in .gvimrc!
-
-     " ...
-
      " Required:
      filetype plugin indent on
 
