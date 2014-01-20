@@ -17,6 +17,14 @@ Requirements: Vim 7.2.051 or above.
 7. neobundle supports lazy initialization for optimizing startup time.
 8. and so on...
 
+## How it works
+
+Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository location>'`.  NeoBundle
+assumes Github as the default location for plugins, so for most plugins you can simply use
+`NeoBundle 'username/plugin` rather than using the absolute URL of the plugin.  These calls should
+be made in your .vimrc file.  Once you have defined these, you must call `NeoBundleInstall`, and
+NeoBundle will clone all of the repos into the desired folder (generally `~/.vim/bundle`) and load
+them into Vim.  If you want to update these repositories, simply call `NeoBundleUpdate`.
 
 ## Quick start
 
