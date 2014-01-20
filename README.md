@@ -72,13 +72,13 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
 ## Advantages over Vundle
 
-1. improved command name(:Bundle vs :NeoBundle).
-2. neobundle works if you set 'shellslash' in your .vimrc.
-3. neobundle supports vimproc(asynchronous update/install).
-4. neobundle supports unite.vim interface(update/install/search).
-5. neobundle supports revision lock feature.
-6. neobundle supports other VCS(Subversion/Git).
-7. neobundle supports lazy initialization for optimizing startup time.
+1. Improved command name(:Bundle vs :NeoBundle).
+2. Works if you set 'shellslash' in your .vimrc.
+3. Support for vimproc(asynchronous update/install).
+4. Support for unite.vim interface(update/install/search).
+5. Support for revision lock feature.
+6. Support for other VCS(Subversion/Git).
+7. Support for lazy initialization for optimizing startup time.
 8. and so on...
 
 ## Tips
