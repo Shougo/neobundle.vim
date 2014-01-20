@@ -81,11 +81,6 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
      Or Command run `bin/neoinstall`
 
-## Docs
-
-see `:h neobundle`
-
-
 ## Tips
 
 If you use a single .vimrc across systems where build programs are
