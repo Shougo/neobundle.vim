@@ -6,17 +6,6 @@ NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/v
 
 Requirements: Vim 7.2.051 or above.
 
-## Advantages
-
-1. improved command name(:Bundle vs :NeoBundle).
-2. neobundle works if you set 'shellslash' in your .vimrc.
-3. neobundle supports vimproc(asynchronous update/install).
-4. neobundle supports unite.vim interface(update/install/search).
-5. neobundle supports revision lock feature.
-6. neobundle supports other VCS(Subversion/Git).
-7. neobundle supports lazy initialization for optimizing startup time.
-8. and so on...
-
 ## How it works
 
 Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository location>'`.  NeoBundle
@@ -80,6 +69,17 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
      Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim)
 
      Or Command run `bin/neoinstall`
+
+## Advantages over Vundle
+
+1. improved command name(:Bundle vs :NeoBundle).
+2. neobundle works if you set 'shellslash' in your .vimrc.
+3. neobundle supports vimproc(asynchronous update/install).
+4. neobundle supports unite.vim interface(update/install/search).
+5. neobundle supports revision lock feature.
+6. neobundle supports other VCS(Subversion/Git).
+7. neobundle supports lazy initialization for optimizing startup time.
+8. and so on...
 
 ## Tips
 
