@@ -6,17 +6,21 @@ NeoBundle is a Vim plugin manager inspired by Vundle(https://github.com/gmarik/v
 
 Requirements: Vim 7.2.051 or above.
 
-## Advantages
+## How it works
 
-1. improved command name(:Bundle vs :NeoBundle).
-2. neobundle works if you set 'shellslash' in your .vimrc.
-3. neobundle supports vimproc(asynchronous update/install).
-4. neobundle supports unite.vim interface(update/install/search).
-5. neobundle supports revision lock feature.
-6. neobundle supports other VCS(Subversion/Git).
-7. neobundle supports lazy initialization for optimizing startup time.
-8. and so on...
+Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository location>'`.  NeoBundle
+assumes Github as the default location for plugins, so for most plugins you can simply use
+`NeoBundle 'username/plugin` rather than using the absolute URL of the plugin.  These calls should
+be made in your .vimrc file.  Once you have defined these, you must call `NeoBundleInstall`, and
+NeoBundle will clone all of the repos into the desired folder (generally `~/.vim/bundle`) and load
+them into Vim.  If you want to update these repositories, simply call `NeoBundleUpdate`.
 
+A few other useful commands:
+- `:NeoBundleList`          - list configured bundles
+- `:NeoBundleInstall(!)`    - install(update) bundles
+- `:NeoBundleClean(!)`      - confirm(or auto-approve) removal of unused bundles
+
+Refer to `:help neobundle` for more examples and for a full list of commands.
 
 ## Quick start
 
@@ -34,39 +38,30 @@ Requirements: Vim 7.2.051 or above.
      ```vim
      if has('vim_starting')
        set nocompatible               " Be iMproved
+
+       " Required:
        set runtimepath+=~/.vim/bundle/neobundle.vim/
      endif
 
+     " Required:
      call neobundle#rc(expand('~/.vim/bundle/'))
 
      " Let NeoBundle manage NeoBundle
+     " Required:
      NeoBundleFetch 'Shougo/neobundle.vim'
 
-     " Recommended to install
-     "NeoBundle 'Shougo/vimproc', {
-     " \ 'build' : {
-     " \     'windows' : 'make -f make_mingw32.mak',
-     " \     'cygwin' : 'make -f make_cygwin.mak',
-     " \     'mac' : 'make -f make_mac.mak',
-     " \     'unix' : 'make -f make_unix.mak',
-     " \    },
-     " \ }
-
      " My Bundles here:
-     " Refer to |:NeoBundle-examples|.
-     "
-     " Note: You don't set neobundle setting in .gvimrc!
+     NeoBundle 'Shougo/neosnippet.vim'
+     NeoBundle 'Shougo/neosnippet-snippets.vim'
+     NeoBundle 'tpope/vim-fugitive.vim'
+     NeoBundle 'kien/ctrlp.vim'
+     NeoBundle 'flazz/vim-colorschemes'
 
-     " ...
+     " Required:
+     filetype plugin indent on
 
-     filetype plugin indent on     " Required!
-     "
-     " Brief help
-     " :NeoBundleList          - list configured bundles
-     " :NeoBundleInstall(!)    - install(update) bundles
-     " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-
-     " Installation check.
+     " If there are uninstalled bundles found on startup,
+     " this will conveniently prompt you to install them.
      NeoBundleCheck
      ```
 3. Install configured bundles:
@@ -75,10 +70,16 @@ Requirements: Vim 7.2.051 or above.
 
      Or Command run `bin/neoinstall`
 
-## Docs
+## Advantages over Vundle
 
-see `:h neobundle`
-
+1. Better command name (:NeoBundle rather than :Bundle)
+2. Works if you set 'shellslash' in your .vimrc.
+3. Support for vimproc(asynchronous update/install).
+4. Support for unite.vim interface(update/install/search).
+5. Support for revision locking.
+6. Support for multiple version control systems (Subversion/Git).
+7. Support for lazy initialization for optimizing startup time.
+8. and so on...
 
 ## Tips
 
