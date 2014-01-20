@@ -26,6 +26,11 @@ be made in your .vimrc file.  Once you have defined these, you must call `NeoBun
 NeoBundle will clone all of the repos into the desired folder (generally `~/.vim/bundle`) and load
 them into Vim.  If you want to update these repositories, simply call `NeoBundleUpdate`.
 
+Other useful commands:
+- `:NeoBundleList`          - list configured bundles
+- `:NeoBundleInstall(!)`    - install(update) bundles
+- `:NeoBundleClean(!)`      - confirm(or auto-approve) removal of unused bundles
+
 ## Quick start
 
 1. Setup NeoBundle:
@@ -69,11 +74,6 @@ them into Vim.  If you want to update these repositories, simply call `NeoBundle
 
      " Required:
      filetype plugin indent on
-
-     " Brief help
-     " :NeoBundleList          - list configured bundles
-     " :NeoBundleInstall(!)    - install(update) bundles
-     " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
      " If there are uninstalled bundles found on startup,
      " this will conveniently prompt you to install them.
