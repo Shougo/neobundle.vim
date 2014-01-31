@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,6 +142,11 @@ function! neobundle#init#_bundle(bundle) "{{{
         \ && isdirectory(bundle.rtp . '/autoload')
     let bundle.autoload.function_prefix =
           \ neobundle#parser#_function_prefix(bundle.name)
+  endif
+  if !has_key(bundle.autoload, 'unite_sources')
+        \ && bundle.name =~ '^unite-'
+    let bundle.autoload.unite_sources =
+          \ matchstr(bundle.name, '^unite-\zs.*')
   endif
   if !has_key(bundle, 'augroup')
     let bundle.augroup = bundle.name

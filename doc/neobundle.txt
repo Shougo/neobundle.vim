@@ -835,6 +835,8 @@ OPTIONS 					*neobundle-options*
 			Unite source name list.
 			Note: To use this feature, you must install latest
 			|unite.vim|.
+			Note: If bundle name starts "unite-", this option is
+			set automatically.
 
 			insert		(Number)
 			If set to non-zero, neobundle will |:NeoBundleSource|
