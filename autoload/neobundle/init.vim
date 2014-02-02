@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 03 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,7 +109,7 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
   if bundle.rev != ''
     let bundle.directory .= '_' . substitute(bundle.rev,
-          \ '[^[:alnum:]_.-]', '', 'g')
+          \ '[^[:alnum:]_-]', '_', 'g')
   endif
 
   let bundle.path = isdirectory(bundle.uri) ?
