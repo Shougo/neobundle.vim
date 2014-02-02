@@ -100,16 +100,17 @@ function! neobundle#init#_bundle(bundle) "{{{
 
   if !has_key(bundle, 'directory')
     let bundle.directory = bundle.name
+
+    if bundle.rev != ''
+      let bundle.directory .= '_' . substitute(bundle.rev,
+            \ '[^[:alnum:]_-]', '_', 'g')
+    endif
   endif
 
   let bundle.base = s:expand_path(bundle.base)
   if bundle.base =~ '[/\\]$'
     " Chomp.
     let bundle.base = substitute(bundle.base, '[/\\]\+$', '', '')
-  endif
-  if bundle.rev != ''
-    let bundle.directory .= '_' . substitute(bundle.rev,
-          \ '[^[:alnum:]_-]', '_', 'g')
   endif
 
   let bundle.path = isdirectory(bundle.uri) ?
