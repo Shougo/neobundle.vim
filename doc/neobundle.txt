@@ -434,7 +434,7 @@ g:neobundle#install_process_timeout
 		The time of timeout seconds when updating/installing bundles.
 		Note: This feature is available if you installed |vimproc|.
 
-		Defaults to "60".
+		Defaults to "120".
 
 g:neobundle#default_options			*g:neobundle#default_options*
 		A dictionary of preconfigured sets of options to use when
