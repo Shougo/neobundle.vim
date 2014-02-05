@@ -2,6 +2,7 @@
 
 Version: 3.0
 Author : Shougo <Shougo.Matsu at gmail.com>
+         gmarik http://github.com/gmarik
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
@@ -40,8 +41,9 @@ FAQ			|neobundle-faq|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle* is the ultimate Vim package manager. This plugin is inspired by
-Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
+*neobundle* is the ultimate Vim package manager. This plugin is based on my
+Vundle(https://github.com/gmarik/vundle) fork in first version, but I added
+tons of features.
 
 For example:
  * Uses |vimproc| if available
