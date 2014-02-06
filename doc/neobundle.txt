@@ -1,4 +1,4 @@
-*neobundle.txt*	Ultimate Vim package manager
+*neobundle.txt*	Next generation Vim package manager
 
 Version: 3.0
 Author : Shougo <Shougo.Matsu at gmail.com>
@@ -41,7 +41,7 @@ FAQ			|neobundle-faq|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle* is the ultimate Vim package manager. This plugin is based on
+*neobundle* is the next generation Vim package manager. This plugin is based on
 Vundle(https://github.com/gmarik/vundle), but I renamed and added tons of
 features.  Because, Vundle's author does not want to add huge features in
 Vundle.
