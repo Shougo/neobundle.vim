@@ -85,13 +85,12 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 ## Advantages over Vundle
 
 1. Better command name (:NeoBundle rather than :Bundle)
-2. Works if you set 'shellslash' in your .vimrc.
-3. Support for vimproc(asynchronous update/install).
-4. Support for unite.vim interface(update/install/search).
-5. Support for revision locking.
-6. Support for multiple version control systems (Subversion/Git).
-7. Support for lazy initialization for optimizing startup time.
-8. and so on...
+2. Support for vimproc(asynchronous update/install).
+3. Support for unite.vim interface(update/install/search).
+4. Support for revision locking.
+5. Support for multiple version control systems (Subversion/Git).
+6. Support for lazy initialization for optimizing startup time.
+7. and so on...
 
 ## Tips
 

@@ -1282,17 +1282,15 @@ But you must know they are huge and complex features.
 
    1. plugin prefixed command name(:Bundle vs :NeoBundle).
    https://github.com/gmarik/Vundle.vim/issues/76
-   2. neobundle works if you set 'shellslash' in your .vimrc.
-   https://github.com/gmarik/Vundle.vim/issues/111
-   3. neobundle supports vimproc(asynchronous update/install).
+   2. neobundle supports vimproc(asynchronous update/install).
    https://github.com/gmarik/Vundle.vim/issues/259
-   4. neobundle supports unite.vim interface(update/install/search).
-   5. neobundle supports revision lock feature.
+   3. neobundle supports unite.vim interface(update/install/search).
+   4. neobundle supports revision lock feature.
    https://github.com/gmarik/Vundle.vim/issues/35
-   6. neobundle supports other VCS(Subversion/Git).
+   5. neobundle supports other VCS(Subversion/Git).
    https://github.com/gmarik/Vundle.vim/pull/134
    https://github.com/gmarik/Vundle.vim/pull/268
-   7. neobundle supports lazy initialization for optimizing startup time.
+   6. neobundle supports lazy initialization for optimizing startup time.
    https://github.com/gmarik/Vundle.vim/issues/364
    https://github.com/gmarik/Vundle.vim/pull/98
 
