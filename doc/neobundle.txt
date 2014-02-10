@@ -51,7 +51,9 @@ manager, you should use Vundle plugin.  It is well works widely and more
 tested.  If you want to use extended features, you can use neobundle.
 
 Vundle features : Stable, simple, good for beginners
-neobundle features : Early development, complex, good for power users
+neobundle features : Early development(may break compatibility), very complex,
+good for plugin power users(for example, 50+ plugins and over 1000 lines
+.vimrc, ...)
 
 neobundle features :
  * Uses |vimproc| if available

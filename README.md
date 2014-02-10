@@ -13,8 +13,10 @@ Note: Neobundle is not stable plugin manager.  If you want to stable plugin
 manager, you should use Vundle plugin.  It is well works widely and more
 tested.  If you want to use extended features, you can use neobundle.
 
-Vundle: Stable, simple, for beginners
-neobundle: Early development, complex, for power users
+Vundle features : Stable, simple, good for beginners
+neobundle features : Early development(may break compatibility), very complex,
+good for plugin power users(for example, 50+ plugins and over 1000 lines
+.vimrc, ...)
 
 ## How it works
 
