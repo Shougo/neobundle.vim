@@ -21,7 +21,7 @@ good for plugin power users(for example, 50+ plugins and over 1000 lines
 
 Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository location>'`.  NeoBundle
 assumes Github as the default location for plugins, so for most plugins you can simply use
-`NeoBundle 'username/plugin` rather than using the absolute URL of the plugin.  These calls should
+`NeoBundle 'username/plugin'` rather than using the absolute URL of the plugin.  These calls should
 be made in your .vimrc file.  Once you have defined these, you must call `NeoBundleInstall`, and
 NeoBundle will clone all of the repos into the desired folder (generally `~/.vim/bundle`) and load
 them into Vim.  If you want to update these repositories, simply call `NeoBundleUpdate`.
