@@ -93,7 +93,9 @@ Neobundle now features a plugin search for vim.org scripts (requires
 ==============================================================================
 INSTALL						*neobundle-install*
 
-Requirements: Vim 7.2.051 or above.
+Requirements:
+* Vim 7.2.051 or above.
+* "git" command in $PATH(if you want to install github or vim.org plugins)
 
 First of all, git clone the repository.
 
