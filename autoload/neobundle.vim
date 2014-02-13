@@ -127,7 +127,7 @@ command! -bar NeoBundleExtraEdit
       \ execute 'edit' fnameescape(neobundle#get_neobundle_dir()).'/extra_bundles.vim'
 
 command! -bar NeoBundleCount
-      \ echo len(map(neobundle#config#get_neobundles(), 'v:val.name'))
+      \ echo len(neobundle#config#get_neobundles())
 
 function! neobundle#rc(...)
   let path = (a:0 > 0) ? a:1 :
