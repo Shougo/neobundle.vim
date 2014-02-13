@@ -395,6 +395,10 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleRecipe 'vimproc.vim'
 <
+						*:NeoBundleCount*
+:NeoBundleCount
+		Show bundles count.  You can know how many bundles you have.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 

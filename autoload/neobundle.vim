@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jan 2014.
+" Last Modified: 13 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,6 +125,9 @@ command! -bar NeoBundleUpdatesLog
 
 command! -bar NeoBundleExtraEdit
       \ execute 'edit' fnameescape(neobundle#get_neobundle_dir()).'/extra_bundles.vim'
+
+command! -bar NeoBundleCount
+      \ echo len(map(neobundle#config#get_neobundles(), 'v:val.name'))
 
 function! neobundle#rc(...)
   let path = (a:0 > 0) ? a:1 :
