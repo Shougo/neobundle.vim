@@ -10,6 +10,10 @@ Requirements:
 * Vim 7.2.051 or above.
 * "git" command in $PATH(if you want to install github or vim.org plugins)
 
+Recommends:
+* vimproc(if you want to install/update asynchronously)
+https://github.com/Shougo/vimproc.vim
+
 Note: Neobundle is not stable plugin manager.  If you want to stable plugin
 manager, you should use Vundle plugin.  It is well works widely and more
 tested.  If you want to use extended features, you can use neobundle.
@@ -21,12 +25,14 @@ good for plugin power users(for example, 50+ plugins and over 1000 lines
 
 ## How it works
 
-Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository location>'`.  NeoBundle
-assumes Github as the default location for plugins, so for most plugins you can simply use
-`NeoBundle 'username/plugin'` rather than using the absolute URL of the plugin.  These calls should
-be made in your .vimrc file.  Once you have defined these, you must call `NeoBundleInstall`, and
-NeoBundle will clone all of the repos into the desired folder (generally `~/.vim/bundle`) and load
-them into Vim.  If you want to update these repositories, simply call `NeoBundleUpdate`.
+Plugins are defined in NeoBundle by calling `NeoBundle '<plugin repository
+location>'`.  NeoBundle assumes Github as the default location for plugins, so
+for most plugins you can simply use `NeoBundle 'username/plugin'` rather than
+using the absolute URL of the plugin.  These calls should be made in your
+.vimrc file.  Once you have defined these, you must call `NeoBundleInstall`,
+and NeoBundle will clone all of the repos into the desired folder (generally
+`~/.vim/bundle`) and load them into Vim.  If you want to update these
+repositories, simply call `NeoBundleUpdate`.
 
 A few other useful commands:
 - `:NeoBundleList`          - list configured bundles
@@ -70,6 +76,9 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
      NeoBundle 'kien/ctrlp.vim'
      NeoBundle 'flazz/vim-colorschemes'
 
+     " You can specify revision/branch/tag.
+     NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+
      " Required:
      filetype plugin indent on
 
@@ -85,7 +94,7 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
 ## Advantages over Vundle
 
-1. Better command name (:NeoBundle rather than :Bundle)
+1. Plugin prefixed command name(:Bundle vs :NeoBundle).
 2. Support for vimproc(asynchronous update/install).
 3. Support for unite.vim interface(update/install/search).
 4. Support for revision locking.
