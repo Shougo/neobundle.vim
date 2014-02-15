@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: svn.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2013.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,11 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+" Global options definition. "{{{
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#svn#command_path', 'svn')
+"}}}
 
 function! neobundle#types#svn#define() "{{{
   return s:type
@@ -63,32 +68,34 @@ function! s:type.detect(path, opts) "{{{
         \ { 'name': name, 'uri': uri, 'type' : type }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
-  if !executable('svn')
+  if !executable(g:neobundle#types#svn#command_path)
     return 'E: svn command is not installed.'
   endif
 
   if !isdirectory(a:bundle.path)
-    let cmd = 'svn checkout'
+    let cmd = 'checkout'
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'svn up'
+    let cmd = 'up'
   endif
 
-  return cmd
+  return g:neobundle#types#svn#command_path . ' ' . cmd
 endfunction"}}}
 function! s:type.get_revision_number_command(bundle) "{{{
-  if !executable('svn')
+  if !executable(g:neobundle#types#svn#command_path)
     return ''
   endif
 
-  return 'svn info'
+  return g:neobundle#types#svn#command_path . ' info'
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
-  if !executable('svn') || a:bundle.rev == ''
+  if !executable(g:neobundle#types#svn#command_path)
+        \ || a:bundle.rev == ''
     return ''
   endif
 
-  return 'svn up -r ' . a:bundle.rev
+  return g:neobundle#types#svn#command_path
+        \ . '  up -r ' . a:bundle.rev
 endfunction"}}}
 
 let &cpo = s:save_cpo

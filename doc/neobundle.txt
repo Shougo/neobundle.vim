@@ -474,6 +474,12 @@ g:neobundle#types#raw#calc_hash_command
 
 		Defaults to "sha1sum" or "md5sum".
 
+				*g:neobundle#types#git#command_path*
+g:neobundle#types#git#command_path
+		The "git" command path used for git type.
+
+		Defaults to "git".
+
 				*g:neobundle#types#git#default_protocol*
 g:neobundle#types#git#default_protocol
 		The default protocol used for git (github).
@@ -492,9 +498,21 @@ g:neobundle#types#git#enable_submodule
 
 		Defaults to 1.
 
+				*g:neobundle#types#hg#command_path*
+g:neobundle#types#hg#command_path
+		The "hg" command path used for hg type.
+
+		Defaults to "hg".
+
 				*g:neobundle#types#hg#default_protocol*
 g:neobundle#types#hg#default_protocol
 		The default protocol used for hg (bitbucket).
+
+				*g:neobundle#types#svn#command_path*
+g:neobundle#types#svn#command_path
+		The "svn" command path used for svn type.
+
+		Defaults to "svn".
 
 					*g:neobundle_default_hg_protocol*
 		Note: |g:neobundle_default_git_protocol| is obsolete.

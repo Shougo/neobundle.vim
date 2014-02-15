@@ -2,7 +2,7 @@
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 05 Feb 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition. "{{{
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#git#command_path', 'git')
 call neobundle#util#set_default(
       \ 'g:neobundle#types#git#default_protocol', 'https',
       \ 'g:neobundle_default_git_protocol')
@@ -108,28 +110,29 @@ function! s:type.detect(path, opts) "{{{
         \  'uri': uri, 'type' : 'git' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
-  if !executable('git')
+  if !executable(g:neobundle#types#git#command_path)
     return 'E: "git" command is not installed.'
   endif
 
   if !isdirectory(a:bundle.path)
-    let cmd = 'git clone'
+    let cmd = 'clone'
     if g:neobundle#types#git#enable_submodule
       let cmd .= ' --recursive'
     endif
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'git pull --rebase'
+    let cmd = 'pull --rebase'
     if g:neobundle#types#git#enable_submodule
-      let cmd .= ' && git submodule update --init --recursive'
+      let cmd .= ' && ' . g:neobundle#types#git#command_path
+            \ . ' submodule update --init --recursive'
     endif
   endif
 
-  return cmd
+  return g:neobundle#types#git#command_path . ' ' . cmd
 endfunction"}}}
 function! s:type.get_revision_number_command(bundle) "{{{
-  if !executable('git')
+  if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
@@ -138,43 +141,50 @@ function! s:type.get_revision_number_command(bundle) "{{{
     let rev = 'HEAD'
   endif
 
-  return 'git rev-parse ' . rev
+  return g:neobundle#types#git#command_path .' rev-parse ' . rev
 endfunction"}}}
 function! s:type.get_revision_pretty_command(bundle) "{{{
-  if !executable('git')
+  if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
-  return "git log -1 --pretty=format:'%h [%cr] %s'"
+  return g:neobundle#types#git#command_path .
+        \ " log -1 --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_commit_date_command(bundle) "{{{
-  if !executable('git')
+  if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
-  return "git log -1 --pretty=format:'%ct'"
+  return g:neobundle#types#git#command_path .
+        \ " log -1 --pretty=format:'%ct'"
 endfunction"}}}
 function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
-  if !executable('git') || a:new_rev == '' || a:old_rev == ''
+  if !executable(g:neobundle#types#git#command_path)
+        \ || a:new_rev == '' || a:old_rev == ''
     return ''
   endif
 
   " Note: If the a:old_rev is not the ancestor of two branchs. Then do not use
   " %s^.  use %s^ will show one commit message which already shown last time.
-  let is_not_ancestor = neobundle#util#system('git merge-base '
+  let is_not_ancestor = neobundle#util#system(
+        \ g:neobundle#types#git#command_path . ' merge-base '
         \ . a:old_rev . ' ' . a:new_rev) ==# a:old_rev
-  return printf("git log %s%s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
+  return printf(g:neobundle#types#git#command_path .
+        \ " log %s%s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
         \ a:old_rev, (is_not_ancestor ? '' : '^'), a:new_rev)
 
   " Test.
-  " return "git log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
+  " return g:neobundle#types#git#command_path .
+  "      \ " log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
-  if !executable('git') || a:bundle.rev == ''
+  if !executable(g:neobundle#types#git#command_path)
+        \ || a:bundle.rev == ''
     return ''
   endif
 
-  return 'git checkout ' . a:bundle.rev
+  return g:neobundle#types#git#command_path . ' checkout ' . a:bundle.rev
 endfunction"}}}
 
 let &cpo = s:save_cpo
