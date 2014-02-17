@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -239,8 +239,10 @@ endfunction"}}}
 function! neobundle#config(arg, ...)
   " Use neobundle#tapped or name.
   return type(a:arg) == type({}) ?
-        \ neobundle#config#set(g:neobundle#tapped.name, a:arg) :
-        \ neobundle#config#set(a:arg, a:1)
+        \   neobundle#config#set(g:neobundle#tapped.name, a:arg) :
+        \ type(a:arg) == type('') ?
+        \   neobundle#config#set(a:arg, a:1) :
+        \   map(copy(a:arg), "neobundle#config#set(v:val, deepcopy(a:1))")
 endfunction
 
 function! neobundle#call_hook(hook_name, ...)

@@ -232,6 +232,8 @@ neobundle#config({dict})
 		calling |:NeoBundle| or |:NeoBundleLocal|.
 		It you omit {bundle-name}, it uses |neobundle#tapped|
 		variable.
+		If {bundle-name} is list, you can change options in multiple
+		plugins.
 >
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {
