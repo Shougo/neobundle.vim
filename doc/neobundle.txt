@@ -225,15 +225,22 @@ neobundle#call_hook({hook-name})		 *neobundle#call_hook()*
 		Note: If {hook-name} is "on_source", neobundle will call
 		"on_source" hooks in sourced bundles.
 
-neobundle#config({bundle-name}, {dict})		 *neobundle#config()*
-neobundle#config({dict})
-		Change plugin options for {bundle-name}.
+neobundle#bundle({repository}, [{options}])	 *neobundle#bundle()*
+		Initialize a bundle.
+		If {repository} is list, you can initialize options in
+		multiple bundles.
+		Note: You can use this function instead of |:NeoBundle|
+		command.
+
+neobundle#config({bundle-name}, {options})	 *neobundle#config()*
+neobundle#config({options})
+		Change bundle options for {bundle-name}.
 		Note: To lazy-load a plugin, you can set the "lazy" flag after
 		calling |:NeoBundle| or |:NeoBundleLocal|.
 		It you omit {bundle-name}, it uses |neobundle#tapped|
 		variable.
 		If {bundle-name} is list, you can change options in multiple
-		plugins.
+		bundles.
 >
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {
@@ -266,7 +273,7 @@ COMMANDS 					*neobundle-commands*
 						*:NeoBundle*
 :NeoBundle {repository} [[,{revision}] [,{options}]]
 :NeoBundle {repository} ,{revision}, {default} [,{options}]]
-		Configures a bundle.
+		Initialize a bundle.
 		{repository} is the repository URI. {revision} is the desired
 		revision or branch name. If omitted, the current latest
 		revision will be used. {default} is a "default options

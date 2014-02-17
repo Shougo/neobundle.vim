@@ -236,6 +236,16 @@ function! neobundle#untap() "{{{
   let g:neobundle#tapped = {}
 endfunction"}}}
 
+function! neobundle#bundle(arg, ...)
+  let opts = get(a:000, 0, {})
+  for arg in neobundle#util#convert2list(a:arg)
+    let bundle = neobundle#parser#_init_bundle(name, deepcopy(opts))
+    if !empty(bundle)
+      call neobundle#config#add(bundle)
+    endif
+  endfor
+endfunction
+
 function! neobundle#config(arg, ...)
   " Use neobundle#tapped or name.
   return type(a:arg) == type({}) ?
