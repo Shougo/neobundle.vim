@@ -238,12 +238,9 @@ endfunction"}}}
 
 function! neobundle#bundle(arg, ...)
   let opts = get(a:000, 0, {})
-  for arg in neobundle#util#convert2list(a:arg)
-    let bundle = neobundle#parser#_init_bundle(name, deepcopy(opts))
-    if !empty(bundle)
-      call neobundle#config#add(bundle)
-    endif
-  endfor
+  call map(neobundle#util#convert2list(a:arg),
+        \ "neobundle#config#add(neobundle#parser#_init_bundle(
+        \     v:val, deepcopy(opts)))")
 endfunction
 
 function! neobundle#config(arg, ...)

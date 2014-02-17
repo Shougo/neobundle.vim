@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 05 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,11 +31,9 @@ set cpo&vim
 function! neobundle#parser#bundle(arg, ...) "{{{
   let bundle = s:parse_arg(a:arg)
   let is_parse_only = get(a:000, 0, 0)
-  if empty(bundle) || is_parse_only
-    return bundle
+  if !is_parse_only
+    call neobundle#config#add(bundle)
   endif
-
-  call neobundle#config#add(bundle)
 
   return bundle
 endfunction"}}}
