@@ -369,8 +369,8 @@ COMMANDS 					*neobundle-commands*
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
-						*:NeoBundleEditExtra*
-:NeoBundleEditExtra
+						*:NeoBundleExtraEdit*
+:NeoBundleExtraEdit
 		Edit extra bundles configuration easily.
 
 :NeoBundleDisable {name}...			*:NeoBundleDisable*
