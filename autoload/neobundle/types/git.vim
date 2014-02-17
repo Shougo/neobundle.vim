@@ -2,7 +2,7 @@
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 15 Feb 2014.
+" Last Modified: 17 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -149,7 +149,7 @@ function! s:type.get_revision_pretty_command(bundle) "{{{
   endif
 
   return g:neobundle#types#git#command_path .
-        \ " log -1 --pretty=format:'%h [%cr] %s'"
+        \ ' log -1 --pretty=format:"%h [%cr] %s"'
 endfunction"}}}
 function! s:type.get_commit_date_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
@@ -157,7 +157,7 @@ function! s:type.get_commit_date_command(bundle) "{{{
   endif
 
   return g:neobundle#types#git#command_path .
-        \ " log -1 --pretty=format:'%ct'"
+        \ ' log -1 --pretty=format:"%ct"'
 endfunction"}}}
 function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
   if !executable(g:neobundle#types#git#command_path)
@@ -171,12 +171,12 @@ function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
         \ g:neobundle#types#git#command_path . ' merge-base '
         \ . a:old_rev . ' ' . a:new_rev) ==# a:old_rev
   return printf(g:neobundle#types#git#command_path .
-        \ " log %s%s..%s --graph --pretty=format:'%%h [%%cr] %%s'",
+        \ ' log %s%s..%s --graph --pretty=format:"%%h [%%cr] %%s"',
         \ a:old_rev, (is_not_ancestor ? '' : '^'), a:new_rev)
 
   " Test.
   " return g:neobundle#types#git#command_path .
-  "      \ " log HEAD^^^^..HEAD --graph --pretty=format:'%h [%cr] %s'"
+  "      \ ' log HEAD^^^^..HEAD --graph --pretty=format:"%h [%cr] %s"'
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
