@@ -620,15 +620,21 @@ function! s:reset_ftplugin(filetype_out) "{{{
   filetype off
 
   if a:filetype_out =~# 'detection:ON'
-    silent! filetype on
-  endif
+        \ && a:filetype_out =~# 'plugin:ON'
+        \ && a:filetype_out =~# 'indent:ON'
+    silent! filetype plugin indent on
+  else
+    if a:filetype_out =~# 'detection:ON'
+      silent! filetype on
+    endif
 
-  if a:filetype_out =~# 'plugin:ON'
-    silent! filetype plugin on
-  endif
+    if a:filetype_out =~# 'plugin:ON'
+      silent! filetype plugin on
+    endif
 
-  if a:filetype_out =~# 'indent:ON'
-    silent! filetype indent on
+    if a:filetype_out =~# 'indent:ON'
+      silent! filetype indent on
+    endif
   endif
 
   " Reload filetype plugins.
