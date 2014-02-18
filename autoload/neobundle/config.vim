@@ -261,8 +261,10 @@ function! neobundle#config#search(bundle_names, ...) "{{{
         \       index(a:bundle_names, v:val.name) >= 0'))
     call add(self, bundle.name)
 
-    let _ += neobundle#config#search(
-          \ map(copy(bundle.depends), 'v:val.name'), self)
+    if !empty(bundle.depends)
+      let _ += neobundle#config#search(
+            \ map(copy(bundle.depends), 'v:val.name'), self)
+    endif
     call add(_, bundle)
   endfor
 
@@ -283,8 +285,10 @@ function! neobundle#config#fuzzy_search(bundle_names) "{{{
 
   let _ = []
   for bundle in bundles
-    let _ += neobundle#config#search(
-          \ map(copy(bundle.depends), 'v:val.name'))
+    if !empty(bundle.depends)
+      let _ += neobundle#config#search(
+            \ map(copy(bundle.depends), 'v:val.name'))
+    endif
     call add(_, bundle)
   endfor
 
