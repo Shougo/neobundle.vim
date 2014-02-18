@@ -249,6 +249,16 @@ function! neobundle#config#rm(path) "{{{
 endfunction"}}}
 
 function! neobundle#config#get_types(...) "{{{
+  let type = get(a:000, 0, '')
+
+  if type ==# 'git'
+    if !exists('s:neobundle_type_git')
+      let s:neobundle_type_git = neobundle#types#git#define()
+    endif
+
+    return s:neobundle_type_git
+  endif
+
   if !exists('s:neobundle_types')
     " Load neobundle types.
     let s:neobundle_types = []
@@ -262,8 +272,6 @@ function! neobundle#config#get_types(...) "{{{
     let s:neobundle_types = neobundle#util#uniq(
           \ s:neobundle_types, 'v:val.name')
   endif
-
-  let type = get(a:000, 0, '')
 
   return (type == '') ? s:neobundle_types :
         \ get(filter(copy(s:neobundle_types), 'v:val.name ==# type'), 0, {})
@@ -524,6 +532,26 @@ endfunction"}}}
 
 function! s:add_lazy(bundle) "{{{
   let bundle = a:bundle
+
+  " Auto set autoload keys.
+  for key in filter([
+        \ 'filetypes', 'filename_patterns',
+        \ 'commands', 'functions', 'mappings', 'unite_sources',
+        \ 'insert', 'explorer', 'on_source', 'function_prefix',
+        \ ], 'has_key(bundle, v:val)')
+    let bundle.autoload[key] = bundle[key]
+    call remove(bundle, key)
+  endfor
+
+  if !has_key(bundle.autoload, 'function_prefix')
+    let bundle.autoload.function_prefix =
+          \ neobundle#parser#_function_prefix(bundle.name)
+  endif
+  if !has_key(bundle.autoload, 'unite_sources')
+        \ && bundle.name =~ '^unite-'
+    let bundle.autoload.unite_sources =
+          \ matchstr(bundle.name, '^unite-\zs.*')
+  endif
 
   if neobundle#config#is_sourced(bundle.name)
     " Already sourced.

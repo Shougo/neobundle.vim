@@ -63,7 +63,7 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#git#default_protocol)
   endif
 
-  if a:path =~ '/'
+  if a:path !~ '/'
     " www.vim.org Vim scripts.
     let name = split(a:path, ':')[-1]
     let uri  = (protocol ==# 'ssh') ?
@@ -79,8 +79,8 @@ function! s:type.detect(path, opts) "{{{
   endif
 
   if a:path !~# '\<\%(gh\|github\):\S\+\|://github.com/'
-    let [name, uri] = s:parse_other_pattern(a:path)
-    if name == ''
+    let uri = s:parse_other_pattern(protocol, a:path, a:opts)
+    if uri == ''
       " Parse failure.
       return {}
     endif
@@ -172,31 +172,30 @@ function! s:type.get_revision_lock_command(bundle) "{{{
   return g:neobundle#types#git#command_path . ' checkout ' . a:bundle.rev
 endfunction"}}}
 
-function! s:parse_other_pattern(path)
+function! s:parse_other_pattern(protocol, path, opts) "{{{
+  let uri = ''
+
   if a:path =~# '\<gist:\S\+\|://gist.github.com/'
     let name = split(a:path, ':')[-1]
-    let uri =  (protocol ==# 'ssh') ?
+    let uri =  (a:protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
-          \ protocol . '://gist.github.com/'. split(name, '/')[-1]
+          \ a:protocol . '://gist.github.com/'. split(name, '/')[-1]
   elseif a:path =~# '\<\%(git@\|git://\)\S\+'
         \ || a:path =~# '\.git\s*$'
         \ || get(a:opts, 'type', '') ==# 'git'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'
       let name = substitute(split(a:path, ':')[-1],
             \   '^//bitbucket.org/', '', '')
-      let uri = (protocol ==# 'ssh') ?
+      let uri = (a:protocol ==# 'ssh') ?
             \ 'git@bitbucket.org:' . name :
-            \ protocol . '://bitbucket.org/' . name
+            \ a:protocol . '://bitbucket.org/' . name
     else
       let uri = a:path
     endif
-  else
-    let name = ''
-    let uri = ''
   endif
 
-  return [name, uri]
-endfunction
+  return uri
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

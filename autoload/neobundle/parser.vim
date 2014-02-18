@@ -191,7 +191,8 @@ function! neobundle#parser#path(path, ...) "{{{
   endif
 
   if has_key(opts, 'type')
-    let types = neobundle#config#get_types(opts.type)
+    let type = neobundle#config#get_types(opts.type)
+    let types = empty(type) ? [] : [type]
   else
     let detect = neobundle#config#get_types('git').detect(path, opts)
     if !empty(detect)
