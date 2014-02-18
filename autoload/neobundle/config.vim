@@ -252,15 +252,11 @@ function! neobundle#config#get_types(...) "{{{
   if !exists('s:neobundle_types')
     " Load neobundle types.
     let s:neobundle_types = []
-    for define in map(split(globpath(&runtimepath,
+    for list in map(split(globpath(&runtimepath,
           \ 'autoload/neobundle/types/*.vim', 1), '\n'),
-          \ "neobundle#types#{fnamemodify(v:val, ':t:r')}#define()")
-      for dict in neobundle#util#convert2list(define)
-        if !empty(dict)
-          call add(s:neobundle_types, dict)
-        endif
-      endfor
-      unlet define
+          \ "neobundle#util#convert2list(
+          \    neobundle#types#{fnamemodify(v:val, ':t:r')}#define())")
+      let s:neobundle_types += list
     endfor
 
     let s:neobundle_types = neobundle#util#uniq(
