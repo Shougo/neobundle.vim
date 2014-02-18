@@ -2,7 +2,7 @@
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 18 Feb 2014.
+" Last Modified: 19 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,34 +184,6 @@ function! s:get_default() "{{{
   let s:default_bundle.base = neobundle#get_neobundle_dir()
 
   return deepcopy(s:default_bundle)
-endfunction"}}}
-
-function! s:init_lazy(bundle) "{{{
-  let bundle = a:bundle
-
-  if !has_key(bundle, 'autoload')
-    " Auto set autoload keys.
-    let bundle.autoload = {}
-
-    for key in filter([
-          \ 'filetypes', 'filename_patterns',
-          \ 'commands', 'functions', 'mappings', 'unite_sources',
-          \ 'insert', 'explorer', 'on_source', 'function_prefix',
-          \ ], 'has_key(bundle, v:val)')
-      let bundle.autoload[key] = bundle[key]
-      call remove(bundle, key)
-    endfor
-  endif
-
-  if !has_key(bundle.autoload, 'function_prefix')
-    let bundle.autoload.function_prefix =
-          \ neobundle#parser#_function_prefix(bundle.name)
-  endif
-  if !has_key(bundle.autoload, 'unite_sources')
-        \ && bundle.name =~ '^unite-'
-    let bundle.autoload.unite_sources =
-          \ matchstr(bundle.name, '^unite-\zs.*')
-  endif
 endfunction"}}}
 
 function! s:init_depends(bundle) "{{{
