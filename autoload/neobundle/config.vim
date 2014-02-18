@@ -132,60 +132,20 @@ function! neobundle#config#source(names, ...) "{{{
     let bundle.disabled = 0
 
     if !get(s:sourced_neobundles, bundle.name, 0)
-      " Unmap dummy mappings.
-      for [mode, mapping] in get(bundle, 'dummy_mappings', [])
-        silent! execute mode.'unmap' mapping
-      endfor
-
-      " Delete dummy commands.
-      for command in get(bundle, 'dummy_commands', [])
-        silent! execute 'delcommand' command
-      endfor
-
-      let s:sourced_neobundles[bundle.name] = 1
+      call s:clear_dummy(bundle)
     endif
 
-    let bundle.dummy_mappings = []
-    let bundle.dummy_commands = []
+    let s:sourced_neobundles[bundle.name] = 1
 
     call neobundle#config#rtp_add(bundle)
     call neobundle#autoload#source(bundle.name)
 
     if exists('g:loaded_neobundle') || is_force
-      call neobundle#call_hook('on_source', bundle)
-
-      " Reload script files.
-      for directory in filter(
-            \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
-            \ "isdirectory(bundle.rtp.'/'.v:val)")
-        for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-          silent! source `=file`
-        endfor
-      endfor
-
-      if exists('#'.bundle.augroup.'#VimEnter')
-        execute 'silent doautocmd' bundle.augroup 'VimEnter'
-
-        if has('gui_running') && &term ==# 'builtin_gui'
-          execute 'silent doautocmd' bundle.augroup 'GUIEnter'
-        endif
-      endif
+      call s:on_source(bundle)
     endif
 
     if !reset_ftplugin
-      for filetype in split(&filetype, '\.')
-        for directory in ['ftplugin', 'indent', 'syntax',
-              \ 'after/ftplugin', 'after/indent', 'after/syntax']
-          let base = bundle.rtp . '/' . directory
-          if filereadable(base.'/'.filetype.'.vim') ||
-                \ (directory =~# 'ftplugin$' &&
-                \   isdirectory(base . '/' . filetype) ||
-                \   glob(base.'/'.filetype.'_*.vim') != '')
-            let reset_ftplugin = 1
-            break
-          endif
-        endfor
-      endfor
+      let reset_ftplugin = s:is_reset_ftplugin(&filetype, bundle.rtp)
     endif
   endfor
 
@@ -194,22 +154,7 @@ function! neobundle#config#source(names, ...) "{{{
   redir END
 
   if reset_ftplugin
-    filetype off
-
-    if filetype_out =~# 'detection:ON'
-      silent! filetype on
-    endif
-
-    if filetype_out =~# 'plugin:ON'
-      silent! filetype plugin on
-    endif
-
-    if filetype_out =~# 'indent:ON'
-      silent! filetype indent on
-    endif
-
-    " Reload filetype plugins.
-    let &l:filetype = &l:filetype
+    call s:reset_ftplugin(filetype_out)
   elseif filetype_before !=# filetype_after
     execute 'doautocmd FileType' &filetype
   endif
@@ -616,6 +561,78 @@ function! s:add_dummy_mappings(bundle) "{{{
       endfor
     endfor
   endfor
+endfunction"}}}
+
+function! s:on_source(bundle) "{{{
+  call neobundle#call_hook('on_source', a:bundle)
+
+  " Reload script files.
+  for directory in filter(
+        \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
+        \ "isdirectory(a:bundle.rtp.'/'.v:val)")
+    for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
+      silent! source `=file`
+    endfor
+  endfor
+
+  if exists('#'.a:bundle.augroup.'#VimEnter')
+    execute 'silent doautocmd' a:bundle.augroup 'VimEnter'
+
+    if has('gui_running') && &term ==# 'builtin_gui'
+      execute 'silent doautocmd' a:bundle.augroup 'GUIEnter'
+    endif
+  endif
+endfunction"}}}
+
+function! s:clear_dummy(bundle) "{{{
+  " Unmap dummy mappings.
+  for [mode, mapping] in get(a:bundle, 'dummy_mappings', [])
+    silent! execute mode.'unmap' mapping
+  endfor
+
+  " Delete dummy commands.
+  for command in get(a:bundle, 'dummy_commands', [])
+    silent! execute 'delcommand' command
+  endfor
+
+  let a:bundle.dummy_mappings = []
+  let a:bundle.dummy_commands = []
+endfunction"}}}
+
+function! s:is_reset_ftplugin(filetype, rtp) "{{{
+  for filetype in split(a:filetype, '\.')
+    for directory in ['ftplugin', 'indent', 'syntax',
+          \ 'after/ftplugin', 'after/indent', 'after/syntax']
+      let base = a:rtp . '/' . directory
+      if filereadable(base.'/'.filetype.'.vim') ||
+            \ (directory =~# 'ftplugin$' &&
+            \   isdirectory(base . '/' . filetype) ||
+            \   glob(base.'/'.filetype.'_*.vim') != '')
+        return 1
+      endif
+    endfor
+  endfor
+
+  return 0
+endfunction"}}}
+
+function! s:reset_ftplugin(filetype_out) "{{{
+  filetype off
+
+  if a:filetype_out =~# 'detection:ON'
+    silent! filetype on
+  endif
+
+  if a:filetype_out =~# 'plugin:ON'
+    silent! filetype plugin on
+  endif
+
+  if a:filetype_out =~# 'indent:ON'
+    silent! filetype indent on
+  endif
+
+  " Reload filetype plugins.
+  let &l:filetype = &l:filetype
 endfunction"}}}
 
 let &cpo = s:save_cpo
