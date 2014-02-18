@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Feb 2014.
+" Last Modified: 19 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -557,58 +557,65 @@ function! s:add_lazy(bundle) "{{{
     " Already sourced.
     call neobundle#config#rtp_add(bundle)
   else
-    let bundle.dummy_commands = []
-    for item in neobundle#util#convert2list(
-          \ get(bundle.autoload, 'commands', []))
-      let command = type(item) == type('') ?
-            \ { 'name' : item } : item
+    if has_key(bundle.autoload, 'commands')
+      call s:add_dummy_commands(bundle)
+    endif
 
-      " Define dummy commands.
-      silent! execute 'command ' . (get(command, 'complete', '') != '' ?
-            \ ('-complete=' . command.complete) : '')
-            \ . ' -bang -range -nargs=*' command.name printf(
-            \ "call neobundle#autoload#command(%s, %s, <q-args>,
-            \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
-            \   string(command.name), string(bundle.name))
-      unlet item
-
-      call add(bundle.dummy_commands, command.name)
-    endfor
-
-    let bundle.dummy_mappings = []
-    for item in neobundle#util#convert2list(
-          \ get(bundle.autoload, 'mappings', []))
-      if type(item) == type([])
-        let [modes, mappings] = [item[0], item[1:]]
-      else
-        let [modes, mappings] = ['nxo', [item]]
-      endif
-
-      for mapping in mappings
-        " Define dummy mappings.
-        for mode in filter(split(modes, '\zs'),
-              \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
-          silent! execute mode.'noremap <unique><silent>' mapping printf(
-                \ (mode ==# 'c' ? "\<C-r>=" :
-                \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
-                \   "neobundle#autoload#mapping(%s, %s, %s)<CR>",
-                \   string(mapping), string(bundle.name), string(mode))
-
-          call add(bundle.dummy_mappings, [mode, mapping])
-        endfor
-      endfor
-
-      unlet item
-    endfor
+    if has_key(bundle.autoload, 'mappings')
+      call s:add_dummy_mappings(bundle)
+    endif
 
     " Load ftdetect.
-    for directory in filter(['ftdetect', 'after/ftdetect'],
-          \ "isdirectory(bundle.rtp.'/'.v:val)")
-      for file in split(glob(bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-        silent! source `=file`
-      endfor
+    for file in map(filter(['ftdetect', 'after/ftdetect'],
+          \ "isdirectory(bundle.rtp.'/'.v:val)"), "
+          \ split(glob(bundle.rtp.'/'.v:val.'/**/*.vim'), '\n')
+          \ ")
+      silent! source `=file`
     endfor
   endif
+endfunction"}}}
+
+function! s:add_dummy_commands(bundle) "{{{
+  let a:bundle.dummy_commands = []
+  for command in map(copy(neobundle#util#convert2list(
+        \ a:bundle.autoload.commands)), "
+        \ type(v:val) == type('') ?
+          \ { 'name' : v:val } : v:val
+          \")
+
+    " Define dummy commands.
+    silent! execute 'command ' . (get(command, 'complete', '') != '' ?
+          \ ('-complete=' . command.complete) : '')
+          \ . ' -bang -range -nargs=*' command.name printf(
+          \ "call neobundle#autoload#command(%s, %s, <q-args>,
+          \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
+          \   string(command.name), string(a:bundle.name))
+
+    call add(a:bundle.dummy_commands, command.name)
+  endfor
+endfunction"}}}
+function! s:add_dummy_mappings(bundle) "{{{
+  let a:bundle.dummy_mappings = []
+  for [modes, mappings] in map(neobundle#util#convert2list(
+        \ a:bundle.autoload.mappings), "
+        \   type(v:val) == type([]) ?
+        \     [v:val[0], v:val[1:]] : ['nxo', [v:val]]
+        \ ")
+
+    for mapping in mappings
+      " Define dummy mappings.
+      for mode in filter(split(modes, '\zs'),
+            \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
+        silent! execute mode.'noremap <unique><silent>' mapping printf(
+              \ (mode ==# 'c' ? "\<C-r>=" :
+              \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
+              \   "neobundle#autoload#mapping(%s, %s, %s)<CR>",
+              \   string(mapping), string(a:bundle.name), string(mode))
+
+        call add(a:bundle.dummy_mappings, [mode, mapping])
+      endfor
+    endfor
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo

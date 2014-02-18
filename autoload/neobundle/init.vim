@@ -66,10 +66,6 @@ function! neobundle#init#_bundle(bundle) "{{{
     return {}
   endif
 
-  if get(bundle, 'lazy', 0)
-    call s:init_lazy(bundle)
-  endif
-
   let bundle = extend(s:get_default(), bundle)
 
   if !has_key(bundle, 'name')
