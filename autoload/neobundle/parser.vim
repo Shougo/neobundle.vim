@@ -159,7 +159,7 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   let bundle.orig_name = a:name
   let bundle.orig_path = path
   let bundle.orig_opts = opts
-  let bundle.orig_arg = [a:name, opts]
+  let bundle.orig_arg = string(a:name).', '.string(opts)
 
   let bundle = neobundle#init#_bundle(bundle)
 
