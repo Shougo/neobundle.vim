@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Feb 2014.
+" Last Modified: 20 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -240,7 +240,7 @@ function! neobundle#bundle(arg, ...)
   let opts = get(a:000, 0, {})
   call map(neobundle#util#convert2list(a:arg),
         \ "neobundle#config#add(neobundle#parser#_init_bundle(
-        \     v:val, deepcopy(opts)))")
+        \     v:val, [deepcopy(opts)]))")
 endfunction
 
 function! neobundle#config(arg, ...)
