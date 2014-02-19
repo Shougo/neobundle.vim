@@ -67,7 +67,7 @@ endfunction"}}}
 
 function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
-        \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
+        \ "!v:val.sourced && v:val.lazy")
 endfunction"}}}
 
 function! neobundle#config#source_bundles(bundles) "{{{
@@ -93,7 +93,11 @@ function! neobundle#config#check_not_exists(names, ...) "{{{
     endif
   endfor
 
-  return neobundle#util#uniq(_)
+  if len(_) > 1
+    let _ = neobundle#util#uniq(_)
+  endif
+
+  return _
 endfunction"}}}
 
 function! neobundle#config#source(names, ...) "{{{
@@ -103,11 +107,6 @@ function! neobundle#config#source(names, ...) "{{{
   let bundles = empty(names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(names)
-  let not_exists = neobundle#config#check_not_exists(names)
-  if !empty(not_exists)
-    call neobundle#util#print_error(
-          \ 'Not installed plugin-names are detected : '. string(not_exists))
-  endif
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let bundles = filter(bundles,
@@ -252,13 +251,21 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
 endfunction"}}}
 
 function! neobundle#config#search(bundle_names, ...) "{{{
+  if empty(a:bundle_names)
+    return []
+  endif
+
   " For infinite loop.
   let self = get(a:000, 0, [])
 
   let _ = []
-  for bundle in copy(filter(neobundle#config#get_neobundles(),
-        \ 'index(self, v:val.name) < 0 &&
-        \       index(a:bundle_names, v:val.name) >= 0'))
+  let bundles = len(a:bundle_names) != 1 ?
+        \ filter(neobundle#config#get_neobundles(),
+        \ 'index(a:bundle_names, v:val.name) >= 0 &&
+        \  (empty(self) || index(self, v:val.name) < 0)') :
+        \ has_key(s:neobundles, a:bundle_names[0]) ?
+        \     [s:neobundles[a:bundle_names[0]]] : []
+  for bundle in bundles
     call add(self, bundle.name)
 
     if !empty(bundle.depends)
@@ -268,7 +275,11 @@ function! neobundle#config#search(bundle_names, ...) "{{{
     call add(_, bundle)
   endfor
 
-  return neobundle#util#uniq(_)
+  if len(_) > 1
+    let _ = neobundle#util#uniq(_)
+  endif
+
+  return _
 endfunction"}}}
 
 function! neobundle#config#search_simple(bundle_names) "{{{
@@ -292,7 +303,11 @@ function! neobundle#config#fuzzy_search(bundle_names) "{{{
     call add(_, bundle)
   endfor
 
-  return neobundle#util#uniq(_)
+  if len(_) > 1
+    let _ = neobundle#util#uniq(_)
+  endif
+
+  return _
 endfunction"}}}
 
 function! neobundle#config#load_extra_bundles() "{{{
