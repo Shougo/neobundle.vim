@@ -109,7 +109,7 @@ function! neobundle#config#source(names, ...) "{{{
           \ 'Not installed plugin-names are detected : '. string(not_exists))
   endif
 
-  let rtps = neobundle#util#split_rtp()
+  let rtps = neobundle#util#split_rtp(&runtimepath)
   let bundles = filter(bundles,
         \ "!neobundle#config#is_sourced(v:val.name) ||
         \ (v:val.rtp != '' && index(rtps, v:val.rtp) < 0)")
