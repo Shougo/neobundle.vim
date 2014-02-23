@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jan 2014.
+" Last Modified: 19 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,22 +111,17 @@ function! neobundle#util#get_last_status() "{{{
 endfunction"}}}
 
 " Split a comma separated string to a list.
-function! neobundle#util#split_rtp(...) "{{{
-  let rtp = a:0 ? a:1 : &runtimepath
-  if type(rtp) == type([])
-    return rtp
+function! neobundle#util#split_rtp(runtimepath) "{{{
+  if stridx(a:runtimepath, '\,') < 0
+    return split(a:runtimepath, ',')
   endif
 
-  if rtp !~ '\\'
-    return split(rtp, ',')
-  endif
-
-  let split = split(rtp, '\\\@<!\%(\\\\\)*\zs,')
+  let split = split(a:runtimepath, '\\\@<!\%(\\\\\)*\zs,')
   return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
 endfunction"}}}
 
 function! neobundle#util#join_rtp(list, runtimepath, rtp) "{{{
-  return (a:runtimepath !~ '\\' && a:rtp !~ ',') ?
+  return (stridx(a:runtimepath, '\,') < 0 && stridx(a:rtp, ',') < 0) ?
         \ join(a:list, ',') : join(map(copy(a:list), 's:escape(v:val)'), ',')
 endfunction"}}}
 

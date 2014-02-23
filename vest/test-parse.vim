@@ -198,7 +198,7 @@ Context types
 
     let bundle = neobundle#parser#_init_bundle(
           \ 'Shougo/neocomplcache', ['ver.3'])
-    ShouldEqual bundle.directory, 'neocomplcache_ver.3'
+    ShouldEqual bundle.directory, 'neocomplcache_ver_3'
   End
 
   It parses function_prefix

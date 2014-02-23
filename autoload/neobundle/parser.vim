@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 18 Feb 2014.
+" Last Modified: 19 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,6 +159,7 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   let bundle.orig_name = a:name
   let bundle.orig_path = path
   let bundle.orig_opts = opts
+  let bundle.orig_arg = string(a:name).', '.string(opts)
 
   let bundle = neobundle#init#_bundle(bundle)
 
@@ -192,12 +193,13 @@ function! neobundle#parser#path(path, ...) "{{{
 
   if has_key(opts, 'type')
     let type = neobundle#config#get_types(opts.type)
-    if empty(type)
-      return {}
+    let types = empty(type) ? [] : [type]
+  else
+    let detect = neobundle#config#get_types('git').detect(path, opts)
+    if !empty(detect)
+      return detect
     endif
 
-    let types = [type]
-  else
     let types = neobundle#config#get_types()
   endif
 

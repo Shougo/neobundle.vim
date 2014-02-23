@@ -2,7 +2,7 @@
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 05 Feb 2014.
+" Last Modified: 19 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,33 +65,16 @@ function! neobundle#init#_bundle(bundle) "{{{
           \   a:bundle.orig_name, string(a:bundle.orig_opts)))
     return {}
   endif
-  if !has_key(bundle, 'autoload')
-    " Auto set autoload keys.
-    let bundle.autoload = {}
 
-    for key in filter([
-          \ 'filetypes', 'filename_patterns',
-          \ 'commands', 'functions', 'mappings', 'unite_sources',
-          \ 'insert', 'explorer', 'on_source', 'function_prefix',
-          \ ], 'has_key(bundle, v:val)')
-      let bundle.autoload[key] = bundle[key]
-      call remove(bundle, key)
-    endfor
-  endif
-
-  let bundle = extend(bundle, s:get_default(), 'keep')
+  let bundle = extend(s:get_default(), bundle)
 
   if !has_key(bundle, 'name')
     let bundle.name = neobundle#util#name_conversion(bundle.orig_name)
   endif
 
   if !has_key(bundle, 'normalized_name')
-    let normalized_name = fnamemodify(bundle.name, ':r')
-    let normalized_name = substitute(normalized_name,
-          \ '^vim-', '', '')
-    let normalized_name = substitute(normalized_name,
-          \ '-vim$', '', '')
-    let bundle.normalized_name = normalized_name
+    let bundle.normalized_name = substitute(
+          \ fnamemodify(bundle.name, ':r'), '^vim-\|-vim$', '', 'g')
   endif
   if !has_key(bundle.orig_opts, 'name') &&
      \ g:neobundle#enable_name_conversion
@@ -140,39 +123,16 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.resettable = !bundle.lazy
   endif
 
-  if !has_key(bundle.autoload, 'function_prefix')
-        \ && isdirectory(bundle.rtp . '/autoload')
-    let bundle.autoload.function_prefix =
-          \ neobundle#parser#_function_prefix(bundle.name)
-  endif
-  if !has_key(bundle.autoload, 'unite_sources')
-        \ && bundle.name =~ '^unite-'
-    let bundle.autoload.unite_sources =
-          \ matchstr(bundle.name, '^unite-\zs.*')
-  endif
   if !has_key(bundle, 'augroup')
     let bundle.augroup = bundle.name
   endif
 
   " Parse depends.
-  let _ = []
-  for depend in neobundle#util#convert2list(bundle.depends)
-    if type(depend) == type('')
-      let depend = string(depend)
-    endif
+  if !empty(bundle.depends)
+    call s:init_depends(bundle)
+  endif
 
-    let depend_bundle = type(depend) == type({}) ?
-          \ depend : neobundle#parser#bundle(depend, 1)
-    let depend_bundle.lazy = bundle.lazy
-    let depend_bundle.resettable = bundle.resettable
-    let depend_bundle.overwrite = 0
-    call add(_, depend_bundle)
-
-    unlet depend
-  endfor
-  let bundle.depends = _
-
-  if neobundle#config#is_sourced(bundle.name)
+  if get(neobundle#config#get(bundle.name), 'sourced', 0)
     let bundle.sourced = 1
   endif
 
@@ -204,10 +164,10 @@ function! s:get_default() "{{{
           \ 'terminal' : 0,
           \ 'overwrite' : 1,
           \ 'stay_same' : 0,
+          \ 'autoload' : {},
           \ 'hooks' : {},
           \ 'called_hooks' : {},
           \ 'external_commands' : {},
-          \ 'autoload' : {},
           \ 'description' : '',
           \ 'dummy_commands' : [],
           \ 'dummy_mappings' : [],
@@ -224,6 +184,28 @@ function! s:get_default() "{{{
   let s:default_bundle.base = neobundle#get_neobundle_dir()
 
   return deepcopy(s:default_bundle)
+endfunction"}}}
+
+function! s:init_depends(bundle) "{{{
+  let bundle = a:bundle
+  let _ = []
+
+  for depend in neobundle#util#convert2list(bundle.depends)
+    if type(depend) == type('')
+      let depend = string(depend)
+    endif
+
+    let depend_bundle = type(depend) == type({}) ?
+          \ depend : neobundle#parser#bundle(depend, 1)
+    let depend_bundle.lazy = bundle.lazy
+    let depend_bundle.resettable = bundle.resettable
+    let depend_bundle.overwrite = 0
+    call add(_, depend_bundle)
+
+    unlet depend
+  endfor
+
+  let bundle.depends = _
 endfunction"}}}
 
 let &cpo = s:save_cpo
