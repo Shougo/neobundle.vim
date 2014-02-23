@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Feb 2014.
+" Last Modified: 23 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -129,12 +129,12 @@ command! -bar NeoBundleExtraEdit
 command! -bar NeoBundleCount
       \ echo len(neobundle#config#get_neobundles())
 
-function! neobundle#rc(...)
+function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
         \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
   return neobundle#init#_rc(path)
-endfunction
+endfunction"}}}
 
 function! neobundle#set_neobundle_dir(path)
   let s:neobundle_dir = a:path
@@ -148,13 +148,13 @@ function! neobundle#get_runtime_dir()
   return s:neobundle_runtime_dir
 endfunction
 
-function! neobundle#get_tags_dir()
+function! neobundle#get_tags_dir() "{{{
   let dir = neobundle#get_neobundle_dir() . '/.neobundle/doc'
   if !isdirectory(dir)
     call mkdir(dir, 'p')
   endif
   return dir
-endfunction
+endfunction"}}}
 
 function! neobundle#get_rtp_dir()
   return s:neobundle_dir . '/.neobundle'
@@ -175,7 +175,7 @@ function! neobundle#complete_lazy_bundles(arglead, cmdline, cursorpos)
         \ 'stridx(tolower(v:val), tolower(a:arglead)) == 0')
 endfunction
 
-function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
+function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos) "{{{
   let bundle_dirs = map(copy(neobundle#config#get_neobundles()), 'v:val.path')
   let all_dirs = split(neobundle#util#substitute_path_separator(
         \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n")
@@ -183,7 +183,7 @@ function! neobundle#complete_deleted_bundles(arglead, cmdline, cursorpos)
 
   return filter(map(x_dirs, "fnamemodify(v:val, ':t')"),
         \ 'stridx(v:val, a:arglead) == 0')
-endfunction
+endfunction"}}}
 
 function! neobundle#local(localdir, ...)
   return neobundle#parser#local(
@@ -194,11 +194,11 @@ function! neobundle#exists_not_installed_bundles()
   return !empty(neobundle#get_not_installed_bundles([]))
 endfunction
 
-function! neobundle#is_installed(...)
+function! neobundle#is_installed(...) "{{{
   return type(get(a:000, 0, [])) == type([]) ?
         \ !empty(neobundle#_get_installed_bundles(get(a:000, 0, []))) :
         \ neobundle#config#is_installed(a:1)
-endfunction
+endfunction"}}}
 
 function! neobundle#is_sourced(name)
   return neobundle#config#is_sourced(a:name)
@@ -208,7 +208,7 @@ function! neobundle#get_not_installed_bundle_names()
   return map(neobundle#get_not_installed_bundles([]), 'v:val.name')
 endfunction
 
-function! neobundle#get_not_installed_bundles(bundle_names)
+function! neobundle#get_not_installed_bundles(bundle_names) "{{{
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(a:bundle_names)
@@ -219,7 +219,7 @@ function! neobundle#get_not_installed_bundles(bundle_names)
         \  v:val.rtp != '' && !v:val.local
         \  && !isdirectory(neobundle#util#expand(v:val.path))
         \")
-endfunction
+endfunction"}}}
 
 function! neobundle#get(name)
   return neobundle#config#get(a:name)
@@ -236,23 +236,23 @@ function! neobundle#untap() "{{{
   let g:neobundle#tapped = {}
 endfunction"}}}
 
-function! neobundle#bundle(arg, ...)
+function! neobundle#bundle(arg, ...) "{{{
   let opts = get(a:000, 0, {})
   call map(neobundle#util#convert2list(a:arg),
         \ "neobundle#config#add(neobundle#parser#_init_bundle(
         \     v:val, [deepcopy(opts)]))")
-endfunction
+endfunction"}}}
 
-function! neobundle#config(arg, ...)
+function! neobundle#config(arg, ...) "{{{
   " Use neobundle#tapped or name.
   return type(a:arg) == type({}) ?
         \   neobundle#config#set(g:neobundle#tapped.name, a:arg) :
         \ type(a:arg) == type('') ?
         \   neobundle#config#set(a:arg, a:1) :
         \   map(copy(a:arg), "neobundle#config#set(v:val, deepcopy(a:1))")
-endfunction
+endfunction"}}}
 
-function! neobundle#call_hook(hook_name, ...)
+function! neobundle#call_hook(hook_name, ...) "{{{
   let bundles = neobundle#util#convert2list(
         \ (empty(a:000) ? neobundle#config#get_neobundles() : a:1))
   let bundles = filter(copy(bundles),
@@ -271,9 +271,9 @@ function! neobundle#call_hook(hook_name, ...)
     call call(bundle.hooks[a:hook_name], [bundle], bundle)
     let bundle.called_hooks[a:hook_name] = 1
   endfor
-endfunction
+endfunction"}}}
 
-function! neobundle#check()
+function! neobundle#check() "{{{
   if neobundle#installer#get_tags_info() !=#
         \ sort(map(neobundle#config#get_neobundles(), 'v:val.name'))
     " Recache automatically.
@@ -295,16 +295,16 @@ function! neobundle#check()
     endif
     echo ''
   endif
-endfunction
+endfunction"}}}
 
-function! neobundle#_get_installed_bundles(bundle_names)
+function! neobundle#_get_installed_bundles(bundle_names) "{{{
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(a:bundle_names)
 
   return filter(copy(bundles),
         \ 'neobundle#config#is_installed(v:val.name)')
-endfunction
+endfunction"}}}
 
 function! neobundle#get_unite_sources()
   return neobundle#autoload#get_unite_sources()
