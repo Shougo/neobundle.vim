@@ -71,7 +71,7 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
      " My Bundles here:
      NeoBundle 'Shougo/neosnippet.vim'
-     NeoBundle 'Shougo/neosnippet-snippets.vim'
+     NeoBundle 'Shougo/neosnippet-snippets'
      NeoBundle 'tpope/vim-fugitive'
      NeoBundle 'kien/ctrlp.vim'
      NeoBundle 'flazz/vim-colorschemes'
