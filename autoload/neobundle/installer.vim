@@ -43,78 +43,6 @@ call neobundle#util#set_default(
 let s:log = []
 let s:updates_log = []
 
-function! neobundle#installer#install(bang, bundle_names)
-  if neobundle#util#is_sudo()
-    call neobundle#util#print_error(
-          \ '"sudo vim" is detected. This feature is disabled.')
-    return
-  endif
-
-  let bundle_dir = neobundle#get_neobundle_dir()
-  if !isdirectory(bundle_dir)
-    call mkdir(bundle_dir, 'p')
-  endif
-
-  let bundle_names = split(a:bundle_names)
-
-  let bundles = !a:bang ?
-        \ neobundle#get_not_installed_bundles(bundle_names) :
-        \ empty(bundle_names) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#fuzzy_search(bundle_names)
-  if empty(bundles)
-    call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.')
-    call neobundle#installer#error(
-          \ '[neobundle/install] You may have used the wrong bundle name,'.
-          \ ' or all of the bundles are already installed.')
-    return
-  endif
-
-  call sort(bundles, 's:cmp_vimproc')
-
-  call neobundle#installer#_load_install_info(bundles)
-
-  call neobundle#installer#clear_log()
-
-  call neobundle#installer#error(
-        \ '[neobundle/install] Update started: ' .
-        \     strftime('(%Y/%m/%d %H:%M:%S)'))
-
-  let reinstall_bundles =
-        \ neobundle#installer#get_reinstall_bundles(bundles)
-  if !empty(reinstall_bundles)
-    call neobundle#installer#reinstall(reinstall_bundles)
-  endif
-
-  let more_save = &more
-  try
-    setlocal nomore
-    let [installed, errored] = s:install(a:bang, bundles)
-    if !has('vim_starting')
-      redraw!
-    endif
-  finally
-    let &more = more_save
-  endtry
-
-  call neobundle#installer#update(installed)
-
-  call neobundle#installer#log(
-        \ "[neobundle/install] Installed/Updated bundles:\n".
-        \ join((empty(installed) ?
-        \   ['no new bundles installed'] :
-        \   map(copy(installed), 'v:val.name')),"\n"))
-
-  if !empty(errored)
-    call neobundle#installer#log(
-          \ "[neobundle/install] Error installing bundles:\n".join(
-          \ map(copy(errored), 'v:val.name')), "\n")
-    call neobundle#installer#log(
-          \ 'Please read the error message log with the :message command.')
-  endif
-endfunction
-
 function! neobundle#installer#update(bundles)
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
@@ -198,7 +126,7 @@ function! neobundle#installer#reinstall(bundles)
   endfor
 
   " Install.
-  call neobundle#installer#install(0,
+  call neobundle#commands#install(0,
         \ join(map(copy(a:bundles), 'v:val.name')))
 
   call neobundle#installer#update(a:bundles)
@@ -554,45 +482,6 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   endif
 endfunction
 
-function! s:install(bang, bundles)
-  " Set context.
-  let context = {}
-  let context.source__bang = a:bang
-  let context.source__synced_bundles = []
-  let context.source__errored_bundles = []
-  let context.source__processes = []
-  let context.source__number = 0
-  let context.source__bundles = a:bundles
-  let context.source__max_bundles =
-        \ len(context.source__bundles)
-
-  while 1
-    while context.source__number < context.source__max_bundles
-          \ && len(context.source__processes) <
-          \      g:neobundle#install_max_processes
-
-      call neobundle#installer#sync(
-            \ context.source__bundles[context.source__number],
-            \ context, 0)
-    endwhile
-
-    for process in context.source__processes
-      call neobundle#installer#check_output(context, process, 0)
-    endfor
-
-    " Filter eof processes.
-    call filter(context.source__processes, '!v:val.eof')
-
-    if empty(context.source__processes)
-          \ && context.source__number == context.source__max_bundles
-      break
-    endif
-  endwhile
-
-  return [context.source__synced_bundles,
-        \ context.source__errored_bundles]
-endfunction
-
 function! s:update_ftdetect()
   " Delete old files.
   call neobundle#util#cleandir('ftdetect')
@@ -761,11 +650,6 @@ function! s:redir(cmd) "{{{
   silent! execute a:cmd
   redir END
   return res
-endfunction"}}}
-
-" Vimproc is first.
-function! s:cmp_vimproc(a, b) "{{{
-  return !(a:a.name ==# 'vimproc' || a:a.name ==# 'vimproc.vim')
 endfunction"}}}
 
 let &cpo = s:save_cpo
