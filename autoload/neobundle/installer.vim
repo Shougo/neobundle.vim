@@ -113,10 +113,6 @@ function! neobundle#installer#install(bang, bundle_names)
     call neobundle#installer#log(
           \ 'Please read the error message log with the :message command.')
   endif
-
-  if !empty(installed)
-    call s:update_ftdetect()
-  endif
 endfunction
 
 function! neobundle#installer#update(bundles)
@@ -132,6 +128,10 @@ function! neobundle#installer#update(bundles)
         \ 'v:val.sourced && !v:val.disabled'))
 
   call s:save_install_info(neobundle#config#get_neobundles())
+
+  if !empty(a:bundles)
+    call s:update_ftdetect()
+  endif
 endfunction
 
 function! neobundle#installer#build(bundle)
