@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Feb 2014.
+" Last Modified: 25 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -126,34 +126,12 @@ function! neobundle#installer#update(bundles)
     return
   endif
 
-  call neobundle#installer#helptags(
+  call neobundle#commands#helptags(
         \ neobundle#config#get_neobundles())
   call s:reload(filter(copy(a:bundles),
         \ 'v:val.sourced && !v:val.disabled'))
 
   call s:save_install_info(neobundle#config#get_neobundles())
-endfunction
-
-function! neobundle#installer#helptags(bundles)
-  if neobundle#util#is_sudo()
-    call neobundle#util#print_error(
-          \ '"sudo vim" is detected. This feature is disabled.')
-    return
-  endif
-
-  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
-
-  if !empty(help_dirs)
-    call s:update_tags()
-
-    if !has('vim_starting')
-      call neobundle#installer#log(
-            \ '[neobundle/install] Helptags: done. '
-            \ .len(help_dirs).' bundles processed')
-    endif
-  endif
-
-  return help_dirs
 endfunction
 
 function! neobundle#installer#build(bundle)
@@ -204,70 +182,6 @@ function! neobundle#installer#build(bundle)
   return neobundle#util#get_last_status()
 endfunction
 
-function! neobundle#installer#clean(bang, ...)
-  if neobundle#util#is_sudo()
-    call neobundle#util#print_error(
-          \ '"sudo vim" is detected. This feature is disabled.')
-    return
-  endif
-
-  if get(a:000, 0, '') == ''
-    let all_dirs = filter(split(neobundle#util#substitute_path_separator(
-          \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n"),
-          \ 'isdirectory(v:val)')
-    let bundle_dirs = map(copy(neobundle#config#get_neobundles()),
-          \ "(v:val.script_type != '') ?
-          \  v:val.base . '/' . v:val.directory : v:val.path")
-    let x_dirs = filter(all_dirs,
-          \ "!neobundle#config#is_installed(fnamemodify(v:val, ':t'))
-          \ && index(bundle_dirs, v:val) < 0 && v:val !~ '/neobundle.vim$'")
-  else
-    let x_dirs = map(neobundle#config#search_simple(a:000), 'v:val.path')
-    if len(x_dirs) > len(a:000)
-      " Check bug.
-      call neobundle#util#print_error('Bug: x_dirs = %s but arguments is %s',
-            \ string(x_dirs), map(copy(a:000), 'v:val.path'))
-      return
-    endif
-  endif
-
-  if empty(x_dirs)
-    call neobundle#installer#log('[neobundle/install] All clean!')
-    return
-  end
-
-  if a:bang || s:check_really_clean(x_dirs)
-    if !has('vim_starting')
-      redraw
-    endif
-    let result = neobundle#util#system(g:neobundle#rm_command . ' ' .
-          \ join(map(copy(x_dirs), '"\"" . v:val . "\""'), ' '))
-    if neobundle#util#get_last_status()
-      call neobundle#installer#error(result)
-    endif
-
-    for dir in x_dirs
-      call neobundle#config#rm(dir)
-    endfor
-
-    call s:update_tags()
-  endif
-endfunction
-
-function! neobundle#installer#reinstall_names(bundle_names)
-  let bundles = neobundle#config#search_simple(split(a:bundle_names))
-
-  if empty(bundles)
-    call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.')
-    call neobundle#installer#error(
-          \ '[neobundle/install] You may have used the wrong bundle name.')
-    return
-  endif
-
-  call neobundle#installer#reinstall(bundles)
-endfunction
-
 function! neobundle#installer#reinstall(bundles)
   for bundle in a:bundles
     " Reinstall.
@@ -278,7 +192,7 @@ function! neobundle#installer#reinstall(bundles)
     let arg = copy(bundle.orig_arg)
 
     " Remove.
-    call neobundle#installer#clean(1, bundle.name)
+    call neobundle#commands#clean(1, bundle.name)
 
     call call('neobundle#parser#bundle', [arg])
   endfor
