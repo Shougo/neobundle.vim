@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 19 Feb 2014.
+" Last Modified: 25 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -118,7 +118,7 @@ function! neobundle#parser#direct(arg) "{{{
   call neobundle#config#save_direct(a:arg)
 
   " Direct install.
-  call neobundle#installer#install(0, bundle.name)
+  call neobundle#commands#install(0, bundle.name)
 
   return bundle
 endfunction"}}}

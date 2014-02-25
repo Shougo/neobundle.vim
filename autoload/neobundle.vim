@@ -94,11 +94,11 @@ command! -nargs=+ -bar
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#commands#complete_bundles
       \ NeoBundleInstall
-      \ call neobundle#installer#install('!' == '<bang>', <q-args>)
+      \ call neobundle#commands#install('!' == '<bang>', <q-args>)
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#commands#complete_bundles
       \ NeoBundleUpdate
-      \ call neobundle#installer#install(('!' == '<bang>' ? 2 : 1), <q-args>)
+      \ call neobundle#commands#install(('!' == '<bang>' ? 2 : 1), <q-args>)
 
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#commands#complete_deleted_bundles
