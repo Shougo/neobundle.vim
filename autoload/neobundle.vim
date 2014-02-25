@@ -110,6 +110,11 @@ command! -nargs=+ -bang -bar
       \ NeoBundleReinstall
       \ call neobundle#commands#reinstall(<q-args>)
 
+command! -nargs=? -bar
+      \ -complete=customlist,neobundle#commands#complete_bundles
+      \ NeoBundleGC
+      \ call neobundle#commands#gc(<q-args>)
+
 command! -nargs=? -bang -bar
       \ NeoBundleList
       \ echo join(map(neobundle#config#get_neobundles(), 'v:val.name'), "\n")
