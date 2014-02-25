@@ -408,6 +408,10 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleCount
 		Show bundles count.  You can know how many bundles you have.
 
+						*:NeoBundleGC*
+:NeoBundleGC [{bundle-name}]
+		Execute Garbage Collect commands in bundles.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 

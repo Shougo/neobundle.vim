@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Feb 2014.
+" Last Modified: 25 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -202,6 +202,25 @@ endfunction"}}}
 
 function! neobundle#util#cd(path) "{{{
   execute 'lcd' fnameescape(a:path)
+endfunction"}}}
+
+function! neobundle#util#writefile(path, list)
+  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
+  let dir = fnamemodify(path, ':h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+
+  return writefile(a:list, path)
+endfunction
+
+function! neobundle#util#cleandir(path) "{{{
+  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
+
+  for file in filter(split(globpath(path, '*', 1), '\n'),
+        \ '!isdirectory(v:val)')
+    call delete(file)
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo

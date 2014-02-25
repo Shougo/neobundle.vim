@@ -593,66 +593,10 @@ function! s:install(bang, bundles)
         \ context.source__errored_bundles]
 endfunction
 
-function! s:has_doc(path)
-  return a:path != '' &&
-        \ isdirectory(a:path.'/doc')
-        \   && (!filereadable(a:path.'/doc/tags')
-        \       || filewritable(a:path.'/doc/tags'))
-        \   && (!filereadable(a:path.'/doc/tags-??')
-        \       || filewritable(a:path.'/doc/tags-??'))
-        \   && (glob(a:path.'/doc/*.txt') != ''
-        \       || glob(a:path.'/doc/*.??x') != '')
-endfunction
-
-function! s:update_tags()
-  let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}]
-        \ + neobundle#config#get_neobundles()
-  call s:copy_bundle_files(bundles, 'doc')
-
-  call s:writefile('tags_info',
-        \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
-
-  try
-    execute 'helptags' fnameescape(neobundle#get_tags_dir())
-  catch
-    call neobundle#installer#error('Error generating helptags:')
-    call neobundle#installer#error(v:exception)
-  endtry
-endfunction
-
 function! s:update_ftdetect()
   " Delete old files.
-  call s:cleandir('ftdetect')
-  call s:cleandir('after/ftdetect')
-endfunction
-
-function! s:copy_bundle_files(bundles, directory)
-  " Delete old files.
-  call s:cleandir(a:directory)
-
-  let files = {}
-  for bundle in a:bundles
-    for file in filter(split(globpath(
-          \ bundle.rtp, a:directory.'/*', 1), '\n'),
-          \ '!isdirectory(v:val)')
-      let filename = fnamemodify(file, ':t')
-      let files[filename] = readfile(file)
-    endfor
-  endfor
-
-  for [filename, list] in items(files)
-    if filename =~# '^tags\%(-.*\)\?$'
-      call sort(list)
-    endif
-    call s:writefile(a:directory . '/' . filename, list)
-  endfor
-endfunction
-
-function! s:check_really_clean(dirs)
-  echo join(a:dirs, "\n")
-
-  return input('Are you sure you want to remove '
-        \        .len(a:dirs).' bundles? [y/n] : ') =~? 'y'
+  call neobundle#util#cleandir('ftdetect')
+  call neobundle#util#cleandir('after/ftdetect')
 endfunction
 
 function! s:save_install_info(bundles)
@@ -669,7 +613,7 @@ function! s:save_install_info(bundles)
           \ }
   endfor
 
-  call s:writefile('install_info',
+  call neobundle#util#writefile('install_info',
         \ [s:install_info_version, string(s:install_info)])
 endfunction
 
@@ -791,25 +735,6 @@ function! neobundle#installer#get_tags_info()
   endif
 
   return readfile(path)
-endfunction
-
-function! s:writefile(path, list)
-  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
-  let dir = fnamemodify(path, ':h')
-  if !isdirectory(dir)
-    call mkdir(dir, 'p')
-  endif
-
-  return writefile(a:list, path)
-endfunction
-
-function! s:cleandir(path)
-  let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
-
-  for file in filter(split(globpath(path, '*', 1), '\n'),
-        \ '!isdirectory(v:val)')
-    call delete(file)
-  endfor
 endfunction
 
 function! s:reload(bundles) "{{{
