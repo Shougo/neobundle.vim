@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Feb 2014.
+" Last Modified: 27 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -252,7 +252,11 @@ function! neobundle#call_hook(hook_name, ...) "{{{
   endif
 
   for bundle in bundles
-    call call(bundle.hooks[a:hook_name], [bundle], bundle)
+    if type(bundle.hooks[a:hook_name]) == type('')
+      execute 'source' fnameescape(bundle.hooks[a:hook_name])
+    else
+      call call(bundle.hooks[a:hook_name], [bundle], bundle)
+    endif
     let bundle.called_hooks[a:hook_name] = 1
   endfor
 endfunction"}}}

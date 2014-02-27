@@ -983,13 +983,13 @@ OPTIONS 					*neobundle-options*
 <
 						*neobundle-options-hooks*
 		hooks			(Dictionary)
-		Specify hook functions. The following hook functions are
-		defined:
+		Specify hook functions or hook script path. The following
+		hooks are defined:
 
 						*neobundle-hooks-on_source*
 			on_source
-			Called before scripts are sourced. It is useful for
-			plugin initialization in lazy bundles.
+			Called or sourced before scripts are sourced. It is
+			useful for plugin initialization in lazy bundles.
 			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
 			Note: To re-call on_source hook when reloading .vimrc,
@@ -997,7 +997,7 @@ OPTIONS 					*neobundle-options*
 
 					*neobundle-hooks-on_post_source*
 			on_post_source
-			Called after scripts are sourced.
+			Called or sourced after scripts are sourced.
 			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
 			Note: To re-call on_source hook when reloading .vimrc,
