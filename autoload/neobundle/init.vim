@@ -118,7 +118,9 @@ function! neobundle#init#_bundle(bundle) "{{{
     endif
   endif
 
-  let bundle.base = s:expand_path(bundle.base)
+  if bundle.base[0] == '~'
+    let bundle.base = s:expand_path(bundle.base)
+  endif
   if bundle.base[-1] == '/' || bundle.base[-1] == '\'
     " Chomp.
     let bundle.base = bundle.base[: -2]
@@ -127,10 +129,13 @@ function! neobundle#init#_bundle(bundle) "{{{
   let bundle.path = isdirectory(bundle.uri) ?
         \ bundle.uri : bundle.base.'/'.bundle.directory
 
-  let rtp = bundle.rtp
   " Check relative path.
-  let bundle.rtp = (rtp =~ '^\%([~/]\|\a\+:\)') ?
-        \ s:expand_path(rtp) : (bundle.path.'/'.rtp)
+  if bundle.rtp !~ '^\%([~/]\|\a\+:\)'
+    let bundle.rtp = bundle.path.'/'.bundle.rtp
+  endif
+  if bundle.rtp[0] == '~'
+    let bundle.rtp = s:expand_path(bundle.rtp)
+  endif
   if bundle.rtp[-1] == '/' || bundle.rtp[-1] == '\'
     " Chomp.
     let bundle.rtp = bundle.rtp[: -2]
@@ -166,16 +171,10 @@ function! neobundle#init#_bundle(bundle) "{{{
   return bundle
 endfunction"}}}
 
-if neobundle#util#is_windows()
-  function! s:expand_path(path)
-    return neobundle#util#substitute_path_separator(
-          \ simplify(expand(escape(a:path, '*?{}'), 1)))
-  endfunction
-else
-  function! s:expand_path(path)
-    return simplify(expand(escape(a:path, '*?{}'), 1))
-  endfunction
-endif
+function! s:expand_path(path)
+  return neobundle#util#substitute_path_separator(
+        \ simplify(expand(escape(a:path, '*?{}'), 1)))
+endfunction
 
 function! s:init_depends(bundle) "{{{
   let bundle = a:bundle

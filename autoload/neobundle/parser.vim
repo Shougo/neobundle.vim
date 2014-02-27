@@ -143,8 +143,10 @@ function! s:parse_arg(arg) "{{{
 endfunction"}}}
 
 function! neobundle#parser#_init_bundle(name, opts) "{{{
-  let path = neobundle#util#expand(
-        \ substitute(a:name, "['".'"]\+', '', 'g'))
+  let path = substitute(a:name, "['".'"]\+', '', 'g')
+  if path[0] == '~'
+    let path = neobundle#util#expand(path)
+  endif
   let opts = s:parse_options(a:opts)
   if !has_key(opts, 'recipe')
     let opts.recipe = ''
