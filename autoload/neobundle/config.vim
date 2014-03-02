@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Feb 2014.
+" Last Modified: 03 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -129,10 +129,8 @@ function! neobundle#config#source(names, ...) "{{{
   for bundle in bundles
     let bundle.sourced = 1
     let bundle.disabled = 0
-
-    if !get(s:sourced_neobundles, bundle.name, 0)
-      call s:clear_dummy(bundle)
-    endif
+    let bundle.dummy_mappings = []
+    let bundle.dummy_commands = []
 
     let s:sourced_neobundles[bundle.name] = 1
 
@@ -604,18 +602,6 @@ function! s:on_source(bundle) "{{{
 endfunction"}}}
 
 function! s:clear_dummy(bundle) "{{{
-  " Unmap dummy mappings.
-  for [mode, mapping] in get(a:bundle, 'dummy_mappings', [])
-    silent! execute mode.'unmap' mapping
-  endfor
-
-  " Delete dummy commands.
-  for command in get(a:bundle, 'dummy_commands', [])
-    silent! execute 'delcommand' command
-  endfor
-
-  let a:bundle.dummy_mappings = []
-  let a:bundle.dummy_commands = []
 endfunction"}}}
 
 function! s:is_reset_ftplugin(filetype, rtp) "{{{
