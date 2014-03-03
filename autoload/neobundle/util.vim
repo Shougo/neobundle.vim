@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Mar 2014.
+" Last Modified: 04 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,12 +38,12 @@ function! neobundle#util#substitute_path_separator(path) "{{{
         \ substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! neobundle#util#expand(path) "{{{
-  let path = expand(escape(a:path, '*?{}'), 1)
+  let path = (a:path =~ '^\~') ? fnamemodify(a:path, ':p') :
+        \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
+        \               '^\$\h\w*', '\=eval(submatch(0))', '') :
+        \ a:path
   return (s:is_windows && path =~ '\\') ?
         \ neobundle#util#substitute_path_separator(path) : path
-endfunction"}}}
-function! neobundle#util#expand2(path) "{{{
-  return expand(escape(a:path, '*?{}'), 1)
 endfunction"}}}
 
 function! neobundle#util#is_windows() "{{{
