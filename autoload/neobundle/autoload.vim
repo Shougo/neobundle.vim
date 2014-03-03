@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 19 Feb 2014.
+" Last Modified: 04 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -147,7 +147,7 @@ function! neobundle#autoload#explorer(path, event)
     let path = '~'
   endif
 
-  let path = s:expand(path)
+  let path = neobundle#util#expand(path)
   if !(isdirectory(path) || (!filereadable(path) && path =~ '^\h\w\+://'))
     return
   endif
@@ -221,14 +221,6 @@ function! s:get_input()
   endwhile
 
   return input
-endfunction
-
-function! s:expand(path)
-  return neobundle#util#substitute_path_separator(
-        \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
-        \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
-        \               '^\$\h\w*', '\=eval(submatch(0))', '') :
-        \ a:path)
 endfunction
 
 function! s:get_lazy_bundles()

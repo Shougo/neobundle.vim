@@ -2,7 +2,7 @@
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 27 Feb 2014.
+" Last Modified: 04 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,7 +119,7 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
 
   if bundle.base[0] == '~'
-    let bundle.base = s:expand_path(bundle.base)
+    let bundle.base = neobundle#util#expand(bundle.base)
   endif
   if bundle.base[-1] == '/' || bundle.base[-1] == '\'
     " Chomp.
@@ -134,7 +134,7 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.rtp = bundle.path.'/'.bundle.rtp
   endif
   if bundle.rtp[0] == '~'
-    let bundle.rtp = s:expand_path(bundle.rtp)
+    let bundle.rtp = neobundle#util#expand(bundle.rtp)
   endif
   if bundle.rtp[-1] == '/' || bundle.rtp[-1] == '\'
     " Chomp.
@@ -170,11 +170,6 @@ function! neobundle#init#_bundle(bundle) "{{{
 
   return bundle
 endfunction"}}}
-
-function! s:expand_path(path)
-  return neobundle#util#substitute_path_separator(
-        \ simplify(expand(escape(a:path, '*?{}'), 1)))
-endfunction
 
 function! s:init_depends(bundle) "{{{
   let bundle = a:bundle
