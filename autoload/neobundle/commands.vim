@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 25 Feb 2014.
+" Last Modified: 04 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,11 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+call neobundle#util#set_default(
+      \ 'g:neobundle#rm_command',
+      \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'),
+      \ 'g:neobundle_rm_command')
 
 function! neobundle#commands#install(bang, bundle_names) "{{{
   if neobundle#util#is_sudo()
