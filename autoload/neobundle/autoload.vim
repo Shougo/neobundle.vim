@@ -113,6 +113,11 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   let cnt = v:count > 0 ? v:count : ''
 
   " Delete dummy mappings.
+  let bundle = neobundle#get(a:name)
+  for [mode, mapping] in get(bundle, 'dummy_mappings', [])
+    silent! execute mode.'unmap' mapping
+  endfor
+
   let input = s:get_input()
 
   call neobundle#config#source(a:name)
