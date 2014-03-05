@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Mar 2014.
+" Last Modified: 05 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -258,6 +258,14 @@ function! neobundle#commands#gc(bundle_names) "{{{
       call neobundle#installer#error(bundle.path, 0)
       call neobundle#installer#error(result, 0)
     endif
+  endfor
+endfunction"}}}
+
+function! neobundle#commands#list() "{{{
+  for bundle in neobundle#config#get_neobundles()
+    echo (neobundle#is_sourced(bundle.name) ? ' ' :
+          \ neobundle#is_installed(bundle.name) ? '#' : 'X')
+          \ . ' ' . bundle.name
   endfor
 endfunction"}}}
 

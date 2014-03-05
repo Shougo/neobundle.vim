@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Aug 2013.
+" Last Modified: 05 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,8 +84,14 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let max = max(map(copy(_), 'len(v:val.word)'))
 
+  call unite#print_source_message(
+        \ '#: not sourced, X: not installed', self.name)
+
   for candidate in _
-    let candidate.abbr = unite#util#truncate(candidate.word, max)
+    let candidate.abbr =
+          \ neobundle#is_sourced(candidate.action__bundle_name) ? ' ' :
+          \ neobundle#is_installed(candidate.action__bundle_name) ? '#' : 'X'
+    let candidate.abbr .= ' ' . unite#util#truncate(candidate.word, max)
     if candidate.source__description != ''
       let candidate.abbr .= ' : ' . candidate.source__description
     endif
