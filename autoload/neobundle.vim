@@ -62,6 +62,9 @@ command! -nargs=+ NeoBundle
 command! -bar NeoBundleCheck
       \ call neobundle#commands#check()
 
+command! -bar NeoBundleCheckUpdate
+      \ call neobundle#commands#check_update()
+
 command! -nargs=+ NeoBundleLazy
       \ call neobundle#parser#lazy(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))

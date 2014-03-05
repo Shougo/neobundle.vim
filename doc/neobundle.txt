@@ -394,6 +394,10 @@ COMMANDS 					*neobundle-commands*
 		also check documentation directories and will execute
 		|:NeoBundleDocs| automatically.
 
+:NeoBundleCheckUpdate				*:NeoBundleCheckUpdate*
+		Check plugins update.  If updates are available, it will
+		execute |:NeoBundleUpdate| automatically.
+
 						*:NeoBundleRecipe*
 :NeoBundleRecipe {recipe-name} [, {options}]
 		Registers a bundle from "recipes/{recipe-name}.vimrecipe" file

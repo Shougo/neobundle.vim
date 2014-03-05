@@ -151,6 +151,55 @@ function! neobundle#commands#check() "{{{
   endif
 endfunction"}}}
 
+function! neobundle#commands#check_update() "{{{
+  let number = 0
+  let max = len(neobundle#config#get_neobundles())
+  let updates = []
+  for bundle in neobundle#config#get_neobundles()
+
+    let number += 1
+
+    let type = neobundle#config#get_types(bundle.type)
+    if empty(type) || !has_key(type, 'get_check_update_command')
+      continue
+    endif
+
+    let cmd = type.get_check_update_command(bundle)
+
+    let cwd = getcwd()
+    try
+      if isdirectory(bundle.path)
+        " Cd to bundle path.
+        call neobundle#util#cd(bundle.path)
+      endif
+
+      redraw
+      call neobundle#util#redraw_echo(
+            \ printf('(%'.len(max).'d/%d): |%s| %s',
+            \ number, max, bundle.name, cmd))
+      let result = neobundle#util#system(cmd)
+      redraw
+      let status = neobundle#util#get_last_status()
+    finally
+      if isdirectory(cwd)
+        call neobundle#util#cd(cwd)
+      endif
+    endtry
+
+    if status
+      call add(updates, bundle.name)
+    endif
+  endfor
+
+  if !empty(updates)
+    echomsg 'Updates available bundles: ' string(updates)
+
+    if confirm('Update bundles now?', "yes\nNo", 2) == 1
+      call neobundle#commands#install(1, '')
+    endif
+  endif
+endfunction"}}}
+
 function! neobundle#commands#clean(bang, ...) "{{{
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
