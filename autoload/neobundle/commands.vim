@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Mar 2014.
+" Last Modified: 07 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,50 +152,46 @@ function! neobundle#commands#check() "{{{
 endfunction"}}}
 
 function! neobundle#commands#check_update() "{{{
-  let number = 0
-  let max = len(neobundle#config#get_neobundles())
-  let updates = []
+  " Set context.
+  let context = {}
+  let context.source__updated_bundles = []
+  let context.source__processes = []
+  let context.source__number = 0
+  let context.source__bundles = neobundle#config#get_neobundles()
+  let context.source__max_bundles =
+        \ len(context.source__bundles)
   for bundle in neobundle#config#get_neobundles()
+    while context.source__number < context.source__max_bundles
+          \ && len(context.source__processes) <
+          \      g:neobundle#install_max_processes
 
-    let number += 1
+      call s:check_update_init(
+            \ context.source__bundles[context.source__number],
+            \ context, 0)
+    endwhile
 
-    let type = neobundle#config#get_types(bundle.type)
-    if empty(type) || !has_key(type, 'get_check_update_command')
-      continue
-    endif
+    for process in context.source__processes
+      call s:check_update_process(context, process, 0)
+    endfor
 
-    let cmd = type.get_check_update_command(bundle)
+    " Filter eof processes.
+    call filter(context.source__processes, '!v:val.eof')
 
-    let cwd = getcwd()
-    try
-      if isdirectory(bundle.path)
-        " Cd to bundle path.
-        call neobundle#util#cd(bundle.path)
-      endif
-
-      redraw
-      call neobundle#util#redraw_echo(
-            \ printf('(%'.len(max).'d/%d): |%s| %s',
-            \ number, max, bundle.name, cmd))
-      let result = neobundle#util#system(cmd)
-      redraw
-      let status = neobundle#util#get_last_status()
-    finally
-      if isdirectory(cwd)
-        call neobundle#util#cd(cwd)
-      endif
-    endtry
-
-    if status
-      call add(updates, bundle.name)
+    if empty(context.source__processes)
+          \ && context.source__number == context.source__max_bundles
+      break
     endif
   endfor
 
-  if !empty(updates)
-    echomsg 'Updates available bundles: ' string(updates)
+  let bundles = map(context.source__updated_bundles, 'v:val.name')
+  redraw!
+
+  if !empty(bundles)
+    echomsg 'Updates available bundles: '
+          \ string(bundles)
 
     if confirm('Update bundles now?', "yes\nNo", 2) == 1
-      call neobundle#commands#install(1, '')
+      call neobundle#commands#install(1, bundles)
     endif
   endif
 endfunction"}}}
@@ -378,6 +374,102 @@ function! s:install(bang, bundles) "{{{
         \ context.source__errored_bundles]
 endfunction"}}}
 
+function! s:check_update_init(bundle, context, is_unite) "{{{
+  let a:context.source__number += 1
+
+  let num = a:context.source__number
+  let max = a:context.source__max_bundles
+
+  let type = neobundle#config#get_types(a:bundle.type)
+  let cmd = has_key(type, 'get_check_update_command') ?
+        \ type.get_check_update_command(a:bundle) : ''
+  if empty(type) || !has_key(type, 'get_check_update_command')
+    return
+  endif
+
+  let message = printf('(%'.len(max).'d/%d): |%s| %s',
+        \ num, max, a:bundle.name, cmd)
+
+  call neobundle#installer#log(
+        \ '[neobundle/check] ' . message, a:is_unite)
+
+  let cwd = getcwd()
+  try
+    if isdirectory(a:bundle.path)
+      " Cd to bundle path.
+      call neobundle#util#cd(a:bundle.path)
+    endif
+
+    let rev = neobundle#installer#get_revision_number(a:bundle)
+
+    let process = {
+          \ 'number' : num,
+          \ 'bundle' : a:bundle,
+          \ 'output' : '',
+          \ 'status' : -1,
+          \ 'eof' : 0,
+          \ 'start_time' : localtime(),
+          \ }
+    if neobundle#util#has_vimproc()
+      let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
+            \            cmd, &encoding, 'char'), 0, 2)
+
+      " Close handles.
+      call process.proc.stdin.close()
+      call process.proc.stderr.close()
+    else
+      let process.output = neobundle#util#system(cmd)
+      let process.status = neobundle#util#get_last_status()
+    endif
+  finally
+    if isdirectory(cwd)
+      call neobundle#util#cd(cwd)
+    endif
+  endtry
+
+  call add(a:context.source__processes, process)
+endfunction "}}}
+
+function! s:check_update_process(context, process, is_unite) "{{{
+  if neobundle#util#has_vimproc() && has_key(a:process, 'proc')
+    let is_timeout = (localtime() - a:process.start_time)
+          \             >= g:neobundle#install_process_timeout
+    let a:process.output .= vimproc#util#iconv(
+          \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
+    if !a:process.proc.stdout.eof && !is_timeout
+      return
+    endif
+    call a:process.proc.stdout.close()
+
+    let [_, status] = a:process.proc.waitpid()
+  else
+    let is_timeout = 0
+    let status = a:process.status
+  endif
+
+  let num = a:process.number
+  let max = a:context.source__max_bundles
+  let bundle = a:process.bundle
+
+  " Lock revision.
+  call neobundle#installer#lock_revision(
+        \ a:process, a:context, a:is_unite)
+
+  let cwd = getcwd()
+
+  let rev = neobundle#installer#get_revision_number(bundle)
+
+  if is_timeout
+    call neobundle#installer#error(
+          \ (is_timeout ? 'Process timeout.' :
+          \    split(a:process.output, '\n')), a:is_unite)
+  elseif a:process.output != ''
+    call add(a:context.source__updated_bundles,
+          \ bundle)
+  endif
+
+  let a:process.eof = 1
+endfunction"}}}
 
 function! s:check_really_clean(dirs) "{{{
   echo join(a:dirs, "\n")

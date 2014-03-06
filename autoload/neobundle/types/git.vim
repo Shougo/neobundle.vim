@@ -2,7 +2,7 @@
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 05 Mar 2014.
+" Last Modified: 07 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,8 +183,8 @@ function! s:type.get_check_update_command(bundle) "{{{
     return ''
   endif
 
-  return g:neobundle#types#git#command_path .' fetch origin; '
-        \ . g:neobundle#types#git#command_path .' diff origin'
+  return g:neobundle#types#git#command_path .' fetch origin ; '
+        \ . g:neobundle#types#git#command_path .' diff origin --name-only'
 endfunction"}}}
 
 function! s:parse_other_pattern(protocol, path, opts) "{{{
