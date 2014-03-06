@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Mar 2014.
+" Last Modified: 07 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,6 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! neobundle#autoload#init()
+  let s:active_auto_source = 0
+
   augroup neobundle
     autocmd FileType *
           \ call neobundle#autoload#filetype()
@@ -46,6 +48,12 @@ function! neobundle#autoload#init()
     autocmd BufWinEnter
           \ * call neobundle#autoload#explorer(
           \ expand('<afile>'), 'BufWinEnter')
+  augroup END
+
+  augroup neobundle-focus
+    autocmd CursorHold * if s:active_auto_source | call s:source_focus() | endif
+    autocmd FocusLost * let s:active_auto_source = 1
+    autocmd FocusGained * let s:active_auto_source = 0
   augroup END
 
   call neobundle#autoload#filename(bufname('%'))
@@ -193,6 +201,20 @@ function! neobundle#autoload#get_unite_sources()
   endfor
 
   return _
+endfunction
+
+function! s:source_focus()
+  let bundles = neobundle#util#sort_by(filter(
+        \ neobundle#config#get_autoload_bundles(),
+        \ "v:val.focus > 0"), 'v:val.focus')
+  if empty(bundles)
+    augroup neobundle-focus
+      autocmd!
+    augroup END
+    return
+  endif
+
+  call neobundle#config#source_bundles([bundles[0]])
 endfunction
 
 function! neobundle#autoload#source(bundle_name)

@@ -837,6 +837,11 @@ OPTIONS 					*neobundle-options*
 	    \ 'vim_version' : '7.3.885'
 	    \ }
 <
+						*neobundle-options-focus*
+		focus		(Number)
+		If it is > 0, neobundle will source the plugin when focus
+		is losted.  It also is source priority.
+		http://d.hatena.ne.jp/osyo-manga/20140212/1392216949
 
 						*neobundle-options-autoload*
 		autoload		(Dictionary)
