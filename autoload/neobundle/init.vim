@@ -2,7 +2,7 @@
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 04 Mar 2014.
+" Last Modified: 07 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,6 +87,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'sourced' : 0,
           \ 'disabled' : 0,
           \ 'local' : 0,
+          \ 'focus' : 0,
           \ 'orig_name' : '',
           \ 'vim_version' : '',
           \ 'orig_opts' : {},
