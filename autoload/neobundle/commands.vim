@@ -459,7 +459,6 @@ function! s:check_update_process(context, process, is_unite) "{{{
 
   let rev = neobundle#installer#get_revision_number(bundle)
 
-  echomsg string(a:process.output)
   if is_timeout
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
