@@ -183,7 +183,7 @@ function! s:type.get_check_update_command(bundle) "{{{
     return ''
   endif
 
-  return g:neobundle#types#git#command_path .' fetch origin ; '
+  return g:neobundle#types#git#command_path .' fetch origin -q ; '
         \ . g:neobundle#types#git#command_path .' diff origin --name-only'
 endfunction"}}}
 
