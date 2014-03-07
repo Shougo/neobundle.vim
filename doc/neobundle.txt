@@ -397,6 +397,7 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleCheckUpdate				*:NeoBundleCheckUpdate*
 		Check plugins update.  If updates are available, it will
 		execute |:NeoBundleUpdate| automatically.
+		Note: It is supported in git type only.
 
 						*:NeoBundleRecipe*
 :NeoBundleRecipe {recipe-name} [, {options}]
