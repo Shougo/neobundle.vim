@@ -51,7 +51,9 @@ function! neobundle#autoload#init()
   augroup END
 
   augroup neobundle-focus
-    autocmd CursorHold * if s:active_auto_source | call s:source_focus() | endif
+    autocmd CursorHold * if s:active_auto_source
+          \ | call s:source_focus()
+          \ | endif | call feedkeys("g\<ESC>", 'n')
     autocmd FocusLost * let s:active_auto_source = 1
     autocmd FocusGained * let s:active_auto_source = 0
   augroup END
@@ -215,9 +217,6 @@ function! s:source_focus()
   endif
 
   call neobundle#config#source_bundles([bundles[0]])
-
-  " Ignore key sequences.
-  call feedkeys("g\<ESC>", 'n')
 endfunction
 
 function! neobundle#autoload#source(bundle_name)
