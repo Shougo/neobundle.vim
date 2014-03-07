@@ -215,6 +215,9 @@ function! s:source_focus()
   endif
 
   call neobundle#config#source_bundles([bundles[0]])
+
+  " Ignore key sequences.
+  call feedkeys("g\<ESC>", 'n')
 endfunction
 
 function! neobundle#autoload#source(bundle_name)
