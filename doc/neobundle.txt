@@ -844,6 +844,10 @@ OPTIONS 					*neobundle-options*
 		is losted.  It also is source priority.
 		http://d.hatena.ne.jp/osyo-manga/20140212/1392216949
 
+						*neobundle-options-verbose*
+		verbose		(Number)
+		If set to 1, neobundle will print message when it is sourced.
+
 						*neobundle-options-autoload*
 		autoload		(Dictionary)
 		Specify autoload conditions.

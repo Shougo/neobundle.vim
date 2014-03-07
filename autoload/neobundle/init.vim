@@ -88,6 +88,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'disabled' : 0,
           \ 'local' : 0,
           \ 'focus' : 0,
+          \ 'verbose' : 0,
           \ 'orig_name' : '',
           \ 'vim_version' : '',
           \ 'orig_opts' : {},

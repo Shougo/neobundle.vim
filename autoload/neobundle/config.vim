@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Mar 2014.
+" Last Modified: 07 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -581,6 +581,10 @@ function! s:add_dummy_mappings(bundle) "{{{
 endfunction"}}}
 
 function! s:on_source(bundle) "{{{
+  if a:bundle.verbose && a:bundle.lazy
+    redraw
+    echo 'source:' a:bundle.name
+  endif
   call neobundle#call_hook('on_source', a:bundle)
 
   " Reload script files.
@@ -598,6 +602,11 @@ function! s:on_source(bundle) "{{{
     if has('gui_running') && &term ==# 'builtin_gui'
       execute 'silent doautocmd' a:bundle.augroup 'GUIEnter'
     endif
+  endif
+
+  if a:bundle.verbose && a:bundle.lazy
+    redraw
+    echo 'sourced:' a:bundle.name
   endif
 endfunction"}}}
 
