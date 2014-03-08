@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: autoload.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Mar 2014.
+" Last Modified: 09 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! neobundle#autoload#init()
   augroup neobundle-focus
     autocmd CursorHold * if s:active_auto_source
           \ | call s:source_focus()
-          \ | endif | call feedkeys("g\<ESC>", 'n')
+          \ | endif
     autocmd FocusLost * let s:active_auto_source = 1
     autocmd FocusGained * let s:active_auto_source = 0
   augroup END
@@ -217,6 +217,7 @@ function! s:source_focus()
   endif
 
   call neobundle#config#source_bundles([bundles[0]])
+  call feedkeys("g\<ESC>", 'n')
 endfunction
 
 function! neobundle#autoload#source(bundle_name)
