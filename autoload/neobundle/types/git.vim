@@ -2,7 +2,7 @@
 " FILE: git.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 07 Mar 2014.
+" Last Modified: 10 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Mar 2014.
+" Last Modified: 10 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -191,7 +191,7 @@ function! neobundle#commands#check_update() "{{{
           \ string(bundles)
 
     if confirm('Update bundles now?', "yes\nNo", 2) == 1
-      call neobundle#commands#install(1, bundles)
+      call neobundle#commands#install(1, join(bundles))
     endif
   endif
 endfunction"}}}
