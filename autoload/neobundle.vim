@@ -67,8 +67,10 @@ command! -nargs=+ NeoBundle
 command! -bar NeoBundleCheck
       \ call neobundle#commands#check()
 
-command! -bar NeoBundleCheckUpdate
-      \ call neobundle#commands#check_update()
+command! -nargs=? -bar
+      \ -complete=customlist,neobundle#commands#complete_bundles
+      \ NeoBundleCheckUpdate
+      \ call neobundle#commands#check_update(<q-args>)
 
 command! -nargs=+ NeoBundleLazy
       \ call neobundle#parser#lazy(

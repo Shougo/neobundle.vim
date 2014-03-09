@@ -394,9 +394,9 @@ COMMANDS 					*neobundle-commands*
 		also check documentation directories and will execute
 		|:NeoBundleDocs| automatically.
 
-:NeoBundleCheckUpdate				*:NeoBundleCheckUpdate*
-		Check plugins update.  If updates are available, it will
-		execute |:NeoBundleUpdate| automatically.
+:NeoBundleCheckUpdate [{name}...]			*:NeoBundleCheckUpdate*
+		Check plugins update specified by {name}.  If updates are
+		available, it will execute |:NeoBundleUpdate| automatically.
 		Note: It is supported in git type only.
 
 						*:NeoBundleRecipe*

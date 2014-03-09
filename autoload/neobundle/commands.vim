@@ -151,13 +151,17 @@ function! neobundle#commands#check() "{{{
   endif
 endfunction"}}}
 
-function! neobundle#commands#check_update() "{{{
+function! neobundle#commands#check_update(bundle_names) "{{{
+  let bundle_names = split(a:bundle_names)
+
   " Set context.
   let context = {}
   let context.source__updated_bundles = []
   let context.source__processes = []
   let context.source__number = 0
-  let context.source__bundles = neobundle#config#get_neobundles()
+  let context.source__bundles = empty(bundle_names) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#fuzzy_search(bundle_names)
   let context.source__max_bundles =
         \ len(context.source__bundles)
   for bundle in neobundle#config#get_neobundles()
