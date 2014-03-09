@@ -132,6 +132,11 @@ function! neobundle#config#source(names, ...) "{{{
 
     let s:sourced_neobundles[bundle.name] = 1
 
+    for [mode, mapping] in get(bundle, 'dummy_mappings', [])
+      silent! execute mode.'unmap' mapping
+    endfor
+    let bundle.dummy_mappings = []
+
     call neobundle#config#rtp_add(bundle)
     call neobundle#autoload#source(bundle.name)
 
