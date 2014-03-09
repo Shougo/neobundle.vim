@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Mar 2014.
+" Last Modified: 10 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,11 @@ call neobundle#util#set_default(
       \ 'g:neobundle#enable_name_conversion', 0)
 call neobundle#util#set_default(
       \ 'g:neobundle#default_options', {})
+call neobundle#util#set_default(
+      \ 'g:neobundle#install_max_processes', 4,
+      \ 'g:unite_source_neobundle_install_max_processes')
+call neobundle#util#set_default(
+      \ 'g:neobundle#install_process_timeout', 120)
 "}}}
 
 let g:neobundle#tapped = {}
