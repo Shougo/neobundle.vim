@@ -462,7 +462,6 @@ function! s:check_update_process(context, process, is_unite) "{{{
   let cwd = getcwd()
 
   let remote_rev = matchstr(a:process.output, '^\S\+')
-  echomsg string(remote_rev)
 
   let rev = neobundle#installer#get_revision_number(bundle)
 
