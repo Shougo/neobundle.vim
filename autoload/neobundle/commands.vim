@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Mar 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -465,7 +465,11 @@ function! s:check_update_process(context, process, is_unite) "{{{
 
   let rev = neobundle#installer#get_revision_number(bundle)
 
-  if is_timeout
+  if is_timeout || status
+    let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ num, max, bundle.name, 'Error')
+    call neobundle#installer#log(message, a:is_unite)
+    call neobundle#installer#error(bundle.path, a:is_unite)
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
           \    split(a:process.output, '\n')), a:is_unite)
