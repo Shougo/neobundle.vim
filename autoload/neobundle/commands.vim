@@ -385,9 +385,9 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
   let max = a:context.source__max_bundles
 
   let type = neobundle#config#get_types(a:bundle.type)
-  let cmd = has_key(type, 'get_check_update_command') ?
-        \ type.get_check_update_command(a:bundle) : ''
-  if empty(type) || !has_key(type, 'get_check_update_command')
+  let cmd = has_key(type, 'get_revision_remote_command') ?
+        \ type.get_revision_remote_command(a:bundle) : ''
+  if cmd == ''
     return
   endif
 
@@ -420,7 +420,7 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
 
       " Close handles.
       call process.proc.stdin.close()
-      call process.proc.stderr.close()
+      " call process.proc.stderr.close()
     else
       let process.output = neobundle#util#system(cmd)
       let process.status = neobundle#util#get_last_status()
@@ -461,13 +461,16 @@ function! s:check_update_process(context, process, is_unite) "{{{
 
   let cwd = getcwd()
 
+  let remote_rev = matchstr(a:process.output, '^\S\+')
+  echomsg string(remote_rev)
+
   let rev = neobundle#installer#get_revision_number(bundle)
 
   if is_timeout
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
           \    split(a:process.output, '\n')), a:is_unite)
-  elseif a:process.output != ''
+  elseif remote_rev != '' && remote_rev !=# rev
     call add(a:context.source__updated_bundles,
           \ bundle)
   endif

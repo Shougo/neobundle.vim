@@ -178,15 +178,13 @@ function! s:type.get_gc_command(bundle) "{{{
 
   return g:neobundle#types#git#command_path .' gc'
 endfunction"}}}
-function! s:type.get_check_update_command(bundle) "{{{
-  let git = g:neobundle#types#git#command_path
-  if !executable(git)
+function! s:type.get_revision_remote_command(bundle) "{{{
+  if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
-  return git .' fetch origin -q ; '
-        \ . git . ' diff --name-status remotes/origin/'
-        \ . ((a:bundle.rev == '') ? 'master' : a:bundle.rev)
+  return g:neobundle#types#git#command_path
+        \ .' ls-remote origin HEAD'
 endfunction"}}}
 
 function! s:parse_other_pattern(protocol, path, opts) "{{{
