@@ -516,6 +516,14 @@ g:neobundle#types#git#enable_submodule
 
 		Defaults to 1.
 
+				*g:neobundle#types#git#clone_depth*
+g:neobundle#types#git#clone_depth
+		The default history depth for "git clone".
+		If it is 1, neobundle use shallow clone feature.
+		See |neobundle-options-type__depth|.
+
+		Defaults to 0.
+
 				*g:neobundle#types#hg#command_path*
 g:neobundle#types#hg#command_path
 		The "hg" command path used for hg type.
@@ -1100,6 +1108,20 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'git://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
 <
+					*neobundle-options-type__depth*
+		type__depth		(Number)
+		History depth for "git clone".
+		If omitted, |g:neobundle#types#git#clone_depth| is used.
+		If it is than 0, neobundle clones the repository by shallow
+		clone. Shallow clone feature saves your repository clone time.
+		But it have problems in some repository. You should use "git"
+		protocol if it is available.
+		See below issues :
+		https://github.com/Shougo/neobundle.vim/issues/81
+		https://github.com/Homebrew/homebrew/issues/12024
+
+		Note: This attribute is available in git type only.
+
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
@@ -1512,6 +1534,10 @@ A: |vimproc| and |system()| uses input redirection.  But git ignores it when
 you used https protocol in console Vim. So it freezes. I think it is bad
 feature in git. I cannot fix it.  You should change
 |g:neobundle#types#git#default_protocol| to "git".
+
+Q: I want to use shallow clone in git.
+
+A: See |neobundle-options-type__depth|.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
