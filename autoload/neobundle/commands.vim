@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 Mar 2014.
+" Last Modified: 13 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -164,7 +164,7 @@ function! neobundle#commands#check_update(bundle_names) "{{{
         \ neobundle#config#fuzzy_search(bundle_names)
   let context.source__max_bundles =
         \ len(context.source__bundles)
-  for bundle in neobundle#config#get_neobundles()
+  while 1
     while context.source__number < context.source__max_bundles
           \ && len(context.source__processes) <
           \      g:neobundle#install_max_processes
