@@ -185,7 +185,7 @@ function! neobundle#commands#check_update(bundle_names) "{{{
           \ && context.source__number == context.source__max_bundles
       break
     endif
-  endfor
+  endwhile
 
   let bundles = map(context.source__updated_bundles, 'v:val.name')
   redraw!
