@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 13 Mar 2014.
+" Last Modified: 17 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,25 +84,25 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
     if !has('vim_starting')
       redraw!
     endif
+
+    call neobundle#installer#update(installed)
+
+    call neobundle#installer#log(
+          \ "[neobundle/install] Installed/Updated bundles:\n".
+          \ join((empty(installed) ?
+          \   ['no new bundles installed'] :
+          \   map(copy(installed), 'v:val.name')),"\n"))
+
+    if !empty(errored)
+      call neobundle#installer#log(
+            \ "[neobundle/install] Error installing bundles:\n".join(
+            \ map(copy(errored), 'v:val.name')), "\n")
+      call neobundle#installer#log(
+            \ 'Please read the error message log with the :message command.')
+    endif
   finally
     let &more = more_save
   endtry
-
-  call neobundle#installer#update(installed)
-
-  call neobundle#installer#log(
-        \ "[neobundle/install] Installed/Updated bundles:\n".
-        \ join((empty(installed) ?
-        \   ['no new bundles installed'] :
-        \   map(copy(installed), 'v:val.name')),"\n"))
-
-  if !empty(errored)
-    call neobundle#installer#log(
-          \ "[neobundle/install] Error installing bundles:\n".join(
-          \ map(copy(errored), 'v:val.name')), "\n")
-    call neobundle#installer#log(
-          \ 'Please read the error message log with the :message command.')
-  endif
 endfunction"}}}
 
 function! neobundle#commands#helptags(bundles) "{{{
@@ -187,17 +187,23 @@ function! neobundle#commands#check_update(bundle_names) "{{{
     endif
   endwhile
 
-  let bundles = map(context.source__updated_bundles, 'v:val.name')
-  redraw!
+  let more_save = &more
+  try
+    setlocal nomore
+    let bundles = map(context.source__updated_bundles, 'v:val.name')
+    redraw!
 
-  if !empty(bundles)
-    echomsg 'Updates available bundles: '
-          \ string(bundles)
+    if !empty(bundles)
+      echomsg 'Updates available bundles: '
+            \ string(bundles)
 
-    if confirm('Update bundles now?', "yes\nNo", 2) == 1
-      call neobundle#commands#install(1, join(bundles))
+      if confirm('Update bundles now?', "yes\nNo", 2) == 1
+        call neobundle#commands#install(1, join(bundles))
+      endif
     endif
-  endif
+  finally
+    let &more = more_save
+  endtry
 endfunction"}}}
 
 function! neobundle#commands#clean(bang, ...) "{{{
