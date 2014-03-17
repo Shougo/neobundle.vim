@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Mar 2014.
+" Last Modified: 18 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -345,6 +345,48 @@ function! neobundle#commands#complete_deleted_bundles(arglead, cmdline, cursorpo
         \ 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 
+function! neobundle#commands#save_cache() "{{{
+  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  let bundles = deepcopy(neobundle#config#get_neobundles())
+  " Clear hooks.  Because, VimL cannot save functions in JSON.
+  for bundle in bundles
+    let bundle.hooks = {}
+  endfor
+
+  call writefile([s:get_cache_version(), string(bundles)], cache)
+endfunction"}}}
+function! neobundle#commands#load_cache() "{{{
+  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  if !filereadable(cache)
+    return
+  endif
+
+  try
+    let list = readfile(cache)
+    let ver = list[0]
+    sandbox let bundles = eval(list[1])
+    if ver !=# s:get_cache_version()
+          \ || type(bundles) != type([])
+      return
+    endif
+
+    for bundle in bundles
+      call neobundle#config#add(bundle)
+    endfor
+  catch
+    call neobundle#util#print_error(
+          \ '[neobundle] Error occured while loading cache : ' . v:errmsg)
+  endtry
+endfunction"}}}
+function! neobundle#commands#clear_cache() "{{{
+  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  if !filereadable(cache)
+    return
+  endif
+
+  call delete(cache)
+endfunction"}}}
+
 function! s:install(bang, bundles) "{{{
   " Set context.
   let context = {}
@@ -548,6 +590,9 @@ function! s:cmp_vimproc(a, b) "{{{
   return !(a:a.name ==# 'vimproc' || a:a.name ==# 'vimproc.vim')
 endfunction"}}}
 
+function! s:get_cache_version()"{{{
+  return str2nr(printf('%02d%02d', 1, 0))
+endfunction "}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

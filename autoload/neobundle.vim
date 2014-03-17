@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Mar 2014.
+" Last Modified: 18 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,6 +144,13 @@ command! -bar NeoBundleExtraEdit
 command! -bar NeoBundleCount
       \ echo len(neobundle#config#get_neobundles())
 
+command! -bar NeoBundleSaveCache
+      \ call neobundle#commands#save_cache()
+command! -bar NeoBundleLoadCache
+      \ call neobundle#commands#load_cache()
+command! -bar NeoBundleClearCache
+      \ call neobundle#commands#clear_cache()
+
 function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
@@ -196,6 +203,10 @@ endfunction"}}}
 
 function! neobundle#is_sourced(name)
   return neobundle#config#is_sourced(a:name)
+endfunction
+
+function! neobundle#has_cache()
+  return filereadable(neobundle#get_rtp_dir() . '/cache.vim')
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()

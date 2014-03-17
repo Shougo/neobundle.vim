@@ -267,6 +267,21 @@ neobundle#tap({bundle-name})		 *neobundle#tap()*
 neobundle#untap()		 *neobundle#untap()*
 		Clear current |neobundle#tapped| variable.
 
+neobundle#has_cache()			 *neobundle#has_cache()*
+		Checks if cache file is generated.
+		You can optimize loading .vimrc time by it and
+		|:NeoBundleLoadCache|.
+		Note: You must clear cache by |:NeoBundleClearCache| if .vimrc
+		file is changed.
+>
+	if neobundle#has_cache()
+	  NeoBundleLoadCache
+	else
+	  " My Bundles here:
+	  " ...
+	  NeoBundleSaveCache
+	endif
+<
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -416,6 +431,19 @@ COMMANDS 					*neobundle-commands*
 						*:NeoBundleGC*
 :NeoBundleGC [{bundle-name}]
 		Execute Garbage Collect commands in bundles.
+
+						*:NeoBundleSaveCache*
+:NeoBundleSaveCache
+		Save plugin configuration in the cache file.
+		Note: It cannot save functions for example "hooks" member.
+
+						*:NeoBundleLoadCache*
+:NeoBundleLoadCache
+		Load plugin configuration from the cache file.
+
+						*:NeoBundleClearCache*
+:NeoBundleClearCache
+		Clear the configuration cache file.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
