@@ -413,9 +413,7 @@ function! neobundle#config#add(bundle, ...) "{{{
     " echomsg string(prev_bundle.orig_arg)
     " Warning.
     call neobundle#util#print_error(
-          \ 'Overwrite previous neobundle configuration in ' . bundle.name)
-    call neobundle#util#print_error(
-          \ 'You may use multiple different :NeoBundle commands for same plugin.')
+          \ 'neobundle: plugin ' . bundle.name . ' multiply defined')
   endif
 endfunction"}}}
 
