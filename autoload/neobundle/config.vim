@@ -413,7 +413,7 @@ function! neobundle#config#add(bundle, ...) "{{{
     " echomsg string(prev_bundle.orig_arg)
     " Warning.
     call neobundle#util#print_error(
-          \ 'neobundle: plugin ' . bundle.name . ' multiply defined')
+          \ '[neobundle] Plugin may be ' . bundle.name . ' defined multiply in .vimrc')
   endif
 endfunction"}}}
 
