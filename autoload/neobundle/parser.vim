@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 17 Mar 2014.
+" Last Modified: 19 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -175,13 +175,12 @@ function! neobundle#parser#local(localdir, options, names) "{{{
         \ "neobundle#util#substitute_path_separator(
         \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))"),
         \ "empty(a:names) || index(a:names, fnamemodify(v:val, ':t')) >= 0")
-    let options = extend({ 'local' : 1, 'base' : base, }, a:options)
+    let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let bundle = neobundle#get(fnamemodify(dir, ':t'))
     if !empty(bundle)
-      call neobundle#config#add(bundle, 1)
-    else
-      call neobundle#parser#bundle([dir, options])
+      call extend(options, bundle.orig_opts)
     endif
+    call neobundle#parser#bundle([dir, options])
   endfor
 endfunction"}}}
 
