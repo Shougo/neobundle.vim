@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 19 Mar 2014.
+" Last Modified: 20 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,6 +47,7 @@ function! neobundle#parser#lazy(arg) "{{{
   " Update lazy flag.
   let bundle.lazy = 1
   let bundle.resettable = 0
+  let bundle.orig_opts.lazy = 1
   for depend in bundle.depends
     let depend.lazy = bundle.lazy
     let depend.resettable = 0
@@ -179,8 +180,18 @@ function! neobundle#parser#local(localdir, options, names) "{{{
     let bundle = neobundle#get(fnamemodify(dir, ':t'))
     if !empty(bundle)
       call extend(options, bundle.orig_opts)
+      if bundle.lazy
+        let options.lazy = 1
+      endif
     endif
-    call neobundle#parser#bundle([dir, options])
+
+    call neobundle#parser#bundle([dir, options], 1)
+
+    if !empty(bundle) && bundle.lazy && bundle.sourced
+      " Remove from runtimepath.
+      call neobundle#config#rtp_rm(bundle)
+      let bundle.sourced = 0
+    endif
   endfor
 endfunction"}}}
 
