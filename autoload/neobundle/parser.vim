@@ -179,19 +179,19 @@ function! neobundle#parser#local(localdir, options, names) "{{{
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let bundle = neobundle#get(fnamemodify(dir, ':t'))
     if !empty(bundle)
-      call extend(options, bundle.orig_opts)
+      call extend(options, copy(bundle.orig_opts))
       if bundle.lazy
         let options.lazy = 1
+
+        if bundle.sourced
+          " Remove from runtimepath.
+          call neobundle#config#rtp_rm(bundle)
+          let bundle.sourced = 0
+        endif
       endif
     endif
 
     call neobundle#parser#bundle([dir, options], 1)
-
-    if !empty(bundle) && bundle.lazy && bundle.sourced
-      " Remove from runtimepath.
-      call neobundle#config#rtp_rm(bundle)
-      let bundle.sourced = 0
-    endif
   endfor
 endfunction"}}}
 
