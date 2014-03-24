@@ -2,7 +2,7 @@
 " FILE: parser.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 24 Mar 2014.
+" Last Modified: 25 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,12 +182,6 @@ function! neobundle#parser#local(localdir, options, names) "{{{
       call extend(options, copy(bundle.orig_opts))
       if bundle.lazy
         let options.lazy = 1
-
-        if bundle.sourced
-          " Remove from runtimepath.
-          call neobundle#config#rtp_rm(bundle)
-          let bundle.sourced = 0
-        endif
       endif
     endif
 
