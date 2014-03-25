@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Detect .vimrc path.
 VIMRC=$HOME/.vimrc
