@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: installer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Mar 2014.
+" Last Modified: 29 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,15 +40,19 @@ function! neobundle#installer#update(bundles)
     return
   endif
 
-  call neobundle#commands#helptags(
-        \ neobundle#config#get_neobundles())
+  let all_bundles = neobundle#config#get_neobundles()
+
+  call neobundle#commands#helptags(all_bundles)
   call s:reload(filter(copy(a:bundles),
         \ 'v:val.sourced && !v:val.disabled'))
 
-  call s:save_install_info(neobundle#config#get_neobundles())
+  call s:save_install_info(all_bundles)
 
   if !empty(a:bundles)
-    call s:update_ftdetect()
+    call neobundle#util#copy_bundle_files(
+          \ all_bundles, 'ftdetect')
+    call neobundle#util#copy_bundle_files(
+          \ all_bundles, 'after/ftdetect')
   endif
 endfunction
 
@@ -470,12 +474,6 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
     call neobundle#installer#error(result, a:is_unite)
     return -1
   endif
-endfunction
-
-function! s:update_ftdetect()
-  " Delete old files.
-  call neobundle#util#cleandir('ftdetect')
-  call neobundle#util#cleandir('after/ftdetect')
 endfunction
 
 function! s:save_install_info(bundles)

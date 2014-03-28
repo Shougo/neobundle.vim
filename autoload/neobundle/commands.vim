@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: commands.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Mar 2014.
+" Last Modified: 29 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -539,7 +539,7 @@ endfunction"}}}
 function! s:update_tags() "{{{
   let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}]
         \ + neobundle#config#get_neobundles()
-  call s:copy_bundle_files(bundles, 'doc')
+  call neobundle#util#copy_bundle_files(bundles, 'doc')
 
   call neobundle#util#writefile('tags_info',
         \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
@@ -550,28 +550,6 @@ function! s:update_tags() "{{{
     call neobundle#installer#error('Error generating helptags:')
     call neobundle#installer#error(v:exception)
   endtry
-endfunction"}}}
-
-function! s:copy_bundle_files(bundles, directory) "{{{
-  " Delete old files.
-  call neobundle#util#cleandir(a:directory)
-
-  let files = {}
-  for bundle in a:bundles
-    for file in filter(split(globpath(
-          \ bundle.rtp, a:directory.'/*', 1), '\n'),
-          \ '!isdirectory(v:val)')
-      let filename = fnamemodify(file, ':t')
-      let files[filename] = readfile(file)
-    endfor
-  endfor
-
-  for [filename, list] in items(files)
-    if filename =~# '^tags\%(-.*\)\?$'
-      call sort(list)
-    endif
-    call neobundle#util#writefile(a:directory . '/' . filename, list)
-  endfor
 endfunction"}}}
 
 function! s:has_doc(path) "{{{
