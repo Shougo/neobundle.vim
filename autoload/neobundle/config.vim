@@ -530,14 +530,6 @@ function! s:add_lazy(bundle) "{{{
     if has_key(bundle.autoload, 'mappings')
       call s:add_dummy_mappings(bundle)
     endif
-
-    " Load ftdetect.
-    for file in map(filter(['ftdetect', 'after/ftdetect'],
-          \ "isdirectory(bundle.rtp.'/'.v:val)"), "
-          \ split(glob(bundle.rtp.'/'.v:val.'/**/*.vim'), '\n')
-          \ ")
-      silent! source `=file`
-    endfor
   endif
 endfunction"}}}
 
