@@ -3,7 +3,6 @@
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 "          Robert Nelson     <robert@rnelson.ca>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the

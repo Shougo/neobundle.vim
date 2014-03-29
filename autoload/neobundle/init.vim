@@ -2,7 +2,6 @@
 " FILE: init.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Copyright (C) 2010 http://github.com/gmarik
-" Last Modified: 20 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
