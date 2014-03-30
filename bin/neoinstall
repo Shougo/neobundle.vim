@@ -3,7 +3,7 @@
 # Detect .vimrc path.
 VIMRC=$HOME/.vimrc
 
-if [[ ! -e $VIMRC ]]; then
+if [ ! -e $VIMRC ]; then
         VIMRC=$HOME/.vim/vimrc
 fi
 
