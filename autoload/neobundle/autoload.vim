@@ -38,16 +38,12 @@ function! neobundle#autoload#init()
           \ call neobundle#autoload#filename(expand('<afile>'))
     autocmd InsertEnter *
           \ call neobundle#autoload#insert()
-    autocmd BufCreate
-          \ * call neobundle#autoload#explorer(
-          \ expand('<afile>'), 'BufCreate')
-    autocmd BufEnter
-          \ * call neobundle#autoload#explorer(
-          \ expand('<afile>'), 'BufEnter')
-    autocmd BufWinEnter
-          \ * call neobundle#autoload#explorer(
-          \ expand('<afile>'), 'BufWinEnter')
   augroup END
+
+  for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter']
+    execute 'autocmd neobundle' event "* call neobundle#autoload#explorer(
+          \ expand('<afile>'), ".string(event) . ")"
+  endfor
 
   augroup neobundle-focus
     autocmd CursorHold * if s:active_auto_source
