@@ -150,6 +150,11 @@ command! -bar NeoBundleLoadCache
 command! -bar NeoBundleClearCache
       \ call neobundle#commands#clear_cache()
 
+command! -nargs=1 -bar
+      \ -complete=customlist,neobundle#commands#complete_bundles
+      \ NeoBundleRollback
+      \ call neobundle#commands#rollback(<f-args>)
+
 function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),

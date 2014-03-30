@@ -429,8 +429,9 @@ COMMANDS 					*neobundle-commands*
 		Show bundles count.  You can know how many bundles you have.
 
 						*:NeoBundleGC*
-:NeoBundleGC [{bundle-name}]
+:NeoBundleGC [{bundle-names}]
 		Execute Garbage Collect commands in bundles.
+		If {bundle-name} is omit, all bundles will be GCed.
 
 						*:NeoBundleSaveCache*
 :NeoBundleSaveCache
@@ -444,6 +445,11 @@ COMMANDS 					*neobundle-commands*
 						*:NeoBundleClearCache*
 :NeoBundleClearCache
 		Clear the configuration cache file.
+
+						*:NeoBundleRollback*
+:NeoBundleRollback {bundle-name}
+		Rollback {bundle-name} plugin version to previous updated
+		version.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*

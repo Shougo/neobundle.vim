@@ -315,6 +315,68 @@ function! neobundle#commands#gc(bundle_names) "{{{
   endfor
 endfunction"}}}
 
+function! neobundle#commands#rollback(bundle_name) "{{{
+  let bundle = get(neobundle#config#search_simple([a:bundle_name]), 0, {})
+  if empty(bundle) || !isdirectory(bundle.path)
+    call neobundle#util#print_error(
+          \ '[neobundle] ' . a:bundle_name . ' is not found.')
+    return
+  endif
+
+  call neobundle#installer#_load_install_info([bundle])
+
+  if len(bundle.revisions) <= 1
+    call neobundle#util#print_error(
+          \ '[neobundle] No revision information.')
+    return
+  endif
+
+  let cnt = 1
+  let selections = []
+  let revisions = neobundle#util#sort_by(
+        \ items(bundle.revisions), 'v:val[0]')
+  for [date, revision] in revisions
+    call add(selections, cnt . strftime(
+          \ '. %Y/%D/%m %H:%M:%S ', date) . ' ' . revision)
+    let cnt += 1
+  endfor
+
+  let select = inputlist(['Select revision:'] + selections)
+  if select == ''
+    return
+  endif
+
+  redraw
+
+  let revision = revisions[select-1][1]
+  call neobundle#installer#log('[neobundle] ' . a:bundle_name .
+        \ ' rollbacked to ' . revision)
+
+  let cwd = getcwd()
+  let revision_save = bundle.rev
+  try
+    let bundle.rev = revision
+    let type = neobundle#config#get_types(bundle.type)
+    let cmd = ''
+    if has_key(type, 'get_revision_lock_command')
+      let cmd = type.get_revision_lock_command(bundle)
+    endif
+    if cmd == ''
+      call neobundle#util#print_error(
+            \ '[neobundle] ' . a:bundle_name . ' is not supported this feature.')
+      return
+    endif
+
+    call neobundle#util#cd(bundle.path)
+    call neobundle#util#system(cmd)
+  finally
+    if isdirectory(cwd)
+      call neobundle#util#cd(cwd)
+    endif
+    let bundle.rev = revision_save
+  endtry
+endfunction"}}}
+
 function! neobundle#commands#list() "{{{
   for bundle in neobundle#config#get_neobundles()
     echo (neobundle#is_sourced(bundle.name) ? ' ' :
