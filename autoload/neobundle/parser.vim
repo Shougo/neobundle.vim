@@ -240,7 +240,8 @@ endfunction"}}}
 
 function! s:parse_options(opts) "{{{
   if empty(a:opts)
-    return get(g:neobundle#default_options, '_', {})
+    return has_key(g:neobundle#default_options, '_') ?
+          \ copy(g:neobundle#default_options['_']) : {}
   endif
 
   if len(a:opts) == 3
