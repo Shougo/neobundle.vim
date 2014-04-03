@@ -27,12 +27,14 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if !exists('s:neobundles')
+  let s:is_block = 0
   let s:neobundles = {}
   let s:sourced_neobundles = {}
   let neobundle#tapped = {}
+  let s:lazy_rtps = []
 endif
 
-function! neobundle#config#init() "{{{
+function! neobundle#config#init(is_block) "{{{
   filetype off
 
   for bundle in values(s:neobundles)
@@ -54,6 +56,25 @@ function! neobundle#config#init() "{{{
   augroup neobundle
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
+
+  let s:is_block = a:is_block
+  let s:lazy_rtps = []
+endfunction"}}}
+function! neobundle#config#final() "{{{
+  " Join to the tail in runtimepath.
+  let rtps = neobundle#util#split_rtp(&runtimepath)
+  let index = index(rtps, neobundle#get_rtp_dir())
+  for rtp in filter(s:lazy_rtps, 'isdirectory(v:val)')
+    call insert(rtps, rtp, index)
+    let index += 1
+
+    if isdirectory(rtp.'/after')
+      execute 'set rtp+='.fnameescape(rtp.'/after')
+    endif
+  endfor
+  let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
+
+  let s:is_block = 0
 endfunction"}}}
 
 function! neobundle#config#get(name) "{{{
@@ -237,6 +258,12 @@ endfunction"}}}
 function! neobundle#config#rtp_add(bundle) abort "{{{
   if has_key(s:neobundles, a:bundle.name)
     call neobundle#config#rtp_rm(s:neobundles[a:bundle.name])
+  endif
+
+  if s:is_block
+    " Add rtp lazily.
+    call add(s:lazy_rtps, a:bundle.rtp)
+    return
   endif
 
   let rtp = a:bundle.rtp

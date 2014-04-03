@@ -5,7 +5,7 @@ if has('vim_starting')
   set runtimepath+=.
 endif
 
-call neobundle#rc(expand('~/test-bundle/'))
+call neobundle#begin(expand('~/test-bundle/'))
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -19,5 +19,7 @@ NeoBundle 'Shougo/neobundle-vim-recipes'
 NeoBundleRecipe 'vinarise'
 NeoBundle 'Shougo/neocomplcache-snippets-complete',
       \ { 'recipe' : 'neocomplcache-snippets-complete'}
+
+call neobundle#end()
 
 filetype plugin indent on     " Required!

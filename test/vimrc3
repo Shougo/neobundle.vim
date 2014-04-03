@@ -5,7 +5,7 @@ if has('vim_starting')
   set runtimepath+=.
 endif
 
-call neobundle#rc(expand('~/test-bundle/'))
+call neobundle#begin(expand('~/test-bundle/'))
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -30,5 +30,7 @@ NeoBundle 'git://git.wincent.com/command-t.git'
 " Non git repos
 NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+
+call neobundle#end()
 
 filetype plugin indent on     " Required!

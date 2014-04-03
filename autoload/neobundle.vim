@@ -159,7 +159,16 @@ function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
         \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
-  return neobundle#init#_rc(path)
+  return neobundle#init#_rc(path, 0)
+endfunction"}}}
+function! neobundle#begin(...) "{{{
+  let path = (a:0 > 0) ? a:1 :
+        \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
+        \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
+  return neobundle#init#_rc(path, 1)
+endfunction"}}}
+function! neobundle#end() "{{{
+  call neobundle#config#final()
 endfunction"}}}
 
 function! neobundle#set_neobundle_dir(path)

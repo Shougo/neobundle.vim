@@ -139,7 +139,7 @@ INTERFACE					*neobundle-interface*
 ------------------------------------------------------------------------------
 FUNCTIONS 					*neobundle-functions*
 
-neobundle#rc([{base-path}])			*neobundle#rc()*
+neobundle#begin([{base-path}])			*neobundle#begin()*
 		Initializes neobundle.vim. {base-path} is where your
 		downloaded plugins will be placed.
 		If {base-path} is omitted, neobundle looks for a "bundle"
@@ -147,18 +147,31 @@ neobundle#rc([{base-path}])			*neobundle#rc()*
 		Note: It executes ":filetype off" automatically.
 		Note: You must not call the function inner
 		"has('vim_starting')".
+		Note: It is faster interface than |neobundle#rc()|.
 >
 	if has('vim_starting')
 	  set nocompatible
 	  set runtimepath+={path to neobundle directory}
 	endif
-	call neobundle#rc(expand('~/.vim/bundle'))
+
+	call neobundle#begin(expand('~/.vim/bundle'))
 
 	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 	...
 
+	call neobundle#end()
+
 	filetype plugin indent on
 <
+
+neobundle#end()					*neobundle#end()*
+		Finalize neobundle.vim.  If you use |neobundle#begin()|, you
+		must call it after neobundle bundles configuration.
+
+neobundle#rc([{base-path}])			*neobundle#rc()*
+		Note: It is old interface.  It is slower than
+		|neobundle#begin()|.
+
 neobundle#source({bundle-names})		*neobundle#source()*
 		Same as |:NeoBundleSource|.
 		{bundle-names} is a list of bundle names.
@@ -385,10 +398,10 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleDirectInstall {repository} [, {options}]
 		Registers a bundle, and installs it directly.
 		Note: The settings are saved in "extra_bundles.vim" in
-		|neobundle#rc()| directory.
+		|neobundle#begin()| directory.
 		Note: To uninstall direct installed bundles, you must delete
 		plugin settings manually in "extra_bundles.vim" in
-		|neobundle#rc()| directory and execute |:NeoBundleClean|
+		|neobundle#begin()| directory and execute |:NeoBundleClean|
 		command.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
@@ -633,7 +646,7 @@ OPTIONS 					*neobundle-options*
 
 		directory		(String)
 		Specify relative directory path from the base directory (set
-		by |neobundle#rc()| or "base" option). If omitted, the "name"
+		by |neobundle#begin()| or "base" option). If omitted, the "name"
 		option will be used.
 		Note: If you set rev "foo" when the name key is "neobundle",
 		the directory key is "neobundle_foo".
@@ -655,8 +668,8 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-base_path*
 		base			(String)
 		Directory base path to use. If omitted, the path specified
-		with |neobundle#rc()| will be used. It is useful for loading
-		scripts from a different path.
+		with |neobundle#begin()| will be used. It is useful for
+		loading scripts from a different path.
 		Example:
 						*neobundle-options-type*
 		type			(String)
@@ -844,7 +857,7 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-resettable*
 		resettable		(Number)
 		If set to 0, neobundle doesn't reset the path in
-		|neobundle#rc()|.
+		|neobundle#begin()|.
 
 						*neobundle-options-gui*
 		gui			(Number)
@@ -1167,7 +1180,7 @@ EXAMPLES					*neobundle-examples*
 	" Use git protocol.
 	" let g:neobundle#types#git#default_protocol = 'git'
 
-	call neobundle#rc(expand('~/.vim/bundle'))
+	call neobundle#begin(expand('~/.vim/bundle'))
 
 	" Let neobundle manage neobundle
 	NeoBundleFetch 'Shougo/neobundle.vim'
@@ -1180,6 +1193,8 @@ EXAMPLES					*neobundle-examples*
 	" Note: You don't set neobundle setting in .gvimrc!
 
 	" ...
+
+	call neobundle#end()
 
 	filetype plugin indent on       " Required!
 
@@ -1293,7 +1308,7 @@ neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings (Default action).
 	install		Direct install plugins from repository.
 			Note: The settings are saved in "extra_bundles.vim" in
-			|neobundle#rc()| directory.
+			|neobundle#begin()| directory.
 	start		Browse github plugin page.
 	open		Open the recipe file.
 
@@ -1427,18 +1442,18 @@ wrong. You can install |vimproc| to keep your Vim from freezing:
 
 Q: Duplicated error was printed when sourcing .vimrc.
 
-A: Your .vimrc was wrong. You must reset neobundle setting by |neobundle#rc()|
-in .vimrc.
-Note: You must not call |neobundle#rc()| inner "has('vim_starting')".
+A: Your .vimrc was wrong. You must reset neobundle setting by
+|neobundle#begin()| in .vimrc.
+Note: You must not call |neobundle#begin()| inner "has('vim_starting')".
 >
 	if has('vim_starting')
 	  set runtimepath+={path to neobundle directory}
-	  " This is wrong neobundle#rc().
-	  "call neobundle#rc(expand('~/.vim/bundle'))
+	  " This is wrong neobundle#begin().
+	  "call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 
 	" This is OK.
-	call neobundle#rc(expand('~/.vim/bundle'))
+	call neobundle#begin(expand('~/.vim/bundle'))
 <
 
 Q: I want to compile vimproc automatically.
@@ -1551,13 +1566,13 @@ enable.
 
 Q: Error was printed when sourcing .vimrc.
 
-A: You must not call |neobundle#rc()| inner "has('vim_starting')".
+A: You must not call |neobundle#begin()| inner "has('vim_starting')".
 >
 	if has('vim_starting')
 	  set runtimepath+={path to neobundle directory}
 	endif
 	" OK!
-	call neobundle#rc(expand('~/.vim/bundle'))
+	call neobundle#begin(expand('~/.vim/bundle'))
 >
 
 Q: Timeout on github makes Vim terribly slow if the repository is not found in
