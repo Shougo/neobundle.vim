@@ -43,6 +43,20 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
 ## Quick start
 
+### 1. Install NeoBundle
+
+#### If you are using Unix/Linux or Mac OX.
+
+1. Clone NeoBundle with submodules (incluede installer) and run script.
+
+     ```
+     $ git clone --recursive https://github.com/Shougo/neobundle.vim
+     $ sh neobundle.vim/installer/install.sh
+     ```
+Complete. No longer need `neobundle.vim` dir. You can run `rm -rf neobundle.vim`.
+
+#### If you want to install manually or you are using Windows.
+
 1. Setup NeoBundle:
 
      ```
@@ -86,11 +100,10 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
      " this will conveniently prompt you to install them.
      NeoBundleCheck
      ```
-3. Install configured bundles:
 
-     Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim)
+### 2. Install configured bundles
 
-     Or Command run `bin/neoinstall`
+Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim) Or Command run `bin/neoinstall`
 
 ## Advantages over Vundle
 
