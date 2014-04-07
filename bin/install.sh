@@ -1,6 +1,10 @@
 #!/bin/sh
+# Standalone installer for Unixs
+# Original version is created by shoma2da
+# https://github.com/shoma2da/neobundle_installer
+
+# Installation directory
 BUNDLE_DIR=~/.vim/bundle
-VIMRC_PATH=~/.vimrc
 
 # check git command
 if type git; then
@@ -11,13 +15,13 @@ else
 fi
 
 # make bundle dir and fetch neobundle
-echo "start fetch NeoBundle..."
+echo "Start fetch NeoBundle..."
 mkdir -p $BUNDLE_DIR
 git clone https://github.com/Shougo/neobundle.vim $BUNDLE_DIR/neobundle.vim
-echo "done."
+echo "Done."
 
 # write initial setting for .vimrc
-echo "start write NeoBundle initial setting to ${VIMRC_PATH} ..."
+echo "Please write NeoBundle initial setting to your vimrc path ..."
 {
     echo ""
     echo ""
@@ -58,7 +62,7 @@ echo "start write NeoBundle initial setting to ${VIMRC_PATH} ..."
     echo "\"End NeoBundle Scripts-------------------------"
     echo ""
     echo ""
-} >> ${VIMRC_PATH}
-echo "done."
+}
+echo "Done."
 
-echo "complete setup NeoBundle!"
+echo "Complete setup NeoBundle!"
