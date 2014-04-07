@@ -47,13 +47,12 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 
 #### If you are using Unix/Linux or Mac OX.
 
-1. Clone NeoBundle with submodules (incluede installer) and run script.
+1. Run below script.
 
      ```
-     $ curl -o install.sh https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
-     $ sh install.sh
+     $ curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
      ```
-Complete. No longer need `install.sh`. You can run `rm install.sh`.
+Complete.
 
 #### If you want to install manually or you are using Windows.
 
