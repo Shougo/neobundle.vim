@@ -501,7 +501,7 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
   let type = neobundle#config#get_types(a:bundle.type)
   let cmd = has_key(type, 'get_revision_remote_command') ?
         \ type.get_revision_remote_command(a:bundle) : ''
-  if cmd == ''
+  if cmd == '' || !isdirectory(a:bundle.path)
     return
   endif
 
@@ -513,10 +513,8 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
 
   let cwd = getcwd()
   try
-    if isdirectory(a:bundle.path)
-      " Cd to bundle path.
-      call neobundle#util#cd(a:bundle.path)
-    endif
+    " Cd to bundle path.
+    call neobundle#util#cd(a:bundle.path)
 
     let rev = neobundle#installer#get_revision_number(a:bundle)
 
