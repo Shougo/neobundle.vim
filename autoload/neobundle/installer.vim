@@ -414,6 +414,10 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let bundle.revisions[updated_time] = rev
 
     call neobundle#installer#build(bundle)
+
+    " Load bundle forcely
+    call neobundle#config#rtp_add(bundle)
+
     call add(a:context.source__synced_bundles,
           \ bundle)
   endif
