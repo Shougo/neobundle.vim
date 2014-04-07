@@ -1,3 +1,0 @@
-[submodule "installer"]
-	path = installer
-	url = git@github.com:shoma2da/neobundle_installer.git

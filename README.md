@@ -50,10 +50,10 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 1. Clone NeoBundle with submodules (incluede installer) and run script.
 
      ```
-     $ git clone --recursive https://github.com/Shougo/neobundle.vim
-     $ sh neobundle.vim/installer/install.sh
+     $ curl -o install.sh https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+     $ sh install.sh
      ```
-Complete. No longer need `neobundle.vim` dir. You can run `rm -rf neobundle.vim`.
+Complete. No longer need `install.sh`. You can run `rm install.sh`.
 
 #### If you want to install manually or you are using Windows.
 
