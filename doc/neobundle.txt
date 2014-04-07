@@ -463,6 +463,9 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleRollback {bundle-name}
 		Rollback {bundle-name} plugin version to previous updated
 		version.
+		Note: If you rollbacked the plugin, you cannot update it by
+		|:NeoBundleUpdate| command.  If you want to update it, you
+		must reinstall the plugin by |:NeoBundleReinstall| command.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
