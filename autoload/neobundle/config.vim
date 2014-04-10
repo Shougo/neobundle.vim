@@ -69,7 +69,7 @@ function! neobundle#config#final() "{{{
     let index += 1
 
     if isdirectory(rtp.'/after')
-      execute 'set rtp+='.fnameescape(rtp.'/after')
+      call add(rtps, fnameescape(rtp.'/after'))
     endif
   endfor
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
