@@ -415,8 +415,10 @@ function! neobundle#installer#check_output(context, process, is_unite)
 
     call neobundle#installer#build(bundle)
 
-    " Load bundle forcely
-    call neobundle#config#rtp_add(bundle)
+    if neobundle#config#is_sourced(bundle.name)
+      " Already sourced.
+      call neobundle#config#rtp_add(bundle)
+    endif
 
     call add(a:context.source__synced_bundles,
           \ bundle)
