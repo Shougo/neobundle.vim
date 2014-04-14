@@ -266,19 +266,19 @@ neobundle#config({options})
 	NeoBundle 'Shougo/neocomplete'
 	if neobundle#tap('neocomplete')
 	  " Some settings...
-	  function! neobundle#tapped.hooks.on_source(bundle)
+	  function! neobundle#hooks.on_source(bundle)
 	    " Some settings...
 	  endfunction
 	  call neobundle#untap()
 	endif
 <
-neobundle#tap({bundle-name})		 *neobundle#tap()*
-		Initialize |neobundle#tapped| variable as {bundle-name}
-		bundle.
+neobundle#tap({bundle-name})			 *neobundle#tap()*
+		Initialize |neobundle#tapped| and |neobundle#hooks| variable
+		as {bundle-name} bundle.
 		It returns non-zero if {bundle-name} is exists.
 
-neobundle#untap()		 *neobundle#untap()*
-		Clear current |neobundle#tapped| variable.
+neobundle#untap()				 *neobundle#untap()*
+		Clear current |neobundle#tapped| and |neobundle#hooks| variable.
 
 neobundle#has_cache()			 *neobundle#has_cache()*
 		Checks if cache file is generated.
@@ -472,6 +472,9 @@ VARIABLES 					*neobundle-variables*
 
 neobundle#tapped				*neobundle#tapped*
 		Current bundle variable set by |neobundle#tap()|.
+
+neobundle#hooks					*neobundle#hooks*
+		Current bundle hooks variable set by |neobundle#tap()|.
 
 g:neobundle#default_site			*g:neobundle#default_site*
 		The default repository site if "site" option is omitted.

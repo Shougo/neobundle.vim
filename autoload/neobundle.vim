@@ -55,6 +55,7 @@ call neobundle#util#set_default(
 "}}}
 
 let g:neobundle#tapped = {}
+let g:neobundle#hooks = {}
 let s:neobundle_dir = ''
 let s:neobundle_runtime_dir = neobundle#util#substitute_path_separator(
       \ fnamemodify(expand('<sfile>'), ':p:h:h'))
@@ -248,10 +249,12 @@ endfunction
 
 function! neobundle#tap(name) "{{{
   let g:neobundle#tapped = neobundle#get(a:name)
+  let g:neobundle#hooks = get(neobundle#get(a:name), 'hooks', {})
   return !empty(g:neobundle#tapped)
 endfunction"}}}
 function! neobundle#untap() "{{{
   let g:neobundle#tapped = {}
+  let g:neobundle#hooks = {}
 endfunction"}}}
 
 function! neobundle#bundle(arg, ...) "{{{
