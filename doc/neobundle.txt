@@ -254,6 +254,8 @@ neobundle#config({options})
 		variable.
 		If {bundle-name} is list, you can change options in multiple
 		bundles.
+		If {bundle-name} is not configured, it will print error
+		messages.
 >
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {

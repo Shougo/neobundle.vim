@@ -362,6 +362,8 @@ endfunction"}}}
 function! neobundle#config#set(name, dict) "{{{
   let bundle = neobundle#config#get(a:name)
   if empty(bundle)
+    call neobundle#util#print_error(
+          \ '[neobundle] Plugin name "' . a:name . '" is not defined.')
     return
   endif
 
@@ -439,7 +441,8 @@ function! neobundle#config#add(bundle, ...) "{{{
     " echomsg string(prev_bundle.orig_arg)
     " Warning.
     call neobundle#util#print_error(
-          \ '[neobundle] Plugin may be ' . bundle.name . ' defined multiply in .vimrc')
+          \ '[neobundle] Plugin "' . bundle.name .
+          \ '" may be defined multiply in .vimrc')
   endif
 endfunction"}}}
 
