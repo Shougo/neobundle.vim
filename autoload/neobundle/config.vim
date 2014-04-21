@@ -456,6 +456,10 @@ function! neobundle#config#tsort(bundles) "{{{
   return sorted
 endfunction"}}}
 
+function! neobundle#config#get_lazy_rtps() "{{{
+  return s:lazy_rtps
+endfunction"}}}
+
 function! s:tsort_impl(target, bundles, mark, sorted) "{{{
   if has_key(a:mark, a:target.name)
     return

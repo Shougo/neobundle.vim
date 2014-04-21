@@ -176,12 +176,17 @@ function! neobundle#parser#local(localdir, options, names) "{{{
         \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))"),
         \ "empty(a:names) || index(a:names, fnamemodify(v:val, ':t')) >= 0")
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
-    let bundle = neobundle#get(fnamemodify(dir, ':t'))
+    let name = fnamemodify(dir, ':t')
+    let bundle = neobundle#get(name)
     if !empty(bundle)
       call extend(options, copy(bundle.orig_opts))
       if bundle.lazy
         let options.lazy = 1
       endif
+
+      " Remove from lazy runtimepath
+      call filter(neobundle#config#get_lazy_rtps(),
+            \ "fnamemodify(v:val, ':h:t') != name")
     endif
 
     call neobundle#parser#bundle([dir, options])
