@@ -362,15 +362,13 @@ function! neobundle#commands#rollback(bundle_name) "{{{
   try
     let bundle.rev = revision
     let type = neobundle#config#get_types(bundle.type)
-    let cmd = ''
-    if has_key(type, 'get_revision_lock_command')
-      let cmd = type.get_revision_lock_command(bundle)
-    endif
-    if cmd == ''
+    if !has_key(type, 'get_revision_lock_command')
       call neobundle#util#print_error(
             \ '[neobundle] ' . a:bundle_name . ' is not supported this feature.')
       return
     endif
+
+    let cmd = type.get_revision_lock_command(bundle)
 
     call neobundle#util#cd(bundle.path)
     call neobundle#util#system(cmd)
@@ -566,10 +564,6 @@ function! s:check_update_process(context, process, is_unite) "{{{
   let num = a:process.number
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
-
-  " Lock revision.
-  call neobundle#installer#lock_revision(
-        \ a:process, a:context, a:is_unite)
 
   let cwd = getcwd()
 
