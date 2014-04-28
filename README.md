@@ -104,7 +104,7 @@ Complete.
 
 ### 2. Install configured bundles
 
-Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim) Or Command run `bin/neoinstall`
+Launch `vim`, run `:NeoBundleInstall`, or `:Unite neobundle/install`(required unite.vim) Or Command run `bin/neoinstall` or `vim +NeoBundleInstall +qall`
 
 ## Advantages over Vundle
 
