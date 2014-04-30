@@ -305,6 +305,9 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 
   let cwd = getcwd()
   try
+    let lang_save = $LANG
+    let $LANG = 'C'
+
     if isdirectory(a:bundle.path)
       " Cd to bundle path.
       call neobundle#util#cd(a:bundle.path)
@@ -333,6 +336,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
       let process.status = neobundle#util#get_last_status()
     endif
   finally
+    let $LANG = lang_save
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
     endif
