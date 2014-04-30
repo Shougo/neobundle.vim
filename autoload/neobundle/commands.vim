@@ -246,9 +246,10 @@ function! neobundle#commands#clean(bang, ...) "{{{
       " Note: In rm command, must use "\" instead of "/".
       let cmdline = substitute(cmdline, '/', '\\\\', 'g')
     endif
-    let result = neobundle#util#system(
-          \ g:neobundle#rm_command . ' ' . cmdline)
-    if neobundle#util#get_last_status()
+
+    " Use system instead of vimproc#system()
+    let result = system(g:neobundle#rm_command . ' ' . cmdline)
+    if v:shell_error
       call neobundle#installer#error(result)
     endif
 
