@@ -599,6 +599,11 @@ function! s:append_log_file(msg)
   if filereadable(g:neobundle#log_filename)
     let msg = readfile(g:neobundle#log_filename) + msg
   endif
+
+  let dir = fnamemodify(g:neobundle#log_filename, ':h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
   call writefile(msg, g:neobundle#log_filename)
 endfunction
 
