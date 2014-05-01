@@ -160,11 +160,12 @@ function! neobundle#config#source(names, ...) "{{{
     endif
 
     call neobundle#config#rtp_add(bundle)
-    call neobundle#autoload#source(bundle.name)
 
     if exists('g:loaded_neobundle') || is_force
       call s:on_source(bundle)
     endif
+
+    call neobundle#autoload#source(bundle.name)
 
     if !reset_ftplugin
       let reset_ftplugin = s:is_reset_ftplugin(&filetype, bundle.rtp)
