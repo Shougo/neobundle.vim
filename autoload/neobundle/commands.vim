@@ -570,7 +570,14 @@ function! s:check_update_process(context, process, is_unite) "{{{
 
   let remote_rev = matchstr(a:process.output, '^\S\+')
 
-  let rev = neobundle#installer#get_revision_number(bundle)
+  let revision_save = bundle.rev
+  try
+    " Get HEAD revision
+    let bundle.rev = ''
+    let rev = neobundle#installer#get_revision_number(bundle)
+  finally
+    let bundle.rev = revision_save
+  endtry
 
   if is_timeout || status
     let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
