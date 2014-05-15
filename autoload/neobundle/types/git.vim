@@ -192,8 +192,13 @@ function! s:type.get_revision_remote_command(bundle) "{{{
     return ''
   endif
 
+  let rev = a:bundle.rev
+  if rev == ''
+    let rev = 'HEAD'
+  endif
+
   return g:neobundle#types#git#command_path
-        \ .' ls-remote origin HEAD'
+        \ .' ls-remote origin ' . rev
 endfunction"}}}
 
 function! s:parse_other_pattern(protocol, path, opts) "{{{

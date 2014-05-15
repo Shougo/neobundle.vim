@@ -515,8 +515,6 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
     " Cd to bundle path.
     call neobundle#util#cd(a:bundle.path)
 
-    let rev = neobundle#installer#get_revision_number(a:bundle)
-
     let process = {
           \ 'number' : num,
           \ 'bundle' : a:bundle,
@@ -573,7 +571,6 @@ function! s:check_update_process(context, process, is_unite) "{{{
   let revision_save = bundle.rev
   try
     " Get HEAD revision
-    let bundle.rev = ''
     let rev = neobundle#installer#get_revision_number(bundle)
   finally
     let bundle.rev = revision_save
