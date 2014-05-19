@@ -3,7 +3,7 @@
 ## About
 
 NeoBundle is a next generation Vim plugin manager. This plugin is based on
-Vundle(https://github.com/gmarik/vundle), but I renamed and added tons of
+[Vundle](https://github.com/gmarik/vundle), but I renamed and added tons of
 features,  while Vundle tends to stay simple.
 
 Requirements:
@@ -11,8 +11,8 @@ Requirements:
 * "git" command in $PATH(if you want to install github or vim.org plugins)
 
 Recommends:
-* vimproc(if you want to install/update asynchronously)
-https://github.com/Shougo/vimproc.vim
+* [vimproc](https://github.com/Shougo/vimproc.vim) if you want to install/update asynchronously
+
 
 Note: Neobundle is not stable plugin manager.  If you want to stable plugin
 manager, you should use Vundle plugin.  It is well works widely and more
