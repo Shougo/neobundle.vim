@@ -1468,14 +1468,16 @@ Q: I want to compile vimproc automatically.
 
 A:
 >
-	NeoBundle 'Shougo/vimproc.vim', {
+	let vimproc_updcmd = has('win64') ?
+	  \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
+	execute "NeoBundle 'Shougo/vimproc.vim'," . string({
 		\ 'build' : {
-			\     'windows' : 'make -f make_mingw32.mak',
+			\     'windows' : vimproc_updcmd,
 			\     'cygwin' : 'make -f make_cygwin.mak',
 			\     'mac' : 'make -f make_mac.mak',
 			\     'unix' : 'make -f make_unix.mak',
 			\    },
-			\ }
+			\ })
 <
 Q: What's the "outdated" plugin?
 
