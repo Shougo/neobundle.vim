@@ -70,7 +70,7 @@ function! neobundle#installer#build(bundle)
   elseif has_key(build, 'others')
     let cmd = build.others
   else
-    return
+    return 0
   endif
 
   call neobundle#installer#log('[neobundle/install] Building...')
@@ -377,7 +377,9 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let updated_time = s:get_commit_date(bundle)
   let bundle.checked_time = localtime()
 
-  if is_timeout
+  let build_failed = neobundle#installer#build(bundle)
+
+  if is_timeout || build_failed
         \ || (status && a:process.rev ==# rev
         \     && (bundle.type !=# 'git' ||
         \     a:process.output !~# 'up-to-date\|up to date'))
@@ -385,9 +387,18 @@ function! neobundle#installer#check_output(context, process, is_unite)
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#log(message, a:is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)
+
+    if build_failed
+      if confirm('Build failed. Uninstall "%s" now?', "yes\nNo", 2) == 1
+        " Remove.
+        call neobundle#commands#clean(1, bundle.name)
+      endif
+    endif
+
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
           \    split(a:process.output, '\n')), a:is_unite)
+
     call add(a:context.source__errored_bundles,
           \ bundle)
   elseif a:process.rev ==# rev
@@ -416,8 +427,6 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let bundle.updated_time = updated_time
     let bundle.installed_uri = bundle.uri
     let bundle.revisions[updated_time] = rev
-
-    call neobundle#installer#build(bundle)
 
     if neobundle#config#is_sourced(bundle.name)
       " Already sourced.
