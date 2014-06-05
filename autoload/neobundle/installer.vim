@@ -377,12 +377,14 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let updated_time = s:get_commit_date(bundle)
   let bundle.checked_time = localtime()
 
-  let build_failed = neobundle#installer#build(bundle)
-
-  if is_timeout || build_failed
+  let is_failed = is_timeout
         \ || (status && a:process.rev ==# rev
-        \     && (bundle.type !=# 'git' ||
-        \     a:process.output !~# 'up-to-date\|up to date'))
+        \     && (bundle.type !=# 'git'
+        \         || a:process.output !~# 'up-to-date\|up to date'))
+
+  let build_failed = is_failed ? 0 : neobundle#installer#build(bundle)
+
+  if is_failed || build_failed
     let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#log(message, a:is_unite)
