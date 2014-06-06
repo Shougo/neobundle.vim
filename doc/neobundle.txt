@@ -1480,6 +1480,12 @@ A:
 		\    },
 		\ })
 <
+Note that arguments of NeoBundle command are evaluated inside the NeoBundle
+command. Thus, local variables cannot be passed to NeoBundle command. If you
+want to use local variables as arguments of NeoBundle command, you have to
+expand them into a string and pass it to `:execute` command.
+
+
 Q: What's the "outdated" plugin?
 
 A: Last update time is older than one week -> Automatic updates are disabled
