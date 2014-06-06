@@ -1473,12 +1473,12 @@ A:
 	  \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
 	execute "NeoBundle 'Shougo/vimproc.vim'," . string({
 		\ 'build' : {
-			\     'windows' : vimproc_updcmd,
-			\     'cygwin' : 'make -f make_cygwin.mak',
-			\     'mac' : 'make -f make_mac.mak',
-			\     'unix' : 'make -f make_unix.mak',
-			\    },
-			\ })
+		\     'windows' : vimproc_updcmd,
+		\     'cygwin' : 'make -f make_cygwin.mak',
+		\     'mac' : 'make -f make_mac.mak',
+		\     'unix' : 'make -f make_unix.mak',
+		\    },
+		\ })
 <
 Q: What's the "outdated" plugin?
 
