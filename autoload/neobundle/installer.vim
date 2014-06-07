@@ -391,7 +391,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)
 
     if build_failed
-      if confirm('Build failed. Uninstall "%s" now?', "yes\nNo", 2) == 1
+      if confirm('Build failed. Uninstall "'.bundle.name.'" now?', "yes\nNo", 2) == 1
         " Remove.
         call neobundle#commands#clean(1, bundle.name)
       endif
