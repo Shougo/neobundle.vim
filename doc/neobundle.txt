@@ -452,6 +452,7 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleSaveCache
 		Save plugin configuration in the cache file.
 		Note: It cannot save functions for example "hooks" member.
+		Note: It is available when loading .vimrc.
 
 						*:NeoBundleLoadCache*
 :NeoBundleLoadCache
