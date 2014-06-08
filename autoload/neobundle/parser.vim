@@ -172,8 +172,8 @@ function! neobundle#parser#local(localdir, options, names) "{{{
   let base = fnamemodify(neobundle#util#expand(a:localdir), ':p')
   for dir in filter(map(filter(split(glob(
         \ base . '*'), '\n'), "isdirectory(v:val)"),
-        \ "neobundle#util#substitute_path_separator(
-        \   substitute(fnamemodify(v:val, ':p'), '/$', '', ''))"),
+        \ "substitute(neobundle#util#substitute_path_separator(
+        \   fnamemodify(v:val, ':p')), '/$', '', '')"),
         \ "empty(a:names) || index(a:names, fnamemodify(v:val, ':t')) >= 0")
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let name = fnamemodify(dir, ':t')
