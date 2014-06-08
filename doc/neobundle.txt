@@ -1581,17 +1581,6 @@ enable.
 	colorscheme molokai
 <
 
-Q: Error was printed when sourcing .vimrc.
-
-A: You must not call |neobundle#begin()| inside a "has('vim_starting')" block.
->
-	if has('vim_starting')
-	  set runtimepath+={path to neobundle directory}
-	endif
-	" OK!
-	call neobundle#begin(expand('~/.vim/bundle'))
->
-
 Q: Timeout on github makes Vim terribly slow if the repository is not found in
 console Vim.
 https://github.com/Shougo/neobundle.vim/issues/175
