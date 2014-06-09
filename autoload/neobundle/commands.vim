@@ -99,6 +99,10 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
       call neobundle#installer#log(
             \ 'Please read the error message log with the :message command.')
     endif
+
+    call neobundle#installer#error(
+          \ '[neobundle/install] Update done: ' .
+          \     strftime('(%Y/%m/%d %H:%M:%S)'))
   finally
     let &more = more_save
   endtry
