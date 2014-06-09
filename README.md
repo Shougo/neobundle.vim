@@ -11,8 +11,11 @@ Requirements:
 * "git" command in $PATH (if you want to install github or vim.org plugins)
 
 Recommends:
-* [vimproc](https://github.com/Shougo/vimproc.vim) if you want to install/update asynchronously
+* [vimproc](https://github.com/Shougo/vimproc.vim) if you want to
+  install/update asynchronously
 
+Note: In :NeoBundleUpdate/:NeoBundleIstall commands, you can parallel update,
+but you cannot do other work.
 
 Note: Neobundle is not a stable plugin manager.  If you want a stable plugin
 manager, you should use Vundle plugin.  It well works widely and it is more

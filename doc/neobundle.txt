@@ -126,7 +126,7 @@ Note: To use neoinstall in Windows, Vim command must be in $PATH. >
         > .vim/bundle/neobundle.vim/bin/neoinstall
 Note: To update and build vimproc in Windows, you can use
 "neoinstall_novimproc" command. >
-	>.vim/bundle/neobundle.vim/bin/neoinstall_novimproc vimproc.vim
+	> .vim/bundle/neobundle.vim/bin/neoinstall_novimproc vimproc.vim
 
 neoinstall can take arguments (install/update plugin names).
 >
