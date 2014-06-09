@@ -12,10 +12,10 @@ Requirements:
 
 Recommends:
 * [vimproc](https://github.com/Shougo/vimproc.vim) if you want to
-  install/update asynchronously
+  install/update asynchronously in Unite insterface.
 
-Note: In :NeoBundleUpdate/:NeoBundleIstall commands, you can parallel update,
-but you cannot do other work.
+Note: In :NeoBundleUpdate/:NeoBundleIstall commands, you can parallel update by
+vimproc, but you cannot do other work unlike Unite interface.
 
 Note: Neobundle is not a stable plugin manager.  If you want a stable plugin
 manager, you should use Vundle plugin.  It well works widely and it is more
