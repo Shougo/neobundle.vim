@@ -1,7 +1,7 @@
 *neobundle.txt*	Next generation Vim package manager
 
 Version: 3.0
-Author : Shougo <Shougo.Matsu at gmail.com>
+Author:  Shougo <Shougo.Matsu at gmail.com>
          Copyright (C) 2010 http://github.com/gmarik
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -42,20 +42,20 @@ FAQ			|neobundle-faq|
 INTRODUCTION					*neobundle-introduction*
 
 *neobundle* is the next generation Vim package manager. This plugin is based on
-Vundle(https://github.com/gmarik/vundle), but I renamed and added tons of
+Vundle (https://github.com/gmarik/vundle), but I renamed and added tons of
 features.  Because, Vundle's author does not want to add huge features in
 Vundle.
 
-Note: Neobundle is not stable plugin manager.  If you want to stable plugin
-manager, you should use Vundle plugin.  It is well works widely and more
+Note: Neobundle is not a stable plugin manager.  If you want a stable plugin
+manager, you should use Vundle plugin.  It well works widely and it is more
 tested.  If you want to use extended features, you can use neobundle.
 
-Vundle features : Stable, simple, good for beginners
-neobundle features : Early development(may break compatibility), very complex,
-good for plugin power users(for example, 50+ plugins and over 1000 lines
+Vundle features: Stable, simple, good for beginners
+Neobundle features: Early development (may break compatibility), very complex,
+good for plugin power users (for example, 50+ plugins and over 1000 lines
 .vimrc, ...)
 
-neobundle features :
+Neobundle features:
  * Uses |vimproc| if available
  * |unite.vim| interface
  * Revision lock
@@ -95,7 +95,7 @@ INSTALL						*neobundle-install*
 
 Requirements:
 * Vim 7.2.051 or above.
-* "git" command in $PATH(if you want to install github or vim.org plugins)
+* "git" command in $PATH (if you want to install github or vim.org plugins)
 
 First of all, git clone the repository.
 
@@ -112,7 +112,7 @@ Example:
 >
 	set runtimepath+=~/.vim/bundle/neobundle.vim
 <
-Now configure your neobundles. (Refer to |neobundle-examples|)
+Now configure your bundles. (Refer to |neobundle-examples|)
 
 Run the |:NeoBundleInstall| command to install your plugins.
 >
@@ -128,7 +128,7 @@ Note: To update and build vimproc in Windows, you can use
 "neoinstall_novimproc" command. >
 	>.vim/bundle/neobundle.vim/bin/neoinstall_novimproc vimproc.vim
 
-neoinstall can take arguments(install/update plugin names).
+neoinstall can take arguments (install/update plugin names).
 >
 	# Build vimproc before install plugins
 	$ . ~/.vim/bundle/neobundle.vim/bin/neoinstall vimproc.vim
@@ -145,8 +145,8 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 		If {base-path} is omitted, neobundle looks for a "bundle"
 		directory in the default 'runtimepath'.
 		Note: It executes ":filetype off" automatically.
-		Note: You must not call the function inner
-		"has('vim_starting')".
+		Note: You must not call the function inside a
+		"has('vim_starting')" block.
 		Note: It is faster interface than |neobundle#rc()|.
 >
 	if has('vim_starting')
@@ -195,8 +195,8 @@ neobundle#is_sourced({bundle-name})
 						 *neobundle#local()*
 neobundle#local({directory}, [{options}, [{names}]])
 		Adds the subdirectories in {directory} to
-		runtimepath, like |pathogen| does. See |neobundle-options| for
-		keys to set in {options}.
+		'runtimepath', like |pathogen| does. See |neobundle-options|
+		for keys to set in {options}.
 		If {names} is given, {names} directories are only loaded.
 		Note: |:NeoBundleLocal| is a shortcut for this function.
 >
@@ -283,7 +283,7 @@ neobundle#untap()				 *neobundle#untap()*
 		Clear current |neobundle#tapped| and |neobundle#hooks| variable.
 
 neobundle#has_cache()			 *neobundle#has_cache()*
-		Checks if cache file is generated.
+		Checks if a cache file is generated.
 		You can optimize loading .vimrc time by it and
 		|:NeoBundleLoadCache|.
 		Note: You must clear cache by |:NeoBundleClearCache| if .vimrc
@@ -382,8 +382,8 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleSource [{name}...]			*:NeoBundleSource*
 		|:source|  the bundles specified by {name}.
 		If {name} is omitted, |:source| all lazy bundles.
-		Note: This command is used to load the neobundles configured
-		with |:NeoBundleLazy|.
+		Note: This command is used to load the bundles configured with
+		|:NeoBundleLazy|.
 
 :NeoBundleFetch {repository} [, {options}]	*:NeoBundleFetch*
 		Registers a bundle, but doesn't add it to 'runtimepath'.
@@ -434,7 +434,7 @@ COMMANDS 					*neobundle-commands*
 		Registers a bundle from "recipes/{recipe-name}.vimrecipe" file
 		in 'runtimepath'.  This command is useful if you don't want to
 		set bundle options.
-		Note: You must install recipes(|neobundle-recipe|) before
+		Note: You must install recipes (|neobundle-recipe|) before
 		executing it.
 >
 		NeoBundleRecipe 'vimproc.vim'
@@ -629,8 +629,8 @@ OPTIONS 					*neobundle-options*
 					*neobundle-options-regular_name*
 		regular_name			(String)
 		Specify the normalized name of the bundle. This is used for
-		neobundle management for detect depends. If omitted, neobundle
-		will normalize the tail of the repository name.
+		neobundle management to detect dependencies. If omitted,
+		neobundle will normalize the tail of the repository name.
 		Note: Must be unique across all bundles.
 		Normalized name example:
 		name            : normalized name
@@ -854,7 +854,7 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-force*
 		force			(Number)
 		If set to 1, neobundle will load plugin files in the plugin
-		repository forcelly.
+		repository forcedly.
 		Note: It is useful for using Bundle within bundle.
 		https://github.com/Shougo/neobundle.vim/issues/199
 
@@ -905,10 +905,10 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-focus*
 		focus		(Number)
 		If it is > 0, neobundle will source the plugin when focus
-		is losted.  It also is source priority.
+		is lost.  It also is source priority.
 		http://d.hatena.ne.jp/osyo-manga/20140212/1392216949
 		Example: >
-	" Source all plugins when focus is losted.
+	" Source all plugins when focus is lost.
 	let g:neobundle#default_options._ = { 'verbose' : 1, 'focus' : 1 }
 <
 						*neobundle-options-verbose*
@@ -1100,7 +1100,7 @@ OPTIONS 					*neobundle-options*
 					*neobundle-options-type__filename*
 		type__filename		(String)
 		The downloaded filename.
-		If omitted, uri filename will be used.
+		If omitted, URI filename will be used.
 		It is useful for downloading vim.org scripts.
 		Note: This attribute is available in raw type only.
 
@@ -1130,7 +1130,7 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 
-		" For bitbucket git repository(.git is needed).
+		" For bitbucket git repository (.git is needed).
 		NeoBundle 'bitbucket:kh3phr3n/vim-qt-syntax.git'
 		NeoBundle 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'
 
@@ -1172,7 +1172,7 @@ OPTIONS 					*neobundle-options*
 		clone. Shallow clone feature saves your repository clone time.
 		But it have problems in some repository. You should use "git"
 		protocol if it is available.
-		See below issues :
+		See below issues:
 		https://github.com/Shougo/neobundle.vim/issues/81
 		https://github.com/Homebrew/homebrew/issues/12024
 
@@ -1288,22 +1288,22 @@ neobundle/search
 		source names.
 
 		Following source names are available:
-		"vim-script.org" :
+		"vim-script.org":
 			Search plugins settings from "http://vim-scripts.org/".
-		"neobundle-vim-recipes" :
+		"neobundle-vim-recipes":
 			Search plugins settings from the |neobundle-recipe|.
-		"github"  :
+		"github":
 			Search plugins settings from "http://github.org/".
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
-		List lazy configured plugins(not sourced by
+		List lazy configured plugins (not sourced by
 		|:NeoBundleSource|).
 
 							*unite-kind-neobundle*
 neobundle		An interface for neobundle bundles. It is used in
 			neobundle source and neobundle/lazy sources.
-	update		Update bundles(Default action)
+	update		Update bundles (Default action)
 	delete		Delete bundles
 	preview		view the plugin documentation
 	reinstall	Reinstall bundles
@@ -1342,7 +1342,7 @@ You can use the recipes with the following command in .vimrc.
 	NeoBundle 'Shougo/neobundle-vim-recipes'
 <
 
-The recipe files are in json format, like this:
+The recipe files are in JSON format, like this:
 
 >
 	# Vim recipe file for neobundle.
@@ -1356,7 +1356,7 @@ The recipe files are in json format, like this:
 <
 		A recipe has the following keys. Most of keys are the same as
 		those used in the neobundle configuration
-		dictionary(|neobundle-options|).
+		dictionary (|neobundle-options|).
 		"#" starts a comment string, but they must start at the
 		beginning of the line.
 
@@ -1399,7 +1399,7 @@ The recipe files are in json format, like this:
 		Dependency plugins list.
 
 		build			(Dictionary)	(Optional)
-		Build script. e.g. make
+		Build script. E.g. make
 
 		external_commands
 			(Dictionary or List or String)	(Optional)
@@ -1414,14 +1414,14 @@ system?
 A: neobundle solves some problems in Vundle or other plugin management system.
 But you must know they are huge and complex features.
 
-   1. Plugin prefixed command name(:Bundle vs :NeoBundle).
+   1. Plugin prefixed command name (:Bundle vs :NeoBundle).
    https://github.com/gmarik/Vundle.vim/issues/76
-   2. Support vimproc(asynchronous update/install).
+   2. Support vimproc (asynchronous update/install).
    https://github.com/gmarik/Vundle.vim/issues/259
-   3. Support unite.vim interface(update/install/search).
+   3. Support unite.vim interface (update/install/search).
    4. Support revision lock feature.
    https://github.com/gmarik/Vundle.vim/issues/35
-   5. Support other VCS(Subversion/Git).
+   5. Support other VCS (Subversion/Git).
    https://github.com/gmarik/Vundle.vim/pull/134
    https://github.com/gmarik/Vundle.vim/pull/268
    6. Support lazy initialization for optimizing startup time.
@@ -1453,7 +1453,8 @@ Q: Duplicated error was printed when sourcing .vimrc.
 
 A: Your .vimrc was wrong. You must reset neobundle setting by
 |neobundle#begin()| in .vimrc.
-Note: You must not call |neobundle#begin()| inner "has('vim_starting')".
+Note: You must not call |neobundle#begin()| inside a "has('vim_starting')"
+block.
 >
 	if has('vim_starting')
 	  set runtimepath+={path to neobundle directory}
@@ -1473,13 +1474,19 @@ A:
 	  \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
 	execute "NeoBundle 'Shougo/vimproc.vim'," . string({
 		\ 'build' : {
-			\     'windows' : vimproc_updcmd,
-			\     'cygwin' : 'make -f make_cygwin.mak',
-			\     'mac' : 'make -f make_mac.mak',
-			\     'unix' : 'make -f make_unix.mak',
-			\    },
-			\ })
+		\     'windows' : vimproc_updcmd,
+		\     'cygwin' : 'make -f make_cygwin.mak',
+		\     'mac' : 'make -f make_mac.mak',
+		\     'unix' : 'make -f make_unix.mak',
+		\    },
+		\ })
 <
+Note that arguments of NeoBundle command are evaluated inside the NeoBundle
+command. Thus, local variables cannot be passed to NeoBundle command. If you
+want to use local variables as arguments of NeoBundle command, you have to
+expand them into a string and pass it to `:execute` command.
+
+
 Q: What's the "outdated" plugin?
 
 A: Last update time is older than one week -> Automatic updates are disabled
@@ -1496,7 +1503,7 @@ A:
 	Unite -log -wrap neobundle/update
 <
 
-Q: neobundle.vim is not worked in debian/Ubuntu Linux...
+Q: neobundle.vim is not worked in Debian/Ubuntu Linux...
 
 A: Did you use "debian.vim"? "debian.vim" changes 'runtimepath'.
 So it conflicts with neobundle. You should not use "debian.vim".
@@ -1530,7 +1537,7 @@ If you don't want to change default protocol, you can set
 |g:neobundle#types#git#default_protocol| manually.  I don't change the default
 value.
 
-Q: I want to add absolute path in runtimepath with |:NeoBundle| and
+Q: I want to add absolute path in 'runtimepath' with |:NeoBundle| and
 |:NeoBundleLazy|.
 https://github.com/Shougo/neobundle.vim/issues/136
 
@@ -1574,17 +1581,6 @@ enable.
 	syntax enable
 	colorscheme molokai
 <
-
-Q: Error was printed when sourcing .vimrc.
-
-A: You must not call |neobundle#begin()| inner "has('vim_starting')".
->
-	if has('vim_starting')
-	  set runtimepath+={path to neobundle directory}
-	endif
-	" OK!
-	call neobundle#begin(expand('~/.vim/bundle'))
->
 
 Q: Timeout on github makes Vim terribly slow if the repository is not found in
 console Vim.
