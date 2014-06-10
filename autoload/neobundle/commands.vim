@@ -76,36 +76,30 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
     call neobundle#installer#reinstall(reinstall_bundles)
   endif
 
-  let more_save = &more
-  try
-    setlocal nomore
-    let [installed, errored] = s:install(a:bang, bundles)
-    if !has('vim_starting')
-      redraw!
-    endif
+  let [installed, errored] = s:install(a:bang, bundles)
+  if !has('vim_starting')
+    redraw!
+  endif
 
-    call neobundle#installer#update(installed)
+  call neobundle#installer#update(installed)
 
+  call neobundle#installer#log(
+        \ "[neobundle/install] Installed/Updated bundles:\n".
+        \ join((empty(installed) ?
+        \   ['no new bundles installed'] :
+        \   map(copy(installed), 'v:val.name')),"\n"))
+
+  if !empty(errored)
     call neobundle#installer#log(
-          \ "[neobundle/install] Installed/Updated bundles:\n".
-          \ join((empty(installed) ?
-          \   ['no new bundles installed'] :
-          \   map(copy(installed), 'v:val.name')),"\n"))
+          \ "[neobundle/install] Error installing bundles:\n".join(
+          \ map(copy(errored), 'v:val.name')), "\n")
+    call neobundle#installer#log(
+          \ 'Please read the error message log with the :message command.')
+  endif
 
-    if !empty(errored)
-      call neobundle#installer#log(
-            \ "[neobundle/install] Error installing bundles:\n".join(
-            \ map(copy(errored), 'v:val.name')), "\n")
-      call neobundle#installer#log(
-            \ 'Please read the error message log with the :message command.')
-    endif
-
-    call neobundle#installer#error(
-          \ '[neobundle/install] Update done: ' .
-          \     strftime('(%Y/%m/%d %H:%M:%S)'))
-  finally
-    let &more = more_save
-  endtry
+  call neobundle#installer#error(
+        \ '[neobundle/install] Update done: ' .
+        \     strftime('(%Y/%m/%d %H:%M:%S)'))
 endfunction"}}}
 
 function! neobundle#commands#helptags(bundles) "{{{
@@ -190,23 +184,17 @@ function! neobundle#commands#check_update(bundle_names) "{{{
     endif
   endwhile
 
-  let more_save = &more
-  try
-    setlocal nomore
-    let bundles = map(context.source__updated_bundles, 'v:val.name')
-    redraw!
+  let bundles = map(context.source__updated_bundles, 'v:val.name')
+  redraw!
 
-    if !empty(bundles)
-      echomsg 'Updates available bundles: '
-            \ string(bundles)
+  if !empty(bundles)
+    echomsg 'Updates available bundles: '
+          \ string(bundles)
 
-      if confirm('Update bundles now?', "yes\nNo", 2) == 1
-        call neobundle#commands#install(1, join(bundles))
-      endif
+    if confirm('Update bundles now?', "yes\nNo", 2) == 1
+      call neobundle#commands#install(1, join(bundles))
     endif
-  finally
-    let &more = more_save
-  endtry
+  endif
 endfunction"}}}
 
 function! neobundle#commands#clean(bang, ...) "{{{
