@@ -87,14 +87,8 @@ Complete.
      NeoBundleFetch 'Shougo/neobundle.vim'
 
      " My Bundles here:
-     NeoBundle 'Shougo/neosnippet.vim'
-     NeoBundle 'Shougo/neosnippet-snippets'
-     NeoBundle 'tpope/vim-fugitive'
-     NeoBundle 'kien/ctrlp.vim'
-     NeoBundle 'flazz/vim-colorschemes'
-
-     " You can specify revision/branch/tag.
-     NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+     " Refer to |:NeoBundle-examples|.
+     " Note: You don't set neobundle setting in .gvimrc!
 
      call neobundle#end()
 
