@@ -443,7 +443,7 @@ function! neobundle#config#add(bundle, ...) "{{{
     " Warning.
     call neobundle#util#print_error(
           \ '[neobundle] Plugin "' . bundle.name .
-          \ '" may be defined multiply in .vimrc')
+          \ '" appears to be defined multiple times in .vimrc.')
   endif
 endfunction"}}}
 
