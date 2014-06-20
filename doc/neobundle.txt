@@ -284,10 +284,10 @@ neobundle#untap()				 *neobundle#untap()*
 
 neobundle#has_cache()			 *neobundle#has_cache()*
 		Checks if a cache file is generated.
-		You can optimize loading .vimrc time by it and
-		|:NeoBundleLoadCache|.
-		Note: You must clear cache by |:NeoBundleClearCache| if .vimrc
-		file is changed.
+		You can optimize the .vimrc loading time by using it
+		together with |:NeoBundleLoadCache|.
+		Note: You must clear the cache by using |:NeoBundleClearCache|
+		if the neobundle configuration is changed.
 >
 	if neobundle#has_cache()
 	  NeoBundleLoadCache
@@ -297,6 +297,11 @@ neobundle#has_cache()			 *neobundle#has_cache()*
 	  NeoBundleSaveCache
 	endif
 <
+neobundle#has_fresh_cache()		 *neobundle#has_fresh_cache()*
+		Similar to |neobundle#has_cache|, but compares the
+		modification time of the cache file to your configuration file
+		(|$MYVIMRC|).
+
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*
 
@@ -456,7 +461,8 @@ COMMANDS 					*neobundle-commands*
 
 						*:NeoBundleLoadCache*
 :NeoBundleLoadCache
-		Load plugin configuration from the cache file.
+		Load plugin configuration from the cache file,
+		which is located in `neobundle#get_rtp_dir() . '/cache.vim'`.
 
 						*:NeoBundleClearCache*
 :NeoBundleClearCache
