@@ -12,7 +12,7 @@ Requirements:
 
 Recommends:
 * [vimproc](https://github.com/Shougo/vimproc.vim) if you want to
-  install/update asynchronously in Unite insterface.
+  install/update asynchronously in Unite interface.
 
 Note: In :NeoBundleUpdate/:NeoBundleIstall commands, you can parallel update by
 vimproc, but you cannot do other work unlike Unite interface.
