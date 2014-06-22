@@ -34,6 +34,7 @@ Interface		|neobundle-interface|
   Variables		  |neobundle-variables|
   Options		    |neobundle-options|
 Configuration Examples	|neobundle-examples|
+Migrating from Pathogen |neobundle-migrate-from-pathogen|
 Unite sources		|neobundle-unite-sources|
 Recipe			|neobundle-recipe|
 FAQ			|neobundle-faq|
@@ -653,6 +654,7 @@ OPTIONS 					*neobundle-options*
 		default			(String)
 		Specify a default option name. (See |g:neobundle#default_options|).
 
+						*neobundle-options-directory*
 		directory		(String)
 		Specify relative directory path from the base directory (set
 		by |neobundle#begin()| or "base" option). If omitted, the "name"
@@ -1156,7 +1158,7 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'Shougo/vimshell', 'master'
 <
 		If type is "nosync", neobundle does not update
-		automatically (like pathogen.vim). Refer to |NeoBundleLocal|.
+		automatically (like pathogen.vim). See also |NeoBundleLocal|.
 >
 		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
 <
@@ -1217,6 +1219,38 @@ EXAMPLES					*neobundle-examples*
 	  call neobundle#call_hook('on_source')
 	endif
 <
+==============================================================================
+MIGRATING FROM PATHOGEN                 *neobundle-migrate-from-pathogen*
+
+Here are a few tips if you want to migrate from a |pathogen| based
+installation to neobundle.
+
+You might want to use a different/non-default directory for neobundle: >
+
+  set rtp+=~/.vim/bundle/neobundle
+  call neobundle#begin(expand('~/.vim/neobundle'))
+<
+This allows you to keep `~/.vim/bundle` in place while migrating.
+
+If you are using Git submodules currently, you can use a shell command like
+the following to automatically generate your NeoBundle statements: >
+
+    while read p url; do \
+      bundle_name="${url#*://github.com/}"; \
+      dir="$(command git config -f .gitmodules --get ${p%.url}.path)"; \
+      echo "NeoBundle '$bundle_name', { 'directory': '${dir##*/}' }"; \
+    done < <(command git config -f .gitmodules \
+      --get-regexp 'submodule.vim/bundle/\S+.(url)' | sort)
+<
+This uses the "submodule.*" urls and path from your .gitmodules sections that
+start with `submodule.vim/bundle/`.
+It sets the directory option explicitly to the name you were using before
+(see |neobundle-options-directory|), which is useful if you want to compare
+your old bundles directory with the one managed by neocomplete later.
+
+The output looks like this: >
+  NeoBundle 'tpope/vim-abolish.git', { 'directory': 'abolish' }
+>
 ==============================================================================
 UNITE SOURCES					*neobundle-unite-sources*
 
