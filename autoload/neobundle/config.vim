@@ -142,7 +142,7 @@ function! neobundle#config#source(names, ...) "{{{
   redir END
 
   redir => filetype_before
-  execute 'silent autocmd FileType' &filetype
+  silent autocmd FileType
   redir END
 
   let reset_ftplugin = 0
@@ -173,7 +173,7 @@ function! neobundle#config#source(names, ...) "{{{
   endfor
 
   redir => filetype_after
-  execute 'silent autocmd FileType' &filetype
+  silent autocmd FileType
   redir END
 
   if reset_ftplugin
