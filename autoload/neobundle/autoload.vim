@@ -64,10 +64,6 @@ function! neobundle#autoload#filetype()
           \ index(neobundle#util#convert2list(
           \     v:val.autoload.filetypes), filetype) >= 0"))
   endfor
-
-  if !empty(bundles)
-    doautocmd FileType
-  endif
 endfunction
 
 function! neobundle#autoload#filename(filename)
