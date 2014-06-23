@@ -402,13 +402,17 @@ function! neobundle#commands#complete_deleted_bundles(arglead, cmdline, cursorpo
         \ 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 
+function! neobundle#commands#get_cache_file() "{{{
+  return neobundle#get_rtp_dir() . '/cache.vim'
+endfunction"}}}
+
 function! neobundle#commands#save_cache() "{{{
   if !has('vim_starting')
     " Ignore if loaded
     return
   endif
 
-  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  let cache = neobundle#commands#get_cache_file()
   let bundles = deepcopy(neobundle#config#get_neobundles())
   " Clear hooks.  Because, VimL cannot save functions in JSON.
   for bundle in bundles
@@ -418,7 +422,7 @@ function! neobundle#commands#save_cache() "{{{
   call writefile([s:get_cache_version(), string(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache() "{{{
-  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  let cache = neobundle#commands#get_cache_file()
   if !filereadable(cache)
     return
   endif
@@ -441,7 +445,7 @@ function! neobundle#commands#load_cache() "{{{
   endtry
 endfunction"}}}
 function! neobundle#commands#clear_cache() "{{{
-  let cache = neobundle#get_rtp_dir() . '/cache.vim'
+  let cache = neobundle#commands#get_cache_file()
   if !filereadable(cache)
     return
   endif

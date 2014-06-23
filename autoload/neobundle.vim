@@ -220,7 +220,16 @@ function! neobundle#is_sourced(name)
 endfunction
 
 function! neobundle#has_cache()
-  return filereadable(neobundle#get_rtp_dir() . '/cache.vim')
+  return filereadable(neobundle#commands#get_cache_file())
+endfunction
+
+function! neobundle#has_fresh_cache()
+  " Check if the cache file is newer than the vimrc file (if it exists,
+  " which is not the case for `vim -u NONE`).
+  let cache = neobundle#commands#get_cache_file()
+  return filereadable(cache)
+        \ && ($MYVIMRC == ''
+        \    || getftime(cache) >= getftime($MYVIMRC))
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()
