@@ -120,7 +120,7 @@ function! s:type.get_sync_command(bundle) "{{{
     if g:neobundle#types#git#enable_submodule
       let shellpath = split(&shell)[0]
       let shell = fnamemodify(shellpath, ":t")
-      if shell == "fish"
+      if !neobundle#util#has_vimproc() && shell ==# "fish"
         let and = '; and '
       else
         let and = ' && '
