@@ -40,13 +40,6 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context) "{{{
-  if !executable('curl') && !executable('wget')
-    call unite#print_error(
-          \ '[neobundle/search:vim-scripts.org] '.
-          \ 'curl or wget command is not available!')
-    return []
-  endif
-
   let repository = 'http://vim-scripts.org/api/scripts_recent.json'
 
   call unite#print_message(
@@ -99,6 +92,11 @@ function! s:get_repository_plugins(context, path) "{{{
       let cmd = 'curl --fail -s -o "' . temp . '" '. a:path
     elseif executable('wget')
       let cmd = 'wget -q -O "' . temp . '" ' . a:path
+    else
+      call unite#print_error(
+            \ '[neobundle/search:vim-scripts.org] '.
+            \ 'curl or wget command is not available!')
+      return []
     endif
 
     let result = unite#util#system(cmd)

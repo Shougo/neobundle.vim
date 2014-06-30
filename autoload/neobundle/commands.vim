@@ -555,7 +555,7 @@ function! s:check_update_process(context, process, is_unite) "{{{
     endif
     call a:process.proc.stdout.close()
 
-    let [_, status] = a:process.proc.waitpid()
+    let status = a:process.proc.waitpid()[1]
   else
     let is_timeout = 0
     let status = a:process.status
@@ -564,8 +564,6 @@ function! s:check_update_process(context, process, is_unite) "{{{
   let num = a:process.number
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
-
-  let cwd = getcwd()
 
   let remote_rev = matchstr(a:process.output, '^\S\+')
 

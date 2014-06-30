@@ -84,7 +84,13 @@ function! s:get_github_searches(string) "{{{
     call unite#print_message('[neobundle/search:github] Done!')
   endif
 
+  " @vimlint(EVL102, 0, l:true)
+  " @vimlint(EVL102, 0, l:false)
+  " @vimlint(EVL102, 0, l:null)
   let [true, false, null] = [1,0,"''"]
+  " @vimlint(EVL102, 1, l:true)
+  " @vimlint(EVL102, 1, l:false)
+  " @vimlint(EVL102, 1, l:null)
   sandbox let data = eval(join(readfile(temp)))
   call filter(data.repositories,
         \ "stridx(v:val.username.'/'.v:val.name, a:string) >= 0")

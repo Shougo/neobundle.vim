@@ -51,8 +51,6 @@ function! s:type.detect(path, opts) "{{{
     return {}
   endif
 
-  let type = ''
-
   let protocol = matchstr(a:path, '^.\{-}\ze://')
   if protocol == '' || a:path =~#
         \'\<\%(bb\|bitbucket\):\S\+'
@@ -108,7 +106,7 @@ function! s:type.get_revision_lock_command(bundle) "{{{
   endif
 
   return g:neobundle#types#hg#command_path
-        \ ' up ' . a:bundle.rev
+        \ . ' up ' . a:bundle.rev
 endfunction"}}}
 
 let &cpo = s:save_cpo

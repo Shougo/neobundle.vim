@@ -110,7 +110,7 @@ function! neobundle#vamkr#parse(path) "{{{
       return []
     endif
 
-    let result = neobundle#util#system(cmd)
+    call neobundle#util#system(cmd)
 
     if !filereadable(cache_path)
       call unite#print_error('Cache file was not created!')

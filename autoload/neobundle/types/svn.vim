@@ -45,6 +45,8 @@ function! s:type.detect(path, opts) "{{{
   endif
 
   let type = ''
+  let name = ''
+  let uri = ''
 
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
         \ && a:path =~? '[/.]svn[/.]'

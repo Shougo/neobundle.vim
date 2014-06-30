@@ -114,12 +114,12 @@ Context types
           \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
           \  'name' : 'vim-fuzzyfinder'}
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'git://github.com/Shougo/neobundle.vim.git',
           \ [{ 'type' : 'hg'}])
-    ShouldEqual bundle.name, 'neobundle.vim'
-    ShouldEqual bundle.type, 'hg'
-    ShouldEqual bundle.uri,  'git://github.com/Shougo/neobundle.vim.git'
+    ShouldEqual g:bundle.name, 'neobundle.vim'
+    ShouldEqual g:bundle.type, 'hg'
+    ShouldEqual g:bundle.uri,  'git://github.com/Shougo/neobundle.vim.git'
   End
 
   It parses bitbucket git repos
@@ -142,63 +142,63 @@ Context types
   End
 
   It parses raw repos
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
           \ [{ 'script_type' : 'plugin'}])
-    ShouldEqual bundle.name, 'rsense.vim'
-    ShouldEqual bundle.type, 'raw'
-    ShouldEqual bundle.uri,
+    ShouldEqual g:bundle.name, 'rsense.vim'
+    ShouldEqual g:bundle.type, 'raw'
+    ShouldEqual g:bundle.uri,
           \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim'
   End
 
   It parses default options.
-    let default_options_save = g:neobundle#default_options
+    let g:default_options_save = g:neobundle#default_options
     let g:neobundle#default_options =
           \ { 'rev' : {'type__update_style' : 'current'},
           \   '_' : {'type' : 'hg'} }
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'Shougo/neocomplcache', ['', 'rev', {}])
-    ShouldEqual bundle.type__update_style, 'current'
+    ShouldEqual g:bundle.type__update_style, 'current'
 
-    let bundle2 = neobundle#parser#_init_bundle(
+    let g:bundle2 = neobundle#parser#_init_bundle(
           \ 'Shougo/neocomplcache', [])
-    ShouldEqual bundle2.type, 'hg'
+    ShouldEqual g:bundle2.type, 'hg'
 
-    let g:neobundle#default_options = default_options_save
+    let g:neobundle#default_options = g:default_options_save
   End
 
   It parses ssh protocol.
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'accountname/reponame', [{
           \ 'site' : 'github', 'type' : 'git', 'type__protocol' : 'ssh' }])
-    ShouldEqual bundle.uri, 'git@github.com:accountname/reponame.git'
+    ShouldEqual g:bundle.uri, 'git@github.com:accountname/reponame.git'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'accountname/reponame', [{
           \ 'site' : 'bitbucket', 'type' : 'hg', 'type__protocol' : 'ssh' }])
-    ShouldEqual bundle.uri, 'ssh://hg@bitbucket.org/accountname/reponame'
+    ShouldEqual g:bundle.uri, 'ssh://hg@bitbucket.org/accountname/reponame'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'accountname/reponame.git', [{
           \ 'site' : 'bitbucket', 'type' : 'git', 'type__protocol' : 'ssh' }])
-    ShouldEqual bundle.uri, 'git@bitbucket.org:accountname/reponame.git'
+    ShouldEqual g:bundle.uri, 'git@bitbucket.org:accountname/reponame.git'
   End
 
   It fetches plugins.
-    let bundle = neobundle#parser#fetch(
+    let g:bundle = neobundle#parser#fetch(
           \ string('accountname/reponame.git'))
-    ShouldEqual bundle.rtp, ''
+    ShouldEqual g:bundle.rtp, ''
   End
 
   It parses directory
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'Shougo/neocomplcache', [])
-    ShouldEqual bundle.directory, 'neocomplcache'
+    ShouldEqual g:bundle.directory, 'neocomplcache'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'Shougo/neocomplcache', ['ver.3'])
-    ShouldEqual bundle.directory, 'neocomplcache_ver_3'
+    ShouldEqual g:bundle.directory, 'neocomplcache_ver_3'
   End
 
   It parses function_prefix
@@ -218,25 +218,25 @@ Context types
   It tests name conversion.
     let g:neobundle#enable_name_conversion = 1
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'git://github.com/Shougo/neobundle.vim.git',
           \ [{ 'type' : 'hg'}])
-    ShouldEqual bundle.name, 'neobundle'
+    ShouldEqual g:bundle.name, 'neobundle'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
           \ [{ 'type' : 'hg'}])
-    ShouldEqual bundle.name, 'qt-syntax'
+    ShouldEqual g:bundle.name, 'qt-syntax'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'https://bitbucket.org/kh3phr3n/qt-syntax-vim.git',
           \ [{ 'type' : 'hg'}])
-    ShouldEqual bundle.name, 'qt-syntax'
+    ShouldEqual g:bundle.name, 'qt-syntax'
 
-    let bundle = neobundle#parser#_init_bundle(
+    let g:bundle = neobundle#parser#_init_bundle(
           \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
           \ [{ 'name' : 'vim-qt-syntax'}])
-    ShouldEqual bundle.name, 'vim-qt-syntax'
+    ShouldEqual g:bundle.name, 'vim-qt-syntax'
 
     let g:neobundle#enable_name_conversion = 0
   End

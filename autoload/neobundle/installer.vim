@@ -172,9 +172,6 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 endfunction
 
 function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max)
-  let repo_dir = neobundle#util#substitute_path_separator(
-        \ neobundle#util#expand(a:bundle.path.'/.'.a:bundle.type.'/'))
-
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
     return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
@@ -211,8 +208,6 @@ function! neobundle#installer#get_revision_number(bundle)
       call neobundle#util#cd(cwd)
     endif
   endtry
-
-  return ''
 endfunction
 
 function! s:get_commit_date(bundle)
@@ -234,8 +229,6 @@ function! s:get_commit_date(bundle)
       call neobundle#util#cd(cwd)
     endif
   endtry
-
-  return ''
 endfunction
 
 function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
@@ -356,7 +349,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     endif
     call a:process.proc.stdout.close()
 
-    let [_, status] = a:process.proc.waitpid()
+    let status = a:process.proc.waitpid()[1]
   else
     let is_timeout = 0
     let status = a:process.status
@@ -369,8 +362,6 @@ function! neobundle#installer#check_output(context, process, is_unite)
   " Lock revision.
   call neobundle#installer#lock_revision(
         \ a:process, a:context, a:is_unite)
-
-  let cwd = getcwd()
 
   let rev = neobundle#installer#get_revision_number(bundle)
 

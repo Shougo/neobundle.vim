@@ -44,6 +44,7 @@ let s:type = {
 function! s:type.detect(path, opts) "{{{
   " No auto detect.
   let type = ''
+  let name = ''
 
   if a:path =~# '^https\?:.*\.vim$'
     " HTTP/HTTPS
@@ -65,10 +66,6 @@ function! s:type.get_sync_command(bundle) "{{{
     return 'E: script_type is not found.'
   endif
 
-  if !executable('curl') && !executable('wget')
-    return 'E: curl or wget command is not available!'
-  endif
-
   let path = a:bundle.path
 
   if !isdirectory(path)
@@ -79,10 +76,13 @@ function! s:type.get_sync_command(bundle) "{{{
   let filename = path . '/' . get(a:bundle,
         \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
   let a:bundle.type__filepath = filename
+
   if executable('curl')
     let cmd = printf('curl --fail -s -o "%s" "%s"', filename, a:bundle.uri)
   elseif executable('wget')
     let cmd = printf('wget -q -O "%s" "%s", ', filename, a:bundle.uri)
+  else
+    return 'E: curl or wget command is not available!'
   endif
 
   return cmd
