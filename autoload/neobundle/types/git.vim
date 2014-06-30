@@ -118,13 +118,9 @@ function! s:type.get_sync_command(bundle) "{{{
   else
     let cmd = 'pull --rebase'
     if g:neobundle#types#git#enable_submodule
-      let shellpath = split(&shell)[0]
-      let shell = fnamemodify(shellpath, ":t")
-      if !neobundle#util#has_vimproc() && shell ==# "fish"
-        let and = '; and '
-      else
-        let and = ' && '
-      endif
+      let shell = fnamemodify(split(&shell)[0], ':t')
+      let and = (!neobundle#util#has_vimproc() && shell ==# 'fish') ?
+            \ '; and ' : ' && '
 
       let cmd .= and . g:neobundle#types#git#command_path
             \ . ' submodule update --init --recursive'
