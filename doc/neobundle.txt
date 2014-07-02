@@ -992,6 +992,10 @@ OPTIONS 					*neobundle-options*
 <
 			on_source	(List) or (String)
 			Load the bundle when the list bundles are loaded.
+			Note: If they are not autoload bundles, "on_source"
+			hooks are called when |VimEnter| auto command.
+			You can call them manually by |neobundle#call_hook()|.
+
 			For example: >
 			if neobundle#tap('plugin-B.vim')
 			  call neobundle#config({
