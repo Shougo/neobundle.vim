@@ -60,7 +60,8 @@ function! neobundle#installer#build(bundle)
   if !empty(a:bundle.build_commands)
         \ && neobundle#config#check_commands(a:bundle.build_commands)
       call neobundle#installer#log(
-            \ '[neobundle/install] Build dependencies not met. Skipped')
+            \ printf('[neobundle/install] |%s| ' .
+            \        'Build dependencies not met. Skipped', a:bundle.name))
       return 0
   endif
 
