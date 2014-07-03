@@ -80,6 +80,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'hooks' : {},
           \ 'called_hooks' : {},
           \ 'external_commands' : {},
+          \ 'build_commands': {},
           \ 'description' : '',
           \ 'dummy_commands' : [],
           \ 'dummy_mappings' : [],
