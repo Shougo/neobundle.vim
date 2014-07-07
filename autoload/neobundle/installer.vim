@@ -57,6 +57,14 @@ function! neobundle#installer#update(bundles)
 endfunction
 
 function! neobundle#installer#build(bundle)
+  if !empty(a:bundle.build_commands)
+        \ && neobundle#config#check_commands(a:bundle.build_commands)
+      call neobundle#installer#log(
+            \ printf('[neobundle/install] |%s| ' .
+            \        'Build dependencies not met. Skipped', a:bundle.name))
+      return 0
+  endif
+
   " Environment check.
   let build = get(a:bundle, 'build', {})
   if neobundle#util#is_windows() && has_key(build, 'windows')

@@ -762,7 +762,8 @@ OPTIONS 					*neobundle-options*
 		build			(Dictionary)
 		Specify the build script.
 		You may use this option if the plugin has to be built before
-		use.
+		use. If the build script requires external commands, see
+		|neobundle-options-build_commands|.
 		This command is executed by |system()| or |vimproc#system()|
 		in plugin runtimepath.
 		For example: |vimproc|
@@ -845,6 +846,18 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'ujihisa/neco-ghc', { 'external_commands' : 'ghc-mod' }
 <
+					*neobundle-options-build_commands*
+		build_commands		(Dictionary or List or String)
+		Specify a list of external commands that are required for
+		building the plugin. If any of these commands are not
+		installed, the bundle will not be built. The list is the same
+		format as |neobundle-options-external_commands|.
+
+		Example:
+>
+		NeoBundle 'Valloric/YouCompleteMe', { 'build_commands' : 'cmake' }
+<
+
 						*neobundle-options-stay_same*
 		stay_same		(Number)
 		If set to 1, neobundle doesn't update it automatically when

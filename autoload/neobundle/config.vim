@@ -409,7 +409,7 @@ function! neobundle#config#add(bundle, ...) "{{{
         \ || (bundle.vim_version != ''
         \     && s:check_version(bundle.vim_version))
         \ || (!empty(bundle.external_commands)
-        \     && s:check_external_commands(bundle))
+        \     && neobundle#config#check_commands(bundle.external_commands))
     " Ignore load.
     return
   endif
@@ -461,6 +461,33 @@ function! neobundle#config#get_lazy_rtps() "{{{
   return s:lazy_rtps
 endfunction"}}}
 
+function! neobundle#config#check_commands(commands) "{{{
+  " Environment check.
+  if type(a:commands) == type([])
+        \ || type(a:commands) == type('')
+    let commands = a:commands
+  elseif neobundle#util#is_windows() && has_key(a:commands, 'windows')
+    let commands = a:commands.windows
+  elseif neobundle#util#is_mac() && has_key(a:commands, 'mac')
+    let commands = a:commands.mac
+  elseif neobundle#util#is_cygwin() && has_key(a:commands, 'cygwin')
+    let commands = a:commands.cygwin
+  elseif !neobundle#util#is_windows() && has_key(a:commands, 'unix')
+    let commands = a:commands.unix
+  elseif has_key(a:commands, 'others')
+    let commands = a:commands.others
+  else
+    " Invalid.
+    return 0
+  endif
+
+  for command in neobundle#util#convert2list(commands)
+    if !executable(command)
+      return 1
+    endif
+  endfor
+endfunction"}}}
+
 function! s:tsort_impl(target, bundles, mark, sorted) "{{{
   if has_key(a:mark, a:target.name)
     return
@@ -489,34 +516,6 @@ function! s:check_version(min_version) "{{{
   let min_version = major * 100 + minor
   return v:version < min_version ||
         \ (patch != 0 && v:version == min_version && !has('patch'.patch))
-endfunction"}}}
-
-function! s:check_external_commands(bundle) "{{{
-  " Environment check.
-  let external_commands = a:bundle.external_commands
-  if type(external_commands) == type([])
-        \ || type(external_commands) == type('')
-    let commands = external_commands
-  elseif neobundle#util#is_windows() && has_key(external_commands, 'windows')
-    let commands = external_commands.windows
-  elseif neobundle#util#is_mac() && has_key(external_commands, 'mac')
-    let commands = external_commands.mac
-  elseif neobundle#util#is_cygwin() && has_key(external_commands, 'cygwin')
-    let commands = external_commands.cygwin
-  elseif !neobundle#util#is_windows() && has_key(external_commands, 'unix')
-    let commands = external_commands.unix
-  elseif has_key(external_commands, 'others')
-    let commands = external_commands.others
-  else
-    " Invalid.
-    return 0
-  endif
-
-  for command in neobundle#util#convert2list(commands)
-    if !executable(command)
-      return 1
-    endif
-  endfor
 endfunction"}}}
 
 function! s:add_depends(bundle) "{{{
