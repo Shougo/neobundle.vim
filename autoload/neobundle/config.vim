@@ -681,6 +681,10 @@ function! s:reset_ftplugin(filetype_out) "{{{
     endif
   endif
 
+  if a:filetype_out =~# 'detection:ON'
+    filetype detect
+  endif
+
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
 endfunction"}}}
