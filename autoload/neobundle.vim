@@ -110,10 +110,10 @@ command! -nargs=? -bang -bar
       \ NeoBundleUpdate
       \ call neobundle#commands#install(('!' == '<bang>' ? 2 : 1), <q-args>)
 
-command! -nargs=? -bang -bar
+command! -nargs=* -bang -bar
       \ -complete=customlist,neobundle#commands#complete_deleted_bundles
       \ NeoBundleClean
-      \ call neobundle#commands#clean('!' == '<bang>', <q-args>)
+      \ call neobundle#commands#clean('!' == '<bang>', <f-args>)
 
 command! -nargs=+ -bang -bar
       \ -complete=customlist,neobundle#commands#complete_bundles

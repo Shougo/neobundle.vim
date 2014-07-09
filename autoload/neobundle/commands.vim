@@ -204,7 +204,7 @@ function! neobundle#commands#clean(bang, ...) "{{{
     return
   endif
 
-  if get(a:000, 0, '') == ''
+  if a:0 == 0
     let all_dirs = filter(split(neobundle#util#substitute_path_separator(
           \ globpath(neobundle#get_neobundle_dir(), '*', 1)), "\n"),
           \ 'isdirectory(v:val)')
@@ -225,7 +225,10 @@ function! neobundle#commands#clean(bang, ...) "{{{
   endif
 
   if empty(x_dirs)
-    call neobundle#installer#log('[neobundle/install] All clean!')
+    let message = a:0 == 0 ?
+          \ '[neobundle/install] All clean!' :
+          \ '[neobundle/install] ' . string(a:000) . ' is not found.'
+    call neobundle#installer#log(message)
     return
   end
 
