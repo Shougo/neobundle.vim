@@ -120,7 +120,7 @@ endfunction"}}}
 
 function! s:source_install.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['!'] +
-        \ neobundle#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
+        \ neobundle#commands#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 let s:source_update = deepcopy(s:source_install)
