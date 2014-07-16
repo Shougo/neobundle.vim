@@ -598,11 +598,12 @@ function! s:add_dummy_mappings(bundle) "{{{
       " Define dummy mappings.
       for mode in filter(split(modes, '\zs'),
             \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
+        let mapping_str = substitute(mapping, '<', '<lt>', 'g')
         silent! execute mode.'noremap <unique><silent>' mapping printf(
               \ (mode ==# 'c' ? "\<C-r>=" :
               \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
               \   "neobundle#autoload#mapping(%s, %s, %s)<CR>",
-              \   string(mapping), string(a:bundle.name), string(mode))
+              \   string(mapping_str), string(a:bundle.name), string(mode))
 
         call add(a:bundle.dummy_mappings, [mode, mapping])
       endfor

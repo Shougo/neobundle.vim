@@ -134,7 +134,12 @@ function! neobundle#autoload#mapping(mapping, name, mode)
 
   call feedkeys(cnt, 'n')
 
-  let mapping = substitute(a:mapping, '<Plug>', "\<Plug>", 'g')
+  let mapping = a:mapping
+  while mapping =~ '<[[:alnum:]-]\+>'
+    let ctrl = matchstr(mapping, '<\zs[[:alnum:]-]\+\ze>')
+    execute 'let mapping = substitute(
+          \ mapping, "<' . ctrl . '>", "\<' . ctrl . '>", "")'
+  endwhile
   call feedkeys(mapping . input, 'm')
 
   return ''
