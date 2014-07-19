@@ -610,7 +610,7 @@ function! s:update_tags() "{{{
         \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
 
   try
-    execute 'helptags' fnameescape(neobundle#get_tags_dir())
+    silent! execute 'helptags' fnameescape(neobundle#get_tags_dir())
   catch
     call neobundle#installer#error('Error generating helptags:')
     call neobundle#installer#error(v:exception)

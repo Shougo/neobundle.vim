@@ -242,7 +242,7 @@ function! neobundle#util#copy_bundle_files(bundles, directory) "{{{
   let files = {}
   for bundle in a:bundles
     for file in filter(split(globpath(
-          \ bundle.rtp, a:directory.'/*', 1), '\n'),
+          \ bundle.rtp, a:directory.'/**', 1), '\n'),
           \ '!isdirectory(v:val)')
       let filename = fnamemodify(file, ':t')
       let files[filename] = readfile(file)
