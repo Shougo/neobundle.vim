@@ -137,6 +137,11 @@ function! neobundle#autoload#mapping(mapping, name, mode)
   let mapping = a:mapping
   while mapping =~ '<[[:alnum:]-]\+>'
     let ctrl = matchstr(mapping, '<\zs[[:alnum:]-]\+\ze>')
+    if ctrl !=? 'Plug' && hasmapto('<' . ctrl . '>', a:mode)
+      " Skip substitution
+      break
+    endif
+
     execute 'let mapping = substitute(
           \ mapping, "<' . ctrl . '>", "\<' . ctrl . '>", "")'
   endwhile
