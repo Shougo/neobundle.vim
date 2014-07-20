@@ -463,7 +463,7 @@ COMMANDS 					*neobundle-commands*
 						*:NeoBundleLoadCache*
 :NeoBundleLoadCache
 		Load plugin configuration from the cache file,
-		which is located in `neobundle#get_rtp_dir() . '/cache.vim'`.
+		which is located in `neobundle#get_rtp_dir() . '/cache'`.
 
 						*:NeoBundleClearCache*
 :NeoBundleClearCache

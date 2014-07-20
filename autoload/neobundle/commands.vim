@@ -406,7 +406,7 @@ function! neobundle#commands#complete_deleted_bundles(arglead, cmdline, cursorpo
 endfunction"}}}
 
 function! neobundle#commands#get_cache_file() "{{{
-  return neobundle#get_rtp_dir() . '/cache.vim'
+  return neobundle#get_rtp_dir() . '/cache'
 endfunction"}}}
 
 function! neobundle#commands#save_cache() "{{{
