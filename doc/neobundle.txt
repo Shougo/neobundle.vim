@@ -298,10 +298,10 @@ neobundle#has_cache()			 *neobundle#has_cache()*
 	  NeoBundleSaveCache
 	endif
 <
-neobundle#has_fresh_cache()		 *neobundle#has_fresh_cache()*
+neobundle#has_fresh_cache([{vimrc}])	 *neobundle#has_fresh_cache()*
 		Similar to |neobundle#has_cache|, but compares the
 		modification time of the cache file to your configuration file
-		(|$MYVIMRC|).
+		({vimrc} or |$MYVIMRC|).
 
 ------------------------------------------------------------------------------
 COMMANDS 					*neobundle-commands*

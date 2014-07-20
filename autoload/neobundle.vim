@@ -223,13 +223,13 @@ function! neobundle#has_cache()
   return filereadable(neobundle#commands#get_cache_file())
 endfunction
 
-function! neobundle#has_fresh_cache()
-  " Check if the cache file is newer than the vimrc file (if it exists,
-  " which is not the case for `vim -u NONE`).
+function! neobundle#has_fresh_cache(...)
+  " Check if the cache file is newer than the vimrc file.
+  let vimrc = get(a:000, 0, $MYVIMRC)
   let cache = neobundle#commands#get_cache_file()
   return filereadable(cache)
-        \ && ($MYVIMRC == ''
-        \    || getftime(cache) >= getftime($MYVIMRC))
+        \ && (!filereadable(vimrc)
+        \    || getftime(cache) >= getftime(vimrc))
 endfunction
 
 function! neobundle#get_not_installed_bundle_names()
