@@ -422,7 +422,7 @@ COMMANDS 					*neobundle-commands*
 		Disables bundles specified by {name}.  If a bundle is
 		disabled, its path will be removed from 'runtimepath'.
 		Note: This command must be executed before neobundle loads
-		the plugins.
+		the plugins(after |neobundle#end()|).
 
 :NeoBundleCheck					*:NeoBundleCheck*
 		Check plugins installation. If plugins are not installed, it
