@@ -344,7 +344,7 @@ function! neobundle#config#load_extra_bundles() "{{{
   let path = neobundle#get_neobundle_dir() . '/extra_bundles.vim'
 
   if filereadable(path)
-    source `=path`
+    execute 'source' fnameescape(path)
   endif
 endfunction"}}}
 
@@ -623,7 +623,7 @@ function! s:on_source(bundle) "{{{
         \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-      silent! source `=file`
+      silent! execute 'source' fnameescape(file)
     endfor
   endfor
 

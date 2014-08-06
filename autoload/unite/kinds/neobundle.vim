@@ -87,7 +87,7 @@ function! s:kind.action_table.preview.func(candidate) "{{{
   let buflisted = buflisted(
         \ unite#util#escape_file_searching(readme))
 
-  pedit `=readme`
+  execute 'pedit' fnameescape(readme)
 
   " Open folds.
   normal! zv
