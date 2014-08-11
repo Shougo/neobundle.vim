@@ -135,6 +135,8 @@ function! neobundle#installer#reinstall(bundles)
 endfunction
 
 function! neobundle#installer#get_reinstall_bundles(bundles)
+  call neobundle#installer#_load_install_info(a:bundles)
+
   let reinstall_bundles = filter(copy(a:bundles),
         \ "neobundle#config#is_installed(v:val.name)
         \  && v:val.normalized_name !=# 'neobundle' &&

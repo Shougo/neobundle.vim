@@ -46,6 +46,13 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
         \ empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
+
+  let reinstall_bundles =
+        \ neobundle#installer#get_reinstall_bundles(bundles)
+  if !empty(reinstall_bundles)
+    call neobundle#installer#reinstall(reinstall_bundles)
+  endif
+
   if empty(bundles)
     call neobundle#installer#error(
           \ '[neobundle/install] Target bundles not found.')
@@ -64,12 +71,6 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   call neobundle#installer#error(
         \ '[neobundle/install] Update started: ' .
         \     strftime('(%Y/%m/%d %H:%M:%S)'))
-
-  let reinstall_bundles =
-        \ neobundle#installer#get_reinstall_bundles(bundles)
-  if !empty(reinstall_bundles)
-    call neobundle#installer#reinstall(reinstall_bundles)
-  endif
 
   let [installed, errored] = s:install(a:bang, bundles)
   if !has('vim_starting')
@@ -126,9 +127,13 @@ function! neobundle#commands#check() "{{{
     NeoBundleDocs
   endif
 
+  let reinstall_bundles = neobundle#installer#get_reinstall_bundles(
+        \     neobundle#config#get_neobundles())
+  if !empty(reinstall_bundles)
+    call neobundle#installer#reinstall(reinstall_bundles)
+  endif
+
   if !neobundle#exists_not_installed_bundles()
-        \ && empty(neobundle#installer#get_reinstall_bundles(
-        \     neobundle#config#get_neobundles()))
     return
   endif
 
