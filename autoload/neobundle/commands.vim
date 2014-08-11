@@ -39,8 +39,6 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
     return
   endif
 
-  let bundle_dir = neobundle#get_neobundle_dir()
-
   let bundle_names = split(a:bundle_names)
 
   let bundles = !a:bang ?
@@ -129,6 +127,8 @@ function! neobundle#commands#check() "{{{
   endif
 
   if !neobundle#exists_not_installed_bundles()
+        \ && empty(neobundle#installer#get_reinstall_bundles(
+        \     neobundle#config#get_neobundles()))
     return
   endif
 
