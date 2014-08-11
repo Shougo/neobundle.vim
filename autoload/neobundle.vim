@@ -177,7 +177,11 @@ function! neobundle#set_neobundle_dir(path)
 endfunction
 
 function! neobundle#get_neobundle_dir()
-  return s:neobundle_dir
+  let dir = s:neobundle_dir
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+  return dir
 endfunction
 
 function! neobundle#get_runtime_dir()
@@ -193,7 +197,11 @@ function! neobundle#get_tags_dir() "{{{
 endfunction"}}}
 
 function! neobundle#get_rtp_dir()
-  return s:neobundle_dir . '/.neobundle'
+  let dir = s:neobundle_dir . '/.neobundle'
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+  return dir
 endfunction
 
 function! neobundle#source(bundle_names)

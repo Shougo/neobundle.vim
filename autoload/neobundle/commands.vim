@@ -40,9 +40,6 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   endif
 
   let bundle_dir = neobundle#get_neobundle_dir()
-  if !isdirectory(bundle_dir)
-    call mkdir(bundle_dir, 'p')
-  endif
 
   let bundle_names = split(a:bundle_names)
 
