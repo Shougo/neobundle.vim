@@ -184,8 +184,9 @@ function! neobundle#autoload#unite_sources(sources)
       let bundles += copy(sources_bundles)
     else
       let bundles += filter(copy(sources_bundles),
-            \ "index(neobundle#util#convert2list(
-            \    v:val.autoload.unite_sources), source_name) >= 0")
+            \ "!empty(filter(copy(neobundle#util#convert2list(
+            \    v:val.autoload.unite_sources)),
+            \    'stridx(source_name, v:val) >= 0'))")
     endif
   endfor
 
