@@ -548,9 +548,9 @@ function! s:add_lazy(bundle) "{{{
           \ neobundle#parser#_function_prefix(bundle.name)
   endif
   if !has_key(bundle.autoload, 'unite_sources')
-        \ && bundle.name =~ '^unite-'
+        \ && bundle.name =~ '^\%(vim-\)\?unite-'
     let bundle.autoload.unite_sources =
-          \ matchstr(bundle.name, '^unite-\zs.*')
+          \ matchstr(bundle.name, '^\%(vim-\)\?-unite-\zs.*')
   endif
 
   if neobundle#config#is_sourced(bundle.name)
