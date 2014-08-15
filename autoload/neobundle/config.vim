@@ -593,8 +593,12 @@ function! s:add_dummy_mappings(bundle) "{{{
         \   type(v:val) == type([]) ?
         \     [v:val[0], v:val[1:]] : ['nxo', [v:val]]
         \ ")
-
     for mapping in mappings
+      if mapping ==# '<Plug>'
+        " Use plugin name.
+        let mapping = '<Plug>(' . a:bundle.normalized_name
+      endif
+
       " Define dummy mappings.
       for mode in filter(split(modes, '\zs'),
             \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")

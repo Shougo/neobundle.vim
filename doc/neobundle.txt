@@ -974,7 +974,16 @@ OPTIONS 					*neobundle-options*
 			Note: You can use plugin prefix mappings.
 			For example, you can use "<Plug>(ref-" instead of
 			"<Plug>(ref-back)" and so on.
-			Note: But you cannot use lazy <Plug> mappings twice.
+
+			Note: You can use "<Plug>" keyword as {mapping}. If
+			{mapping} is "<Plug>", "<Plug>(normalized_name" is
+			used.
+			For example: >
+			" It is same as "'mappings' : '<Plug>(anzu'
+			NeoBundleLazy 'osyo-manga/vim-anzu', {
+			  \'autoload': {'mappings': '<Plug>'}}
+<
+			Note: You cannot use lazy <Plug> mappings twice.
 			For example: >
 			NeoBundleLazy 'osyo-manga/vim-anzu', {
 			  \'autoload': {'mappings': '<Plug>(anzu-'}}
