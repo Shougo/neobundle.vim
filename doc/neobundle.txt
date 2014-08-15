@@ -213,7 +213,7 @@ neobundle#get({bundle-name})			 *neobundle#get()*
 		Example:
 >
 	NeoBundleLazy 'tyru/open-browser.vim', '', 'same', { 'autoload' : {
-	      \ 'mappings' : '<Plug>(open-browser-wwwsearch)',
+	      \ 'mappings' : '<Plug>',
 	      \ }}
 	nmap gs <Plug>(open-browser-wwwsearch)
 
@@ -1064,7 +1064,7 @@ OPTIONS 					*neobundle-options*
 	      \                   'complete' : 'customlist,vimshell#complete'},
 	      \                 'VimShellExecute', 'VimShellInteractive',
 	      \                 'VimShellTerminal', 'VimShellPop'],
-	      \   'mappings' : ['<Plug>(vimshell_']
+	      \   'mappings' : '<Plug>'
 	      \ }})
 	NeoBundleLazy 'Shougo/vimfiler', {
 	      \ 'depends' : 'Shougo/unite.vim',
@@ -1073,7 +1073,7 @@ OPTIONS 					*neobundle-options*
 	      \                    'complete' : 'customlist,vimfiler#complete' },
 	      \                  'VimFilerExplorer',
 	      \                  'Edit', 'Read', 'Source', 'Write'],
-	      \    'mappings' : ['<Plug>(vimfiler_'],
+	      \    'mappings' : '<Plug>',
 	      \    'explorer' : 1,
 	      \ }
 	      \ }
@@ -1084,7 +1084,7 @@ OPTIONS 					*neobundle-options*
 	      \ }}
 	NeoBundleLazy 'tyru/winmove.vim', { 'autoload' : {
 	      \ 'mappings' : [
-	      \   ['n', '<Plug>(winmove-']],
+	      \   ['n', '<Plug>']],
 	      \ },
 	      \ 'gui' : 1,
 	      \ 'augroup' : 'winmove',
@@ -1094,7 +1094,7 @@ OPTIONS 					*neobundle-options*
 	      \}}
 	" Omit autoload dictionary.
 	NeoBundleLazy 'LeafCage/cmdlineplus.vim', {
-	      \ 'mappings': [['c', '<Plug>(cmdlineplus-']]}
+	      \ 'mappings': [['c', '<Plug>']]}
 <
 						*neobundle-options-hooks*
 		hooks			(Dictionary)
