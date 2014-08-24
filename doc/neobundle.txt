@@ -962,8 +962,17 @@ OPTIONS 					*neobundle-options*
 				input.  Refer to |:command-completion| for
 				information.
 
-				Example:
-
+				Example: >
+			NeoBundleLazy 'Shougo/vimfiler.vim', {
+			      \ 'depends' : 'Shougo/unite.vim',
+			      \ 'commands' : [
+			      \ {'name' : ['VimFiler', 'Edit', 'Write'],
+			      \  'complete' : 'customlist,vimfiler#complete'},
+			      \ 'Read', 'Source'],
+			      \ 'mappings' : '<Plug>',
+			      \ 'explorer' : 1,
+			      \ }
+<
 			functions	(List) or (String)
 			Functions list.
 
