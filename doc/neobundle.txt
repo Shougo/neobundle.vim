@@ -954,8 +954,8 @@ OPTIONS 					*neobundle-options*
 
 			commands	(List) or (String)
 			Command list. The item can be following dictionary.
-				name		(String)
-				Command name.
+				name		(String) or (List)
+				Command name or the list of command names.
 
 				complete	(String)
 				The type of completion supported for the

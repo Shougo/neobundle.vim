@@ -579,15 +579,17 @@ function! s:add_dummy_commands(bundle) "{{{
           \ { 'name' : v:val } : v:val
           \")
 
-    " Define dummy commands.
-    silent! execute 'command ' . (get(command, 'complete', '') != '' ?
-          \ ('-complete=' . command.complete) : '')
-          \ . ' -bang -range -nargs=*' command.name printf(
-          \ "call neobundle#autoload#command(%s, %s, <q-args>,
-          \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
-          \   string(command.name), string(a:bundle.name))
+    for name in neobundle#util#convert2list(command.name)
+      " Define dummy commands.
+      silent! execute 'command ' . (get(command, 'complete', '') != '' ?
+            \ ('-complete=' . command.complete) : '')
+            \ . ' -bang -range -nargs=*' name printf(
+            \ "call neobundle#autoload#command(%s, %s, <q-args>,
+            \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
+            \   string(name), string(a:bundle.name))
 
-    call add(a:bundle.dummy_commands, command.name)
+      call add(a:bundle.dummy_commands, name)
+    endfor
   endfor
 endfunction"}}}
 function! s:add_dummy_mappings(bundle) "{{{
