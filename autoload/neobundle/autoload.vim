@@ -40,6 +40,11 @@ function! neobundle#autoload#init()
           \ call neobundle#autoload#insert()
   augroup END
 
+  if has('patch-7.4.414')
+    autocmd CmdUndefined *
+          \ call neobundle#autoload#command_prefix()
+  endif
+
   for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter']
     execute 'autocmd neobundle' event "* call neobundle#autoload#explorer(
           \ expand('<afile>'), ".string(event) . ")"
@@ -112,6 +117,16 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
     " E481: No range allowed
     execute a:command.a:bang a:args
   endtry
+endfunction
+
+function! neobundle#autoload#command_prefix()
+  let command = expand('<afile>')
+
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
+        \ "get(v:val.autoload, 'command_prefix', '') != '' &&
+        \  stridx(tolower(command),
+        \  tolower(get(v:val.autoload, 'command_prefix', ''))) == 0")
+  call neobundle#config#source_bundles(bundles)
 endfunction
 
 function! neobundle#autoload#mapping(mapping, name, mode)

@@ -916,7 +916,7 @@ OPTIONS 					*neobundle-options*
 		If set to 1, neobundle will disable the plugin.
 
 		Example: >
-	" neocomplete requires vim 7.3.885 or above.
+	" neocomplete requires Vim 7.3.885 or above.
 	NeoBundle 'Shougo/neocomplete', {
 	    \ 'depends' : 'Shougo/context_filetype.vim',
 	    \ 'disabled' : !has('lua'),
@@ -1038,6 +1038,15 @@ OPTIONS 					*neobundle-options*
 			If omitted it, automatically generated prefix is used.
 			Example: If you use "unite.vim", "unite" function
 			prefix is used.
+
+			command_prefix	(String)
+			Autoload command prefix in commands.
+			If the prefix is set, commands were loaded
+			automatically.
+			If omitted it, automatically generated prefix is used.
+			Example: If you use "unite.vim", "Unite" command
+			prefix is used.
+			Note: It requires Vim 7.4.414 or above.
 
 		Examples:
 >

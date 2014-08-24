@@ -547,6 +547,10 @@ function! s:add_lazy(bundle) "{{{
     let bundle.autoload.function_prefix =
           \ neobundle#parser#_function_prefix(bundle.name)
   endif
+  if !has_key(bundle.autoload, 'command_prefix')
+    let bundle.autoload.command_prefix =
+          \ substitute(bundle.normalized_name, '[_-]', '', 'g')
+  endif
   if !has_key(bundle.autoload, 'unite_sources')
         \ && bundle.name =~ '^\%(vim-\)\?unite-'
     let bundle.autoload.unite_sources =
