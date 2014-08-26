@@ -238,8 +238,7 @@ function! neobundle#parser#_function_prefix(name) "{{{
         \'^vim-', '','')
   let function_prefix = substitute(function_prefix,
         \'^unite-', 'unite#sources#','')
-  let function_prefix = substitute(function_prefix,
-        \'-', '_', 'g')
+  let function_prefix = tr(function_prefix, '-', '_')
   return function_prefix
 endfunction"}}}
 

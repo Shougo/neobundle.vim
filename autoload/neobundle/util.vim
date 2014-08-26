@@ -34,7 +34,7 @@ let s:is_mac = !s:is_windows
 
 function! neobundle#util#substitute_path_separator(path) "{{{
   return (s:is_windows && a:path =~ '\\') ?
-        \ substitute(a:path, '\\', '/', 'g') : a:path
+        \ tr(a:path, '\', '/') : a:path
 endfunction"}}}
 function! neobundle#util#expand(path) "{{{
   let path = (a:path =~ '^\~') ? fnamemodify(a:path, ':p') :
