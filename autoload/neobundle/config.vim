@@ -537,7 +537,8 @@ function! s:add_lazy(bundle) "{{{
   for key in filter([
         \ 'filetypes', 'filename_patterns',
         \ 'commands', 'functions', 'mappings', 'unite_sources',
-        \ 'insert', 'explorer', 'on_source', 'function_prefix',
+        \ 'insert', 'explorer', 'on_source',
+        \ 'function_prefix' 'command_prefix',
         \ ], 'has_key(bundle, v:val)')
     let bundle.autoload[key] = bundle[key]
     call remove(bundle, key)
