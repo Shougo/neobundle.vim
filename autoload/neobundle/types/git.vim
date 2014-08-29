@@ -116,7 +116,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'pull --rebase'
+    let cmd = 'pull --ff --ff-only'
     if g:neobundle#types#git#enable_submodule
       let shell = fnamemodify(split(&shell)[0], ':t')
       let and = (!neobundle#util#has_vimproc() && shell ==# 'fish') ?
