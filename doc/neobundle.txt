@@ -587,6 +587,13 @@ g:neobundle#types#git#clone_depth
 
 		Defaults to 0.
 
+				*g:neobundle#types#git#pull_command*
+g:neobundle#types#git#pull_command
+		The git command used to pull updates.
+		The previous default has been "pull --rebase".
+
+		Defaults to "pull --ff --ff-only".
+
 				*g:neobundle#types#hg#command_path*
 g:neobundle#types#hg#command_path
 		The "hg" command path used for hg type.
