@@ -39,6 +39,8 @@ call neobundle#util#set_default(
 call neobundle#util#set_default(
       \ 'g:neobundle#types#git#clone_depth', 0,
       \ 'g:neobundle_git_clone_depth')
+call neobundle#util#set_default(
+      \ 'g:neobundle#types#git#pull_command', 'pull --ff --ff-only')
 "}}}
 
 function! neobundle#types#git#define() "{{{
@@ -116,7 +118,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
     let cmd .= printf(' %s "%s"', a:bundle.uri, a:bundle.path)
   else
-    let cmd = 'pull --rebase'
+    let cmd = g:neobundle#types#git#pull_command
     if g:neobundle#types#git#enable_submodule
       let shell = fnamemodify(split(&shell)[0], ':t')
       let and = (!neobundle#util#has_vimproc() && shell ==# 'fish') ?
