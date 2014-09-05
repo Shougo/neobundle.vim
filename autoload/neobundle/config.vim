@@ -609,7 +609,10 @@ function! s:add_dummy_mappings(bundle) "{{{
       " Define dummy mappings.
       for mode in filter(split(modes, '\zs'),
             \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
-        let mapping_str = substitute(mapping, '<', '<lt>', 'g')
+
+        " Only replace the left angle bracket of '<xxx-xxx>' style.
+        let mapping_str = substitute(mapping, '<\zs\w\{-}-\w\{-}\ze>', 'lt>\0', 'g')
+
         silent! execute mode.'noremap <unique><silent>' mapping printf(
               \ (mode ==# 'c' ? "\<C-r>=" :
               \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
