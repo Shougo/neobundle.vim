@@ -72,6 +72,9 @@ Complete.
      Sample `.vimrc`:
 
      ```vim
+     " Note: Skip initialization for vim-tiny or vim-small.
+     if !1 | finish | endif
+
      if has('vim_starting')
        set nocompatible               " Be iMproved
 

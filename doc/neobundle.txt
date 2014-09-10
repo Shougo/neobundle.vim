@@ -1241,6 +1241,9 @@ OPTIONS 					*neobundle-options*
 ==============================================================================
 EXAMPLES					*neobundle-examples*
 >
+	" Note: Skip initialization for vim-tiny or vim-small.
+	if !1 | finish | endif
+
 	if has('vim_starting')
 	  set nocompatible                " Recommend
 	  set runtimepath+={path to neobundle directory}
