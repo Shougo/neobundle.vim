@@ -327,6 +327,20 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'eof' : 0,
           \ 'start_time' : localtime(),
           \ }
+
+    if a:bundle.rev != '' && isdirectory(a:bundle.path)
+      let rev_save = a:bundle.rev
+      try
+        " Checkout HEAD revision.
+        let a:bundle.rev = ''
+
+        call neobundle#installer#lock_revision(
+              \ process, a:context, a:is_unite)
+      finally
+        let a:bundle.rev = rev_save
+      endtry
+    endif
+
     if neobundle#util#has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
             \            cmd, &encoding, 'char'), 0, 2)
@@ -369,9 +383,11 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  " Lock revision.
-  call neobundle#installer#lock_revision(
-        \ a:process, a:context, a:is_unite)
+  if bundle.rev != ''
+    " Lock revision.
+    call neobundle#installer#lock_revision(
+          \ a:process, a:context, a:is_unite)
+  endif
 
   let rev = neobundle#installer#get_revision_number(bundle)
 
@@ -448,11 +464,6 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  if bundle.rev == ''
-    " Skipped.
-    return 0
-  endif
-
   let bundle.new_rev = neobundle#installer#get_revision_number(bundle)
 
   let [cmd, message] =
@@ -469,12 +480,14 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
     return -1
   endif
 
-  call neobundle#installer#log(
-        \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
-        \ num, max, bundle.name, 'Locked'), a:is_unite)
+  if bundle.rev != ''
+    call neobundle#installer#log(
+          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ num, max, bundle.name, 'Locked'), a:is_unite)
 
-  call neobundle#installer#log(
-        \ '[neobundle/install] ' . message, a:is_unite)
+    call neobundle#installer#log(
+          \ '[neobundle/install] ' . message, a:is_unite)
+  endif
 
   let cwd = getcwd()
   try

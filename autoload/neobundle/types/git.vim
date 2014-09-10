@@ -180,11 +180,16 @@ function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
-        \ || a:bundle.rev == ''
     return ''
   endif
 
-  return g:neobundle#types#git#command_path . ' checkout ' . a:bundle.rev
+  let rev = a:bundle.rev
+  if rev == ''
+    " Fix detach HEAD.
+    let rev = 'master'
+  endif
+
+  return g:neobundle#types#git#command_path . ' checkout ' . rev
 endfunction"}}}
 function! s:type.get_gc_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
