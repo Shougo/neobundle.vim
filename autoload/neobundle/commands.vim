@@ -47,6 +47,9 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
 
+  " Remove disabled bundles.
+  call filter(bundles, '!v:val.disabled')
+
   let reinstall_bundles =
         \ neobundle#installer#get_reinstall_bundles(bundles)
   if !empty(reinstall_bundles)
