@@ -151,8 +151,10 @@ function! neobundle#autoload#mapping(mapping, name, mode)
 
   let mapping = a:mapping
   while mapping =~ '<[[:alnum:]-]\+>'
-    let mapping = substitute(mapping, '\c<Leader>', g:mapleader, 'g')
-    let mapping = substitute(mapping, '\c<LocalLeader>', g:maplocalleader, 'g')
+    let mapping = substitute(mapping, '\c<Leader>',
+          \ get(g:, 'mapleader', '\'), 'g')
+    let mapping = substitute(mapping, '\c<LocalLeader>',
+          \ get(g:, 'maplocalleader', '\'), 'g')
     let ctrl = matchstr(mapping, '<\zs[[:alnum:]-]\+\ze>')
     execute 'let mapping = substitute(
           \ mapping, "<' . ctrl . '>", "\<' . ctrl . '>", "")'
