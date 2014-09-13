@@ -41,7 +41,7 @@ function! neobundle#autoload#init()
   augroup END
 
   if has('patch-7.4.414')
-    autocmd CmdUndefined *
+    autocmd neobundle CmdUndefined *
           \ call neobundle#autoload#command_prefix()
   endif
 
@@ -51,6 +51,7 @@ function! neobundle#autoload#init()
   endfor
 
   augroup neobundle-focus
+    autocmd!
     autocmd CursorHold * if s:active_auto_source
           \ | call s:source_focus()
           \ | endif
