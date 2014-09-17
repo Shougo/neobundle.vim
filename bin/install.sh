@@ -10,18 +10,18 @@ BUNDLE_DIR=~/.vim/bundle
 if type git; then
   : # You have git command. No Problem.
 else
-  echo 'Please install git command!'
+  echo 'Please install git or update your path to include the git executable!'
   exit 1;
 fi
 
 # make bundle dir and fetch neobundle
-echo "Start fetch NeoBundle..."
+echo "Begin fetching NeoBundle..."
 mkdir -p $BUNDLE_DIR
 git clone https://github.com/Shougo/neobundle.vim $BUNDLE_DIR/neobundle.vim
 echo "Done."
 
 # write initial setting for .vimrc
-echo "Please write NeoBundle initial setting to your vimrc path ..."
+echo "Please add the following settings for NeoBundle to the top of your .vimrc file:"
 {
     echo ""
     echo ""
@@ -40,7 +40,7 @@ echo "Please write NeoBundle initial setting to your vimrc path ..."
     echo "\" Required:"
     echo "NeoBundleFetch 'Shougo/neobundle.vim'"
     echo ""
-    echo "\" My Bundles here:"
+    echo "\" Add or remove your Bundles here:"
     echo "NeoBundle 'Shougo/neosnippet.vim'"
     echo "NeoBundle 'Shougo/neosnippet-snippets'"
     echo "NeoBundle 'tpope/vim-fugitive'"
