@@ -241,7 +241,14 @@ function! neobundle#commands#clean(bang, ...) "{{{
     return
   end
 
-  if a:bang || s:check_really_clean(x_dirs)
+  if !a:bang && !s:check_really_clean(x_dirs)
+    return
+  endif
+
+  let cwd = getcwd()
+  try
+    execute 'lcd' fnameescape(neobundle#get_neobundle_dir())
+
     if !has('vim_starting')
       redraw
     endif
@@ -262,7 +269,9 @@ function! neobundle#commands#clean(bang, ...) "{{{
     endfor
 
     call s:update_tags()
-  endif
+  finally
+    execute 'lcd' fnameescape(cwd)
+  endtry
 endfunction"}}}
 
 function! neobundle#commands#reinstall(bundle_names) "{{{
