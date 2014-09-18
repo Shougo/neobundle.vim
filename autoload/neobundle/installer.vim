@@ -148,6 +148,13 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
   if !empty(reinstall_bundles)
     echomsg 'Reinstall bundles detected: '
           \ string(map(copy(reinstall_bundles), 'v:val.name'))
+    let cwd = neobundle#util#substitute_path_separator(getcwd())
+    let warning_bundles = map(filter(copy(reinstall_bundles),
+        \     'v:val.path ==# cwd'), 'v:val.path')
+    if !empty(warning_bundles)
+      call neobundle#util#print_error('Warning: current directory is the
+            \ reinstall bundles directory! ' . string(warning_bundles))
+    endif
     let ret = confirm('Reinstall bundles now?', "yes\nNo", 2)
     redraw
     if ret != 1

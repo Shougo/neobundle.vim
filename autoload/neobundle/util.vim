@@ -213,7 +213,9 @@ function! neobundle#util#unify_path(path) "{{{
 endfunction"}}}
 
 function! neobundle#util#cd(path) "{{{
-  execute 'lcd' fnameescape(a:path)
+  if isdirectory(a:path)
+    execute 'lcd' fnameescape(a:path)
+  endif
 endfunction"}}}
 
 function! neobundle#util#writefile(path, list) "{{{

@@ -247,7 +247,8 @@ function! neobundle#commands#clean(bang, ...) "{{{
 
   let cwd = getcwd()
   try
-    execute 'lcd' fnameescape(neobundle#get_neobundle_dir())
+    " x_dirs may contain current directory.
+    call neobundle#util#cd(neobundle#get_neobundle_dir())
 
     if !has('vim_starting')
       redraw
@@ -270,7 +271,7 @@ function! neobundle#commands#clean(bang, ...) "{{{
 
     call s:update_tags()
   finally
-    execute 'lcd' fnameescape(cwd)
+    call neobundle#util#cd(cwd)
   endtry
 endfunction"}}}
 
