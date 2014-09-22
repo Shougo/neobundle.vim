@@ -124,6 +124,25 @@ function! neobundle#util#join_rtp(list, runtimepath, rtp) "{{{
         \ join(a:list, ',') : join(map(copy(a:list), 's:escape(v:val)'), ',')
 endfunction"}}}
 
+function! neobundle#util#split_envpath(path) "{{{
+  let delimiter = neobundle#util#is_windows() ? ';' : ':'
+  if stridx(a:path, '\' . delimiter) < 0
+    return split(a:path, delimiter)
+  endif
+
+  let split = split(a:path, '\\\@<!\%(\\\\\)*\zs' . delimiter)
+  return map(split,'substitute(v:val, ''\\\([\\'
+        \ . delimiter . ']\)'', "\\1", "g")')
+endfunction"}}}
+
+function! neobundle#util#join_envpath(list, orig_path, add_path) "{{{
+  let delimiter = neobundle#util#is_windows() ? ';' : ':'
+  return (stridx(a:orig_path, '\' . delimiter) < 0
+        \ && stridx(a:add_path, delimiter) < 0) ?
+        \   join(a:list, delimiter) :
+        \   join(map(copy(a:list), 's:escape(v:val)'), delimiter)
+endfunction"}}}
+
 " Removes duplicates from a list.
 function! neobundle#util#uniq(list, ...) "{{{
   let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
