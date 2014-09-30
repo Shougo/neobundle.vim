@@ -201,10 +201,7 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
     return ['', '']
   endif
 
-  let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
-        \ a:number, a:max, a:bundle.name, cmd)
-
-  return [cmd, message]
+  return [cmd, '']
 endfunction
 
 function! neobundle#installer#get_revision_number(bundle)
