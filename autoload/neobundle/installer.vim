@@ -218,8 +218,11 @@ function! neobundle#installer#get_revision_number(bundle)
 
     call neobundle#util#cd(a:bundle.path)
 
-    return neobundle#util#system(
+    let rev = neobundle#util#system(
           \ type.get_revision_number_command(a:bundle))
+
+    " If rev contains new line, it is error message
+    return (rev !~ '\n') ? rev : ''
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
@@ -390,8 +393,21 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  if bundle.rev != ''
+  if bundle.rev != '' || !a:context.source__bang
     " Lock revision.
+    let rev_save = a:bundle.rev
+    try
+      if !a:context.source__bang
+        " Checkout install_rev revision.
+        let a:bundle.rev = a:bundle.install_rev
+      endif
+
+      call neobundle#installer#lock_revision(
+            \ process, a:context, a:is_unite)
+    finally
+      let a:bundle.rev = rev_save
+    endtry
+
     call neobundle#installer#lock_revision(
           \ a:process, a:context, a:is_unite)
   endif
@@ -534,9 +550,14 @@ function! s:save_install_info(bundles)
 
   call neobundle#util#writefile('install_info',
         \ [s:install_info_version, string(s:install_info)])
+
+  " Save lock file
+  call s:save_lockfile(a:bundles)
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
+  call s:source_lockfile()
+
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
   if !exists('s:install_info')
@@ -660,6 +681,26 @@ function! neobundle#installer#get_tags_info()
 
   return readfile(path)
 endfunction
+
+function! s:save_lockfile(bundles) "{{{
+  let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
+  let dir = fnamemodify(path, ':h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+
+  return writefile(map(filter(copy(a:bundles),
+        \ "neobundle#installer#get_revision_number(v:val) != ''"),
+        \ "printf('NeoBundleLock %s %s', v:val.name,
+        \          neobundle#installer#get_revision_number(v:val))"), path)
+endfunction"}}}
+
+function! s:source_lockfile() "{{{
+  let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
+  if filereadable(path)
+    execute 'source' fnameescape(path)
+  endif
+endfunction"}}}
 
 function! s:reload(bundles) "{{{
   if empty(a:bundles)

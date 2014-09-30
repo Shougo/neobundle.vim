@@ -156,6 +156,9 @@ command! -nargs=1 -bar
       \ NeoBundleRollback
       \ call neobundle#commands#rollback(<f-args>)
 
+command! -nargs=+ NeoBundleLock
+      \ call neobundle#commands#lock(<f-args>)
+
 function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
