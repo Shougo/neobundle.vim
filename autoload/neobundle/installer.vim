@@ -127,6 +127,8 @@ function! neobundle#installer#reinstall(bundles)
     call call('neobundle#parser#bundle', [arg])
   endfor
 
+  call s:save_install_info(neobundle#config#get_neobundles())
+
   " Install.
   call neobundle#commands#install(0,
         \ join(map(copy(a:bundles), 'v:val.name')))
