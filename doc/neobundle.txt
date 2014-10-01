@@ -1323,12 +1323,8 @@ Here let me explain about a source for |unite| provided in neobundle.
 neobundle
 		Nominates bundles as a candidate.
 
-		Note: On windows
-		If argument is bang(!), print plugins path instead of plugins
-		status.
-		Note: Other platforms
-		If argument is bang(!), print plugins status instead of plugins
-		path.
+		Note:
+		If argument is bang(!), print plugins status.
 
 		http://github.com/Shougo/vimproc.vim
 
@@ -1690,11 +1686,6 @@ https://github.com/Shougo/neobundle.vim/issues/222
 
 A: You can copy "NeoBundle.lock" to another machine from neobundle base path
 directory.  It is used when install plugins.
-
-Q: |neobundle-unite-source-neobundle| is too slow.
-
-A: You should use bang argument. >
-	:Unite neobundle:!
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
