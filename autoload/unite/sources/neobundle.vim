@@ -93,10 +93,11 @@ function! s:source.gather_candidates(args, context) "{{{
       let candidate.abbr .= ' : ' . candidate.source__description
     endif
 
-    let status = s:get_commit_status(
-          \         a:context.source__bang, candidate.action__bundle)
-    if status != ''
-      let candidate.abbr .= "\n   " . status
+    if a:context.source__bang
+      let status = s:get_commit_status(candidate.action__bundle)
+      if status != ''
+        let candidate.abbr .= "\n   " . status
+      endif
     endif
 
     let candidate.word .= candidate.source__description
@@ -105,14 +106,9 @@ function! s:source.gather_candidates(args, context) "{{{
   return _
 endfunction"}}}
 
-function! s:get_commit_status(bang, bundle) "{{{
+function! s:get_commit_status(bundle) "{{{
   if !isdirectory(a:bundle.path)
     return 'Not installed'
-  endif
-
-  if !a:bang
-    return neobundle#util#substitute_path_separator(
-          \ fnamemodify(a:bundle.path, ':~'))
   endif
 
   let type = neobundle#config#get_types(a:bundle.type)

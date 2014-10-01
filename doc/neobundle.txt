@@ -1324,8 +1324,7 @@ neobundle
 		Nominates bundles as a candidate.
 
 		Note:
-		If argument is bang(!), print plugins status instead of plugins
-		path.
+		If argument is bang(!), print plugins status.
 
 		http://github.com/Shougo/vimproc.vim
 
