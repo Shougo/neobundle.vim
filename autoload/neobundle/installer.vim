@@ -337,7 +337,8 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'start_time' : localtime(),
           \ }
 
-    if isdirectory(a:bundle.path) && !a:bundle.local
+    if isdirectory(a:bundle.path)
+          \ && (a:bundle.rev != '' || !a:bundle.local)
       let rev_save = a:bundle.rev
       try
         " Checkout HEAD revision.
