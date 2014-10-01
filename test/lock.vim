@@ -1,8 +1,5 @@
 " Recipe installation test.
-if has('vim_starting')
-  set nocompatible               " Be iMproved
-  set runtimepath+=.
-endif
+set verbose=1
 
 let path = expand('~/test-bundle')
 
@@ -28,6 +25,11 @@ call writefile([
 
 NeoBundleInstall
 
-let bundle = neobundle#get('neocomplete.vim')
-echomsg (neobundle#installer#get_revision_number(bundle) ==
-      \ '8200dfd83ba829f77f028ea26e81eebbe95e6a89')
+let s:suite = themis#suite('lock')
+let s:assert = themis#helper('assert')
+
+function! s:suite.revision_check()
+  let bundle = neobundle#get('neocomplete.vim')
+  call s:assert.equals(neobundle#installer#get_revision_number(bundle),
+        \ '8200dfd83ba829f77f028ea26e81eebbe95e6a89')
+endfunction
