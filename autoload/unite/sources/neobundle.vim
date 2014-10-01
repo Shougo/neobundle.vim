@@ -125,12 +125,12 @@ function! s:get_commit_status(bang, bundle) "{{{
   endif
 
   let cwd = getcwd()
-
-  call neobundle#util#cd(a:bundle.path)
-
-  let output = neobundle#util#system(cmd)
-
-  call neobundle#util#cd(cwd)
+  try
+    call neobundle#util#cd(a:bundle.path)
+    let output = neobundle#util#system(cmd)
+  finally
+    call neobundle#util#cd(cwd)
+  endtry
 
   if neobundle#util#get_last_status()
     return printf('Error(%d) occured when executing "%s"',
