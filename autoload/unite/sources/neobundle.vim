@@ -110,8 +110,7 @@ function! s:get_commit_status(bang, bundle) "{{{
     return 'Not installed'
   endif
 
-  if a:bang && !neobundle#util#is_windows()
-        \ || !a:bang && neobundle#util#is_windows()
+  if !a:bang
     return neobundle#util#substitute_path_separator(
           \ fnamemodify(a:bundle.path, ':~'))
   endif
