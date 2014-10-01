@@ -255,7 +255,7 @@ function! neobundle#get_not_installed_bundles(bundle_names) "{{{
   call neobundle#installer#_load_install_info(bundles)
 
   return filter(copy(bundles), "
-        \  !v:val.disabled && v:val.rtp != '' && !v:val.local
+        \  !v:val.disabled && v:val.path != '' && !v:val.local
         \  && !isdirectory(neobundle#util#expand(v:val.path))
         \")
 endfunction"}}}

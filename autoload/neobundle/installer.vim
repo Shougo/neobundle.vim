@@ -43,7 +43,7 @@ function! neobundle#installer#update(bundles)
 
   call neobundle#commands#helptags(all_bundles)
   call s:reload(filter(copy(a:bundles),
-        \ 'v:val.sourced && !v:val.disabled'))
+        \ "v:val.sourced && !v:val.disabled && v:val.rtp != ''"))
 
   call s:save_install_info(all_bundles)
 
@@ -407,9 +407,6 @@ function! neobundle#installer#check_output(context, process, is_unite)
     finally
       let bundle.rev = rev_save
     endtry
-
-    call neobundle#installer#lock_revision(
-          \ a:process, a:context, a:is_unite)
   endif
 
   let rev = neobundle#installer#get_revision_number(bundle)
