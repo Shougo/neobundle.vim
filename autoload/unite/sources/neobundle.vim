@@ -61,9 +61,7 @@ function! s:source.source__converter(candidates, context) "{{{
   return a:candidates
 endfunction"}}}
 
-let s:source.filters =
-      \ ['matcher_default', 'sorter_default',
-      \      s:source.source__converter]
+let s:source.converters = s:source.source__converter
 "}}}
 
 function! s:source.gather_candidates(args, context) "{{{
@@ -127,12 +125,12 @@ function! s:get_commit_status(bang, bundle) "{{{
   endif
 
   let cwd = getcwd()
-
-  call neobundle#util#cd(a:bundle.path)
-
-  let output = neobundle#util#system(cmd)
-
-  call neobundle#util#cd(cwd)
+  try
+    call neobundle#util#cd(a:bundle.path)
+    let output = neobundle#util#system(cmd)
+  finally
+    call neobundle#util#cd(cwd)
+  endtry
 
   if neobundle#util#get_last_status()
     return printf('Error(%d) occured when executing "%s"',

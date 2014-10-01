@@ -196,9 +196,8 @@ function! s:source.source__converter(candidates, context) "{{{
   return a:candidates
 endfunction"}}}
 
-let s:source.filters =
-      \ ['matcher_default', s:source.source__sorter,
-      \      s:source.source__converter]
+let s:source.sorters = s:source.source__sorter
+let s:source.converters = s:source.source__converter
 "}}}
 
 " Misc. "{{{
