@@ -786,6 +786,11 @@ OPTIONS 					*neobundle-options*
 			cygwin		(String)
 			Specify Cygwin environment build script.
 
+			linux		(String)
+			Specify Linux environment build script.
+			Note: It is detected if "gmake" command is not
+			executable.
+
 			unix		(String)
 			Specify Unix environment build script.
 
@@ -800,7 +805,8 @@ OPTIONS 					*neobundle-options*
 	      \     'windows' : 'tools\\update-dll-mingw',
 	      \     'cygwin' : 'make -f make_cygwin.mak',
 	      \     'mac' : 'make -f make_mac.mak',
-	      \     'unix' : 'make -f make_unix.mak',
+	      \     'linux' : 'make',
+	      \     'unix' : 'gmake',
 	      \    },
 	      \ }
 <

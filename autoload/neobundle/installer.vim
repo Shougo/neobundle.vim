@@ -73,6 +73,9 @@ function! neobundle#installer#build(bundle)
     let cmd = build.mac
   elseif neobundle#util#is_cygwin() && has_key(build, 'cygwin')
     let cmd = build.cygwin
+  elseif !neobundle#util#is_windows() && has_key(build, 'linux')
+        \ && !executable('gmake')
+    let cmd = build.linux
   elseif !neobundle#util#is_windows() && has_key(build, 'unix')
     let cmd = build.unix
   elseif has_key(build, 'others')
