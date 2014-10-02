@@ -688,7 +688,7 @@ function! s:save_lockfile(bundles) "{{{
 
   return writefile(map(filter(copy(a:bundles),
         \ "neobundle#installer#get_revision_number(v:val) != ''"),
-        \ "printf('NeoBundleLock %s %s', v:val.name,
+        \ "printf('NeoBundleLock %s %s', escape(v:val.name, ' \'),
         \          neobundle#installer#get_revision_number(v:val))"), path)
 endfunction"}}}
 
