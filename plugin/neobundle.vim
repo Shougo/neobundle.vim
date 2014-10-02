@@ -41,6 +41,13 @@ elseif v:version < 702 || (v:version == 702 && !has('patch51'))
   unlet s:save_cpo
 
   finish
+elseif fnamemodify(&shell, ':t') ==# 'fish'
+  echoerr 'neobundle does not support "' . &shell . '".'
+
+  let &cpo = s:save_cpo
+  unlet s:save_cpo
+
+  finish
 endif
 
 let g:loaded_neobundle = 1
