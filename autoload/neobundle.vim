@@ -156,6 +156,9 @@ command! -nargs=1 -bar
       \ NeoBundleRollback
       \ call neobundle#commands#rollback(<f-args>)
 
+command! -nargs=+ NeoBundleLock
+      \ call neobundle#commands#lock(<f-args>)
+
 function! neobundle#rc(...) "{{{
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
@@ -252,7 +255,7 @@ function! neobundle#get_not_installed_bundles(bundle_names) "{{{
   call neobundle#installer#_load_install_info(bundles)
 
   return filter(copy(bundles), "
-        \  !v:val.disabled && v:val.rtp != '' && !v:val.local
+        \  !v:val.disabled && v:val.path != '' && !v:val.local
         \  && !isdirectory(neobundle#util#expand(v:val.path))
         \")
 endfunction"}}}

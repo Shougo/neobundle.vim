@@ -43,7 +43,7 @@ function! neobundle#installer#update(bundles)
 
   call neobundle#commands#helptags(all_bundles)
   call s:reload(filter(copy(a:bundles),
-        \ 'v:val.sourced && !v:val.disabled'))
+        \ "v:val.sourced && !v:val.disabled && v:val.rtp != ''"))
 
   call s:save_install_info(all_bundles)
 
@@ -127,6 +127,8 @@ function! neobundle#installer#reinstall(bundles)
     call call('neobundle#parser#bundle', [arg])
   endfor
 
+  call s:save_install_info(neobundle#config#get_neobundles())
+
   " Install.
   call neobundle#commands#install(0,
         \ join(map(copy(a:bundles), 'v:val.name')))
@@ -201,10 +203,7 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
     return ['', '']
   endif
 
-  let message = printf('(%'.len(a:max).'d/%d): |%s| %s',
-        \ a:number, a:max, a:bundle.name, cmd)
-
-  return [cmd, message]
+  return [cmd, '']
 endfunction
 
 function! neobundle#installer#get_revision_number(bundle)
@@ -218,8 +217,11 @@ function! neobundle#installer#get_revision_number(bundle)
 
     call neobundle#util#cd(a:bundle.path)
 
-    return neobundle#util#system(
+    let rev = neobundle#util#system(
           \ type.get_revision_number_command(a:bundle))
+
+    " If rev contains new line, it is error message
+    return (rev !~ '\n') ? rev : ''
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
@@ -335,7 +337,8 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'start_time' : localtime(),
           \ }
 
-    if a:bundle.rev != '' && isdirectory(a:bundle.path)
+    if isdirectory(a:bundle.path)
+          \ && (a:bundle.rev != '' || !a:bundle.local)
       let rev_save = a:bundle.rev
       try
         " Checkout HEAD revision.
@@ -390,10 +393,20 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
 
-  if bundle.rev != ''
+  if bundle.rev != '' || !a:context.source__bang
     " Lock revision.
-    call neobundle#installer#lock_revision(
-          \ a:process, a:context, a:is_unite)
+    let rev_save = bundle.rev
+    try
+      if !a:context.source__bang
+        " Checkout install_rev revision.
+        let bundle.rev = bundle.install_rev
+      endif
+
+      call neobundle#installer#lock_revision(
+            \ a:process, a:context, a:is_unite)
+    finally
+      let bundle.rev = rev_save
+    endtry
   endif
 
   let rev = neobundle#installer#get_revision_number(bundle)
@@ -534,9 +547,14 @@ function! s:save_install_info(bundles)
 
   call neobundle#util#writefile('install_info',
         \ [s:install_info_version, string(s:install_info)])
+
+  " Save lock file
+  call s:save_lockfile(a:bundles)
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
+  call s:source_lockfile()
+
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
   if !exists('s:install_info')
@@ -660,6 +678,26 @@ function! neobundle#installer#get_tags_info()
 
   return readfile(path)
 endfunction
+
+function! s:save_lockfile(bundles) "{{{
+  let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
+  let dir = fnamemodify(path, ':h')
+  if !isdirectory(dir)
+    call mkdir(dir, 'p')
+  endif
+
+  return writefile(map(filter(copy(a:bundles),
+        \ "neobundle#installer#get_revision_number(v:val) != ''"),
+        \ "printf('NeoBundleLock %s %s', v:val.name,
+        \          neobundle#installer#get_revision_number(v:val))"), path)
+endfunction"}}}
+
+function! s:source_lockfile() "{{{
+  let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
+  if filereadable(path)
+    execute 'source' fnameescape(path)
+  endif
+endfunction"}}}
 
 function! s:reload(bundles) "{{{
   if empty(a:bundles)

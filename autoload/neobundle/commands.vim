@@ -403,6 +403,15 @@ function! neobundle#commands#list() "{{{
   endfor
 endfunction"}}}
 
+function! neobundle#commands#lock(name, rev) "{{{
+  let bundle = neobundle#config#get(a:name)
+  if empty(bundle)
+    return
+  endif
+
+  let bundle.install_rev = a:rev
+endfunction"}}}
+
 function! neobundle#commands#complete_bundles(arglead, cmdline, cursorpos) "{{{
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
         \ 'stridx(tolower(v:val), tolower(a:arglead)) >= 0')
