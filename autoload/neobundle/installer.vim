@@ -220,8 +220,8 @@ function! neobundle#installer#get_revision_number(bundle)
     let rev = neobundle#util#system(
           \ type.get_revision_number_command(a:bundle))
 
-    " If rev contains new line, it is error message
-    return (rev !~ '\n') ? rev : ''
+    " If rev contains spaces, it is error message
+    return (rev !~ '\s') ? rev : ''
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
@@ -686,10 +686,11 @@ function! s:save_lockfile(bundles) "{{{
     call mkdir(dir, 'p')
   endif
 
-  return writefile(map(filter(copy(a:bundles),
-        \ "neobundle#installer#get_revision_number(v:val) != ''"),
-        \ "printf('NeoBundleLock %s %s', escape(v:val.name, ' \'),
-        \          neobundle#installer#get_revision_number(v:val))"), path)
+  return writefile(map(filter(map(copy(a:bundles),
+        \ '[v:val.name, neobundle#installer#get_revision_number(v:val)]'),
+        \ "v:val[1] != '' && v:val[1] !~ '\s'"),
+        \ "printf('NeoBundleLock %s %s',
+        \          escape(v:val[0], ' \'), v:val[1])"), path)
 endfunction"}}}
 
 function! s:source_lockfile() "{{{
