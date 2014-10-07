@@ -622,7 +622,7 @@ function! s:on_source(bundle) "{{{
     endfor
   endfor
 
-  if exists('#'.a:bundle.augroup.'#VimEnter')
+  if !has('vim_starting') && exists('#'.a:bundle.augroup.'#VimEnter')
     execute 'silent doautocmd' a:bundle.augroup 'VimEnter'
 
     if has('gui_running') && &term ==# 'builtin_gui'
