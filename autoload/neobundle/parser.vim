@@ -185,8 +185,8 @@ function! neobundle#parser#local(localdir, options, names) "{{{
       endif
 
       " Remove from lazy runtimepath
-      call filter(neobundle#config#get_lazy_rtps(),
-            \ "fnamemodify(v:val, ':h:t') != name")
+      call filter(neobundle#config#get_lazy_rtp_bundles(),
+            \ "fnamemodify(v:val.rtp, ':h:t') != name")
     endif
 
     call neobundle#parser#bundle([dir, options])

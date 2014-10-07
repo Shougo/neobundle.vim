@@ -1141,8 +1141,6 @@ OPTIONS 					*neobundle-options*
 			useful for plugin initialization in lazy bundles.
 			Note: In Vim initializing, calling the hooks are
 			delayed until |VimEnter|.
-			Note: To re-call on_source hook when reloading .vimrc,
-			you must call the hook in end of .vimrc.
 
 					*neobundle-hooks-on_post_source*
 			on_post_source

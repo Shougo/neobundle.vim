@@ -710,9 +710,6 @@ function! s:reload(bundles) "{{{
 
   call filter(copy(a:bundles), 'neobundle#config#rtp_add(v:val)')
 
-  " Call hooks.
-  call neobundle#call_hook('on_source', a:bundles)
-
   silent! runtime! ftdetect/**/*.vim
   silent! runtime! after/ftdetect/**/*.vim
   silent! runtime! plugin/**/*.vim

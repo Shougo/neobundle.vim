@@ -28,10 +28,10 @@ set cpo&vim
 
 if !exists('s:neobundles')
   let s:is_block = 0
+  let s:lazy_rtp_bundles = []
   let s:neobundles = {}
   let s:sourced_neobundles = {}
   let neobundle#tapped = {}
-  let s:lazy_rtps = []
 endif
 
 function! neobundle#config#init(is_block) "{{{
@@ -58,30 +58,26 @@ function! neobundle#config#init(is_block) "{{{
   augroup END
 
   let s:is_block = a:is_block
-  let s:lazy_rtps = []
+  let s:lazy_rtp_bundles = []
 endfunction"}}}
 function! neobundle#config#final() "{{{
   " Join to the tail in runtimepath.
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let index = index(rtps, neobundle#get_rtp_dir())
-  for rtp in filter(s:lazy_rtps, 'isdirectory(v:val)')
-    call insert(rtps, rtp, index)
+  for bundle in filter(s:lazy_rtp_bundles, 'isdirectory(v:val.rtp)')
+    call insert(rtps, bundle.rtp, index)
     let index += 1
 
-    if isdirectory(rtp.'/after')
-      call add(rtps, fnameescape(rtp.'/after'))
+    if isdirectory(bundle.rtp.'/after')
+      call add(rtps, fnameescape(bundle.rtp.'/after'))
     endif
   endfor
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
 
-  if has('vim_starting')
-    " Call the on_source hook for any loaded bundles now, so it happens
-    " before the plugins are loaded.
-    call neobundle#call_hook('on_source')
-    " on_post_source is invoked in response to VimEnter
-  endif
+  call neobundle#call_hook('on_source', s:lazy_rtp_bundles)
 
-  let s:lazy_rtps = []
+  let s:is_block = 0
+  let s:lazy_rtp_bundles = []
 endfunction"}}}
 
 function! neobundle#config#get(name) "{{{
@@ -270,7 +266,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
 
   if s:is_block
     " Add rtp lazily.
-    call add(s:lazy_rtps, a:bundle.rtp)
+    call add(s:lazy_rtp_bundles, a:bundle)
     return
   endif
 
@@ -285,6 +281,8 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.fnameescape(rtp.'/after')
   endif
+
+  call neobundle#call_hook('on_source', a:bundle)
 endfunction"}}}
 
 function! neobundle#config#search(bundle_names, ...) "{{{
@@ -458,8 +456,8 @@ function! neobundle#config#tsort(bundles) "{{{
   return sorted
 endfunction"}}}
 
-function! neobundle#config#get_lazy_rtps() "{{{
-  return s:lazy_rtps
+function! neobundle#config#get_lazy_rtp_bundles() "{{{
+  return s:lazy_rtp_bundles
 endfunction"}}}
 
 function! neobundle#config#check_commands(commands) "{{{
@@ -504,7 +502,7 @@ function! s:tsort_impl(target, bundles, mark, sorted) "{{{
 endfunction"}}}
 
 function! s:on_vim_enter() "{{{
-  if !empty(s:lazy_rtps)
+  if !empty(s:lazy_rtp_bundles)
     call neobundle#util#print_error(
           \ '[neobundle] neobundle#begin() was called without calling ' .
           \ 'neobundle#end() in .vimrc.')
@@ -513,11 +511,6 @@ function! s:on_vim_enter() "{{{
     return
   endif
 
-  let s:is_block = 0
-
-  " Call hooks.
-  " on_source may not be already called(For compatibility)
-  call neobundle#call_hook('on_source')
   call neobundle#call_hook('on_post_source')
 endfunction"}}}
 
@@ -630,7 +623,6 @@ function! s:on_source(bundle) "{{{
     redraw
     echo 'source:' a:bundle.name
   endif
-  call neobundle#call_hook('on_source', a:bundle)
 
   " Reload script files.
   for directory in filter(
