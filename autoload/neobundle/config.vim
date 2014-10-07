@@ -75,6 +75,13 @@ function! neobundle#config#final() "{{{
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
 
   let s:is_block = 0
+
+  if has('vim_starting')
+    " call the on_source hook for any loaded bundles now, so it happens
+    " before the plugins are loaded.
+    call neobundle#call_hook('on_source')
+    " on_post_source is invoked in response to VimEnter
+  endif
 endfunction"}}}
 
 function! neobundle#config#get(name) "{{{
@@ -497,8 +504,16 @@ function! s:tsort_impl(target, bundles, mark, sorted) "{{{
 endfunction"}}}
 
 function! s:on_vim_enter() "{{{
+  if s:is_block
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle#begin() was called without calling ' .
+          \ 'neobundle#end() in .vimrc.')
+    " We're past the point of plugins being sourced, so don't bother
+    " trying to recover.
+    return
+  endif
   " Call hooks.
-  call neobundle#call_hook('on_source')
+  " on_source was already called in neobundle#config#final()
   call neobundle#call_hook('on_post_source')
 endfunction"}}}
 
@@ -622,7 +637,7 @@ function! s:on_source(bundle) "{{{
     endfor
   endfor
 
-  if exists('#'.a:bundle.augroup.'#VimEnter')
+  if !has('vim_starting') && exists('#'.a:bundle.augroup.'#VimEnter')
     execute 'silent doautocmd' a:bundle.augroup 'VimEnter'
 
     if has('gui_running') && &term ==# 'builtin_gui'
