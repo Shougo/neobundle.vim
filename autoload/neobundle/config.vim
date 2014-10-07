@@ -74,14 +74,14 @@ function! neobundle#config#final() "{{{
   endfor
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
 
-  let s:is_block = 0
-
   if has('vim_starting')
     " call the on_source hook for any loaded bundles now, so it happens
     " before the plugins are loaded.
     call neobundle#call_hook('on_source')
     " on_post_source is invoked in response to VimEnter
   endif
+
+  let s:lazy_rtps = []
 endfunction"}}}
 
 function! neobundle#config#get(name) "{{{
