@@ -75,7 +75,7 @@ function! neobundle#config#final() "{{{
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
 
   if has('vim_starting')
-    " call the on_source hook for any loaded bundles now, so it happens
+    " Call the on_source hook for any loaded bundles now, so it happens
     " before the plugins are loaded.
     call neobundle#call_hook('on_source')
     " on_post_source is invoked in response to VimEnter
@@ -504,7 +504,7 @@ function! s:tsort_impl(target, bundles, mark, sorted) "{{{
 endfunction"}}}
 
 function! s:on_vim_enter() "{{{
-  if s:is_block
+  if !empty(s:lazy_rtps)
     call neobundle#util#print_error(
           \ '[neobundle] neobundle#begin() was called without calling ' .
           \ 'neobundle#end() in .vimrc.')
@@ -512,8 +512,12 @@ function! s:on_vim_enter() "{{{
     " trying to recover.
     return
   endif
+
+  let s:is_block = 0
+
   " Call hooks.
-  " on_source was already called in neobundle#config#final()
+  " on_source may not be already called(For compatibility)
+  call neobundle#call_hook('on_source')
   call neobundle#call_hook('on_post_source')
 endfunction"}}}
 
