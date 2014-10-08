@@ -1,50 +1,42 @@
-if has('vim_starting')
-  set nocompatible
-  execute 'set' 'runtimepath+='.getcwd()
-endif
+" Source test.
+set verbose=1
 
-let testdir = expand('~/neobundle-test/bundles', 1)
+let path = expand('~/test-bundle')
+
+if isdirectory(path)
+  let rm_command = neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'
+  call system(printf('%s "%s"', rm_command, path))
+endif
 
 let neobundle#types#git#default_protocol =
       \ exists('$http_proxy') ? 'https' : 'git'
 
-call neobundle#rc(expand(testdir, 1))
+call neobundle#rc(path)
 
 " Test dependencies.
 
-" A
+let s:suite = themis#suite('source')
+let s:assert = themis#helper('assert')
+
 NeoBundleLazy 'Shougo/echodoc'
 NeoBundle 'Shougo/unite-build', { 'depends' : 'Shougo/echodoc' }
-echomsg neobundle#is_sourced('echodoc') == 1
-echomsg neobundle#is_sourced('unite-build') == 1
 
-" B
 NeoBundle 'Shougo/unite-ssh',  { 'depends' : 'Shougo/unite-sudo' }
 NeoBundleLazy 'Shougo/unite-sudo'
-echomsg neobundle#is_sourced('unite-ssh') == 1
-echomsg neobundle#is_sourced('unite-sudo') == 1
 
-" C
-NeoBundleLazy 'Shougo/vimproc', { 'depends': 'Shougo/neocomplcache' }
+NeoBundleLazy 'Shougo/neomru.vim', { 'depends': 'Shougo/neocomplcache' }
 NeoBundle 'Shougo/neocomplcache', 'ver.8'
-echomsg neobundle#is_sourced('vimproc') == 0
-echomsg neobundle#is_sourced('neocomplcache') == 1
 
-" D
 NeoBundleLazy 'Shougo/vimshell', { 'depends': 'Shougo/vinarise' }
 NeoBundleLazy 'Shougo/vinarise'
-echomsg neobundle#is_sourced('vimshell') == 0
-echomsg neobundle#is_sourced('vinarise') == 0
 
 NeoBundle 'Shougo/vimfiler', { 'depends' : 'foo/var' }
-echomsg neobundle#config#check_not_exists(['vimfiler']) ==# ['var']
 
 NeoBundleLazy 'Shougo/unite.vim', {
       \ 'depends' : ['Shougo/unite-outline', 'basyura/TweetVim'],
       \ 'autoload' : { 'commands' : 'Unite' } }
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim' }
-echomsg neobundle#get('unite.vim').autoload.commands == 'Unite'
 
 " Dependencies test.
 NeoBundleLazy 'basyura/twibill.vim'
@@ -70,24 +62,10 @@ NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
       \ {'script_type' : 'plugin', 'rev' : '0'}
 " NeoBundleReinstall rsense.vim
 
+NeoBundle 'https://github.com/Shougo/neocomplcache/' " slash is added
+
 NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
       \ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
-
-" on_source Test.
-NeoBundle 'hoge'
-let bundle = neobundle#get('hoge')
-function! bundle.hooks.on_source(bundle)
-  " Should ignore.
-  echomsg "hoge"
-endfunction
-unlet bundle
-
-let s:bundle = neobundle#get("TweetVim")
-function! s:bundle.hooks.on_source(bundle)
-endfunction
-unlet s:bundle
-
-NeoBundle 'https://github.com/Shougo/neocomplcache/' " slash is added
 
 filetype plugin indent on       " required!
 
@@ -99,4 +77,27 @@ set wildignore+=.git
 set wildignore+=.git/*
 set wildignore+=*/.git/*
 
-autocmd VimEnter * NeoBundleCheck
+function! s:suite.pattern_a()
+  call s:assert.equals(neobundle#is_sourced('echodoc'), 1)
+  call s:assert.equals(neobundle#is_sourced('unite-build'), 1)
+endfunction
+
+function! s:suite.pattern_b()
+  call s:assert.equals(neobundle#is_sourced('unite-ssh'), 1)
+  call s:assert.equals(neobundle#is_sourced('unite-sudo'), 1)
+endfunction
+
+function! s:suite.pattern_c()
+  call s:assert.equals(neobundle#is_sourced('neomru.vim'), 0)
+  call s:assert.equals(neobundle#is_sourced('neocomplcache'), 1)
+endfunction
+
+function! s:suite.pattern_d()
+  call s:assert.equals(neobundle#is_sourced('vimshell'), 0)
+  call s:assert.equals(neobundle#is_sourced('vinarise'), 0)
+endfunction
+
+function! s:suite.autoload()
+  call s:assert.equals(neobundle#get('unite.vim').autoload.commands, 'Unite')
+endfunction
+

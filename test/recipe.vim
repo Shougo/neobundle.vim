@@ -1,18 +1,17 @@
 " Recipe installation test.
+set verbose=1
 
-if has('vim_starting')
-  set nocompatible               " Be iMproved
-  set runtimepath+=.
+let path = expand('~/test-bundle')
+
+if isdirectory(path)
+  let rm_command = neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'
+  call system(printf('%s "%s"', rm_command, path))
 endif
 
-call neobundle#begin(expand('~/test-bundle/'))
+call neobundle#begin(path)
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Recommended to install
-" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-NeoBundle 'Shougo/vimproc'
 
 " Use recipe.
 NeoBundle 'Shougo/neobundle-vim-recipes'
@@ -23,3 +22,5 @@ NeoBundle 'Shougo/neocomplcache-snippets-complete',
 call neobundle#end()
 
 filetype plugin indent on     " Required!
+
+NeoBundleInstall

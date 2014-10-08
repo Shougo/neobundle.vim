@@ -1,4 +1,4 @@
-" Recipe installation test.
+" Lock file test.
 set verbose=1
 
 let path = expand('~/test-bundle')
