@@ -11,7 +11,7 @@ endif
 let neobundle#types#git#default_protocol =
       \ exists('$http_proxy') ? 'https' : 'git'
 
-call neobundle#rc(path)
+call neobundle#begin(path)
 
 " Test dependencies.
 
@@ -66,6 +66,8 @@ NeoBundle 'https://github.com/Shougo/neocomplcache/' " slash is added
 
 NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
       \ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
+
+call neobundle#end()
 
 filetype plugin indent on       " required!
 

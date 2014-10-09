@@ -10,7 +10,7 @@ endif
 
 call mkdir(path, 'p')
 
-call neobundle#rc(path)
+call neobundle#begin(path)
 
 let g:neobundle#types#git#default_protocol = 'https'
 
@@ -105,6 +105,11 @@ NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
 NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
        \ {'script_type' : 'plugin'}
 
+" Fetch only.
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+call neobundle#end()
+
 filetype plugin indent on       " required!
 
 " Should not break helptags.
@@ -114,7 +119,4 @@ set wildignore+=doc
 set wildignore+=.git
 set wildignore+=.git/*
 set wildignore+=*/.git/*
-
-" Fetch only.
-NeoBundleFetch 'Shougo/neobundle.vim'
 

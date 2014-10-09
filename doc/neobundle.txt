@@ -148,7 +148,6 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 		Note: It executes ":filetype off" automatically.
 		Note: You must not call the function inside a
 		"has('vim_starting')" block.
-		Note: It is faster interface than |neobundle#rc()|.
 >
 	if has('vim_starting')
 	  set nocompatible
@@ -170,8 +169,7 @@ neobundle#end()					*neobundle#end()*
 		must call it after neobundle bundles configuration.
 
 neobundle#rc([{base-path}])			*neobundle#rc()*
-		Note: It is old interface.  It is slower than
-		|neobundle#begin()|.
+		Note: It is deprecated interface.
 
 neobundle#source({bundle-names})		*neobundle#source()*
 		Same as |:NeoBundleSource|.
