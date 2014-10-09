@@ -1,7 +1,7 @@
 " Source test.
 set verbose=1
 
-let path = expand('~/test-bundle')
+let path = expand('~/test-bundle/'.fnamemodify(expand('<sfile>'), ':t:r'))
 
 if isdirectory(path)
   let rm_command = neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'
@@ -61,8 +61,6 @@ NeoBundleLazy 'rhysd/TweetVim', {
 NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
       \ {'script_type' : 'plugin', 'rev' : '0'}
 " NeoBundleReinstall rsense.vim
-
-NeoBundle 'https://github.com/Shougo/neocomplcache/' " slash is added
 
 NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
       \ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }

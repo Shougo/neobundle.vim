@@ -1,7 +1,7 @@
 " Lock file test.
 set verbose=1
 
-let path = expand('~/test-bundle')
+let path = expand('~/test-bundle/'.fnamemodify(expand('<sfile>'), ':t:r'))
 
 if isdirectory(path)
   let rm_command = neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'

@@ -1,7 +1,7 @@
 let s:suite = themis#suite('tsort')
 let s:assert = themis#helper('assert')
 
-let g:path = expand('~/test-bundle')
+let g:path = expand('~/test-bundle/'.fnamemodify(expand('<sfile>'), ':t:r'))
 
 function! s:comp_bundle(bundle1, bundle2)
   return a:bundle1.name > a:bundle2.name
