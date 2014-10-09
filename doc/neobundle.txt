@@ -1139,8 +1139,7 @@ OPTIONS 					*neobundle-options*
 			on_source
 			Called or sourced before scripts are sourced. It is
 			useful for plugin initialization in lazy bundles.
-			Note: In Vim initializing, calling the hooks are
-			delayed until |VimEnter|.
+			Note: You must call the hook before |neobundle#end()|.
 
 					*neobundle-hooks-on_post_source*
 			on_post_source
