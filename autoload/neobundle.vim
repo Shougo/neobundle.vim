@@ -164,6 +164,8 @@ function! neobundle#rc(...) "{{{
         \ '[neobundle] neobundle#rc() is deprecated function.')
   call neobundle#util#print_error(
         \ '[neobundle] It is removed in the next version.')
+  call neobundle#util#print_error(
+        \ '[neobundle] Please use neobundle#begin()/neobundle#end() instead.')
   let path = (a:0 > 0) ? a:1 :
         \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
         \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
