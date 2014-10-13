@@ -400,7 +400,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     " Lock revision.
     let rev_save = bundle.rev
     try
-      if !a:context.source__bang
+      if !a:context.source__bang && bundle.rev != ''
         " Checkout install_rev revision.
         let bundle.rev = bundle.install_rev
       endif
