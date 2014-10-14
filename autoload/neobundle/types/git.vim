@@ -54,8 +54,7 @@ let s:type = {
 function! s:type.detect(path, opts) "{{{
   if a:path =~ '^/\|^\a:/' && s:is_git_dir(a:path.'/.git')
     " Local repository.
-    return { 'name' : split(a:path, '/')[-1],
-          \  'uri' : a:path, 'type' : 'git' }
+    return { 'uri' : a:path, 'type' : 'git' }
   elseif isdirectory(a:path)
     return {}
   endif
@@ -96,8 +95,7 @@ function! s:type.detect(path, opts) "{{{
     let uri .= '.git'
   endif
 
-  return { 'name': neobundle#util#name_conversion(uri),
-        \  'uri': uri, 'type' : 'git' }
+  return { 'uri': uri, 'type' : 'git' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
@@ -216,7 +214,6 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
   let uri = ''
 
   if a:path =~# '\<gist:\S\+\|://gist.github.com/'
-    let name = split(a:path, ':')[-1]
     let uri =  (a:protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
           \ a:protocol . '://gist.github.com/'. split(name, '/')[-1]

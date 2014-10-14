@@ -245,7 +245,7 @@ function! neobundle#util#redraw_echo(expr) "{{{
 endfunction"}}}
 
 function! neobundle#util#name_conversion(path) "{{{
-  return fnamemodify(a:path, ':s?/$??:t:s?\c\.git\s*$??')
+  return fnamemodify(split(a:path, ':')[-1], ':s?/$??:t:s?\c\.git\s*$??')
 endfunction"}}}
 
 " Escape a path for runtimepath.

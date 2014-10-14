@@ -209,27 +209,31 @@ function! neobundle#parser#path(path, ...) "{{{
   else
     let detect = neobundle#config#get_types('git').detect(path, opts)
     if !empty(detect)
+      let detect.name = neobundle#util#name_conversion(path)
       return detect
     endif
 
     let types = neobundle#config#get_types()
   endif
 
+  let detect = {}
   for type in types
     let detect = type.detect(path, opts)
-
     if !empty(detect)
-      return detect
+      break
     endif
   endfor
 
-  if isdirectory(path)
+  if empty(detect) && isdirectory(path)
     " Detect nosync type.
-    return { 'name' : split(path, '/')[-1],
-          \  'uri' : path, 'type' : 'nosync' }
+    return { 'uri' : path, 'type' : 'nosync' }
   endif
 
-  return {}
+  if !empty(detect) && !has_key(detect, 'name')
+    let detect.name = neobundle#util#name_conversion(path)
+  endif
+
+  return detect
 endfunction"}}}
 
 function! neobundle#parser#_function_prefix(name) "{{{

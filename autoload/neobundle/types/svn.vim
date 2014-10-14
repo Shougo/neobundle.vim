@@ -51,8 +51,6 @@ function! s:type.detect(path, opts) "{{{
   if a:path =~# '\<\%(file\|https\?\|svn\)://'
         \ && a:path =~? '[/.]svn[/.]'
     let uri = a:path
-    let name = split(uri, '/')[-1]
-
     let type = 'svn'
   elseif a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
     let name = substitute(split(a:path, ':')[-1],
@@ -60,13 +58,10 @@ function! s:type.detect(path, opts) "{{{
     let uri =  'https://github.com/'. name
     let uri .= '/trunk'
 
-    let name = split(name, '/')[-1]
-
     let type = 'svn'
   endif
 
-  return type == '' ?  {} :
-        \ { 'name': name, 'uri': uri, 'type' : type }
+  return type == '' ?  {} : { 'uri': uri, 'type' : type }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
   if !executable(g:neobundle#types#svn#command_path)

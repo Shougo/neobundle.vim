@@ -45,8 +45,7 @@ let s:type = {
 function! s:type.detect(path, opts) "{{{
   if isdirectory(a:path.'/.hg')
     " Local repository.
-    return { 'name' : split(a:path, '/')[-1],
-          \  'uri' : a:path, 'type' : 'hg' }
+    return { 'uri' : a:path, 'type' : 'hg' }
   elseif isdirectory(a:path)
     return {}
   endif
@@ -74,8 +73,7 @@ function! s:type.detect(path, opts) "{{{
     return {}
   endif
 
-  return { 'name': neobundle#util#name_conversion(uri),
-        \  'uri' : uri, 'type' : 'hg' }
+  return { 'uri' : uri, 'type' : 'hg' }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
   if !executable(g:neobundle#types#hg#command_path)

@@ -49,10 +49,11 @@ function! s:type.detect(path, opts) "{{{
   if a:path =~# '^https\?:.*\.vim$'
     " HTTP/HTTPS
 
-    let name = split(a:path, '/')[-1]
+    let name = neobundle#util#name_conversion(a:path)
 
     let type = 'raw'
-  elseif a:path =~# '^https\?://www\.vim\.org/scripts/download_script.php?src_id=\d\+$'
+  elseif a:path =~#
+        \ '^https\?://www\.vim\.org/scripts/download_script.php?src_id=\d\+$'
     " For www.vim.org
     let name = 'vim-scripts-' . matchstr(a:path, '\d\+$')
     let type = 'raw'
