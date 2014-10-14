@@ -44,6 +44,32 @@ function! neobundle#util#expand(path) "{{{
   return (s:is_windows && path =~ '\\') ?
         \ neobundle#util#substitute_path_separator(path) : path
 endfunction"}}}
+function! neobundle#util#join_paths(path1, path2) "{{{
+  " Joins two paths together, handling the case where the second path
+  " is an absolute path.
+  if s:is_absolute(a:path2)
+    return a:path2
+  endif
+  if a:path1 =~ (s:is_windows ? '[\\/]$' : '/$') ||
+        \ a:path2 =~ (s:is_windows ? '^[\\/]' : '^/')
+    " the appropriate separator already exists
+    return a:path1 . a:path2
+  else
+    " note: I'm assuming here that '/' is always valid as a directory
+    " separator on Windows. I know Windows has paths that start with \\?\ that
+    " diasble behavior like that, but I don't know how Vim deals with that.
+    return a:path1 . '/' . a:path2
+  endif
+endfunction "}}}
+if s:is_windows
+  function! s:is_absolute(path) "{{{
+    return a:path =~ '^[\\/]\|^\a:'
+  endfunction "}}}
+else
+  function! s:is_absolute(path) "{{{
+    return a:path =~ "^/"
+  endfunction "}}}
+endif
 
 function! neobundle#util#is_windows() "{{{
   return s:is_windows

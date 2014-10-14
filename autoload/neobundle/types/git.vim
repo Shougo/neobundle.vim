@@ -52,7 +52,7 @@ let s:type = {
       \ }
 
 function! s:type.detect(path, opts) "{{{
-  if isdirectory(a:path.'/.git')
+  if s:is_git_dir(a:path.'/.git')
     " Local repository.
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'git' }
@@ -236,6 +236,62 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
 
   return uri
 endfunction"}}}
+
+function! s:is_git_dir(path) "{{{
+  if isdirectory(a:path)
+    let git_dir = a:path
+  elseif filereadable(a:path)
+    " check if this is a gitdir file
+    " File starts with "gitdir: " and all text after this string is treated
+    " as the path. Any CR or NLs are stripped off the end of the file.
+    let buf = join(readfile(a:path, 'b'), "\n")
+    let matches = matchlist(buf, '\C^gitdir: \(\_.*[^\r\n]\)[\r\n]*$')
+    if empty(matches)
+      return 0
+    endif
+    let path = fnamemodify(a:path, ':h')
+    if fnamemodify(a:path, ':t') == ''
+      " if there's no tail, the path probably ends in a directory separator
+      let path = fnamemodify(path, ':h')
+    endif
+    let git_dir = neobundle#util#join_paths(path, matches[1])
+    if !isdirectory(git_dir)
+      return 0
+    endif
+  else
+    return 0
+  endif
+
+  " Git only considers it to be a git dir if a few required files/dirs exist
+  " and are accessible inside the directory.
+  " Note: we can't actually test file permissions the way we'd like to, since
+  " getfperm() gives the mode string but doesn't tell us whether the user or
+  " group flags apply to us. Instead, just check if dirname/. is a directory.
+  " This should also check if we have search permissions.
+  " I'm assuming here that dirname/. works on windows, since I can't test.
+  " Note: Git also accepts having the GIT_OBJECT_DIRECTORY env var set instead
+  " of using .git/objects, but we don't care about that.
+  for name in ['objects', 'refs']
+    if !isdirectory(neobundle#util#join_paths(git_dir, name))
+      return 0
+    endif
+  endfor
+
+  " Git also checks if HEAD is a symlink or a properly-formatted file.
+  " We don't really care to actually validate this, so let's just make
+  " sure the file exists and is readable.
+  " Note: it may also be a symlink, which can point to a path that doesn't
+  " necessarily exist yet.
+  let head = neobundle#util#join_paths(git_dir, 'HEAD')
+  if !filereadable(head) && getftype(head) != 'link'
+    return 0
+  endif
+
+  " Sure looks like a git directory. There's a few subtleties where we'll
+  " accept a directory that git itself won't, but I think we can safely ignore
+  " those edge cases.
+  return 1
+endfunction "}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
