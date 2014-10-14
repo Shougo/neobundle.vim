@@ -52,7 +52,7 @@ let s:type = {
       \ }
 
 function! s:type.detect(path, opts) "{{{
-  if s:is_git_dir(a:path.'/.git')
+  if a:path =~ '^/\|^\a:/' && s:is_git_dir(a:path.'/.git')
     " Local repository.
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'git' }
