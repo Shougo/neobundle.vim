@@ -73,8 +73,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
       let bundle = a:context.source__bundles[a:context.source__number]
       call neobundle#installer#sync(bundle, a:context, 1)
 
-      call unite#clear_message()
-      call unite#print_message(
+      call neobundle#util#redraw_echo(
             \ neobundle#installer#get_progress_message(bundle,
             \ a:context.source__number,
             \ a:context.source__max_bundles))
