@@ -98,21 +98,21 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
       let messages += ['[neobundle/install] Errored bundles:']
             \ + map(copy(a:context.source__errored_bundles),
             \        'v:val.name')
-      call neobundle#installer#log(
+      call neobundle#installer#update_log(
             \ 'Please read error message log by :message command.')
     endif
 
-    call neobundle#installer#log(messages, 1)
+    call neobundle#installer#update_log(messages, 1)
     call neobundle#installer#update(
           \ a:context.source__synced_bundles)
 
     " Finish.
-    call neobundle#installer#log('[neobundle/install] Completed.', 1)
+    call neobundle#installer#update_log('[neobundle/install] Completed.', 1)
 
     let a:context.is_async = 0
   endif
 
-  return map(neobundle#installer#get_log()[len(old_msgs) :], "{
+  return map(neobundle#installer#get_updates_log()[len(old_msgs) :], "{
         \ 'word' : substitute(v:val, '^\\[.\\{-}\\]\\s*', '', ''),
         \ 'is_multiline' : 1,
         \}")
@@ -175,7 +175,7 @@ function! s:init(context, bundle_names)
           \ '[neobundle/install] Target bundles not found.' .
           \ ' You may use wrong bundle name.', 1)
   else
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ '[neobundle/install] Update started: ' .
           \     strftime('(%Y/%m/%d %H:%M:%S)'))
   endif
