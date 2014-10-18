@@ -82,17 +82,17 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
 
   call neobundle#installer#update(installed)
 
-  call neobundle#installer#log(
+  call neobundle#installer#update_log(
         \ "[neobundle/install] Installed/Updated bundles:\n".
         \ join((empty(installed) ?
         \   ['no new bundles installed'] :
         \   map(copy(installed), 'v:val.name')),"\n"))
 
   if !empty(errored)
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ "[neobundle/install] Error installing bundles:\n".join(
           \ map(copy(errored), 'v:val.name')), "\n")
-    call neobundle#installer#log(
+    call neobundle#installer#update_log(
           \ 'Please read the error message log with the :message command.')
   endif
 
