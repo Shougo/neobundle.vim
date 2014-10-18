@@ -213,13 +213,23 @@ function! neobundle#util#convert2list(expr) "{{{
 endfunction"}}}
 
 function! neobundle#util#print_error(expr) "{{{
-  let msg = neobundle#util#convert2list(a:expr)
-  echohl WarningMsg | echomsg join(msg, "\n") | echohl None
+  return s:echo(a:expr, 1)
 endfunction"}}}
 
 function! neobundle#util#redraw_echo(expr) "{{{
+  return s:echo(a:expr, 0)
+endfunction"}}}
+
+function! s:echo(expr, is_error) "{{{
+  let msg = neobundle#util#convert2list(a:expr)
+
   if has('vim_starting')
-    echo join(neobundle#util#convert2list(a:expr), "\n")
+    let m = join(msg, "\n")
+    if a:is_error
+      echohl WarningMsg | echomsg m | echohl None
+    else
+      echo m
+    endif
     return
   endif
 
@@ -231,11 +241,16 @@ function! neobundle#util#redraw_echo(expr) "{{{
     set noshowcmd
     set noruler
 
-    let msg = neobundle#util#convert2list(a:expr)
     let height = max([1, &cmdheight])
     for i in range(0, len(msg)-1, height)
       redraw
-      echo join(msg[i : i+height-1], "\n")
+
+      let m = join(msg[i : i+height-1], "\n")
+      if a:is_error
+        echohl WarningMsg | echomsg m | echohl None
+      else
+        echo m
+      endif
     endfor
   finally
     let &more = more_save

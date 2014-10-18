@@ -634,12 +634,7 @@ function! neobundle#installer#error(msg, ...)
   call extend(s:log, msg)
   call extend(s:updates_log, msg)
 
-  if &filetype == 'unite' || is_unite
-    call unite#print_error(msg)
-  else
-    call neobundle#util#print_error(msg)
-  endif
-
+  call neobundle#util#print_error(msg)
   call s:append_log_file(msg)
 endfunction
 
