@@ -64,7 +64,7 @@ function! s:source_install.hooks.on_close(args, context) "{{{
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context) "{{{
-  let old_msgs = copy(neobundle#installer#get_log())
+  let old_msgs = copy(neobundle#installer#get_updates_log())
 
   if a:context.source__number < a:context.source__max_bundles
     while a:context.source__number < a:context.source__max_bundles
@@ -98,7 +98,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
       let messages += ['[neobundle/install] Errored bundles:']
             \ + map(copy(a:context.source__errored_bundles),
             \        'v:val.name')
-      call neobundle#installer#update_log(
+      call neobundle#installer#error(
             \ 'Please read error message log by :message command.')
     endif
 
