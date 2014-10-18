@@ -675,6 +675,12 @@ function! neobundle#installer#clear_log()
   let s:updates_log = []
 endfunction
 
+function! neobundle#installer#get_progress_message(bundle, number, max)
+  return printf('(%'.len(a:max).'d/%d) [%-20s] %s',
+          \ a:number, a:max,
+          \ repeat('=', (a:number*20/a:max)), a:bundle.name)
+endfunction
+
 function! neobundle#installer#get_tags_info()
   let path = neobundle#get_neobundle_dir() . '/.neobundle/tags_info'
   if !filereadable(path)

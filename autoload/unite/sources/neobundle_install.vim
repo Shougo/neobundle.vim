@@ -70,9 +70,14 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
     while a:context.source__number < a:context.source__max_bundles
         \ && len(a:context.source__processes) <
         \      g:neobundle#install_max_processes
-      call neobundle#installer#sync(
-            \ a:context.source__bundles[a:context.source__number],
-            \ a:context, 1)
+      let bundle = a:context.source__bundles[a:context.source__number]
+      call neobundle#installer#sync(bundle, a:context, 1)
+
+      call unite#clear_message()
+      call unite#print_message(
+            \ neobundle#installer#get_progress_message(bundle,
+            \ a:context.source__number,
+            \ a:context.source__max_bundles))
     endwhile
   endif
 
