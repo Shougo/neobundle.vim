@@ -175,9 +175,12 @@ function! neobundle#commands#check_update(bundle_names) "{{{
           \ && len(context.source__processes) <
           \      g:neobundle#install_max_processes
 
-      call s:check_update_init(
-            \ context.source__bundles[context.source__number],
-            \ context, 0)
+      let bundle = context.source__bundles[context.source__number]
+      call s:check_update_init(bundle, context, 0)
+      call neobundle#util#redraw_echo(
+            \ neobundle#installer#get_progress_message(bundle,
+            \ context.source__number,
+            \ context.source__max_bundles))
     endwhile
 
     for process in context.source__processes
@@ -501,9 +504,14 @@ function! s:install(bang, bundles) "{{{
           \ && len(context.source__processes) <
           \      g:neobundle#install_max_processes
 
+      let bundle = context.source__bundles[context.source__number]
       call neobundle#installer#sync(
             \ context.source__bundles[context.source__number],
             \ context, 0)
+      call neobundle#util#redraw_echo(
+            \ neobundle#installer#get_progress_message(bundle,
+            \ context.source__number,
+            \ context.source__max_bundles))
     endwhile
 
     for process in context.source__processes
