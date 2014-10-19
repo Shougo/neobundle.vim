@@ -598,7 +598,6 @@ function! s:get_skipped_message(number, max, bundle, prefix, message)
 endfunction
 
 function! neobundle#installer#log(msg, ...)
-  let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
         \ a:msg : split(a:msg, '\n')
   call extend(s:log, msg)
@@ -628,7 +627,6 @@ function! neobundle#installer#update_log(msg, ...)
 endfunction
 
 function! neobundle#installer#error(msg, ...)
-  let is_unite = get(a:000, 0, 0)
   let msg = type(a:msg) == type([]) ?
         \ a:msg : split(a:msg, '\r\?\n')
   call extend(s:log, msg)
