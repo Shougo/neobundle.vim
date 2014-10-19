@@ -214,6 +214,7 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
   let uri = ''
 
   if a:path =~# '\<gist:\S\+\|://gist.github.com/'
+    let name = split(a:path, ':')[-1]
     let uri =  (a:protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
           \ a:protocol . '://gist.github.com/'. split(name, '/')[-1]
