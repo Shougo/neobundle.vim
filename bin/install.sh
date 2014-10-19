@@ -5,6 +5,12 @@
 
 # Installation directory
 BUNDLE_DIR=~/.vim/bundle
+INSTALL_DIR=$BUNDLE_DIR/neobundle.vim
+
+if [ -e $INSTALL_DIR ]; then
+  echo "$INSTALL_DIR already exists!"
+  exit 1
+fi
 
 # check git command
 if type git; then
