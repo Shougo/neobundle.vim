@@ -172,8 +172,7 @@ endfunction
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
-    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
-          \ a:number, a:max, a:bundle.name, 'Unknown Type')]
+    return ['E: Unknown Type', '']
   endif
 
   let is_directory = isdirectory(a:bundle.path)
@@ -195,8 +194,7 @@ endfunction
 function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max)
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
-    return ['', printf('(%'.len(a:max).'d/%d): |%s| %s',
-          \ a:number, a:max, a:bundle.name, 'Unknown Type')]
+    return ['E: Unknown Type', '']
   endif
 
   let cmd = type.get_revision_lock_command(a:bundle)
@@ -214,6 +212,7 @@ function! neobundle#installer#get_revision_number(bundle)
     let type = neobundle#config#get_types(a:bundle.type)
 
     if !isdirectory(a:bundle.path)
+          \ || !has_key(type, 'get_revision_number_command')
       return ''
     endif
 
