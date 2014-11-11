@@ -35,7 +35,7 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init(is_block) "{{{
-  filetype off
+  call s:filetype_off()
 
   for bundle in values(s:neobundles)
     if (!bundle.resettable && !bundle.lazy) ||
@@ -139,11 +139,6 @@ function! neobundle#config#source(names, ...) "{{{
     return
   endif
 
-  let filetype_out = ''
-  redir => filetype_out
-  silent filetype
-  redir END
-
   redir => filetype_before
   silent autocmd FileType
   redir END
@@ -180,7 +175,7 @@ function! neobundle#config#source(names, ...) "{{{
   redir END
 
   if reset_ftplugin
-    call s:reset_ftplugin(filetype_out)
+    call s:reset_ftplugin()
   elseif filetype_before !=# filetype_after
     execute 'doautocmd FileType' &filetype
   endif
@@ -667,33 +662,50 @@ function! s:is_reset_ftplugin(filetype, rtp) "{{{
   return 0
 endfunction"}}}
 
-function! s:reset_ftplugin(filetype_out) "{{{
-  filetype off
+function! s:reset_ftplugin() "{{{
+  let filetype_out = s:filetype_off()
 
-  if a:filetype_out =~# 'detection:ON'
-        \ && a:filetype_out =~# 'plugin:ON'
-        \ && a:filetype_out =~# 'indent:ON'
+  if filetype_out =~# 'detection:ON'
+        \ && filetype_out =~# 'plugin:ON'
+        \ && filetype_out =~# 'indent:ON'
     silent! filetype plugin indent on
   else
-    if a:filetype_out =~# 'detection:ON'
+    if filetype_out =~# 'detection:ON'
       silent! filetype on
     endif
 
-    if a:filetype_out =~# 'plugin:ON'
+    if filetype_out =~# 'plugin:ON'
       silent! filetype plugin on
     endif
 
-    if a:filetype_out =~# 'indent:ON'
+    if filetype_out =~# 'indent:ON'
       silent! filetype indent on
     endif
   endif
 
-  if a:filetype_out =~# 'detection:ON'
+  if filetype_out =~# 'detection:ON'
     filetype detect
   endif
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
+endfunction"}}}
+
+function! s:filetype_off() "{{{
+  redir => filetype_out
+  silent filetype
+  redir END
+
+  if filetype_out =~# 'plugin:ON'
+        \ || filetype_out =~# 'indent:ON'
+    filetype plugin indent off
+  endif
+
+  if filetype_out =~# 'detection:ON'
+    filetype off
+  endif
+
+  return filetype_out
 endfunction"}}}
 
 let &cpo = s:save_cpo
