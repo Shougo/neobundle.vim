@@ -961,7 +961,8 @@ OPTIONS 					*neobundle-options*
 		This dictionary accepts the following keys:
 
 			filetypes	(List) or (String)
-			Filetype list.
+			Filetype list.  If the filetype is "all", it means all
+			filetypes.
 
 			filename_patterns	(List) or (String)
 			Filename regex pattern list.

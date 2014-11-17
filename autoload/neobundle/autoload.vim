@@ -68,7 +68,9 @@ function! neobundle#autoload#filetype()
   for filetype in neobundle#util#get_filetypes()
     call neobundle#config#source_bundles(filter(copy(bundles),"
           \ index(neobundle#util#convert2list(
-          \     v:val.autoload.filetypes), filetype) >= 0"))
+          \     v:val.autoload.filetypes), filetype) >= 0
+          \ || index(neobundle#util#convert2list(
+          \     v:val.autoload.filetypes), 'all') >= 0"))
   endfor
 endfunction
 
