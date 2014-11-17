@@ -205,6 +205,47 @@ neobundle#local({directory}, [{options}, [{names}]])
 		call neobundle#local("~/.vim/bundle",
 		\   {}, ['plugin1', 'plugin2'])
 <
+						 *neobundle#load_toml()*
+neobundle#load_toml({filename}, [{options}])
+		Load TOML plugin configurations from {filename}.  See
+		|neobundle-options| for keys to set in {options}.
+		Note: TOML parser is slow.  You should use neobundle cache
+		feature.
+
+		TOML file format specification:
+		https://github.com/toml-lang/toml
+		Note: Original TOML parser is created by kamichidu.
+		https://github.com/kamichidu
+>
+		" Load toml from "~/.vim/bundle.toml".
+		call neobundle#load_toml("~/.vim/bundle.toml", {})
+<
+		TOML file sample is here:
+>
+		# TOML sample
+		[[plugins]]
+		# repository name is required.
+		repository = 'kana/vim-niceblock'
+		mappings = '<Plug>'
+
+		[[plugins]]
+		repository = 'Shougo/neosnippet.vim'
+		depends = ['Shougo/neosnippet-snippets',
+		  'Shougo/context_filetype.vim']
+		insert = 1
+		filetypes = 'snippet'
+		unite_sources = [ 'neosnippet',
+		  'neosnippet/user', 'neosnippet/runtime']
+
+		[[plugins]]
+		repository = 'Shougo/vimproc.vim'
+
+		  [plugins.build]
+		  windows = 'tools\\update-dll-mingw'
+		  cygwin = 'make -f make_cygwin.mak'
+		  mac = 'make -f make_mac.mak'
+		  unix = 'make -f make_unix.mak'
+<
 neobundle#get({bundle-name})			 *neobundle#get()*
 		Get the neobundle options dictionary for {bundle-name}.
 		Useful for setting hooks.

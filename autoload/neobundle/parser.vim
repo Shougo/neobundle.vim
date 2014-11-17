@@ -193,6 +193,29 @@ function! neobundle#parser#local(localdir, options, names) "{{{
   endfor
 endfunction"}}}
 
+function! neobundle#parser#load_toml(filename, default) "{{{
+  let toml = neobundle#TOML#parse_file(neobundle#util#expand(a:filename))
+  if type(toml) != type({}) || !has_key(toml, 'plugins')
+    call neobundle#util#print_error(
+          \ '[neobundle] Invalid toml file: ' . a:filename)
+    return 1
+  endif
+
+  " Parse.
+  for plugin in toml.plugins
+    if !has_key(plugin, 'repository')
+      call neobundle#util#print_error(
+            \ '[neobundle] No repository plugin data: ' . a:filename)
+      return 1
+    endif
+
+    let options = extend(plugin, a:default, 'keep')
+    " echomsg plugin.repository
+    " echomsg string(options)
+    call neobundle#parser#bundle([plugin.repository, options])
+  endfor
+endfunction"}}}
+
 function! neobundle#parser#path(path, ...) "{{{
   let opts = get(a:000, 0, {})
   let site = get(opts, 'site', g:neobundle#default_site)

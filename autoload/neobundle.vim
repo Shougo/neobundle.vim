@@ -333,6 +333,11 @@ function! neobundle#_get_installed_bundles(bundle_names) "{{{
         \ 'neobundle#config#is_installed(v:val.name)')
 endfunction"}}}
 
+function! neobundle#load_toml(filename, ...) "{{{
+  let opts = get(a:000, 0, {})
+  return neobundle#parser#load_toml(a:filename, opts)
+endfunction"}}}
+
 function! neobundle#get_unite_sources()
   return neobundle#autoload#get_unite_sources()
 endfunction
