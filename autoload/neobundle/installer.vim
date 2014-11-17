@@ -555,11 +555,11 @@ function! s:save_install_info(bundles)
 endfunction
 
 function! neobundle#installer#_load_install_info(bundles)
-  call s:source_lockfile()
-
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
   if !exists('s:install_info')
+    call s:source_lockfile()
+
     let s:install_info = {}
 
     if filereadable(install_info_path)
