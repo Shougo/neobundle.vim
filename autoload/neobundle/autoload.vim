@@ -67,8 +67,7 @@ function! neobundle#autoload#filetype()
         \ "has_key(v:val.autoload, 'filetypes')")
   for filetype in add(neobundle#util#get_filetypes(), 'all')
     call neobundle#config#source_bundles(filter(copy(bundles),"
-          \ index(neobundle#util#convert2list(
-          \     v:val.autoload.filetypes), filetype) >= 0"))
+          \ index(v:val.autoload.filetypes, filetype) >= 0"))
   endfor
 endfunction
 
@@ -77,8 +76,7 @@ function! neobundle#autoload#filename(filename)
         \ "has_key(v:val.autoload, 'filename_patterns')")
   if !empty(bundles)
     call neobundle#config#source_bundles(filter(copy(bundles),"
-          \ len(filter(copy(neobundle#util#convert2list(
-          \  v:val.autoload.filename_patterns)),
+          \ len(filter(copy(v:val.autoload.filename_patterns),
           \  'a:filename =~? v:val')) > 0"))
   endif
 endfunction
@@ -99,8 +97,7 @@ function! neobundle#autoload#function()
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "get(v:val.autoload, 'function_prefix', '').'#' ==# function_prefix ||
         \  (has_key(v:val.autoload, 'functions') &&
-        \    index(neobundle#util#convert2list(
-        \     v:val.autoload.functions), function) >= 0)")
+        \    index(v:val.autoload.functions, function) >= 0)")
   call neobundle#config#source_bundles(bundles)
 endfunction
 
@@ -199,8 +196,7 @@ function! neobundle#autoload#unite_sources(sources)
       let bundles += copy(sources_bundles)
     else
       let bundles += filter(copy(sources_bundles),
-            \ "!empty(filter(copy(neobundle#util#convert2list(
-            \    v:val.autoload.unite_sources)),
+            \ "!empty(filter(copy(v:val.autoload.unite_sources),
             \    'stridx(source_name, v:val) >= 0'))")
     endif
   endfor
@@ -213,8 +209,7 @@ function! neobundle#autoload#get_unite_sources()
   let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
           \ "has_key(v:val.autoload, 'unite_sources')")
   for bundle in sources_bundles
-    let _ += neobundle#util#convert2list(
-          \ bundle.autoload.unite_sources)
+    let _ += bundle.autoload.unite_sources
   endfor
 
   return _
@@ -238,8 +233,7 @@ endfunction
 function! neobundle#autoload#source(bundle_name)
   let bundles = filter(neobundle#config#get_neobundles(),
         \ "has_key(v:val.autoload, 'on_source') &&
-        \   index(neobundle#util#convert2list(
-        \         v:val.autoload.on_source), a:bundle_name) >= 0 &&
+        \   index(v:val.autoload.on_source, a:bundle_name) >= 0 &&
         \   !v:val.sourced && v:val.lazy")
   if !empty(bundles)
     call neobundle#config#source_bundles(bundles)

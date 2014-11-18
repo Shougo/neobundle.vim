@@ -541,6 +541,16 @@ function! s:add_lazy(bundle) "{{{
     call remove(bundle, key)
   endfor
 
+  " Auto convert2list.
+  for key in filter([
+        \ 'filetypes', 'filename_patterns', 'on_source',
+        \ 'commands', 'functions', 'mappings', 'unite_sources',
+        \ ], "has_key(bundle.autoload, v:val)
+        \     && type(bundle.autoload[v:val]) != type([])
+        \")
+    let bundle.autoload[key] = [bundle.autoload[key]]
+  endfor
+
   if !has_key(bundle.autoload, 'function_prefix')
     let bundle.autoload.function_prefix =
           \ neobundle#parser#_function_prefix(bundle.name)
@@ -551,8 +561,10 @@ function! s:add_lazy(bundle) "{{{
   endif
   if !has_key(bundle.autoload, 'unite_sources')
         \ && bundle.name =~ '^\%(vim-\)\?unite-'
-    let bundle.autoload.unite_sources =
-          \ matchstr(bundle.name, '^\%(vim-\)\?-unite-\zs.*')
+    let unite_source = matchstr(bundle.name, '^\%(vim-\)\?-unite-\zs.*')
+    if unite_source != ''
+      let bundle.autoload.unite_sources = unite_source
+    endif
   endif
 
   if neobundle#config#is_sourced(bundle.name)
@@ -571,8 +583,7 @@ endfunction"}}}
 
 function! s:add_dummy_commands(bundle) "{{{
   let a:bundle.dummy_commands = []
-  for command in map(copy(neobundle#util#convert2list(
-        \ a:bundle.autoload.commands)), "
+  for command in map(copy(a:bundle.autoload.commands), "
         \ type(v:val) == type('') ?
           \ { 'name' : v:val } : v:val
           \")
@@ -592,8 +603,7 @@ function! s:add_dummy_commands(bundle) "{{{
 endfunction"}}}
 function! s:add_dummy_mappings(bundle) "{{{
   let a:bundle.dummy_mappings = []
-  for [modes, mappings] in map(neobundle#util#convert2list(
-        \ copy(a:bundle.autoload.mappings)), "
+  for [modes, mappings] in map(copy(a:bundle.autoload.mappings), "
         \   type(v:val) == type([]) ?
         \     [v:val[0], v:val[1:]] : ['nxo', [v:val]]
         \ ")
