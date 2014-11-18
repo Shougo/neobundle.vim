@@ -433,18 +433,6 @@ function! neobundle#config#add(bundle, ...) "{{{
   elseif bundle.lazy
     call s:add_lazy(bundle)
   endif
-
-  if !is_force && bundle.overwrite &&
-        \ !empty(prev_bundle) && prev_bundle.overwrite &&
-        \ bundle.orig_arg !=# prev_bundle.orig_arg &&
-        \ prev_bundle.resettable && prev_bundle.overwrite
-    " echomsg string(bundle.orig_arg)
-    " echomsg string(prev_bundle.orig_arg)
-    " Warning.
-    call neobundle#util#print_error(
-          \ '[neobundle] Plugin "' . bundle.name .
-          \ '" appears to be defined multiple times in .vimrc.')
-  endif
 endfunction"}}}
 
 function! neobundle#config#tsort(bundles) "{{{
