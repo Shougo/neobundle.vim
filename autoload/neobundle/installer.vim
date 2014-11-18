@@ -150,8 +150,14 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
         \     v:val.path ==# v:val.installed_path &&
         \     v:val.uri !=# v:val.installed_uri")
   if !empty(reinstall_bundles)
-    echomsg 'Reinstall bundles detected: '
-          \ string(map(copy(reinstall_bundles), 'v:val.name'))
+    call unite#util#print_error(
+          \ '[neobundle] Reinstall bundles are detected!')
+
+    for bundle in reinstall_bundles
+      echomsg printf('%s: %s -> %s',
+            \   bundle.name, bundle.installed_uri, bundle.uri)
+    endfor
+
     let cwd = neobundle#util#substitute_path_separator(getcwd())
     let warning_bundles = map(filter(copy(reinstall_bundles),
         \     'v:val.path ==# cwd'), 'v:val.path')
