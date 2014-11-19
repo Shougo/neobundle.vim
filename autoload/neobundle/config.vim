@@ -624,15 +624,16 @@ function! s:on_source(bundle) "{{{
         \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-      silent! execute 'source' fnameescape(file)
+      execute 'source' fnameescape(file)
     endfor
   endfor
 
   if !has('vim_starting') && exists('#'.a:bundle.augroup.'#VimEnter')
-    execute 'silent doautocmd' a:bundle.augroup 'VimEnter'
+    execute 'doautocmd' a:bundle.augroup 'VimEnter'
 
     if has('gui_running') && &term ==# 'builtin_gui'
-      execute 'silent doautocmd' a:bundle.augroup 'GUIEnter'
+          \ && exists('#'.a:bundle.augroup.'#GUIEnter')
+      execute 'doautocmd' a:bundle.augroup 'GUIEnter'
     endif
   endif
 
