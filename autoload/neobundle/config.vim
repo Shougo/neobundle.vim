@@ -624,8 +624,7 @@ function! s:on_source(bundle) "{{{
   endif
 
   " Reload script files.
-  for directory in filter(
-        \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
+  for directory in filter(['plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
       " NOTE: "silent!" is required to ignore E122, E174 and E227.
