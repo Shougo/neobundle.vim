@@ -160,7 +160,13 @@ function! neobundle#config#source(names, ...) "{{{
     call neobundle#config#rtp_add(bundle)
 
     if exists('g:loaded_neobundle') || is_force
-      call s:on_source(bundle)
+      try
+        call s:on_source(bundle)
+      catch
+        call neobundle#util#print_error(
+              \ '[neobundle] Uncaught error while sourcing "' . bundle.name .
+              \ '": '.v:exception)
+      endtry
     endif
 
     call neobundle#autoload#source(bundle.name)
@@ -624,15 +630,29 @@ function! s:on_source(bundle) "{{{
         \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-      silent! execute 'source' fnameescape(file)
+      try
+        execute 'source' fnameescape(file)
+
+      catch /^Vim\%((\a\+)\)\=:\%(E122\|E174\|E227\)/
+        " Catch (kind of expected) errors from sourcing a file multiple times,
+        " e.g. on update/re-install:
+        " E122: Function Foo already exists, add ! to replace it
+        " E174: Command already exists: add ! to replace it
+        " E227: mapping already exists for ...
+      catch
+        call neobundle#util#print_error(
+              \ '[neobundle] Uncaught error while sourcing "' . file .
+              \ '": '.v:exception)
+      endtry
     endfor
   endfor
 
   if !has('vim_starting') && exists('#'.a:bundle.augroup.'#VimEnter')
-    execute 'silent doautocmd' a:bundle.augroup 'VimEnter'
+    execute 'doautocmd' a:bundle.augroup 'VimEnter'
 
     if has('gui_running') && &term ==# 'builtin_gui'
-      execute 'silent doautocmd' a:bundle.augroup 'GUIEnter'
+          \ && exists('#'.a:bundle.augroup.'#GUIEnter')
+      execute 'doautocmd' a:bundle.augroup 'GUIEnter'
     endif
   endif
 
