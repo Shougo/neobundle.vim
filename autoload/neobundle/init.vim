@@ -104,7 +104,8 @@ function! neobundle#init#_bundle(bundle) "{{{
 
   if !has_key(bundle, 'normalized_name')
     let bundle.normalized_name = substitute(
-          \ fnamemodify(bundle.name, ':r'), '^vim-\|-vim$', '', 'g')
+          \ fnamemodify(bundle.name, ':r'),
+          \ '\c^vim[_-]\|[_-]vim$', '', 'g')
   endif
   if !has_key(bundle.orig_opts, 'name') &&
      \ g:neobundle#enable_name_conversion
