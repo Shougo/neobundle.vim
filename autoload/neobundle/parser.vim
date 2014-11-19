@@ -194,7 +194,14 @@ function! neobundle#parser#local(localdir, options, names) "{{{
 endfunction"}}}
 
 function! neobundle#parser#load_toml(filename, default) "{{{
-  let toml = neobundle#TOML#parse_file(neobundle#util#expand(a:filename))
+  try
+    let toml = neobundle#TOML#parse_file(neobundle#util#expand(a:filename))
+  catch /vital: Text.TOML:/
+    call neobundle#util#print_error(
+          \ '[neobundle] Invalid toml format: ' . a:filename)
+    call neobundle#util#print_error(v:exception)
+    return 1
+  endtry
   if type(toml) != type({}) || !has_key(toml, 'plugins')
     call neobundle#util#print_error(
           \ '[neobundle] Invalid toml file: ' . a:filename)
