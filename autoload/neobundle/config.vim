@@ -165,7 +165,7 @@ function! neobundle#config#source(names, ...) "{{{
       catch
         call neobundle#util#print_error(
               \ '[neobundle] Uncaught error while sourcing "' . bundle.name .
-              \ '": '.v:exception)
+              \ '": '.v:exception . ' in ' . v:throwpoint)
       endtry
     endif
 
