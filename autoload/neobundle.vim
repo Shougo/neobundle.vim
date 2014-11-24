@@ -94,7 +94,7 @@ command! -nargs=+ NeoBundleDirectInstall
 command! -nargs=* -bar
       \ -complete=customlist,neobundle#commands#complete_lazy_bundles
       \ NeoBundleSource
-      \ call neobundle#config#source([<f-args>])
+      \ call neobundle#commands#source([<f-args>])
 
 command! -nargs=+ -bar
       \ -complete=customlist,neobundle#commands#complete_bundles

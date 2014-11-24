@@ -126,10 +126,8 @@ endfunction"}}}
 function! neobundle#config#source(names, ...) "{{{
   let is_force = get(a:000, 0, 1)
 
-  let names = neobundle#util#convert2list(a:names)
-  let bundles = empty(names) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(names)
+  let bundles = neobundle#config#search(
+        \ neobundle#util#convert2list(a:names))
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let bundles = filter(bundles,

@@ -415,6 +415,21 @@ function! neobundle#commands#lock(name, rev) "{{{
   let bundle.install_rev = a:rev
 endfunction"}}}
 
+function! neobundle#commands#source(names, ...) "{{{
+  let is_force = get(a:000, 0, 1)
+
+  let names = neobundle#util#convert2list(a:names)
+  if empty(names)
+    let bundles = []
+    for bundle in neobundle#config#get_neobundles()
+      let bundles += neobundle#config#search([bundle.name])
+    endfor
+    let names = map(neobundle#util#uniq(bundles), 'v:val.name')
+  endif
+
+  call neobundle#config#source(names, is_force)
+endfunction "}}}
+
 function! neobundle#commands#complete_bundles(arglead, cmdline, cursorpos) "{{{
   return filter(map(neobundle#config#get_neobundles(), 'v:val.name'),
         \ 'stridx(tolower(v:val), tolower(a:arglead)) >= 0')
