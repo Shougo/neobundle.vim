@@ -165,7 +165,7 @@ function! neobundle#config#source(names, ...) "{{{
       catch
         call neobundle#util#print_error(
               \ '[neobundle] Uncaught error while sourcing "' . bundle.name .
-              \ '": '.v:exception)
+              \ '": '.v:exception . ' in ' . v:throwpoint)
       endtry
     endif
 
@@ -630,20 +630,10 @@ function! s:on_source(bundle) "{{{
         \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-      try
-        execute 'source' fnameescape(file)
-
-      catch /^Vim\%((\a\+)\)\=:\%(E122\|E174\|E227\)/
-        " Catch (kind of expected) errors from sourcing a file multiple times,
-        " e.g. on update/re-install:
-        " E122: Function Foo already exists, add ! to replace it
-        " E174: Command already exists: add ! to replace it
-        " E227: mapping already exists for ...
-      catch
-        call neobundle#util#print_error(
-              \ '[neobundle] Uncaught error while sourcing "' . file .
-              \ '": '.v:exception)
-      endtry
+      " NOTE: "silent!" is required to ignore E122, E174 and E227.
+      "       try/catching them aborts sourcing of the file.
+      "       "unsilent" then displays any messages while sourcing.
+      execute 'silent! unsilent source' fnameescape(file)
     endfor
   endfor
 
