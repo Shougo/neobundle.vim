@@ -424,7 +424,7 @@ function! neobundle#commands#source(names, ...) "{{{
     for bundle in neobundle#config#get_neobundles()
       let bundles += neobundle#config#search([bundle.name])
     endfor
-    let names = map(neobundle#util#uniq(bundles), 'v:val.name')
+    let names = neobundle#util#uniq(map(bundles, 'v:val.name'))
   endif
 
   call neobundle#config#source(names, is_force)
