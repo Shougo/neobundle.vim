@@ -98,6 +98,6 @@ function! s:suite.pattern_d()
 endfunction
 
 function! s:suite.autoload()
-  call s:assert.equals(neobundle#get('unite.vim').autoload.commands, 'Unite')
+  call s:assert.equals(neobundle#get('unite.vim').autoload.commands, ['Unite'])
 endfunction
 
