@@ -546,10 +546,10 @@ function! s:add_lazy(bundle) "{{{
           \ substitute(bundle.normalized_name, '[_-]', '', 'g')
   endif
   if !has_key(bundle.autoload, 'unite_sources')
-        \ && bundle.name =~ '^\%(vim-\)\?unite-'
-    let unite_source = matchstr(bundle.name, '^\%(vim-\)\?-unite-\zs.*')
+        \ && bundle.name =~# '^\%(vim-\)\?unite-'
+    let unite_source = matchstr(bundle.name, '^\%(vim-\)\?unite-\zs.*')
     if unite_source != ''
-      let bundle.autoload.unite_sources = unite_source
+      let bundle.autoload.unite_sources = [unite_source]
     endif
   endif
 
