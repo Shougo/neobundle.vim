@@ -101,7 +101,6 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ }
 
 " script_type support.
-NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
 NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
        \ {'script_type' : 'plugin'}
 

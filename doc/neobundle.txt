@@ -757,9 +757,13 @@ OPTIONS 					*neobundle-options*
 		Specify the script type. It is useful for non-official
 		categorized plugins.
 		For example: "indent", "plugin", "ftplugin", ...
+		Note: You must not specify it for categorized plugins.
 		Example:
 >
-		NeoBundle 'bronzehedwick/impactjs-colorscheme', {'script_type' : 'colors'}
+		NeoBundle 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
+		\ {'script_type' : 'plugin'}
+		NeoBundle 'https://github.com/bronzehedwick/impactjs-colorscheme',
+		\ {'script_type' : 'colorscheme'}
 <
 						*neobundle-options-site*
 		site			(String)
