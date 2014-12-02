@@ -214,18 +214,22 @@ endfunction
 
 function! neobundle#installer#get_revision_number(bundle)
   let cwd = getcwd()
+  let type = neobundle#config#get_types(a:bundle.type)
+
+  if !isdirectory(a:bundle.path)
+        \ || !has_key(type, 'get_revision_number_command')
+    return ''
+  endif
+
+  let cmd = type.get_revision_number_command(a:bundle)
+  if cmd == ''
+    return ''
+  endif
+
   try
-    let type = neobundle#config#get_types(a:bundle.type)
-
-    if !isdirectory(a:bundle.path)
-          \ || !has_key(type, 'get_revision_number_command')
-      return ''
-    endif
-
     call neobundle#util#cd(a:bundle.path)
 
-    let rev = neobundle#util#system(
-          \ type.get_revision_number_command(a:bundle))
+    let rev = neobundle#util#system(cmd)
 
     " If rev contains spaces, it is error message
     return (rev !~ '\s') ? rev : ''

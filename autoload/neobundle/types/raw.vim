@@ -99,7 +99,9 @@ function! s:type.get_revision_number_command(bundle) "{{{
   endif
 
   " Calc hash.
-  return g:neobundle#types#raw#calc_hash_command . ' ' . a:bundle.type__filepath
+  return printf('%s %s',
+        \ g:neobundle#types#raw#calc_hash_command,
+        \ a:bundle.type__filepath)
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
   let new_rev = matchstr(a:bundle.new_rev, '^\S\+')
