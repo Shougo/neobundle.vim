@@ -45,8 +45,11 @@ function! neobundle#autoload#init()
           \ call neobundle#autoload#command_prefix()
   endif
 
+  augroup neobundle-explorer
+    autocmd!
+  augroup END
   for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter']
-    execute 'autocmd neobundle' event "* call neobundle#autoload#explorer(
+    execute 'autocmd neobundle-explorer' event "* call neobundle#autoload#explorer(
           \ expand('<afile>'), ".string(event) . ")"
   endfor
 
@@ -180,7 +183,11 @@ function! neobundle#autoload#explorer(path, event)
 
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "get(v:val.autoload, 'explorer', 0)")
-  if !empty(bundles)
+  if empty(bundles)
+    augroup neobundle-explorer
+      autocmd!
+    augroup END
+  else
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
   endif
