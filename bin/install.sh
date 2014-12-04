@@ -50,7 +50,7 @@ echo "Please add the following settings for NeoBundle to the top of your .vimrc 
     echo "NeoBundle 'Shougo/neosnippet.vim'"
     echo "NeoBundle 'Shougo/neosnippet-snippets'"
     echo "NeoBundle 'tpope/vim-fugitive'"
-    echo "NeoBundle 'kien/ctrlp.vim'"
+    echo "NeoBundle 'ctrlpvim/ctrlp.vim'"
     echo "NeoBundle 'flazz/vim-colorschemes'"
     echo ""
     echo "\" You can specify revision/branch/tag."
