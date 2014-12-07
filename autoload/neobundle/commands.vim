@@ -490,7 +490,7 @@ function! neobundle#commands#load_cache() "{{{
     endfor
   catch
     call neobundle#util#print_error(
-          \ '[neobundle] Error occured while loading cache : ' . v:errmsg)
+          \ '[neobundle] Error occurred while loading cache : ' . v:errmsg)
   endtry
 endfunction"}}}
 function! neobundle#commands#clear_cache() "{{{

@@ -128,7 +128,7 @@ function! s:get_commit_status(bundle) "{{{
   endtry
 
   if neobundle#util#get_last_status()
-    return printf('Error(%d) occured when executing "%s"',
+    return printf('Error(%d) occurred when executing "%s"',
           \ neobundle#util#get_last_status(), cmd)
   endif
 

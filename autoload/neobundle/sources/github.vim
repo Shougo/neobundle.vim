@@ -76,7 +76,7 @@ function! s:get_github_searches(string) "{{{
 
   if unite#util#get_last_status()
     call unite#print_message('[neobundle/search:github] ' . cmd)
-    call unite#print_error('[neobundle/search:github] Error occured!')
+    call unite#print_error('[neobundle/search:github] Error occurred!')
     call unite#print_error(result)
     return []
   elseif !filereadable(temp)
