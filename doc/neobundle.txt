@@ -325,11 +325,16 @@ neobundle#untap()				 *neobundle#untap()*
 		Clear current |neobundle#tapped| and |neobundle#hooks| variable.
 
 neobundle#has_cache()			 *neobundle#has_cache()*
-		Checks if a cache file is generated.
+		Checks if a cache file is available.
 		You can optimize the .vimrc loading time by using it
 		together with |:NeoBundleLoadCache|.
-		Note: You must clear the cache by using |:NeoBundleClearCache|
-		if the neobundle configuration is changed.
+
+		The default cache location can be overridden through
+		|g:neobundle#cache_file|.
+
+		Note: to clear the cache use |:NeoBundleClearCache|,
+		or use |neobundle#commands#has_fresh_cache()| when
+		checking for it.
 >
 	if neobundle#has_cache()
 	  NeoBundleLoadCache
@@ -521,6 +526,14 @@ COMMANDS 					*neobundle-commands*
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
+g:neobundle#cache_file				*g:neobundle#cache_file*
+		The cache file to use.
+
+		The default is provided through
+		neobundle#commands#get_default_cache_file():
+>
+		neobundle#get_rtp_dir() . '/cache'
+<
 neobundle#tapped				*neobundle#tapped*
 		Current bundle variable set by |neobundle#tap()|.
 
