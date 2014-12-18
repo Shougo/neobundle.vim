@@ -698,11 +698,11 @@ function! s:save_lockfile(bundles) "{{{
     call mkdir(dir, 'p')
   endif
 
-  return writefile(map(filter(map(copy(a:bundles),
+  return writefile(sort(map(filter(map(copy(a:bundles),
         \ '[v:val.name, neobundle#installer#get_revision_number(v:val)]'),
         \ "v:val[1] != '' && v:val[1] !~ '\s'"),
         \ "printf('NeoBundleLock %s %s',
-        \          escape(v:val[0], ' \'), v:val[1])"), path)
+        \          escape(v:val[0], ' \'), v:val[1])")), path)
 endfunction"}}}
 
 function! s:source_lockfile() "{{{
