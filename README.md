@@ -110,6 +110,14 @@ Complete.
 Launch `vim`, run `:NeoBundleInstall` or `:Unite neobundle/install` (required
 unite.vim) Or Command run `bin/neoinstall` or `vim +NeoBundleInstall +qall`
 
+
+## How to test
+
+Run `make test` command in command line(required vim-themis).
+
+https://github.com/thinca/vim-themis
+
+
 ## Advantages over Vundle
 
 1. Plugin prefixed command name (:Bundle vs :NeoBundle).
