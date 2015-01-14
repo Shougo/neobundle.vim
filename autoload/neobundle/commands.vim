@@ -47,9 +47,6 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
 
-  " Remove disabled bundles.
-  call filter(bundles, '!v:val.disabled')
-
   let reinstall_bundles =
         \ neobundle#installer#get_reinstall_bundles(bundles)
   if !empty(reinstall_bundles)
@@ -164,9 +161,6 @@ function! neobundle#commands#check_update(bundle_names) "{{{
   let context.source__bundles = empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
-
-  " Remove disabled bundles.
-  call filter(context.source__bundles, '!v:val.disabled')
 
   let context.source__max_bundles =
         \ len(context.source__bundles)

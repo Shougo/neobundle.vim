@@ -156,9 +156,6 @@ function! s:init(context, bundle_names)
         \ neobundle#config#search(a:bundle_names) :
         \ neobundle#config#fuzzy_search(a:bundle_names)
 
-  " Remove disabled bundles.
-  call filter(a:context.source__bundles, '!v:val.disabled')
-
   call neobundle#installer#_load_install_info(
         \ a:context.source__bundles)
 

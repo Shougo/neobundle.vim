@@ -986,7 +986,7 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-disabled*
 		disabled		(Number)
 		If set to 1, neobundle will disable the plugin.
-		Note: Disabled plugins are ignored when install/update
+		Note: Disabled plugins are not ignored when install/update
 		plugins.
 
 		Example: >
