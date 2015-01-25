@@ -137,8 +137,9 @@ function! neobundle#commands#check() "{{{
     return
   endif
 
-  if has('gui_running') && has('vim_starting')
-    " Note: :NeoBundleCheck cannot work in GUI startup.
+  " Defer call during Vim startup.
+  " This is required for 'gui_running' and fixes issues otherwise.
+  if has('vim_starting')
     autocmd neobundle VimEnter * NeoBundleCheck
   else
     echomsg 'Not installed bundles: '
