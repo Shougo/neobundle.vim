@@ -253,8 +253,10 @@ function! s:get_input()
 
   call feedkeys(termstr, 'n')
 
+  let type_num = type(0)
   while 1
-    let input .= nr2char(getchar())
+    let char = getchar()
+    let input .= type(char) == type_num ? nr2char(char) : char
 
     let idx = stridx(input, termstr)
     if idx >= 1
