@@ -108,13 +108,17 @@ function! neobundle#commands#helptags(bundles) "{{{
   let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
 
   if !empty(help_dirs)
-    call s:update_tags()
-
-    if !has('vim_starting')
-      call neobundle#installer#log(
-            \ '[neobundle/install] Helptags: done. '
-            \ .len(help_dirs).' bundles processed')
-    endif
+    try
+      call s:update_tags()
+      if !has('vim_starting')
+        call neobundle#installer#log(
+              \ '[neobundle/install] Helptags: done. '
+              \ .len(help_dirs).' bundles processed')
+      endif
+    catch
+      call neobundle#installer#error('Error generating helptags:')
+      call neobundle#installer#error(v:exception)
+    endtry
   endif
 
   return help_dirs
@@ -267,7 +271,12 @@ function! neobundle#commands#clean(bang, ...) "{{{
       call neobundle#config#rm(dir)
     endfor
 
-    call s:update_tags()
+    try
+      call s:update_tags()
+    catch
+      call neobundle#installer#error('Error generating helptags:')
+      call neobundle#installer#error(v:exception)
+    endtry
   finally
     call neobundle#util#cd(cwd)
   endtry
@@ -659,12 +668,7 @@ function! s:update_tags() "{{{
   call neobundle#util#writefile('tags_info',
         \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
 
-  try
-    silent! execute 'helptags' fnameescape(neobundle#get_tags_dir())
-  catch
-    call neobundle#installer#error('Error generating helptags:')
-    call neobundle#installer#error(v:exception)
-  endtry
+  silent execute 'helptags' fnameescape(neobundle#get_tags_dir())
 endfunction"}}}
 
 function! s:has_doc(path) "{{{
