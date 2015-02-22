@@ -70,7 +70,7 @@ function! neobundle#config#final() "{{{
     let index += 1
 
     if isdirectory(bundle.rtp.'/after')
-      call add(rtps, fnameescape(bundle.rtp.'/after'))
+      call add(rtps, s:get_rtp_after(bundle))
     endif
   endfor
   let &runtimepath = neobundle#util#join_rtp(rtps, &runtimepath, '')
@@ -255,7 +255,7 @@ endfunction"}}}
 function! neobundle#config#rtp_rm(bundle) "{{{
   execute 'set rtp-='.fnameescape(a:bundle.rtp)
   if isdirectory(a:bundle.rtp.'/after')
-    execute 'set rtp-='.fnameescape(a:bundle.rtp.'/after')
+    execute 'set rtp-='.s:get_rtp_after(a:bundle)
   endif
 endfunction"}}}
 
@@ -279,8 +279,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
           \ &runtimepath, rtp)
   endif
   if isdirectory(rtp.'/after')
-    execute 'set rtp+='.substitute(
-          \ fnameescape(rtp.'/after'), '//', '/', 'g')
+    execute 'set rtp+='.s:get_rtp_after(a:bundle)
   endif
 
   call neobundle#call_hook('on_source', a:bundle)
@@ -713,6 +712,11 @@ function! s:filetype_off() "{{{
   endif
 
   return filetype_out
+endfunction"}}}
+
+function! s:get_rtp_after(bundle) abort "{{{
+  return substitute(
+          \ fnameescape(a:bundle.rtp . '/after'), '//', '/', 'g')
 endfunction"}}}
 
 let &cpo = s:save_cpo
