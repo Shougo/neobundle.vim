@@ -64,7 +64,8 @@ function! neobundle#config#final() "{{{
   " Join to the tail in runtimepath.
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let index = index(rtps, neobundle#get_rtp_dir())
-  for bundle in filter(s:lazy_rtp_bundles, 'isdirectory(v:val.rtp)')
+  for bundle in filter(s:lazy_rtp_bundles,
+        \ 'isdirectory(v:val.rtp) && !v:val.disabled')
     call insert(rtps, bundle.rtp, index)
     let index += 1
 
