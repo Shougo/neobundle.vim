@@ -279,7 +279,8 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
           \ &runtimepath, rtp)
   endif
   if isdirectory(rtp.'/after')
-    execute 'set rtp+='.fnameescape(rtp.'/after')
+    execute 'set rtp+='.substitute(
+          \ fnameescape(rtp.'/after'), '//', '/', 'g')
   endif
 
   call neobundle#call_hook('on_source', a:bundle)
