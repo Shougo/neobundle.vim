@@ -264,7 +264,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
     call neobundle#config#rtp_rm(s:neobundles[a:bundle.name])
   endif
 
-  if s:is_block && !bundle.force
+  if s:is_block && !a:bundle.force
     " Add rtp lazily.
     call add(s:lazy_rtp_bundles, a:bundle)
     return
