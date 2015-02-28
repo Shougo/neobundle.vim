@@ -1324,7 +1324,7 @@ EXAMPLES					*neobundle-examples*
 	NeoBundleFetch 'Shougo/neobundle.vim'
 
 	" Use neobundle standard recipes.
-	NeoBundle 'Shougo/neobundle-vim-recipes'
+	NeoBundle 'Shougo/neobundle-vim-recipes', {'force' : 1}
 
 	" My Bundles here:
 	" Refer to |:NeoBundle-examples|.
@@ -1495,8 +1495,9 @@ The standard recipes are in "neobundle-vim-recipes".
 https://github.com/Shougo/neobundle-vim-recipes
 
 You can use the recipes with the following command in .vimrc.
+Note: You must use "force" option for "neobundle-vim-recipes".
 >
-	NeoBundle 'Shougo/neobundle-vim-recipes'
+	NeoBundle 'Shougo/neobundle-vim-recipes', {'force' : 1}
 <
 
 The recipe files are in JSON format, like this:
