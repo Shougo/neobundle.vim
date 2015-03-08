@@ -319,7 +319,8 @@ neobundle#config({options})
 neobundle#tap({bundle-name})			 *neobundle#tap()*
 		Initialize |neobundle#tapped| and |neobundle#hooks| variable
 		as {bundle-name} bundle.
-		It returns non-zero if {bundle-name} is exists.
+		It returns non-zero if {bundle-name} is exists and not
+		disabled.
 
 neobundle#untap()				 *neobundle#untap()*
 		Clear current |neobundle#tapped| and |neobundle#hooks| variable.

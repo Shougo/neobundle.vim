@@ -276,7 +276,7 @@ endfunction
 function! neobundle#tap(name) "{{{
   let g:neobundle#tapped = neobundle#get(a:name)
   let g:neobundle#hooks = get(neobundle#get(a:name), 'hooks', {})
-  return !empty(g:neobundle#tapped)
+  return !empty(g:neobundle#tapped) && !g:neobundle#tapped.disabled
 endfunction"}}}
 function! neobundle#untap() "{{{
   let g:neobundle#tapped = {}
