@@ -150,7 +150,7 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
         \     v:val.path ==# v:val.installed_path &&
         \     v:val.uri !=# v:val.installed_uri")
   if !empty(reinstall_bundles)
-    call unite#util#print_error(
+    call neobundle#util#print_error(
           \ '[neobundle] Reinstall bundles are detected!')
 
     for bundle in reinstall_bundles
