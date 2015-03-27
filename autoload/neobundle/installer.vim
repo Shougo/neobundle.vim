@@ -46,13 +46,11 @@ function! neobundle#installer#update(bundles)
 
   call s:save_install_info(all_bundles)
 
-  if !empty(a:bundles)
-    let lazy_bundles = filter(copy(all_bundles), 'v:val.lazy')
-    call neobundle#util#copy_bundle_files(
-          \ lazy_bundles, 'ftdetect')
-    call neobundle#util#copy_bundle_files(
-          \ lazy_bundles, 'after/ftdetect')
-  endif
+  let lazy_bundles = filter(copy(all_bundles), 'v:val.lazy')
+  call neobundle#util#copy_bundle_files(
+        \ lazy_bundles, 'ftdetect')
+  call neobundle#util#copy_bundle_files(
+        \ lazy_bundles, 'after/ftdetect')
 endfunction
 
 function! neobundle#installer#build(bundle)
