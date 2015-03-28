@@ -110,7 +110,9 @@ function! neobundle#autoload#command(command, name, args, bang, line1, line2)
 
   call neobundle#config#source(a:name)
 
-  let range = (a:line1 != a:line2) ? "'<,'>" : ''
+  let range = (a:line1 == a:line2) ? '' :
+        \ (a:line1==line("'<") && a:line2==line("'>")) ?
+        \ "'<,'>" : a:line1.",".a:line2
 
   try
     execute range.a:command.a:bang a:args
