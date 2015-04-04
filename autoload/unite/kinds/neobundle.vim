@@ -44,9 +44,9 @@ let s:kind.action_table.update = {
       \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.update.func(candidates) "{{{
-  call unite#start_temporary([['neobundle/update', '!']
+  call unite#start_script([['neobundle/update', '!']
         \ + map(copy(a:candidates), 'v:val.action__bundle_name')],
-        \ { 'log' : 1, 'script' : 1 })
+        \ { 'log' : 1 })
 endfunction"}}}
 let s:kind.action_table.delete = {
       \ 'description' : 'delete bundles',
