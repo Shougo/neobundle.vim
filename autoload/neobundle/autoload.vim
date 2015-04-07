@@ -48,7 +48,7 @@ function! neobundle#autoload#init()
   augroup neobundle-explorer
     autocmd!
   augroup END
-  for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter']
+  for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter', 'BufNew', 'VimEnter']
     execute 'autocmd neobundle-explorer' event "* call neobundle#autoload#explorer(
           \ expand('<afile>'), ".string(event) . ")"
   endfor
@@ -168,7 +168,7 @@ function! neobundle#autoload#mapping(mapping, name, mode)
 endfunction
 
 function! neobundle#autoload#explorer(path, event)
-  if bufnr('%') != expand('<abuf>') || a:path == ''
+  if a:path == ''
     return
   endif
 
