@@ -91,7 +91,7 @@ endfunction"}}}
 
 function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
-        \ "!v:val.sourced && v:val.lazy")
+        \ "!v:val.sourced && v:val.lazy && !v:val.disabled")
 endfunction"}}}
 
 function! neobundle#config#source_bundles(bundles) "{{{
@@ -131,9 +131,9 @@ function! neobundle#config#source(names, ...) "{{{
         \ neobundle#util#convert2list(a:names))
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
-  let bundles = filter(bundles,
-        \ "!neobundle#config#is_sourced(v:val.name) ||
-        \ (v:val.rtp != '' && index(rtps, v:val.rtp) < 0)")
+  let bundles = filter(bundles, "!v:val.disabled
+        \ && (!neobundle#config#is_sourced(v:val.name)
+        \ || (v:val.rtp != '' && index(rtps, v:val.rtp) < 0))")
   if empty(bundles)
     return
   endif
