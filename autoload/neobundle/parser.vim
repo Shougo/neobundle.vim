@@ -269,7 +269,7 @@ endfunction"}}}
 function! neobundle#parser#_function_prefix(name) "{{{
   let function_prefix = tolower(fnamemodify(a:name, ':r'))
   let function_prefix = substitute(function_prefix,
-        \'^vim-', '','')
+        \'^vim-\|-vim$', '','')
   let function_prefix = substitute(function_prefix,
         \'^unite-', 'unite#sources#','')
   let function_prefix = tr(function_prefix, '-', '_')

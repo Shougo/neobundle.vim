@@ -211,6 +211,9 @@ function! s:suite.parse_function_prefix()
 
   call s:assert.equals(neobundle#parser#_function_prefix(
         \ 'vim-vcs'), 'vcs')
+
+  call s:assert.equals(neobundle#parser#_function_prefix(
+        \ 'gist-vim'), 'gist')
 endfunction
 
 function! s:suite.name_conversion()
