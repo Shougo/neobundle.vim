@@ -35,6 +35,14 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init() "{{{
+  if s:is_block
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle#begin()/neobundle#end() usage is invalid.')
+    call neobundle#util#print_error(
+          \ '[neobundle] Please check your .vimrc.')
+    return
+  endif
+
   call s:filetype_off()
 
   for bundle in values(s:neobundles)
@@ -61,6 +69,14 @@ function! neobundle#config#init() "{{{
   let s:lazy_rtp_bundles = []
 endfunction"}}}
 function! neobundle#config#final() "{{{
+  if !s:is_block
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle#begin()/neobundle#end() usage is invalid.')
+    call neobundle#util#print_error(
+          \ '[neobundle] Please check your .vimrc.')
+    return
+  endif
+
   " Join to the tail in runtimepath.
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let index = index(rtps, neobundle#get_rtp_dir())
