@@ -147,6 +147,12 @@ command! -bar NeoBundleCount
 command! -bar NeoBundleSaveCache
       \ call neobundle#commands#save_cache()
 command! -bar NeoBundleLoadCache
+      \ call neobundle#util#print_error(
+      \ '[neobundle] NeoBundleLoadCache is deprecated command.') |
+      \ call neobundle#util#print_error(
+      \ '[neobundle] It will be removed in the next version.') |
+      \ call neobundle#util#print_error(
+      \ '[neobundle] Please use neobundle#load_cache() instead.') |
       \ call neobundle#commands#load_cache()
 command! -bar NeoBundleClearCache
       \ call neobundle#commands#clear_cache()
@@ -158,6 +164,13 @@ command! -nargs=1 -bar
 
 command! -nargs=+ NeoBundleLock
       \ call neobundle#commands#lock(<f-args>)
+
+function! neobundle#rc(...) "{{{
+  call neobundle#util#print_error(
+        \ '[neobundle] neobundle#rc() is removed function.')
+  call neobundle#util#print_error(
+        \ '[neobundle] Please use neobundle#begin()/neobundle#end() instead.')
+endfunction"}}}
 
 function! neobundle#begin(...) "{{{
   let path = (a:0 > 0) ? a:1 :
@@ -225,10 +238,29 @@ function! neobundle#is_sourced(name)
 endfunction
 
 function! neobundle#has_cache()
+  call neobundle#util#print_error(
+        \ '[neobundle] neobundle#has_cache() is deprecated function.')
+  call neobundle#util#print_error(
+        \ '[neobundle] It will be removed in the next version.')
+  call neobundle#util#print_error(
+        \ '[neobundle] Please use neobundle#load_cache() instead.')
+
   return filereadable(neobundle#commands#get_cache_file())
 endfunction
 
+function! neobundle#load_cache(...)
+  let vimrc = get(a:000, 0, $MYVIMRC)
+  return neobundle#commands#load_cache(vimrc)
+endfunction
+
 function! neobundle#has_fresh_cache(...)
+  call neobundle#util#print_error(
+        \ '[neobundle] neobundle#has_fresh_cache() is deprecated function.')
+  call neobundle#util#print_error(
+        \ '[neobundle] It will be removed in the next version.')
+  call neobundle#util#print_error(
+        \ '[neobundle] Please use neobundle#load_cache() instead.')
+
   " Check if the cache file is newer than the vimrc file.
   let vimrc = get(a:000, 0, $MYVIMRC)
   let cache = neobundle#commands#get_cache_file()

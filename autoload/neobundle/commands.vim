@@ -483,34 +483,36 @@ function! neobundle#commands#save_cache() "{{{
   call writefile( [s:get_cache_version(),
         \ v:progname, current_vim, string(bundles)], cache)
 endfunction"}}}
-function! neobundle#commands#load_cache() "{{{
+function! neobundle#commands#load_cache(...) "{{{
+  let vimrc = get(a:000, 0, $MYVIMRC)
   let cache = neobundle#commands#get_cache_file()
-  if !filereadable(cache)
-    return
+  if !filereadable(cache) || getftime(cache) < getftime(vimrc)
+    return 1
   endif
+
+  redir => current_vim
+  silent! version
+  redir END
 
   try
     let list = readfile(cache)
     let ver = list[0]
+    let prog = get(list, 1, '')
+    let vim = get(list, 2, '')
+
     if len(list) != 4
           \ || ver !=# s:get_cache_version()
-      return
-    endif
-
-    let prog = list[1]
-    let vim = list[2]
-    redir => current_vim
-    silent! version
-    redir END
-
-    if v:progname !=# prog || current_vim !=# vim
-      return
+          \ || v:progname !=# prog
+          \ || current_vim !=# vim
+      call neobundle#commands#clear_cache()
+      return 1
     endif
 
     sandbox let bundles = eval(list[3])
 
     if type(bundles) != type([])
-      return
+      call neobundle#commands#clear_cache()
+      return 1
     endif
 
     for bundle in bundles
@@ -519,6 +521,8 @@ function! neobundle#commands#load_cache() "{{{
   catch
     call neobundle#util#print_error(
           \ '[neobundle] Error occurred while loading cache : ' . v:errmsg)
+    call neobundle#commands#clear_cache()
+    return 1
   endtry
 endfunction"}}}
 function! neobundle#commands#clear_cache() "{{{
