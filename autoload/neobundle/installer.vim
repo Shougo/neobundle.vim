@@ -384,7 +384,7 @@ endfunction
 function! neobundle#installer#check_output(context, process, is_unite)
   if neobundle#util#has_vimproc() && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
-          \             >= g:neobundle#install_process_timeout
+          \             >= a:process.bundle.install_process_timeout
     let a:process.output .= vimproc#util#iconv(
           \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
     if !a:process.proc.stdout.eof && !is_timeout

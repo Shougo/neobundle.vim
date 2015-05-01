@@ -586,7 +586,6 @@ g:neobundle#install_max_processes
 					*g:neobundle#install_process_timeout*
 g:neobundle#install_process_timeout
 		The time of timeout seconds when updating/installing bundles.
-		Note: This feature is available if you installed |vimproc|.
 
 		Defaults to "120".
 
@@ -1010,6 +1009,12 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-verbose*
 		verbose		(Number)
 		If set to 1, neobundle will print message when it is sourced.
+
+				*neobundle-options-install_process_timeout*
+		install_process_timeout (Number)
+		The time of timeout seconds when updating/installing bundles.
+		If omit it, |g:neobundle#install_process_timeout| will be used.
+		Note: This feature is available if you installed |vimproc|.
 
 						*neobundle-options-autoload*
 		autoload		(Dictionary)

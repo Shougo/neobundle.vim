@@ -95,6 +95,8 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'recipe' : '',
           \ 'base' : neobundle#get_neobundle_dir(),
           \ 'install_rev' : '',
+          \ 'install_process_timeout'
+          \    : g:neobundle#install_process_timeout,
           \ }
   call extend(bundle, a:bundle)
 
