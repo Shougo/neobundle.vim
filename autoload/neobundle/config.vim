@@ -27,7 +27,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if !exists('s:neobundles')
-  let s:is_block = 0
+  let s:within_block = 0
   let s:lazy_rtp_bundles = []
   let s:neobundles = {}
   let s:sourced_neobundles = {}
@@ -35,7 +35,7 @@ if !exists('s:neobundles')
 endif
 
 function! neobundle#config#init() "{{{
-  if s:is_block
+  if neobundle#config#within_block()
     call neobundle#util#print_error(
           \ '[neobundle] neobundle#begin()/neobundle#end() usage is invalid.')
     call neobundle#util#print_error(
@@ -65,11 +65,11 @@ function! neobundle#config#init() "{{{
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
 
-  let s:is_block = 1
+  let s:within_block = 1
   let s:lazy_rtp_bundles = []
 endfunction"}}}
 function! neobundle#config#final() "{{{
-  if !s:is_block
+  if !neobundle#config#within_block()
     call neobundle#util#print_error(
           \ '[neobundle] neobundle#begin()/neobundle#end() usage is invalid.')
     call neobundle#util#print_error(
@@ -93,8 +93,11 @@ function! neobundle#config#final() "{{{
 
   call neobundle#call_hook('on_source', s:lazy_rtp_bundles)
 
-  let s:is_block = 0
+  let s:within_block = 0
   let s:lazy_rtp_bundles = []
+endfunction"}}}
+function! neobundle#config#within_block() "{{{
+  return s:within_block
 endfunction"}}}
 
 function! neobundle#config#get(name) "{{{
@@ -280,7 +283,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
     call neobundle#config#rtp_rm(s:neobundles[a:bundle.name])
   endif
 
-  if s:is_block && !a:bundle.force
+  if s:within_block && !a:bundle.force
     " Add rtp lazily.
     call add(s:lazy_rtp_bundles, a:bundle)
     return

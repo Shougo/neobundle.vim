@@ -28,6 +28,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! neobundle#parser#bundle(arg, ...) "{{{
+  if !neobundle#config#within_block()
+    call neobundle#util#print_error(
+          \ '[neobundle] :NeoBundle commands usage is invalid.')
+    return
+  endif
+
   let bundle = s:parse_arg(a:arg)
   let is_parse_only = get(a:000, 0, 0)
   if !is_parse_only
