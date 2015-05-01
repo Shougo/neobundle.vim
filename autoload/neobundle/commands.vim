@@ -476,7 +476,12 @@ function! neobundle#commands#save_cache() "{{{
     let bundle.hooks = {}
   endfor
 
-  call writefile([s:get_cache_version(), string(bundles)], cache)
+  redir => current_vim
+  silent! version
+  redir END
+
+  call writefile( [s:get_cache_version(),
+        \ v:progname, current_vim, string(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache() "{{{
   let cache = neobundle#commands#get_cache_file()
@@ -487,9 +492,24 @@ function! neobundle#commands#load_cache() "{{{
   try
     let list = readfile(cache)
     let ver = list[0]
-    sandbox let bundles = eval(list[1])
-    if ver !=# s:get_cache_version()
-          \ || type(bundles) != type([])
+    if len(list) != 4
+          \ || ver !=# s:get_cache_version()
+      return
+    endif
+
+    let prog = list[1]
+    let vim = list[2]
+    redir => current_vim
+    silent! version
+    redir END
+
+    if v:progname !=# prog || current_vim !=# vim
+      return
+    endif
+
+    sandbox let bundles = eval(list[3])
+
+    if type(bundles) != type([])
       return
     endif
 
@@ -688,7 +708,7 @@ function! s:cmp_vimproc(a, b) "{{{
 endfunction"}}}
 
 function! s:get_cache_version()"{{{
-  return str2nr(printf('%02d%02d', 1, 0))
+  return str2nr(printf('%02d%02d', 2, 0))
 endfunction "}}}
 
 let &cpo = s:save_cpo
