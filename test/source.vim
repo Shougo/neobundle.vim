@@ -25,7 +25,7 @@ NeoBundle 'Shougo/unite-ssh',  { 'depends' : 'Shougo/unite-sudo' }
 NeoBundleLazy 'Shougo/unite-sudo'
 
 NeoBundleLazy 'Shougo/neomru.vim', { 'depends': 'Shougo/neocomplcache' }
-NeoBundle 'Shougo/neocomplcache', 'ver.8'
+NeoBundle 'Shougo/neocomplcache.vim', 'ver.8'
 
 NeoBundleLazy 'Shougo/vimshell', { 'depends': 'Shougo/vinarise' }
 NeoBundleLazy 'Shougo/vinarise'
@@ -89,7 +89,7 @@ endfunction
 
 function! s:suite.pattern_c()
   call s:assert.equals(neobundle#is_sourced('neomru.vim'), 0)
-  call s:assert.equals(neobundle#is_sourced('neocomplcache'), 1)
+  call s:assert.equals(neobundle#is_sourced('neocomplcache.vim'), 1)
 endfunction
 
 function! s:suite.pattern_d()
