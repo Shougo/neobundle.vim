@@ -34,7 +34,7 @@ if !exists('s:neobundles')
   let neobundle#tapped = {}
 endif
 
-function! neobundle#config#init(is_block) "{{{
+function! neobundle#config#init() "{{{
   call s:filetype_off()
 
   for bundle in values(s:neobundles)
@@ -57,7 +57,7 @@ function! neobundle#config#init(is_block) "{{{
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
 
-  let s:is_block = a:is_block
+  let s:is_block = 1
   let s:lazy_rtp_bundles = []
 endfunction"}}}
 function! neobundle#config#final() "{{{
