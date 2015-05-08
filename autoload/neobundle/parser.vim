@@ -30,7 +30,7 @@ set cpo&vim
 function! neobundle#parser#bundle(arg, ...) "{{{
   if !neobundle#config#within_block()
     call neobundle#util#print_error(
-          \ '[neobundle] :NeoBundle commands usage is invalid.')
+          \ '[neobundle] `NeoBundle` commands must be executed within a neobundle#begin/end block.  Please check your usage.')
     return
   endif
 
