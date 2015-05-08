@@ -28,16 +28,17 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! neobundle#parser#bundle(arg, ...) "{{{
-  if !neobundle#config#within_block()
-    call neobundle#util#print_error(
-          \ '[neobundle] `NeoBundle` commands must be executed within a neobundle#begin/end block.  Please check your usage.')
-    return
-  endif
-
   let bundle = s:parse_arg(a:arg)
   let is_parse_only = get(a:000, 0, 0)
   if !is_parse_only
     call neobundle#config#add(bundle)
+
+    if !neobundle#config#within_block()
+          \ && !bundle.lazy && has('vim_starting')
+      call neobundle#util#print_error(
+            \ '[neobundle] `NeoBundle` commands must be executed within' .
+            \ ' a neobundle#begin/end block.  Please check your usage.')
+    endif
   endif
 
   return bundle
