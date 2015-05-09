@@ -220,7 +220,7 @@ endfunction
 
 function! neobundle#local(localdir, ...)
   return neobundle#parser#local(
-        \ a:localdir, get(a:000, 0, {}), get(a:000, 1, []))
+        \ a:localdir, get(a:000, 0, {}), get(a:000, 1, ['*']))
 endfunction
 
 function! neobundle#exists_not_installed_bundles()

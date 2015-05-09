@@ -198,13 +198,14 @@ neobundle#local({directory}, [{options}, [{names}]])
 		'runtimepath', like |pathogen| does. See |neobundle-options|
 		for keys to set in {options}.
 		If {names} is given, {names} directories are only loaded.
+		{names} is |wildcards| list.
 		Note: |:NeoBundleLocal| is a shortcut for this function.
 >
 		" Load plugin from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle", {})
 		" Load plugin1 and plugin2 from "~/.vim/bundle".
 		call neobundle#local("~/.vim/bundle",
-		\   {}, ['plugin1', 'plugin2'])
+		\   {}, ['plugin1', 'plugin2', 'vim-*', '*.vim'])
 <
 						 *neobundle#load_toml()*
 neobundle#load_toml({filename}, [{options}])

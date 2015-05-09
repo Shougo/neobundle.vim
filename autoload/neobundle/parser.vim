@@ -175,13 +175,16 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#local(localdir, options, names) "{{{
+function! neobundle#parser#local(localdir, options, includes) "{{{
   let base = fnamemodify(neobundle#util#expand(a:localdir), ':p')
-  for dir in filter(map(filter(split(glob(
-        \ base . '*'), '\n'), "isdirectory(v:val)"),
-        \ "substitute(neobundle#util#substitute_path_separator(
-        \   fnamemodify(v:val, ':p')), '/$', '', '')"),
-        \ "empty(a:names) || index(a:names, fnamemodify(v:val, ':t')) >= 0")
+  let directories = []
+  for glob in a:includes
+    let directories += map(filter(split(glob(base . glob), '\n'),
+          \ "isdirectory(v:val)"), "
+          \ substitute(neobundle#util#substitute_path_separator(
+          \   fnamemodify(v:val, ':p')), '/$', '', '')")
+  endfor
+  for dir in neobundle#util#uniq(directories)
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let name = fnamemodify(dir, ':t')
     let bundle = neobundle#get(name)
