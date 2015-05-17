@@ -58,15 +58,15 @@ function! neobundle#config#init() "{{{
     endif
   endfor
 
-  " Load extra bundles configuration.
-  call neobundle#config#load_extra_bundles()
-
   augroup neobundle
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
 
   let s:within_block = 1
   let s:lazy_rtp_bundles = []
+
+  " Load extra bundles configuration.
+  call neobundle#config#load_extra_bundles()
 endfunction"}}}
 function! neobundle#config#final() "{{{
   if !neobundle#config#within_block()
