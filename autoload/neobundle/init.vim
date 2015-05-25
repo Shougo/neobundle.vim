@@ -174,6 +174,10 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.sourced = 1
   endif
 
+  if type(bundle.disabled) == type('')
+    sandbox let bundle.disabled = eval(bundle.disabled)
+  endif
+
   let bundle.disabled = bundle.disabled
         \ || (bundle.gui && !has('gui_running'))
         \ || (bundle.terminal && has('gui_running'))

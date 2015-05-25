@@ -994,8 +994,9 @@ OPTIONS 					*neobundle-options*
 		"7.3.885".
 
 						*neobundle-options-disabled*
-		disabled		(Number)
+		disabled		(Number) or (String)
 		If set to 1, neobundle will disable the plugin.
+		If it is string, neobundle will eval the string.
 		Note: Disabled plugins are not ignored when install/update
 		plugins.
 
