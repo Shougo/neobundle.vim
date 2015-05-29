@@ -345,9 +345,6 @@ neobundle#load_cache([{vimrc}])			 *neobundle#load_cache()*
 		It returns 1, if the cache file is old or invalid or not
 		found.
 
-		You can optimize the .vimrc loading time by using it
-		together with |neobundle#load_cache()|.
-
 		The default cache location can be overridden through
 		|g:neobundle#cache_file|.
 >
