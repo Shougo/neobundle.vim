@@ -23,7 +23,7 @@ fi
 # make bundle dir and fetch neobundle
 echo "Begin fetching NeoBundle..."
 mkdir -p $BUNDLE_DIR
-git clone https://github.com/Shougo/neobundle.vim $BUNDLE_DIR/neobundle.vim
+git clone https://github.com/Shougo/neobundle.vim $INSTALL_DIR
 echo "Done."
 
 # write initial setting for .vimrc
