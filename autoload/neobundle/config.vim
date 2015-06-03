@@ -43,8 +43,6 @@ function! neobundle#config#init() "{{{
     return
   endif
 
-  call s:filetype_off()
-
   for bundle in values(s:neobundles)
     if (!bundle.resettable && !bundle.lazy) ||
           \ (bundle.sourced && bundle.lazy
@@ -62,11 +60,35 @@ function! neobundle#config#init() "{{{
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
 
+  call s:filetype_off()
+
   let s:within_block = 1
   let s:lazy_rtp_bundles = []
 
   " Load extra bundles configuration.
   call neobundle#config#load_extra_bundles()
+endfunction"}}}
+function! neobundle#config#append() "{{{
+  if neobundle#config#within_block()
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle#begin()/neobundle#end() usage is invalid.')
+    call neobundle#util#print_error(
+          \ '[neobundle] Please check your .vimrc.')
+    return
+  endif
+
+  if neobundle#get_rtp_dir() == ''
+    call neobundle#util#print_error(
+          \ '[neobundle] You must call neobundle#begin() before.')
+    call neobundle#util#print_error(
+          \ '[neobundle] Please check your .vimrc.')
+    return
+  endif
+
+  call s:filetype_off()
+
+  let s:within_block = 1
+  let s:lazy_rtp_bundles = []
 endfunction"}}}
 function! neobundle#config#final() "{{{
   if !neobundle#config#within_block()

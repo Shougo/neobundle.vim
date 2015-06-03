@@ -178,6 +178,9 @@ function! neobundle#begin(...) "{{{
         \ 'isdirectory(v:val)'), 0, '~/.vim/bundle')
   return neobundle#init#_rc(path)
 endfunction"}}}
+function! neobundle#append() "{{{
+  call neobundle#config#append()
+endfunction"}}}
 function! neobundle#end() "{{{
   call neobundle#config#final()
 endfunction"}}}
@@ -207,6 +210,10 @@ function! neobundle#get_tags_dir() "{{{
 endfunction"}}}
 
 function! neobundle#get_rtp_dir()
+  if s:neobundle_dir == ''
+    return ''
+  endif
+
   let dir = s:neobundle_dir . '/.neobundle'
   if !isdirectory(dir)
     call mkdir(dir, 'p')

@@ -141,15 +141,19 @@ INTERFACE					*neobundle-interface*
 FUNCTIONS 					*neobundle-functions*
 
 neobundle#begin([{base-path}])			*neobundle#begin()*
-		Initializes neobundle.vim. {base-path} is where your
-		downloaded plugins will be placed.
+		Initializes neobundle.vim and start neobundle bundles
+		configuration block.
+		{base-path} is where your downloaded plugins will be placed.
 		If {base-path} is omitted, neobundle looks for a "bundle"
 		directory in the default 'runtimepath'.
-		Note: It executes ":filetype off" automatically.
-		Note: You must execute |:NeoBundle| commands in
-		|neobundle#begin()| block.
 		Note: You must not call the function inside a
 		"has('vim_starting')" block.
+		Note: You can use |neobundle#begin()| / |neobundle#end()| block
+		only once in your .vimrc.
+
+		Note: It executes ":filetype off" automatically.
+		Note: You must execute |:NeoBundle| commands in
+		|neobundle#begin()| or |neobundle#append()| block.
 >
 	if has('vim_starting')
 	  if &compatible
@@ -168,9 +172,18 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 	filetype plugin indent on
 <
 
+neobundle#append()				*neobundle#append()*
+		Start neobundle bundles configuration block.
+		You can use multiple |neobundle#append()| / |neobundle#end()|
+		blocks in your .vimrc.
+		Note: It does not initialize neobundle.  You must call
+		|neobundle#begin()| at first.
+		Note: It executes ":filetype off" automatically.
+		Note: You must execute |:NeoBundle| commands in
+		|neobundle#begin()| or |neobundle#append()| block.
+
 neobundle#end()					*neobundle#end()*
-		Finalize neobundle.vim.  If you use |neobundle#begin()|, you
-		must call it after neobundle bundles configuration.
+		End neobundle bundles configuration block.
 
 neobundle#source({bundle-names})		*neobundle#source()*
 		Same as |:NeoBundleSource|.
