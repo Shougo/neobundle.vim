@@ -54,7 +54,8 @@ Refer to `:help neobundle` for more examples and for a full list of commands.
 1. Run below script.
 
      ```
-     $ curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+     $ curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+     $ sh ./install.sh
      ```
 Complete.
 
