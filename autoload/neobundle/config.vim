@@ -635,12 +635,17 @@ function! s:add_dummy_mappings(bundle) "{{{
         \   type(v:val) == type([]) ?
         \     [v:val[0], v:val[1:]] : ['nxo', [v:val]]
         \ ")
-    for mapping in mappings
-      if mapping ==# '<Plug>'
-        " Use plugin name.
-        let mapping = '<Plug>(' . a:bundle.normalized_name
+    if mappings ==# ['<Plug>']
+      " Use plugin name.
+      let mappings = ['<Plug>(' . a:bundle.normalized_name]
+      if stridx(a:bundle.normalized_name, '-') >= 0
+        " The plugin mappings may use "_" instead of "-".
+        call add(mappings, '<Plug>(' .
+              \ substitute(a:bundle.normalized_name, '-', '_', 'g'))
       endif
+    endif
 
+    for mapping in mappings
       " Define dummy mappings.
       for mode in filter(split(modes, '\zs'),
             \ "index(['n', 'v', 'x', 'o', 'i', 'c'], v:val) >= 0")
