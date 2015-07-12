@@ -149,7 +149,7 @@ function! s:source.action_table.yank.func(candidates) "{{{
   let @" = join(map(a:candidates,
         \ "'NeoBundle ' . s:get_neobundle_args(v:val)"), "\n")
   if has('clipboard')
-    let @* = @"
+    call setreg(v:register, @")
   endif
 
   echo 'Yanked plugin settings!'
