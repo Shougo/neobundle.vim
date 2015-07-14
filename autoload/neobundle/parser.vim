@@ -71,6 +71,7 @@ function! neobundle#parser#fetch(arg) "{{{
   endif
 
   " Clear runtimepath.
+  let bundle.fetch = 1
   let bundle.rtp = ''
 
   call neobundle#config#add(bundle)

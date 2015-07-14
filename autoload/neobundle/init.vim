@@ -71,6 +71,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'rtp' : '',
           \ 'depends' : [],
           \ 'lazy' : 0,
+          \ 'fetch' : 0,
           \ 'force' : 0,
           \ 'gui' : 0,
           \ 'terminal' : 0,
@@ -146,7 +147,7 @@ function! neobundle#init#_bundle(bundle) "{{{
     " Chomp.
     let bundle.rtp = bundle.rtp[: -2]
   endif
-  if bundle.normalized_name ==# 'neobundle'
+  if bundle.normalized_name ==# 'neobundle' || bundle.fetch
     " Do not add runtimepath.
     let bundle.rtp = ''
   endif
