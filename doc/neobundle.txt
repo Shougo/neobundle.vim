@@ -253,6 +253,10 @@ neobundle#load_toml({filename}, [{options}])
 		  'neosnippet/user', 'neosnippet/runtime']
 
 		[[plugins]]
+		repository = 'Shougo/neobundle.vim'
+		fetch = 1
+
+		[[plugins]]
 		repository = 'Shougo/vimproc.vim'
 
 		  [plugins.build]
