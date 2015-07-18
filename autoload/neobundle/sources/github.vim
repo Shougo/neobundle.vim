@@ -35,6 +35,19 @@ let s:source = {
       \ 'short_name' : 'github',
       \ }
 
+" sorter 
+let s:filter = {
+\   "name" : "sorter_stars",
+\}
+
+function! s:filter.filter(candidates, context)
+    " v:val.source__track.artist で sort
+    return unite#util#sort_by(a:candidates, 'v:val.source__stars')
+endfunction
+
+call unite#define_filter(s:filter)
+unlet s:filter
+
 function! s:source.gather_candidates(args, context) "{{{
   if !executable('wget')
     call unite#print_error(
@@ -52,6 +65,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \          v:val.full_name,
         \ 'source__path' : v:val.full_name,
         \ 'source__description' : v:val.description,
+        \ 'source__stars' : v:val.stargazers_count,
         \ 'source__options' : [],
         \ 'action__uri' : v:val.html_url,
         \ }")
@@ -99,6 +113,8 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:true)
 " @vimlint(EVL102, 0, l:false)
 " @vimlint(EVL102, 0, l:null)
+
+call unite#custom_source('neobundle/search', 'sorters', 'sorters_stars')
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
