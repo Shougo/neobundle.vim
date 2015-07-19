@@ -35,13 +35,12 @@ let s:source = {
       \ 'short_name' : 'github',
       \ }
 
-" sorter 
+" sorter
 let s:filter = {
 \   "name" : "sorter_stars",
 \}
 
 function! s:filter.filter(candidates, context)
-    " v:val.source__track.artist で sort
     return unite#util#sort_by(a:candidates, 'v:val.source__stars')
 endfunction
 
