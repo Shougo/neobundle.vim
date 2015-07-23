@@ -253,6 +253,10 @@ neobundle#load_toml({filename}, [{options}])
 		  'neosnippet/user', 'neosnippet/runtime']
 
 		[[plugins]]
+		repository = 'Shougo/neobundle.vim'
+		fetch = 1
+
+		[[plugins]]
 		repository = 'Shougo/vimproc.vim'
 
 		  [plugins.build]
@@ -963,6 +967,11 @@ OPTIONS 					*neobundle-options*
 		lazy			(Number)
 		If set to 1, neobundle doesn't add the path to user
 		runtimepath.
+
+						*neobundle-options-fetch*
+		fetch			(Number)
+		If set to 1, neobundle doesn't add the path to user
+		runtimepath, and doesn't load the bundle.
 
 						*neobundle-options-force*
 		force			(Number)
