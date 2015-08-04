@@ -38,7 +38,7 @@ function! neobundle#installer#update(bundles)
     return
   endif
 
-  let all_bundles = neobundle#config#get_neobundles()
+  let all_bundles = neobundle#config#get_enabled_bundles()
 
   call neobundle#commands#helptags(all_bundles)
   call s:reload(filter(copy(a:bundles),
