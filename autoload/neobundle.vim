@@ -191,6 +191,12 @@ function! neobundle#set_neobundle_dir(path)
 endfunction
 
 function! neobundle#get_neobundle_dir()
+  if s:neobundle_dir == ''
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle directory is empty.')
+    return ''
+  endif
+
   let dir = s:neobundle_dir
   if !isdirectory(dir)
     call mkdir(dir, 'p')
@@ -203,7 +209,11 @@ function! neobundle#get_runtime_dir()
 endfunction
 
 function! neobundle#get_tags_dir() "{{{
-  let dir = neobundle#get_neobundle_dir() . '/.neobundle/doc'
+  if s:neobundle_dir == ''
+    return ''
+  endif
+
+  let dir = s:neobundle_dir . '/.neobundle/doc'
   if !isdirectory(dir)
     call mkdir(dir, 'p')
   endif

@@ -34,6 +34,13 @@ function! neobundle#init#_rc(path) "{{{
   if path =~ '/$'
     let path = path[: -2]
   endif
+
+  if path == ''
+    call neobundle#util#print_error(
+          \ '[neobundle] neobundle#rc() argument is empty.')
+    return
+  endif
+
   call neobundle#set_neobundle_dir(path)
 
   " Join to the tail in runtimepath.
