@@ -252,6 +252,10 @@ neobundle#load_toml({filename}, [{options}])
 		unite_sources = [ 'neosnippet',
 		  'neosnippet/user', 'neosnippet/runtime']
 
+		  [[plugins.depends]]
+		  repository = 'honza/vim-snippet'
+		  name = 'honza-snippet'
+
 		[[plugins]]
 		repository = 'Shougo/neobundle.vim'
 		fetch = 1
