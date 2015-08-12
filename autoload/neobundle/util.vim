@@ -328,6 +328,19 @@ function! neobundle#util#sort_by(list, expr) "{{{
   \      'a:a[1] ==# a:b[1] ? 0 : a:a[1] ># a:b[1] ? 1 : -1'), 'v:val[0]')
 endfunction"}}}
 
+" Executes a command and returns its output.
+" This wraps Vim's `:redir`, and makes sure that the `verbose` settings have
+" no influence.
+function! neobundle#util#redir(cmd) abort "{{{
+  let [save_verbose, save_verbosefile] = [&verbose, &verbosefile]
+  set verbose=0 verbosefile=
+  redir => res
+    silent! execute a:cmd
+  redir END
+  let [&verbose, &verbosefile] = [save_verbose, save_verbosefile]
+  return res
+endfunction"}}}
+
 " Sorts a list with expression to compare each two values.
 " a:a and a:b can be used in {expr}.
 function! s:sort(list, expr) "{{{
