@@ -179,9 +179,7 @@ function! neobundle#config#source(names, ...) "{{{
     return
   endif
 
-  redir => filetype_before
-  silent autocmd FileType
-  redir END
+  let filetype_before = neobundle#util#redir("autocmd FileType")
 
   let reset_ftplugin = 0
   for bundle in bundles
@@ -216,9 +214,7 @@ function! neobundle#config#source(names, ...) "{{{
     endif
   endfor
 
-  redir => filetype_after
-  silent autocmd FileType
-  redir END
+  let filetype_after = neobundle#util#redir('autocmd FileType')
 
   if reset_ftplugin
     call s:reset_ftplugin()
@@ -744,9 +740,7 @@ function! s:reset_ftplugin() "{{{
 endfunction"}}}
 
 function! s:filetype_off() "{{{
-  redir => filetype_out
-  silent filetype
-  redir END
+  let filetype_out = neobundle#util#redir('filetype')
 
   if filetype_out =~# 'plugin:ON'
         \ || filetype_out =~# 'indent:ON'

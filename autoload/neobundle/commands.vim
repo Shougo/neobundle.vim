@@ -476,9 +476,7 @@ function! neobundle#commands#save_cache() "{{{
     let bundle.hooks = {}
   endfor
 
-  redir => current_vim
-  silent! version
-  redir END
+  let current_vim = neobundle#util#redir('version')
 
   call writefile( [s:get_cache_version(),
         \ v:progname, current_vim, string(bundles)], cache)
@@ -490,9 +488,7 @@ function! neobundle#commands#load_cache(...) "{{{
     return 1
   endif
 
-  redir => current_vim
-  silent! version
-  redir END
+  let current_vim = neobundle#util#redir('version')
 
   try
     let list = readfile(cache)

@@ -726,12 +726,5 @@ function! s:reload(bundles) "{{{
   call neobundle#call_hook('on_post_source', a:bundles)
 endfunction"}}}
 
-function! s:redir(cmd) "{{{
-  redir => res
-  silent! execute a:cmd
-  redir END
-  return res
-endfunction"}}}
-
 let &cpo = s:save_cpo
 unlet s:save_cpo
