@@ -37,7 +37,7 @@ function! neobundle#init#_rc(path) "{{{
 
   if path == ''
     call neobundle#util#print_error(
-          \ '[neobundle] neobundle#rc() argument is empty.')
+          \ 'neobundle#rc() argument is empty.')
     return
   endif
 

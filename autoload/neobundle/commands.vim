@@ -345,16 +345,14 @@ endfunction"}}}
 function! neobundle#commands#rollback(bundle_name) "{{{
   let bundle = get(neobundle#config#search_simple([a:bundle_name]), 0, {})
   if empty(bundle) || !isdirectory(bundle.path)
-    call neobundle#util#print_error(
-          \ '[neobundle] ' . a:bundle_name . ' is not found.')
+    call neobundle#util#print_error(a:bundle_name . ' is not found.')
     return
   endif
 
   call neobundle#installer#_load_install_info([bundle])
 
   if len(bundle.revisions) <= 1
-    call neobundle#util#print_error(
-          \ '[neobundle] No revision information.')
+    call neobundle#util#print_error('No revision information.')
     return
   endif
 
@@ -386,7 +384,7 @@ function! neobundle#commands#rollback(bundle_name) "{{{
     let type = neobundle#config#get_types(bundle.type)
     if !has_key(type, 'get_revision_lock_command')
       call neobundle#util#print_error(
-            \ '[neobundle] ' . a:bundle_name . ' is not supported this feature.')
+            \ a:bundle_name . ' is not supported this feature.')
       return
     endif
 
@@ -516,7 +514,7 @@ function! neobundle#commands#load_cache(...) "{{{
     endfor
   catch
     call neobundle#util#print_error(
-          \ '[neobundle] Error occurred while loading cache : ' . v:errmsg)
+          \ 'Error occurred while loading cache : ' . v:errmsg)
     call neobundle#commands#clear_cache()
     return 1
   endtry

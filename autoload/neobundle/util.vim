@@ -221,7 +221,8 @@ function! neobundle#util#redraw_echo(expr) "{{{
 endfunction"}}}
 
 function! s:echo(expr, is_error) "{{{
-  let msg = neobundle#util#convert2list(a:expr)
+  let msg = map(neobundle#util#convert2list(a:expr),
+        \ "'[neobundle] ' .  v:val")
 
   if has('vim_starting')
     let m = join(msg, "\n")

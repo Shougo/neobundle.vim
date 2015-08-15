@@ -149,7 +149,7 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
         \     v:val.uri !=# v:val.installed_uri")
   if !empty(reinstall_bundles)
     call neobundle#util#print_error(
-          \ '[neobundle] Reinstall bundles are detected!')
+          \ 'Reinstall bundles are detected!')
 
     for bundle in reinstall_bundles
       echomsg printf('%s: %s -> %s',
@@ -160,8 +160,9 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
     let warning_bundles = map(filter(copy(reinstall_bundles),
         \     'v:val.path ==# cwd'), 'v:val.path')
     if !empty(warning_bundles)
-      call neobundle#util#print_error('Warning: current directory is the
-            \ reinstall bundles directory! ' . string(warning_bundles))
+      call neobundle#util#print_error(
+            \ 'Warning: current directory is the
+            \  reinstall bundles directory! ' . string(warning_bundles))
     endif
     let ret = confirm('Reinstall bundles now?', "yes\nNo", 2)
     redraw

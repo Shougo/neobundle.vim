@@ -36,7 +36,7 @@ function! neobundle#parser#bundle(arg, ...) "{{{
     if !neobundle#config#within_block()
           \ && !bundle.lazy && has('vim_starting')
       call neobundle#util#print_error(
-            \ '[neobundle] `NeoBundle` commands must be executed within' .
+            \ '`NeoBundle` commands must be executed within' .
             \ ' a neobundle#begin/end block.  Please check your usage.')
     endif
   endif
@@ -209,13 +209,13 @@ function! neobundle#parser#load_toml(filename, default) "{{{
     let toml = neobundle#TOML#parse_file(neobundle#util#expand(a:filename))
   catch /vital: Text.TOML:/
     call neobundle#util#print_error(
-          \ '[neobundle] Invalid toml format: ' . a:filename)
+          \ 'Invalid toml format: ' . a:filename)
     call neobundle#util#print_error(v:exception)
     return 1
   endtry
   if type(toml) != type({}) || !has_key(toml, 'plugins')
     call neobundle#util#print_error(
-          \ '[neobundle] Invalid toml file: ' . a:filename)
+          \ 'Invalid toml file: ' . a:filename)
     return 1
   endif
 
@@ -223,7 +223,7 @@ function! neobundle#parser#load_toml(filename, default) "{{{
   for plugin in toml.plugins
     if !has_key(plugin, 'repository')
       call neobundle#util#print_error(
-            \ '[neobundle] No repository plugin data: ' . a:filename)
+            \ 'No repository plugin data: ' . a:filename)
       return 1
     endif
 
@@ -235,7 +235,7 @@ function! neobundle#parser#load_toml(filename, default) "{{{
         elseif type(depend) == type({})
           if !has_key(depend, 'repository')
             call neobundle#util#print_error(
-                  \ '[neobundle] No repository plugin data: ' . a:filename)
+                  \ 'No repository plugin data: ' . a:filename)
             return 1
           endif
 
@@ -378,7 +378,7 @@ function! neobundle#parser#_parse_recipe(recipe) "{{{
 
   if !filereadable(path)
     call neobundle#util#print_error(printf(
-          \ '[neobundle] The recipe file "%s" is not found.', a:recipe))
+          \ 'The recipe file "%s" is not found.', a:recipe))
     return {}
   endif
 
@@ -386,10 +386,9 @@ function! neobundle#parser#_parse_recipe(recipe) "{{{
           \ "v:val !~ '^\\s*\\%(#.*\\)\\?$'"), ''))
 
   if !has_key(data, 'name') || !has_key(data, 'path')
+    call neobundle#util#print_error(path)
     call neobundle#util#print_error(
-          \ '[neobundle] ' . path)
-    call neobundle#util#print_error(
-          \ '[neobundle] The recipe file format is wrong.')
+          \ 'The recipe file format is wrong.')
     return {}
   endif
 

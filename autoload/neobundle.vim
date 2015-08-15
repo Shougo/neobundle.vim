@@ -148,11 +148,11 @@ command! -bar NeoBundleSaveCache
       \ call neobundle#commands#save_cache()
 command! -bar NeoBundleLoadCache
       \ call neobundle#util#print_error(
-      \ '[neobundle] NeoBundleLoadCache is deprecated command.') |
+      \ 'NeoBundleLoadCache is deprecated command.') |
       \ call neobundle#util#print_error(
-      \ '[neobundle] It will be removed in the next version.') |
+      \ 'It will be removed in the next version.') |
       \ call neobundle#util#print_error(
-      \ '[neobundle] Please use neobundle#load_cache() instead.') |
+      \ 'Please use neobundle#load_cache() instead.') |
       \ call neobundle#commands#load_cache()
 command! -bar NeoBundleClearCache
       \ call neobundle#commands#clear_cache()
@@ -167,9 +167,9 @@ command! -nargs=+ NeoBundleLock
 
 function! neobundle#rc(...) "{{{
   call neobundle#util#print_error(
-        \ '[neobundle] neobundle#rc() is removed function.')
+        \ 'neobundle#rc() is removed function.')
   call neobundle#util#print_error(
-        \ '[neobundle] Please use neobundle#begin()/neobundle#end() instead.')
+        \ 'Please use neobundle#begin()/neobundle#end() instead.')
 endfunction"}}}
 
 function! neobundle#begin(...) "{{{
@@ -193,7 +193,7 @@ endfunction
 function! neobundle#get_neobundle_dir()
   if s:neobundle_dir == ''
     call neobundle#util#print_error(
-          \ '[neobundle] neobundle directory is empty.')
+          \ 'neobundle directory is empty.')
     return ''
   endif
 
@@ -257,11 +257,11 @@ endfunction
 
 function! neobundle#has_cache()
   call neobundle#util#print_error(
-        \ '[neobundle] neobundle#has_cache() is deprecated function.')
+        \ 'neobundle#has_cache() is deprecated function.')
   call neobundle#util#print_error(
-        \ '[neobundle] It will be removed in the next version.')
+        \ 'It will be removed in the next version.')
   call neobundle#util#print_error(
-        \ '[neobundle] Please use neobundle#load_cache() instead.')
+        \ 'Please use neobundle#load_cache() instead.')
 
   return filereadable(neobundle#commands#get_cache_file())
 endfunction
@@ -273,11 +273,11 @@ endfunction
 
 function! neobundle#has_fresh_cache(...)
   call neobundle#util#print_error(
-        \ '[neobundle] neobundle#has_fresh_cache() is deprecated function.')
+        \ 'neobundle#has_fresh_cache() is deprecated function.')
   call neobundle#util#print_error(
-        \ '[neobundle] It will be removed in the next version.')
+        \ 'It will be removed in the next version.')
   call neobundle#util#print_error(
-        \ '[neobundle] Please use neobundle#load_cache() instead.')
+        \ 'Please use neobundle#load_cache() instead.')
 
   " Check if the cache file is newer than the vimrc file.
   let vimrc = get(a:000, 0, $MYVIMRC)
