@@ -199,23 +199,6 @@ function! s:suite.parse_directory()
   call s:assert.equals(bundle.directory, 'neocomplcache_ver_3')
 endfunction
 
-function! s:suite.parse_function_prefix()
-  call s:assert.equals(neobundle#parser#_function_prefix(
-        \ 'neobundle.vim'), 'neobundle')
-
-  call s:assert.equals(neobundle#parser#_function_prefix(
-        \ 'unite-tag'), 'unite#sources#tag')
-
-  call s:assert.equals(neobundle#parser#_function_prefix(
-        \ 'TweetVim'), 'tweetvim')
-
-  call s:assert.equals(neobundle#parser#_function_prefix(
-        \ 'vim-vcs'), 'vcs')
-
-  call s:assert.equals(neobundle#parser#_function_prefix(
-        \ 'gist-vim'), 'gist')
-endfunction
-
 function! s:suite.name_conversion()
   let g:neobundle#enable_name_conversion = 1
 

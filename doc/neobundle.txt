@@ -1154,15 +1154,6 @@ OPTIONS 					*neobundle-options*
 <
 			plugin-B is loaded before plugin-A is loaded.
 
-			function_prefix	(String)
-			Autoload function prefix in functions.
-			{function_prefix}#...
-			If the prefix is set, functions were loaded
-			automatically.
-			If omitted it, automatically generated prefix is used.
-			Example: If you use "unite.vim", "unite" function
-			prefix is used.
-
 			command_prefix	(String)
 			Autoload command prefix in commands.
 			If the prefix is set, commands were loaded

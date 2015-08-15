@@ -559,7 +559,7 @@ function! s:add_lazy(bundle) "{{{
         \ 'filetypes', 'filename_patterns',
         \ 'commands', 'functions', 'mappings', 'unite_sources',
         \ 'insert', 'explorer', 'on_source',
-        \ 'function_prefix', 'command_prefix',
+        \ 'command_prefix',
         \ ], 'has_key(bundle, v:val)')
     let bundle.autoload[key] = bundle[key]
     call remove(bundle, key)
@@ -575,10 +575,6 @@ function! s:add_lazy(bundle) "{{{
     let bundle.autoload[key] = [bundle.autoload[key]]
   endfor
 
-  if !has_key(bundle.autoload, 'function_prefix')
-    let bundle.autoload.function_prefix =
-          \ neobundle#parser#_function_prefix(bundle.name)
-  endif
   if !has_key(bundle.autoload, 'command_prefix')
     let bundle.autoload.command_prefix =
           \ substitute(bundle.normalized_name, '[_-]', '', 'g')

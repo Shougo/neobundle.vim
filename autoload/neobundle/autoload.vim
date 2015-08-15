@@ -96,10 +96,17 @@ endfunction
 function! neobundle#autoload#function()
   let function = expand('<amatch>')
   let function_prefix = get(split(function, '#'), 0, '') . '#'
+  if function_prefix ==# 'neobundle#'
+    return
+  endif
 
-  let bundles = filter(neobundle#config#get_autoload_bundles(),
-        \ "get(v:val.autoload, 'function_prefix', '').'#' ==# function_prefix ||
-        \  (has_key(v:val.autoload, 'functions') &&
+  let bundles = neobundle#config#get_autoload_bundles()
+  call s:set_function_prefixes(bundles)
+
+  let bundles = filter(bundles,
+        \ "index(v:val.autoload.function_prefixes,
+        \        function_prefix) >= 0
+        \ || (has_key(v:val.autoload, 'functions') &&
         \    index(v:val.autoload.functions, function) >= 0)")
   call neobundle#config#source_bundles(bundles)
 endfunction
@@ -277,6 +284,17 @@ function! s:get_lazy_bundles()
   return filter(neobundle#config#get_neobundles(),
         \ "!neobundle#config#is_sourced(v:val.name)
         \ && v:val.rtp != '' && v:val.lazy")
+endfunction
+
+function! s:set_function_prefixes(bundles) abort
+  for bundle in filter(copy(a:bundles),
+        \ "!has_key(v:val.autoload, 'function_prefixes')")
+    let bundle.autoload.function_prefixes =
+          \ map(split(globpath(bundle.path, 'autoload/*.vim', 1), "\n")
+          \     + filter(split(globpath(bundle.path, 'autoload/*', 1), "\n"),
+          \              'isdirectory(v:val)'),
+          \  "fnamemodify(v:val, ':t:r').'#'")
+  endfor
 endfunction
 
 let &cpo = s:save_cpo
