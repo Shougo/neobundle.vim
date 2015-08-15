@@ -298,16 +298,6 @@ function! neobundle#parser#path(path, ...) "{{{
   return detect
 endfunction"}}}
 
-function! neobundle#parser#_function_prefix(name) "{{{
-  let function_prefix = tolower(fnamemodify(a:name, ':r'))
-  let function_prefix = substitute(function_prefix,
-        \'^vim-\|-vim$', '','')
-  let function_prefix = substitute(function_prefix,
-        \'^unite-', 'unite#sources#','')
-  let function_prefix = tr(function_prefix, '-', '_')
-  return function_prefix
-endfunction"}}}
-
 function! s:parse_options(opts) "{{{
   if empty(a:opts)
     return has_key(g:neobundle#default_options, '_') ?
