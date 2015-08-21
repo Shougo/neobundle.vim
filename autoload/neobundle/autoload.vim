@@ -95,8 +95,8 @@ endfunction
 
 function! neobundle#autoload#function()
   let function = expand('<amatch>')
-  let function_prefix = get(split(function, '#'), 0, '') . '#'
-  if function_prefix ==# 'neobundle#' || function_prefix ==# 'vital#'
+  let function_prefix = substitute(function, '[^#]*$', '', '')
+  if function_prefix =~# '^neobundle#' || function_prefix ==# 'vital#'
     return
   endif
 
@@ -290,8 +290,12 @@ function! s:set_function_prefixes(bundles) abort
   for bundle in filter(copy(a:bundles),
         \ "!has_key(v:val.autoload, 'function_prefixes')")
     let bundle.autoload.function_prefixes =
-          \ map(split(globpath(bundle.path, 'autoload/*.vim', 1), "\n"),
-          \  "fnamemodify(v:val, ':t:r').'#'")
+          \ neobundle#util#uniq(map(split(globpath(
+          \  bundle.path, 'autoload/**/*.vim', 1), "\n"),
+          \  "substitute(matchstr(
+          \   neobundle#util#substitute_path_separator(
+          \         fnamemodify(v:val, ':r')),
+          \         '/autoload/\\zs.*$'), '/', '#', 'g').'#'"))
   endfor
 endfunction
 
