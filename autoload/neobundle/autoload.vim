@@ -48,8 +48,12 @@ function! neobundle#autoload#init()
   augroup neobundle-explorer
     autocmd!
   augroup END
-  for event in ['BufRead', 'BufCreate', 'BufEnter', 'BufWinEnter', 'BufNew', 'VimEnter']
-    execute 'autocmd neobundle-explorer' event "* call neobundle#autoload#explorer(
+  for event in [
+        \ 'BufRead', 'BufCreate', 'BufEnter',
+        \ 'BufWinEnter', 'BufNew', 'VimEnter'
+        \ ]
+    execute 'autocmd neobundle-explorer' event
+          \ "* call neobundle#autoload#explorer(
           \ expand('<afile>'), ".string(event) . ")"
   endfor
 
@@ -188,7 +192,8 @@ function! neobundle#autoload#explorer(path, event)
   endif
 
   let path = neobundle#util#expand(path)
-  if !(isdirectory(path) || (!filereadable(path) && path =~ '^\h\w\+://'))
+  if !(isdirectory(path)
+        \ || (!filereadable(path) && path =~ '^\h\w\+://'))
     return
   endif
 
@@ -267,7 +272,7 @@ function! s:get_input()
   let type_num = type(0)
   while 1
     let char = getchar()
-    let input .= type(char) == type_num ? nr2char(char) : char
+    let input .= (type(char) == type_num) ? nr2char(char) : char
 
     let idx = stridx(input, termstr)
     if idx >= 1
