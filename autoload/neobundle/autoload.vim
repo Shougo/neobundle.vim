@@ -96,7 +96,9 @@ endfunction
 function! neobundle#autoload#function()
   let function = expand('<amatch>')
   let function_prefix = substitute(function, '[^#]*$', '', '')
-  if function_prefix =~# '^neobundle#' || function_prefix ==# 'vital#'
+  if function_prefix =~# '^neobundle#'
+        \ || function_prefix ==# 'vital#'
+        \ || has('vim_starting')
     return
   endif
 
