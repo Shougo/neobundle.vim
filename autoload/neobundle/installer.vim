@@ -366,7 +366,15 @@ function! neobundle#installer#sync(bundle, context, is_unite)
       endtry
     endif
 
-    if neobundle#util#has_vimproc()
+    if has('neovim') && a:is_unite
+      " Use neovim async jobs
+      let process.proc = jobstart(
+            \          iconv(cmd, &encoding, 'char'), {
+            \ 'on_stdout' : function('s:job_handler'),
+            \ 'on_stderr' : function('s:job_handler'),
+            \ 'on_exit' : function('s:job_handler'),
+            \ })
+    elseif neobundle#util#has_vimproc()
       let process.proc = vimproc#pgroup_open(vimproc#util#iconv(
             \            cmd, &encoding, 'char'), 0, 2)
 
@@ -388,7 +396,26 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
-  if neobundle#util#has_vimproc() && has_key(a:process, 'proc')
+  if has('neovim') && a:is_unite && has_key(a:process, 'proc')
+    let is_timeout = (localtime() - a:process.start_time)
+          \             >= a:process.bundle.install_process_timeout
+
+    let job = s:job_info[a:process.proc]
+
+    if !job.eof && !is_timeout
+      let a:process.output .= join(job.candidates[: -2], "\n")
+      let job.candidates = job.candidates[-1:]
+      return
+    else
+      if is_timeout
+        call jobstop(a:process.proc)
+      endif
+      let a:process.output .= join(job.candidates, "\n")
+      let job.candidates = []
+    endif
+
+    let status = job.status
+  elseif neobundle#util#has_vimproc() && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= a:process.bundle.install_process_timeout
     let a:process.output .= vimproc#util#iconv(
@@ -730,6 +757,36 @@ function! s:reload(bundles) "{{{
 
   " Call hooks.
   call neobundle#call_hook('on_post_source', a:bundles)
+endfunction"}}}
+
+let s:job_info = {}
+function! s:job_handler(job_id, data, event) abort "{{{
+  if !has_key(s:job_info, a:job_id)
+    let s:job_info[a:job_id] = {
+          \ 'candidates' : [],
+          \ 'eof' : 0,
+          \ 'status' : -1,
+          \ }
+  endif
+
+  let job = s:job_info[a:job_id]
+
+  if a:event ==# 'exit'
+    let job.eof = 1
+    let job.status = a:data
+    return
+  endif
+
+  let lines = a:data
+
+  let candidates = job.candidates
+  if !empty(lines) && lines[0] != "\n" && !empty(job.candidates)
+    " Join to the previous line
+    let candidates[-1] .= lines[0]
+    call remove(lines, 0)
+  endif
+
+  let candidates += map(lines, "iconv(v:val, 'char', &encoding)")
 endfunction"}}}
 
 let &cpo = s:save_cpo

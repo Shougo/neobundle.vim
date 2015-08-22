@@ -58,6 +58,7 @@ good for plugin power users (for example, 50+ plugins and over 1000 lines
 
 Neobundle features:
  * Uses |vimproc| if available
+ * Uses neovim async jobs feature if available
  * |unite.vim| interface
  * Revision lock
  * Supports svn/Mercurial repositories besides Git
@@ -398,8 +399,12 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleInstall [{name}...]			*:NeoBundleInstall*
 		Installs plugins specified by {name}. {name} is
 		fuzzy-searched.  If {name} is omitted, all configured plugins
-		are installed.  Note: {name}s are plugin names like
-		"neobundle.vim", not "Shougo/neobundle.vim".
+		are installed.
+		Note: {name}s are plugin names like "neobundle.vim", not
+		"Shougo/neobundle.vim".
+		Note: neobundle cannot use neovim async jobs feature in the
+		command.  If you want to use the feature, you should use unite
+		interface instead.
 
 :NeoBundleInstall! [{name}...]			*:NeoBundleInstall!*
 		Same as |:NeoBundleUpdate|.
@@ -411,6 +416,9 @@ COMMANDS 					*neobundle-commands*
 		the "stay_same" option set.
 		Note: {name}s are plugin names like "neobundle.vim", not
 		"Shougo/neobundle.vim".
+		Note: neobundle cannot use neovim async jobs feature in the
+		command.  If you want to use the feature, you should use unite
+		interface instead.
 
 :NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate!*
 		Same as |:NeoBundleUpdate|, except that it disregards the
@@ -1426,9 +1434,10 @@ neobundle
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
 		Install configured plugins asynchronously.
+		It supports neovim async jobs feature.
 
-		Note: To install |vimproc| plugin is recommended.
-		http://github.com/Shougo/vimproc.vim
+		Note: Installing the |vimproc| plugin or using neovim is
+		recommended.
 
 		If argument is bang(!), it will install and update all plugins.
 
@@ -1454,8 +1463,10 @@ neobundle/log
 neobundle/update
 		Install and update configured plugins asynchronously, except
 		for outdated ones or those with the "stay_same" option.
+		It supports neovim async jobs feature.
 		Note: This source is the same as "neobundle/install:!".
-		Note: Installing the |vimproc| plugin is recommended.
+		Note: Installing the |vimproc| plugin or using neovim is
+		recommended.
 
 		If argument is bang(!), it will not be with fuzzy search.
 		If argument is "all", it will update all plugins.

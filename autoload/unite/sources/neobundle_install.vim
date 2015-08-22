@@ -58,7 +58,11 @@ endfunction"}}}
 function! s:source_install.hooks.on_close(args, context) "{{{
   if !empty(a:context.source__processes)
     for process in a:context.source__processes
-      call process.proc.waitpid()
+      if has('neovim')
+        call jobstop(process.proc)
+      else
+        call process.proc.waitpid()
+      endif
     endfor
   endif
 endfunction"}}}
