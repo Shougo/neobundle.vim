@@ -107,7 +107,7 @@ function! neobundle#autoload#function()
   endif
 
   let bundles = neobundle#config#get_autoload_bundles()
-  call s:set_function_prefixes(bundles)
+  call neobundle#autoload#_set_function_prefixes(bundles)
 
   let bundles = filter(bundles,
         \ "index(v:val.autoload.function_prefixes,
@@ -293,7 +293,7 @@ function! s:get_lazy_bundles()
         \ && v:val.rtp != '' && v:val.lazy")
 endfunction
 
-function! s:set_function_prefixes(bundles) abort
+function! neobundle#autoload#_set_function_prefixes(bundles) abort
   for bundle in filter(copy(a:bundles),
         \ "!has_key(v:val.autoload, 'function_prefixes')")
     let bundle.autoload.function_prefixes =

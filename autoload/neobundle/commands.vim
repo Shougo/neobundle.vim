@@ -468,6 +468,11 @@ function! neobundle#commands#save_cache() "{{{
   endif
 
   let cache = neobundle#commands#get_cache_file()
+
+  " Set function prefixes before save cache
+  call neobundle#autoload#_set_function_prefixes(
+        \ neobundle#config#get_autoload_bundles())
+
   let bundles = deepcopy(neobundle#config#get_neobundles())
   " Clear hooks.  Because, VimL cannot save functions in JSON.
   for bundle in bundles
