@@ -1,6 +1,6 @@
 "=============================================================================
-" FILE: raw.vim
-" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" FILE: vba.vim
+" AUTHOR:  Yu Huang <paulhybryant@gmail.com>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,17 +28,17 @@ set cpo&vim
 
 " Global options definition. "{{{
 call neobundle#util#set_default(
-      \ 'g:neobundle#types#raw#calc_hash_command',
+      \ 'g:neobundle#types#vba#calc_hash_command',
       \ executable('sha1sum') ? 'sha1sum' :
       \ executable('md5sum') ? 'md5sum' : '')
 "}}}
 
-function! neobundle#types#raw#define() "{{{
+function! neobundle#types#vba#define() "{{{
   return s:type
 endfunction"}}}
 
 let s:type = {
-      \ 'name' : 'raw',
+      \ 'name' : 'vba',
       \ }
 
 function! s:type.detect(path, opts) "{{{
@@ -46,27 +46,17 @@ function! s:type.detect(path, opts) "{{{
   let type = ''
   let name = ''
 
-  if a:path =~# '^https\?:.*\.vim$'
-    " HTTP/HTTPS
-
-    let name = neobundle#util#name_conversion(a:path)
-
-    let type = 'raw'
-  elseif a:path =~#
-        \ '^https\?://www\.vim\.org/scripts/download_script.php?src_id=\d\+$'
-    " For www.vim.org
-    let name = 'vim-scripts-' . matchstr(a:path, '\d\+$')
-    let type = 'raw'
+  if a:path =~# '^https\?:.*\.vba\(\.gz\)\?$'
+    " HTTP / HTTPS
+    " .*.vba / .*.vba.gz
+    let name = fnamemodify(split(a:path, ':')[-1], ':s?/$??:t:s?\c\.vba\(\.gz\)*\s*$??')
+    let type = 'vba'
   endif
 
   return type == '' ?  {} :
         \ { 'name': name, 'uri' : a:path, 'type' : type }
 endfunction"}}}
 function! s:type.get_sync_command(bundle) "{{{
-  if a:bundle.script_type == ''
-    return 'E: script_type is not found.'
-  endif
-
   let path = a:bundle.path
 
   if !isdirectory(path)
@@ -79,28 +69,38 @@ function! s:type.get_sync_command(bundle) "{{{
   let a:bundle.type__filepath = filename
 
   if executable('curl')
-    let cmd = printf('curl --fail -s -o "%s" "%s"', filename, a:bundle.uri)
+    let cmd = printf('curl --fail -s -o "%s" "%s" && ', filename, a:bundle.uri)
   elseif executable('wget')
-    let cmd = printf('wget -q -O "%s" "%s"', filename, a:bundle.uri)
+    let cmd = printf('wget -q -O "%s" "%s" && ', filename, a:bundle.uri)
   else
     return 'E: curl or wget command is not available!'
   endif
+  let cmd .= printf(' %s -u NONE' .
+        \ ' -c "set nocompatible"' .
+        \ ' -c "filetype plugin on"' .
+        \ ' -c "runtime plugin/gzip.vim"' .
+        \ ' -c "runtime plugin/vimballPlugin.vim"' .
+        \ ' -c "edit %s"' .
+        \ ' -c "UseVimball %s"' .
+        \ ' -c "q"', v:progpath, filename, path)
+  " let cmd .= printf(' rm %s &&', filename)
+  " let cmd .= printf(' rm %s/.VimballRecord', path)
 
   return cmd
 endfunction"}}}
 function! s:type.get_revision_number_command(bundle) "{{{
-  if g:neobundle#types#raw#calc_hash_command == ''
+  if g:neobundle#types#vba#calc_hash_command == ''
     return ''
   endif
 
-  if !filereadable(a:bundle.type__filepath)
+  if !has_key(a:bundle, 'type__filepath') || !filereadable(a:bundle.type__filepath)
     " Not Installed.
     return ''
   endif
 
   " Calc hash.
   return printf('%s %s',
-        \ g:neobundle#types#raw#calc_hash_command,
+        \ g:neobundle#types#vba#calc_hash_command,
         \ a:bundle.type__filepath)
 endfunction"}}}
 function! s:type.get_revision_lock_command(bundle) "{{{
