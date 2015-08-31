@@ -304,6 +304,21 @@ function! neobundle#get_not_installed_bundles(bundle_names) "{{{
         \")
 endfunction"}}}
 
+function! neobundle#get_force_not_installed_bundles(bundle_names) "{{{
+  let bundles = empty(a:bundle_names) ?
+        \ neobundle#config#get_neobundles() :
+        \ neobundle#config#fuzzy_search(a:bundle_names)
+
+  call neobundle#installer#_load_install_info(bundles)
+
+  return filter(copy(bundles), "
+        \  !v:val.disabled && v:val.path != '' && !v:val.local
+        \  && (!isdirectory(neobundle#util#expand(v:val.path))
+        \   || v:val.install_rev !=#
+        \      neobundle#installer#get_revision_number(v:val))
+        \")
+endfunction"}}}
+
 function! neobundle#get(name)
   return neobundle#config#get(a:name)
 endfunction

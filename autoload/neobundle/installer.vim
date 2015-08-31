@@ -118,7 +118,9 @@ function! neobundle#installer#build(bundle)
 endfunction
 
 function! neobundle#installer#reinstall(bundles)
-  for bundle in a:bundles
+  let bundles = neobundle#util#uniq(a:bundles)
+
+  for bundle in bundles
     " Reinstall.
     call neobundle#installer#log(
           \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
@@ -136,9 +138,9 @@ function! neobundle#installer#reinstall(bundles)
 
   " Install.
   call neobundle#commands#install(0,
-        \ join(map(copy(a:bundles), 'v:val.name')))
+        \ join(map(bundles, 'v:val.name')))
 
-  call neobundle#installer#update(a:bundles)
+  call neobundle#installer#update(bundles)
 endfunction
 
 function! neobundle#installer#get_reinstall_bundles(bundles)
@@ -191,7 +193,9 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 
   if cmd == ''
     return ['', 'Not supported sync action.']
-  elseif (is_directory && !a:bang)
+  elseif (is_directory && !a:bang
+        \ && a:bundle.install_rev ==#
+        \      neobundle#installer#get_revision_number(a:bundle))
     return ['', 'Already installed.']
   endif
 

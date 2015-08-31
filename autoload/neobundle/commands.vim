@@ -42,7 +42,7 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   let bundle_names = split(a:bundle_names)
 
   let bundles = !a:bang ?
-        \ neobundle#get_not_installed_bundles(bundle_names) :
+        \ neobundle#get_force_not_installed_bundles(bundle_names) :
         \ empty(bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(bundle_names)
