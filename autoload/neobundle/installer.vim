@@ -541,7 +541,7 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
         \ neobundle#installer#get_revision_lock_command(
         \ a:context.source__bang, bundle, num, max)
 
-  if cmd == ''
+  if cmd == '' || bundle.new_rev ==# bundle.rev
     " Skipped.
     return 0
   elseif cmd =~# '^E: '
