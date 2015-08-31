@@ -235,8 +235,16 @@ function! neobundle#installer#get_revision_number(bundle)
 
     let rev = neobundle#util#system(cmd)
 
-    " If rev contains spaces, it is error message
-    return (rev !~ '\s') ? rev : ''
+    if type.name ==# 'vba' || type.name ==# 'raw'
+      " If rev is ok, the output is the checksum followed by the filename
+      " separated by two spaces.
+      let pat = '^[0-9a-f]\+  ' . a:bundle.path . '/' .
+            \ fnamemodify(a:bundle.uri, ':t') . '$'
+      return (rev =~# pat) ? matchstr(rev, '^[0-9a-f]\+') : ''
+    else
+      " If rev contains spaces, it is error message
+      return (rev !~ '\s') ? rev : ''
+    endif
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)

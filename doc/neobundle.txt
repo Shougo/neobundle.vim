@@ -797,6 +797,7 @@ OPTIONS 					*neobundle-options*
 		"git"       : Git
 		"hg"        : Mercurial
 		"svn"       : Subversion
+		"vba"       : Vimball
 
 		Example:
 >
@@ -1308,6 +1309,11 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'gist:355360', {
 		      \ 'name': 'ambicmd.vim',
 		      \ 'script_type': 'plugin'}
+<
+		" For vba repository.
+		NeoBundle 'http://www.drchip.org/astronaut/vim/vbafiles/Decho.vba.gz', {
+		      \ 'name': 'Decho',
+		      \ 'type': 'vba'}
 <
 		Neobundle supports revision (or branch) lock.
 		Note: The revision (or branch) is checked out in
