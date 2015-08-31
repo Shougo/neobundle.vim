@@ -227,9 +227,11 @@ function! neobundle#config#source(names, ...) "{{{
   endif
 endfunction"}}}
 
-function! neobundle#config#disable(arg) "{{{
-  let bundle_names = neobundle#config#search(split(a:arg))
+function! neobundle#config#disable(...) "{{{
+  let bundle_names = neobundle#config#search(a:000)
   if empty(bundle_names)
+    call neobundle#util#print_error(
+          \ 'Disabled bundles ' . string(a:000) . ' are not found.')
     return
   endif
 
