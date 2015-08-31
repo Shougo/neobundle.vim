@@ -52,7 +52,7 @@ function! neobundle#installer#update(bundles)
   call neobundle#util#copy_bundle_files(
         \ lazy_bundles, 'after/ftdetect')
 
-  if has('neovim')
+  if has('nvim')
     " For neovim remote plugins
     UpdateRemotePlugins
   endif
@@ -374,7 +374,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
       endtry
     endif
 
-    if has('neovim') && a:is_unite
+    if has('nvim') && a:is_unite
       " Use neovim async jobs
       let process.proc = jobstart(
             \          iconv(cmd, &encoding, 'char'), {
@@ -404,7 +404,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
 endfunction
 
 function! neobundle#installer#check_output(context, process, is_unite)
-  if has('neovim') && a:is_unite && has_key(a:process, 'proc')
+  if has('nvim') && a:is_unite && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= a:process.bundle.install_process_timeout
 
