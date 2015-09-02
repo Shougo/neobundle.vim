@@ -184,7 +184,7 @@ function! s:type.get_revision_lock_command(bundle) "{{{
   let rev = a:bundle.rev
   if rev == ''
     " Fix detach HEAD.
-    let rev = 'HEAD'
+    let rev = 'master'
   endif
 
   return g:neobundle#types#git#command_path . ' checkout ' . rev
