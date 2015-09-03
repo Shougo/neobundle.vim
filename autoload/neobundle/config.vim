@@ -132,7 +132,7 @@ endfunction"}}}
 
 function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
-        \ "!v:val.sourced && v:val.lazy && !v:val.disabled")
+        \ "!get(v:val, 'sourced', 0) && v:val.lazy && !v:val.disabled")
 endfunction"}}}
 
 function! neobundle#config#source_bundles(bundles) "{{{
