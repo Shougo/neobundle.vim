@@ -42,7 +42,7 @@ function! neobundle#installer#update(bundles)
 
   call neobundle#commands#helptags(all_bundles)
   call s:reload(filter(copy(a:bundles),
-        \ "get(v:val, 'sourced', 0) && !v:val.disabled && v:val.rtp != ''"))
+        \ "v:val.sourced && !v:val.disabled && v:val.rtp != ''"))
 
   call s:save_install_info(all_bundles)
 
@@ -138,7 +138,7 @@ function! neobundle#installer#reinstall(bundles)
 
   " Install.
   call neobundle#commands#install(0,
-        \ join(map(bundles, 'v:val.name')))
+        \ join(map(copy(bundles), 'v:val.name')))
 
   call neobundle#installer#update(bundles)
 endfunction
