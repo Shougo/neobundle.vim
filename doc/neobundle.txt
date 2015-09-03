@@ -327,23 +327,41 @@ neobundle#config({options})
 	\ 'autoload' : {
 	\   'insert' : 1,
 	\ }})
-
-	" Use neobundle#tap()
-	NeoBundle 'Shougo/neocomplete'
-	if neobundle#tap('neocomplete')
-	  " Some settings...
-	  function! neobundle#hooks.on_source(bundle)
-	    " Some settings...
-	  endfunction
-	  call neobundle#untap()
-	endif
 <
 neobundle#tap({bundle-name})			 *neobundle#tap()*
 		Initialize |neobundle#tapped| and |neobundle#hooks| variable
 		as {bundle-name} bundle.
 		It returns non-zero if {bundle-name} is exists and not
 		disabled.
+>
+		if neobundle#tap('foo')
+		  " If foo plugin is installed and enabled
 
+		  " neobundle#hooks is syntax sugar
+		  function! neobundle#hooks.on_source(bundle)
+		    " Settings, Init, ...
+		    " Timing of adding rtp
+		    " Like vimrc time
+		    let g:foo#bar = 1
+		    let g:foo#path = a:bundle.path
+		    call foo#baz()
+		  endfunction
+
+		  function! neobundle#hooks.on_post_source(bundle)
+		    " Settings, Init, ...
+		    " Timing of after source plugin files
+		    " Like VimEnter time
+		    let g:foo#bar = 3
+		    call foo#bazbaz()
+		  endfunction
+
+		  " Define plugin mappings, commands, ...
+		  map f <Plug>(foo)
+		  command! FOO call foo#foo()
+		
+		  call neobundle#untap()
+		endif
+<
 neobundle#untap()				 *neobundle#untap()*
 		Clear current |neobundle#tapped| and |neobundle#hooks| variable.
 
