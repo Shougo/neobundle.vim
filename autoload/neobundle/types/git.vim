@@ -134,12 +134,7 @@ function! s:type.get_revision_number_command(bundle) "{{{
     return ''
   endif
 
-  let rev = a:bundle.rev
-  if rev == ''
-    let rev = 'HEAD'
-  endif
-
-  return g:neobundle#types#git#command_path .' rev-parse ' . rev
+  return g:neobundle#types#git#command_path .' rev-parse HEAD'
 endfunction"}}}
 function! s:type.get_revision_pretty_command(bundle) "{{{
   if !executable(g:neobundle#types#git#command_path)
