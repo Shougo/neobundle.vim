@@ -144,13 +144,13 @@ endfunction"}}}
 
 function! neobundle#config#check_not_exists(names, ...) "{{{
   " For infinite loop.
-  let l:self = get(a:000, 0, [])
+  let self = get(a:000, 0, [])
 
   let _ = map(neobundle#get_not_installed_bundles(a:names), 'v:val.name')
   for bundle in map(filter(copy(a:names),
         \ 'index(self, v:val) < 0 && has_key(s:neobundles, v:val)'),
         \ 's:neobundles[v:val]')
-    call add(l:self, bundle.name)
+    call add(self, bundle.name)
 
     if !empty(bundle.depends)
       let _ += neobundle#config#check_not_exists(
@@ -330,7 +330,7 @@ function! neobundle#config#search(bundle_names, ...) "{{{
   endif
 
   " For infinite loop.
-  let l:self = get(a:000, 0, [])
+  let self = get(a:000, 0, [])
 
   let _ = []
   let bundles = len(a:bundle_names) != 1 ?
@@ -340,7 +340,7 @@ function! neobundle#config#search(bundle_names, ...) "{{{
         \ has_key(s:neobundles, a:bundle_names[0]) ?
         \     [s:neobundles[a:bundle_names[0]]] : []
   for bundle in bundles
-    call add(l:self, bundle.name)
+    call add(self, bundle.name)
 
     if !empty(bundle.depends)
       let _ += neobundle#config#search(
