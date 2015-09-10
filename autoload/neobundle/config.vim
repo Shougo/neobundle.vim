@@ -237,10 +237,16 @@ function! neobundle#config#disable(...) "{{{
 
   for bundle in bundle_names
     call neobundle#config#rtp_rm(bundle)
-    let bundle.sourced = 0
     let bundle.refcnt -= 1
 
     if bundle.refcnt <= 0
+      if bundle.sourced
+        call neobundle#util#print_error(
+              \ bundle.name . ' is already sourced.  Cannot be disabled.')
+        continue
+      endif
+
+      let bundle.sourced = 0
       let bundle.disabled = 1
     endif
   endfor
