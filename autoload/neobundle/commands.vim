@@ -711,7 +711,7 @@ function! s:cmp_vimproc(a, b) "{{{
 endfunction"}}}
 
 function! s:get_cache_version()"{{{
-  return str2nr(printf('%02d%02d', 2, 1))
+  return str2nr(printf('%02d%02d', 2, 2))
 endfunction "}}}
 
 let &cpo = s:save_cpo

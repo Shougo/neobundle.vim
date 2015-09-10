@@ -105,6 +105,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'install_rev' : '',
           \ 'install_process_timeout'
           \    : g:neobundle#install_process_timeout,
+          \ 'refcnt' : 1,
           \ }
   call extend(bundle, a:bundle)
 

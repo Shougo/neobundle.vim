@@ -238,7 +238,11 @@ function! neobundle#config#disable(...) "{{{
   for bundle in bundle_names
     call neobundle#config#rtp_rm(bundle)
     let bundle.sourced = 0
-    let bundle.disabled = 1
+    let bundle.refcnt -= 1
+
+    if bundle.refcnt <= 0
+      let bundle.disabled = 1
+    endif
   endfor
 endfunction"}}}
 
@@ -546,9 +550,14 @@ function! s:add_depends(bundle) "{{{
   for depend in a:bundle.depends
     if !has_key(s:neobundles, depend.name)
       call neobundle#config#add(depend)
-    elseif !depend.lazy
-      " Load automatically.
-      call neobundle#config#source(depend.name, depend.force)
+    else
+      " Add reference count
+      let s:neobundles[depend.name].refcnt += 1
+
+      if !depend.lazy
+        " Load automatically.
+        call neobundle#config#source(depend.name, depend.force)
+      endif
     endif
   endfor
 endfunction"}}}
