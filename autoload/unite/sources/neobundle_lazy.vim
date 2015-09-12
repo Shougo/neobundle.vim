@@ -40,7 +40,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let _ = []
   for bundle in filter(copy(neobundle#config#get_neobundles()),
-        \ '!neobundle#config#is_sourced(v:val.name)')
+        \ '!v:val.sourced')
     let name = substitute(bundle.orig_name,
         \  '^\%(https\?\|git\)://\%(github.com/\)\?', '', '')
     let dict = {

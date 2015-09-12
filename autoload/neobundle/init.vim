@@ -179,10 +179,6 @@ function! neobundle#init#_bundle(bundle) "{{{
     call s:init_depends(bundle)
   endif
 
-  if get(neobundle#config#get(bundle.name), 'sourced', 0)
-    let bundle.sourced = 1
-  endif
-
   if type(bundle.disabled) == type('')
     sandbox let bundle.disabled = eval(bundle.disabled)
   endif

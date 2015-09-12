@@ -289,8 +289,7 @@ endfunction
 
 function! s:get_lazy_bundles()
   return filter(neobundle#config#get_neobundles(),
-        \ "!neobundle#config#is_sourced(v:val.name)
-        \ && v:val.rtp != '' && v:val.lazy")
+        \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
 endfunction
 
 function! neobundle#autoload#_set_function_prefixes(bundles) abort

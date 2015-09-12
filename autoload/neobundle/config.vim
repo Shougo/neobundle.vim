@@ -30,7 +30,6 @@ if !exists('s:neobundles')
   let s:within_block = 0
   let s:lazy_rtp_bundles = []
   let s:neobundles = {}
-  let s:sourced_neobundles = {}
   let neobundle#tapped = {}
 endif
 
@@ -45,8 +44,7 @@ function! neobundle#config#init() "{{{
 
   for bundle in values(s:neobundles)
     if (!bundle.resettable && !bundle.lazy) ||
-          \ (bundle.sourced && bundle.lazy
-          \ && neobundle#is_sourced(bundle.name))
+          \ (bundle.sourced && bundle.lazy)
       call neobundle#config#rtp_add(bundle)
     elseif bundle.resettable
       " Reset.
@@ -104,6 +102,7 @@ function! neobundle#config#final() "{{{
   let index = index(rtps, neobundle#get_rtp_dir())
   for bundle in filter(s:lazy_rtp_bundles,
         \ 'isdirectory(v:val.rtp) && !v:val.disabled')
+    let bundle.sourced = 1
     call insert(rtps, bundle.rtp, index)
     let index += 1
 
@@ -173,8 +172,8 @@ function! neobundle#config#source(names, ...) "{{{
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let bundles = filter(bundles, "!v:val.disabled
-        \ && (!neobundle#config#is_sourced(v:val.name)
-        \ || (v:val.rtp != '' && index(rtps, v:val.rtp) < 0))")
+        \ && (!v:val.sourced || (v:val.rtp != ''
+        \                        && index(rtps, v:val.rtp) < 0))")
   if empty(bundles)
     return
   endif
@@ -185,8 +184,6 @@ function! neobundle#config#source(names, ...) "{{{
   for bundle in bundles
     let bundle.sourced = 1
     let bundle.disabled = 0
-
-    let s:sourced_neobundles[bundle.name] = 1
 
     if !empty(bundle.dummy_mappings)
       for [mode, mapping] in bundle.dummy_mappings
@@ -241,12 +238,11 @@ function! neobundle#config#disable(...) "{{{
 
     if bundle.refcnt <= 0
       if bundle.sourced
-        " call neobundle#util#print_error(
-        "       \ bundle.name . ' is already sourced.  Cannot be disabled.')
-        " continue
+        call neobundle#util#print_error(
+              \ bundle.name . ' is already sourced.  Cannot be disabled.')
+        continue
       endif
 
-      let bundle.sourced = 0
       let bundle.disabled = 1
     endif
   endfor
@@ -423,8 +419,7 @@ function! neobundle#config#set(name, dict) "{{{
   endif
 
   let bundle = neobundle#init#_bundle(extend(bundle, a:dict))
-  if bundle.lazy && bundle.sourced &&
-        \ !get(s:sourced_neobundles, bundle.name, 0)
+  if bundle.lazy && bundle.sourced
     " Remove from runtimepath.
     call neobundle#config#rtp_rm(bundle)
     let bundle.sourced = 0
@@ -471,7 +466,6 @@ function! neobundle#config#add(bundle, ...) "{{{
       " Load automatically.
       call neobundle#config#source(bundle.name, bundle.force)
     else
-      let bundle.sourced = 1
       call neobundle#config#rtp_add(bundle)
 
       if bundle.force
@@ -604,10 +598,7 @@ function! s:add_lazy(bundle) "{{{
     endif
   endif
 
-  if neobundle#config#is_sourced(bundle.name)
-    " Already sourced.
-    call neobundle#config#rtp_add(bundle)
-  else
+  if !bundle.sourced
     if has_key(bundle.autoload, 'commands')
       call s:add_dummy_commands(bundle)
     endif
