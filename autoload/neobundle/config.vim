@@ -241,9 +241,9 @@ function! neobundle#config#disable(...) "{{{
 
     if bundle.refcnt <= 0
       if bundle.sourced
-        call neobundle#util#print_error(
-              \ bundle.name . ' is already sourced.  Cannot be disabled.')
-        continue
+        " call neobundle#util#print_error(
+        "       \ bundle.name . ' is already sourced.  Cannot be disabled.')
+        " continue
       endif
 
       let bundle.sourced = 0
