@@ -217,8 +217,16 @@ function! neobundle#config#source(names, ...) "{{{
   let filetype_after = neobundle#util#redir('autocmd FileType')
 
   if reset_ftplugin
+    if &verbose
+      echom "Neobundle: resetting ftplugin, after loading bundles:"
+            \ join(map(copy(bundles), 'v:val.name'), ", ")
+    endif
     call s:reset_ftplugin()
   elseif filetype_before !=# filetype_after
+    if &verbose
+      echom "Neobundle: FileType autocommand triggered by:"
+            \ join(map(copy(bundles), 'v:val.name'), ", ")
+    endif
     execute 'doautocmd FileType' &filetype
   endif
 
