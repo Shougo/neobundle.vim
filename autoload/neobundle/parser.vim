@@ -52,11 +52,9 @@ function! neobundle#parser#lazy(arg) "{{{
 
   " Update lazy flag.
   let bundle.lazy = 1
-  let bundle.resettable = 0
   let bundle.orig_opts.lazy = 1
   for depend in bundle.depends
     let depend.lazy = bundle.lazy
-    let depend.resettable = 0
   endfor
 
   call neobundle#config#add(bundle)

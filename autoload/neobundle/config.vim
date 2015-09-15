@@ -43,10 +43,7 @@ function! neobundle#config#init() "{{{
   endif
 
   for bundle in values(s:neobundles)
-    if (!bundle.resettable && !bundle.lazy) ||
-          \ (bundle.sourced && bundle.lazy)
-      call neobundle#config#rtp_add(bundle)
-    elseif bundle.resettable
+    if !(bundle.lazy && bundle.sourced)
       " Reset.
       call neobundle#config#rtp_rm(bundle)
 
