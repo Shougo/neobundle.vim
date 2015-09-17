@@ -217,8 +217,18 @@ function! neobundle#config#source(names, ...) "{{{
   let filetype_after = neobundle#util#redir('autocmd FileType')
 
   if reset_ftplugin
+    if &verbose
+      call neobundle#util#print_error(
+            \ "Neobundle: resetting ftplugin, after loading bundles:"
+            \ .join(map(copy(bundles), 'v:val.name'), ", "))
+    endif
     call s:reset_ftplugin()
   elseif filetype_before !=# filetype_after
+    if &verbose
+      call neobundle#util#print_error(
+            \ "Neobundle: FileType autocommand triggered by:"
+            \ .join(map(copy(bundles), 'v:val.name'), ", "))
+    endif
     execute 'doautocmd FileType' &filetype
   endif
 
@@ -681,7 +691,7 @@ function! s:on_source(bundle) "{{{
   for directory in filter(['plugin', 'after/plugin'],
         \ "isdirectory(a:bundle.rtp.'/'.v:val)")
     for file in split(glob(a:bundle.rtp.'/'.directory.'/**/*.vim'), '\n')
-      " NOTE: "silent!" is required to ignore E122, E174 and E227.
+      " Note: "silent!" is required to ignore E122, E174 and E227.
       "       try/catching them aborts sourcing of the file.
       "       "unsilent" then displays any messages while sourcing.
       execute 'silent! unsilent source' fnameescape(file)
