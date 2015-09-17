@@ -1085,6 +1085,13 @@ OPTIONS 					*neobundle-options*
 			filetypes	(List) or (String)
 			Filetype list.  If the filetype is "all", it means all
 			filetypes.
+			Note: Using this will usually cause Neobundle to
+			either reset the ftplugin state, or explicitly call
+			the FileType autocommand another time (after adding
+			the lazy-loaded bundle), which results in the
+			autocommand to be processed twice for all other
+			plugins.  Therefore, using "all" does not make sense
+			usually.
 
 			filename_patterns	(List) or (String)
 			Filename regex pattern list.

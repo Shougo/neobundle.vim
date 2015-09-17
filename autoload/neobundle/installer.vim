@@ -413,6 +413,10 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let is_timeout = (localtime() - a:process.start_time)
           \             >= a:process.bundle.install_process_timeout
 
+    if !has_key(s:job_info, a:process.proc)
+      return
+    endif
+
     let job = s:job_info[a:process.proc]
 
     if !job.eof && !is_timeout

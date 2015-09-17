@@ -5,9 +5,9 @@
 
 # Installation directory
 BUNDLE_DIR=~/.vim/bundle
-INSTALL_DIR=$BUNDLE_DIR/neobundle.vim
-
-if [ -e $INSTALL_DIR ]; then
+INSTALL_DIR="$BUNDLE_DIR/neobundle.vim"
+echo "$INSTALL_DIR"
+if [ -e "$INSTALL_DIR" ]; then
   echo "$INSTALL_DIR already exists!"
   exit 1
 fi
@@ -22,8 +22,8 @@ fi
 
 # make bundle dir and fetch neobundle
 echo "Begin fetching NeoBundle..."
-mkdir -p $BUNDLE_DIR
-git clone https://github.com/Shougo/neobundle.vim $INSTALL_DIR
+mkdir -p "$BUNDLE_DIR"
+git clone https://github.com/Shougo/neobundle.vim "$INSTALL_DIR"
 echo "Done."
 
 # write initial setting for .vimrc
