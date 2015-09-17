@@ -445,6 +445,10 @@ function! neobundle#config#add(bundle, ...) "{{{
   endif
 
   if !empty(prev_bundle)
+    if prev_bundle.sourced
+      return
+    endif
+
     call neobundle#config#rtp_rm(prev_bundle)
   endif
   let s:neobundles[bundle.name] = bundle
