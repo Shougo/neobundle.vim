@@ -402,7 +402,7 @@ endfunction"}}}
 
 function! neobundle#commands#list() "{{{
   for bundle in neobundle#config#get_neobundles()
-    echo (neobundle#is_sourced(bundle.name) ? ' ' :
+    echo (bundle.sourced ? ' ' :
           \ neobundle#is_installed(bundle.name) ? '#' : 'X')
           \ . ' ' . bundle.name
   endfor
@@ -439,7 +439,7 @@ endfunction"}}}
 
 function! neobundle#commands#complete_lazy_bundles(arglead, cmdline, cursorpos) "{{{
   return filter(map(filter(neobundle#config#get_neobundles(),
-        \ "!neobundle#config#is_sourced(v:val.name) && v:val.rtp != ''"), 'v:val.name'),
+        \ "!v:val.sourced && v:val.rtp != ''"), 'v:val.name'),
         \ 'stridx(tolower(v:val), tolower(a:arglead)) == 0')
 endfunction"}}}
 

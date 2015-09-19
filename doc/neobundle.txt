@@ -1,6 +1,6 @@
 *neobundle.txt*	Next generation Vim package manager
 
-Version: 3.1
+Version: 3.2
 Author:  Shougo <Shougo.Matsu at gmail.com>
          Copyright (C) 2010 http://github.com/gmarik
 License: MIT license  {{{
@@ -1015,11 +1015,6 @@ OPTIONS 					*neobundle-options*
 		overwrite		(Number)
 		If set to 1, neobundle doesn't overwrite the path to user
 		runtimepath.
-
-						*neobundle-options-resettable*
-		resettable		(Number)
-		If set to 0, neobundle doesn't reset the path in
-		|neobundle#begin()|.
 
 						*neobundle-options-gui*
 		gui			(Number)
