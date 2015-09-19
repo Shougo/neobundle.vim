@@ -130,7 +130,7 @@ command! -nargs=? -bang -bar
       \ call neobundle#commands#list()
 
 command! -bar NeoBundleDocs
-      \ call neobundle#commands#helptags(neobundle#config#get_neobundles())
+      \ call neobundle#commands#helptags(neobundle#config#get_enabled_bundles())
 
 command! -bar NeoBundleLog
       \ echo join(neobundle#installer#get_log(), "\n")

@@ -130,6 +130,11 @@ function! neobundle#config#get_neobundles() "{{{
   return values(s:neobundles)
 endfunction"}}}
 
+function! neobundle#config#get_enabled_bundles() "{{{
+  return filter(values(s:neobundles),
+        \ "!v:val.disabled")
+endfunction"}}}
+
 function! neobundle#config#get_autoload_bundles() "{{{
   return filter(values(s:neobundles),
         \ "!v:val.sourced && v:val.lazy && !v:val.disabled")
@@ -260,6 +265,10 @@ function! neobundle#config#disable(...) "{{{
       let bundle.disabled = 1
     endif
   endfor
+endfunction"}}}
+
+function! neobundle#config#is_disabled(name) "{{{
+  return get(neobundle#config#get(a:name), 'disabled', 1)
 endfunction"}}}
 
 function! neobundle#config#is_sourced(name) "{{{
