@@ -913,16 +913,25 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-	      NeoBundle 'Shougo/vimproc.vim', {
-	      \ 'build' : {
-	      \     'windows' : 'tools\\update-dll-mingw',
-	      \     'cygwin' : 'make -f make_cygwin.mak',
-	      \     'mac' : 'make -f make_mac.mak',
-	      \     'linux' : 'make',
-	      \     'unix' : 'gmake',
-	      \    },
-	      \ }
+		NeoBundle 'Shougo/vimproc.vim', {
+		\ 'build' : {
+		\     'windows' : 'tools\\update-dll-mingw',
+		\     'cygwin' : 'make -f make_cygwin.mak',
+		\     'mac' : 'make -f make_mac.mak',
+		\     'linux' : 'make',
+		\     'unix' : 'gmake',
+		\    },
+		\ }
 <
+		Note: The command is executed in plugin top directory.
+		If you need cd command, you must use "sh -c". >
+		NeoBundle 'wincent/command-t', {
+		\  'build': {
+		\    'others' :
+		\      'sh -c "cd ruby/command-t && ruby extconf.rb && make"'
+		\   }
+		\ }
+
 						*neobundle-options-augroup*
 		augroup		(String)
 		Specify an augroup name that the plugin uses for |VimEnter| or
