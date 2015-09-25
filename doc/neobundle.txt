@@ -879,14 +879,15 @@ OPTIONS 					*neobundle-options*
 		    \ ]}
 <
 						*neobundle-options-build*
-		build			(Dictionary)
+		build			(Dictionary or String)
 		Specify the build script.
 		You may use this option if the plugin has to be built before
 		use. If the build script requires external commands, see
 		|neobundle-options-build_commands|.
 		This command is executed by |system()| or |vimproc#system()|
 		in plugin runtimepath.
-		For example: |vimproc|
+		Note: Type String is syntax sugar for Dictionary of
+		{"others": "cmd"}.
 
 		This dictionary accepts the following keys:
 

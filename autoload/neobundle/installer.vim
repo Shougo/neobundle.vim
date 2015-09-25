@@ -69,7 +69,9 @@ function! neobundle#installer#build(bundle)
 
   " Environment check.
   let build = get(a:bundle, 'build', {})
-  if neobundle#util#is_windows() && has_key(build, 'windows')
+  if type(build) == type('')
+    let cmd = build
+  elseif neobundle#util#is_windows() && has_key(build, 'windows')
     let cmd = build.windows
   elseif neobundle#util#is_mac() && has_key(build, 'mac')
     let cmd = build.mac
