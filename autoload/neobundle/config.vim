@@ -457,11 +457,11 @@ function! neobundle#config#add(bundle, ...) "{{{
     return
   endif
 
-  let prev_bundle = get(s:neobundles, bundle.name, {})
-
-  if get(prev_bundle, 'local', 0) && !bundle.local
-    return
+  if !empty(bundle.depends)
+    call s:add_depends(bundle)
   endif
+
+  let prev_bundle = get(s:neobundles, bundle.name, {})
 
   if !empty(prev_bundle)
     if prev_bundle.sourced
@@ -475,10 +475,6 @@ function! neobundle#config#add(bundle, ...) "{{{
   if bundle.disabled
     " Ignore load.
     return
-  endif
-
-  if !empty(bundle.depends)
-    call s:add_depends(bundle)
   endif
 
   if !bundle.lazy && bundle.rtp != ''
