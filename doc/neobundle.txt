@@ -1494,6 +1494,7 @@ neobundle/install
 					*neobundle-unite-source-neobundle-log*
 neobundle/log
 		Print previous neobundle install logs.
+		And you can jump the diff URI in github.
 
 				*neobundle-unite-source-neobundle-update*
 neobundle/update

@@ -209,7 +209,8 @@ function! neobundle#util#get_filetypes() "{{{
 endfunction"}}}
 
 function! neobundle#util#convert2list(expr) "{{{
-  return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\r\?\n')
+  return type(a:expr) ==# type([]) ? a:expr :
+        \ type(a:expr) ==# type('') ? split(a:expr, '\r\?\n') : [a:expr]
 endfunction"}}}
 
 function! neobundle#util#print_error(expr) "{{{

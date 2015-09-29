@@ -47,11 +47,16 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__NeoBundleLog_Source /|.\{-}|/
         \ contained containedin=uniteSource__NeoBundleLog_Progress
   highlight default link uniteSource__NeoBundleLog_Source Type
+  syntax match uniteSource__NeoBundleLog_URI /\h\w*:\f\+/
+        \ contained containedin=uniteSource__NeoBundleLog
+  highlight default link uniteSource__NeoBundleLog_URI Identifier
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   return map(copy(neobundle#installer#get_log()), "{
         \ 'word' : v:val,
+        \ 'kind' : (v:val =~ '^\\h\\w*://' ? 'uri' : 'word'),
+        \ 'action__uri' : v:val,
         \ }")
 endfunction"}}}
 

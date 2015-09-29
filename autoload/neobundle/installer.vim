@@ -183,6 +183,30 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
   return reinstall_bundles
 endfunction
 
+function! neobundle#installer#get_updated_bundles_message(bundles)
+  let msg = ''
+  let installed_bundles = filter(copy(a:bundles),
+        \ "v:val.old_rev == ''")
+  if !empty(installed_bundles)
+    let msg .= "Installed bundles:\n".
+        \ join(map(copy(installed_bundles), 'v:val.name'),"\n")
+  endif
+  let updated_bundles = filter(copy(a:bundles),
+        \ "v:val.old_rev != ''")
+  if !empty(updated_bundles)
+    let msg .= "Updated bundles:\n".
+        \ join(map(copy(updated_bundles),
+        \ "v:val.name . (v:val.uri =~ '/github.com/' ? \"\\n\"
+        \    . printf('%s/compare/%s...%s',
+        \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
+        \          '^\\h\\w\\+:', 'https:', ''),
+        \        v:val.old_rev, v:val.new_rev) : '')")
+        \ , "\n")
+  endif
+
+  return msg
+endfunction
+
 function! neobundle#installer#get_sync_command(bang, bundle, number, max)
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
@@ -526,6 +550,8 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let bundle.updated_time = updated_time
     let bundle.installed_uri = bundle.uri
     let bundle.revisions[updated_time] = rev
+    let bundle.old_rev = a:process.rev
+    let bundle.new_rev = rev
 
     call add(a:context.source__synced_bundles, bundle)
   endif
@@ -639,16 +665,19 @@ function! neobundle#installer#_load_install_info(bundles)
 endfunction
 
 function! s:get_skipped_message(number, max, bundle, prefix, message)
-  let messages = [a:prefix . printf(' (%'.len(a:max).'d/%d): |%s| %s',
+  let messages = [a:prefix . printf('(%'.len(a:max).'d/%d): |%s| %s',
           \ a:number, a:max, a:bundle.name, 'Skipped')]
   if a:message != ''
-    call add(messages, a:prefix . ' ' . a:message)
+    call add(messages, a:prefix . a:message)
   endif
   return messages
 endfunction
 
 function! neobundle#installer#log(msg, ...)
   let msg = neobundle#util#convert2list(a:msg)
+  if empty(msg)
+    return
+  endif
   call extend(s:log, msg)
 
   call s:append_log_file(msg)
@@ -670,6 +699,9 @@ endfunction
 
 function! neobundle#installer#error(msg, ...)
   let msg = neobundle#util#convert2list(a:msg)
+  if empty(msg)
+    return
+  endif
   call extend(s:log, msg)
   call extend(s:updates_log, msg)
 

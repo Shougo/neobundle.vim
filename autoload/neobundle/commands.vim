@@ -80,10 +80,7 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   call neobundle#installer#update(installed)
 
   call neobundle#installer#update_log(
-        \ "Installed/Updated bundles:\n".
-        \ join((empty(installed) ?
-        \   ['no new bundles installed'] :
-        \   map(copy(installed), 'v:val.name')),"\n"))
+        \ neobundle#installer#get_updated_bundles_message(installed))
 
   if !empty(errored)
     call neobundle#installer#update_log(

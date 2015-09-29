@@ -92,15 +92,8 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
     " Filter eof processes.
     call filter(a:context.source__processes, '!v:val.eof')
   else
-    let messages = []
-
-    if empty(a:context.source__synced_bundles)
-      let messages += ['No new bundles installed.']
-    else
-      let messages += ['Installed/Updated bundles:']
-            \ + map(copy(a:context.source__synced_bundles),
-            \        'v:val.name')
-    endif
+    let messages = split(neobundle#installer#get_updated_bundles_message(
+          \ a:context.source__synced_bundles), '\n')
 
     if !empty(a:context.source__errored_bundles)
       let messages += ['Errored bundles:']
@@ -123,6 +116,8 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   return map(neobundle#installer#get_updates_log()[len(old_msgs) :], "{
         \ 'word' : v:val,
         \ 'is_multiline' : 1,
+        \ 'kind' : (v:val =~ '^\\h\\w*://' ? 'uri' : 'word'),
+        \ 'action__uri' : v:val,
         \}")
 endfunction"}}}
 
