@@ -51,7 +51,7 @@ endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   return map(copy(neobundle#installer#get_log()), "{
-        \ 'word' : substitute(v:val, '^\\[.\\{-}\\]\\s*', '', ''),
+        \ 'word' : v:val,
         \ }")
 endfunction"}}}
 

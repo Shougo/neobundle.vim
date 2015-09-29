@@ -55,9 +55,9 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
 
   if empty(bundles)
     call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.')
+          \ 'Target bundles not found.')
     call neobundle#installer#error(
-          \ '[neobundle/install] You may have used the wrong bundle name,'.
+          \ 'You may have used the wrong bundle name,'.
           \ ' or all of the bundles are already installed.')
     return
   endif
@@ -69,7 +69,7 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   call neobundle#installer#clear_log()
 
   call neobundle#installer#error(
-        \ '[neobundle/install] Update started: ' .
+        \ 'Update started: ' .
         \     strftime('(%Y/%m/%d %H:%M:%S)'))
 
   let [installed, errored] = s:install(a:bang, bundles)
@@ -80,22 +80,21 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   call neobundle#installer#update(installed)
 
   call neobundle#installer#update_log(
-        \ "[neobundle/install] Installed/Updated bundles:\n".
+        \ "Installed/Updated bundles:\n".
         \ join((empty(installed) ?
         \   ['no new bundles installed'] :
         \   map(copy(installed), 'v:val.name')),"\n"))
 
   if !empty(errored)
     call neobundle#installer#update_log(
-          \ "[neobundle/install] Error installing bundles:\n".join(
+          \ "Error installing bundles:\n".join(
           \ map(copy(errored), 'v:val.name')), "\n")
     call neobundle#installer#update_log(
           \ 'Please read the error message log with the :message command.')
   endif
 
   call neobundle#installer#error(
-        \ '[neobundle/install] Update done: ' .
-        \     strftime('(%Y/%m/%d %H:%M:%S)'))
+        \ 'Update done: ' . strftime('(%Y/%m/%d %H:%M:%S)'))
 endfunction"}}}
 
 function! neobundle#commands#helptags(bundles) "{{{
@@ -112,7 +111,7 @@ function! neobundle#commands#helptags(bundles) "{{{
       call s:update_tags()
       if !has('vim_starting')
         call neobundle#installer#log(
-              \ '[neobundle/install] Helptags: done. '
+              \ 'Helptags: done. '
               \ .len(help_dirs).' bundles processed')
       endif
     catch
@@ -237,8 +236,8 @@ function! neobundle#commands#clean(bang, ...) "{{{
 
   if empty(x_dirs)
     let message = a:0 == 0 ?
-          \ '[neobundle/install] All clean!' :
-          \ '[neobundle/install] ' . string(a:000) . ' is not found.'
+          \ 'All clean!' :
+          \ string(a:000) . ' is not found.'
     call neobundle#installer#log(message)
     return
   end
@@ -287,9 +286,9 @@ function! neobundle#commands#reinstall(bundle_names) "{{{
 
   if empty(bundles)
     call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.')
+          \ 'Target bundles not found.')
     call neobundle#installer#error(
-          \ '[neobundle/install] You may have used the wrong bundle name.')
+          \ 'You may have used the wrong bundle name.')
     return
   endif
 
@@ -593,8 +592,7 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
   let message = printf('(%'.len(max).'d/%d): |%s| %s',
         \ num, max, a:bundle.name, cmd)
 
-  call neobundle#installer#log(
-        \ '[neobundle/check] ' . message, a:is_unite)
+  call neobundle#installer#log(message, a:is_unite)
 
   let cwd = getcwd()
   try
@@ -661,7 +659,7 @@ function! s:check_update_process(context, process, is_unite) "{{{
   endtry
 
   if is_timeout || status
-    let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+    let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#log(message, a:is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)

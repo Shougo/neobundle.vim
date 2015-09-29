@@ -62,7 +62,7 @@ function! neobundle#installer#build(bundle)
   if !empty(a:bundle.build_commands)
         \ && neobundle#config#check_commands(a:bundle.build_commands)
       call neobundle#installer#log(
-            \ printf('[neobundle/install] |%s| ' .
+            \ printf('|%s| ' .
             \        'Build dependencies not met. Skipped', a:bundle.name))
       return 0
   endif
@@ -88,7 +88,7 @@ function! neobundle#installer#build(bundle)
     return 0
   endif
 
-  call neobundle#installer#log('[neobundle/install] Building...')
+  call neobundle#installer#log('Building...')
 
   let cwd = getcwd()
   try
@@ -113,7 +113,7 @@ function! neobundle#installer#build(bundle)
   if neobundle#util#get_last_status()
     call neobundle#installer#error(result)
   else
-    call neobundle#installer#log('[neobundle/install] ' . result)
+    call neobundle#installer#log(result)
   endif
 
   return neobundle#util#get_last_status()
@@ -125,7 +125,7 @@ function! neobundle#installer#reinstall(bundles)
   for bundle in bundles
     " Reinstall.
     call neobundle#installer#log(
-          \ printf('[neobundle/install] |%s| Reinstalling...', bundle.name))
+          \ printf('|%s| Reinstalling...', bundle.name))
 
     " Save info.
     let arg = copy(bundle.orig_arg)
@@ -327,13 +327,13 @@ function! neobundle#installer#sync(bundle, context, is_unite)
   if cmd == ''
     " Skipped.
     call neobundle#installer#log(s:get_skipped_message(
-          \ num, max, a:bundle, '[neobundle/install]', message), a:is_unite)
+          \ num, max, a:bundle, '', message), a:is_unite)
     return
   elseif cmd =~# '^E: '
     " Errored.
 
     call neobundle#installer#update_log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, a:bundle.name, 'Error'), a:is_unite)
     call neobundle#installer#error(cmd[3:], a:is_unite)
     call add(a:context.source__errored_bundles,
@@ -341,8 +341,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
     return
   endif
 
-  call neobundle#installer#log(
-        \ '[neobundle/install] ' . message, a:is_unite)
+  call neobundle#installer#log(message, a:is_unite)
 
   let cwd = getcwd()
   try
@@ -483,7 +482,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let build_failed = is_failed ? 0 : neobundle#installer#build(bundle)
 
   if is_failed || build_failed
-    let message = printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+    let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#update_log(message, a:is_unite)
     call neobundle#installer#error(bundle.path, a:is_unite)
@@ -508,17 +507,16 @@ function! neobundle#installer#check_output(context, process, is_unite)
     endif
 
     call neobundle#installer#log(s:get_skipped_message(
-          \ num, max, bundle, '[neobundle/install]',
-          \ 'Same revision.'), a:is_unite)
+          \ num, max, bundle, '', 'Same revision.'), a:is_unite)
   else
     call neobundle#installer#update_log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), a:is_unite)
     let message = neobundle#installer#get_updated_log_message(
           \ bundle, rev, a:process.rev)
     call neobundle#installer#update_log(
           \ map(split(message, '\n'),
-          \ "printf('[neobundle/install] |%s| ' .
+          \ "printf('|%s| ' .
           \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
           \ a:is_unite)
 
@@ -558,11 +556,10 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
 
   if bundle.rev != ''
     call neobundle#installer#log(
-          \ printf('[neobundle/install] (%'.len(max).'d/%d): |%s| %s',
+          \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Locked'), a:is_unite)
 
-    call neobundle#installer#log(
-          \ '[neobundle/install] ' . message, a:is_unite)
+    call neobundle#installer#log(message, a:is_unite)
   endif
 
   let cwd = getcwd()
@@ -660,19 +657,12 @@ endfunction
 
 function! neobundle#installer#update_log(msg, ...)
   let is_unite = get(a:000, 0, 0)
-  let msgs = []
-  for msg in type(a:msg) == type([]) ?
-        \ a:msg : [a:msg]
-    let source_name = matchstr(msg, '^\[.\{-}\] ')
-
-    let msg_nrs = split(msg, '\n')
-    let msgs += [msg_nrs[0]] +
-          \ map(msg_nrs[1:], "source_name . v:val")
-  endfor
 
   if !(&filetype == 'unite' || is_unite)
-    call neobundle#util#redraw_echo(msg)
+    call neobundle#util#redraw_echo(a:msg)
   endif
+
+  let msgs = neobundle#util#convert2list(a:msg)
 
   call neobundle#installer#log(msgs)
 

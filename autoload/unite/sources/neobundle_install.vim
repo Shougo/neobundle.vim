@@ -95,15 +95,15 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
     let messages = []
 
     if empty(a:context.source__synced_bundles)
-      let messages += ['[neobundle/install] No new bundles installed.']
+      let messages += ['No new bundles installed.']
     else
-      let messages += ['[neobundle/install] Installed/Updated bundles:']
+      let messages += ['Installed/Updated bundles:']
             \ + map(copy(a:context.source__synced_bundles),
             \        'v:val.name')
     endif
 
     if !empty(a:context.source__errored_bundles)
-      let messages += ['[neobundle/install] Errored bundles:']
+      let messages += ['Errored bundles:']
             \ + map(copy(a:context.source__errored_bundles),
             \        'v:val.name')
       call neobundle#installer#error(
@@ -115,13 +115,13 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
           \ a:context.source__synced_bundles)
 
     " Finish.
-    call neobundle#installer#update_log('[neobundle/install] Completed.', 1)
+    call neobundle#installer#update_log('Completed.', 1)
 
     let a:context.is_async = 0
   endif
 
   return map(neobundle#installer#get_updates_log()[len(old_msgs) :], "{
-        \ 'word' : substitute(v:val, '^\\[.\\{-}\\]\\s*', '', ''),
+        \ 'word' : v:val,
         \ 'is_multiline' : 1,
         \}")
 endfunction"}}}
@@ -164,7 +164,8 @@ function! s:init(context, bundle_names)
         \ a:context.source__bundles)
 
   let reinstall_bundles =
-        \ neobundle#installer#get_reinstall_bundles(a:context.source__bundles)
+        \ neobundle#installer#get_reinstall_bundles(
+        \   a:context.source__bundles)
   if !empty(reinstall_bundles)
     call neobundle#installer#reinstall(reinstall_bundles)
   endif
@@ -177,12 +178,10 @@ function! s:init(context, bundle_names)
   if empty(a:context.source__bundles)
     let a:context.is_async = 0
     call neobundle#installer#error(
-          \ '[neobundle/install] Target bundles not found.' .
-          \ ' You may use wrong bundle name.', 1)
+          \ 'Target bundles not found. You may use wrong bundle name.', 1)
   else
     call neobundle#installer#update_log(
-          \ '[neobundle/install] Update started: ' .
-          \     strftime('(%Y/%m/%d %H:%M:%S)'))
+          \ 'Update started: ' . strftime('(%Y/%m/%d %H:%M:%S)'))
   endif
 endfunction
 
