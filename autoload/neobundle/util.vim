@@ -28,7 +28,7 @@ set cpo&vim
 
 let s:is_windows = has('win32')
 let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows
+let s:is_mac = !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!isdirectory('/proc') && executable('sw_vers')))
 
