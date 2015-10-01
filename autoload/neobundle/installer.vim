@@ -185,23 +185,27 @@ endfunction
 
 function! neobundle#installer#get_updated_bundles_message(bundles)
   let msg = ''
+
   let installed_bundles = filter(copy(a:bundles),
         \ "v:val.old_rev == ''")
   if !empty(installed_bundles)
     let msg .= "Installed bundles:\n".
-        \ join(map(copy(installed_bundles), 'v:val.name'),"\n")
+        \ join(map(copy(installed_bundles), 'v:val.name'), "\n")
+    let msg .= "\n"
   endif
+
   let updated_bundles = filter(copy(a:bundles),
         \ "v:val.old_rev != ''")
   if !empty(updated_bundles)
     let msg .= "Updated bundles:\n".
         \ join(map(copy(updated_bundles),
-        \ "v:val.name . (v:val.uri =~ '^^\\h\\w*://github.com/' ? \"\\n\"
+        \ "v:val.name . (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
         \    . printf('%s/compare/%s...%s',
         \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
         \          '^\\h\\w*:', 'https:', ''),
         \        v:val.old_rev, v:val.new_rev) : '')")
         \ , "\n")
+    let msg .= "\n"
   endif
 
   return msg
@@ -359,7 +363,7 @@ function! neobundle#installer#sync(bundle, context, is_unite)
     call neobundle#installer#update_log(
           \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, a:bundle.name, 'Error'), a:is_unite)
-    call neobundle#installer#error(cmd[3:], a:is_unite)
+    call neobundle#installer#error(cmd[3:])
     call add(a:context.source__errored_bundles,
           \ a:bundle)
     return
@@ -509,7 +513,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#update_log(message, a:is_unite)
-    call neobundle#installer#error(bundle.path, a:is_unite)
+    call neobundle#installer#error(bundle.path)
 
     if build_failed
       if confirm('Build failed. Uninstall "'
@@ -521,7 +525,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
 
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
-          \    split(a:process.output, '\n')), a:is_unite)
+          \    split(a:process.output, '\n')))
 
     call add(a:context.source__errored_bundles,
           \ bundle)
@@ -575,8 +579,8 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
     return 0
   elseif cmd =~# '^E: '
     " Errored.
-    call neobundle#installer#error(bundle.path, a:is_unite)
-    call neobundle#installer#error(cmd[3:], a:is_unite)
+    call neobundle#installer#error(bundle.path)
+    call neobundle#installer#error(cmd[3:])
     return -1
   endif
 
@@ -604,8 +608,8 @@ function! neobundle#installer#lock_revision(process, context, is_unite)
   endtry
 
   if status
-    call neobundle#installer#error(bundle.path, a:is_unite)
-    call neobundle#installer#error(result, a:is_unite)
+    call neobundle#installer#error(bundle.path)
+    call neobundle#installer#error(result)
     return -1
   endif
 endfunction
@@ -690,23 +694,29 @@ function! neobundle#installer#update_log(msg, ...)
     call neobundle#util#redraw_echo(a:msg)
   endif
 
-  let msgs = neobundle#util#convert2list(a:msg)
+  call neobundle#installer#log(a:msg)
 
-  call neobundle#installer#log(msgs)
-
-  let s:updates_log += msgs
+  let s:updates_log += neobundle#util#convert2list(a:msg)
 endfunction
 
-function! neobundle#installer#error(msg, ...)
-  let msg = neobundle#util#convert2list(a:msg)
-  if empty(msg)
+function! neobundle#installer#echomsg(msg)
+  call neobundle#util#redraw_echomsg(a:msg)
+
+  call neobundle#installer#log(a:msg)
+
+  let s:updates_log += neobundle#util#convert2list(a:msg)
+endfunction
+
+function! neobundle#installer#error(msg)
+  let msgs = neobundle#util#convert2list(a:msg)
+  if empty(msgs)
     return
   endif
-  call extend(s:log, msg)
-  call extend(s:updates_log, msg)
+  call extend(s:log, msgs)
+  call extend(s:updates_log, msgs)
 
-  call neobundle#util#print_error(msg)
-  call s:append_log_file(msg)
+  call neobundle#util#print_error(msgs)
+  call s:append_log_file(msgs)
 endfunction
 
 function! s:append_log_file(msg)

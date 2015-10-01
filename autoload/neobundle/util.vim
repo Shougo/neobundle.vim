@@ -214,24 +214,24 @@ function! neobundle#util#convert2list(expr) "{{{
 endfunction"}}}
 
 function! neobundle#util#print_error(expr) "{{{
-  return s:echo(a:expr, 1)
+  return s:echo(a:expr, 'error')
 endfunction"}}}
 
 function! neobundle#util#redraw_echo(expr) "{{{
-  return s:echo(a:expr, 0)
+  return s:echo(a:expr, 'echo')
 endfunction"}}}
 
-function! s:echo(expr, is_error) "{{{
+function! neobundle#util#redraw_echomsg(expr) "{{{
+  return s:echo(a:expr, 'echomsg')
+endfunction"}}}
+
+function! s:echo(expr, mode) "{{{
   let msg = map(neobundle#util#convert2list(a:expr),
         \ "'[neobundle] ' .  v:val")
 
   if has('vim_starting')
     let m = join(msg, "\n")
-    if a:is_error
-      echohl WarningMsg | echomsg m | echohl None
-    else
-      echo m
-    endif
+    call s:echo_mode(m, a:mode)
     return
   endif
 
@@ -248,17 +248,24 @@ function! s:echo(expr, is_error) "{{{
       redraw
 
       let m = join(msg[i : i+height-1], "\n")
-      if a:is_error
-        echohl WarningMsg | echomsg m | echohl None
-      else
-        echo m
-      endif
+      call s:echo_mode(m, a:mode)
     endfor
   finally
     let &more = more_save
     let &showcmd = showcmd_save
     let &ruler = ruler_save
   endtry
+endfunction"}}}
+function! s:echo_mode(m, mode) "{{{
+  for m in split(a:m, '\r\?\n', 1)
+    if a:mode ==# 'error'
+      echohl WarningMsg | echomsg m | echohl None
+    elseif a:mode ==# 'echomsg'
+      echomsg m
+    else
+      echo m
+    endif
+  endfor
 endfunction"}}}
 
 function! neobundle#util#name_conversion(path) "{{{

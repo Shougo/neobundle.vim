@@ -68,7 +68,7 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
 
   call neobundle#installer#clear_log()
 
-  call neobundle#installer#error(
+  call neobundle#installer#echomsg(
         \ 'Update started: ' .
         \     strftime('(%Y/%m/%d %H:%M:%S)'))
 
@@ -79,18 +79,18 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
 
   call neobundle#installer#update(installed)
 
-  call neobundle#installer#update_log(
+  call neobundle#installer#echomsg(
         \ neobundle#installer#get_updated_bundles_message(installed))
 
   if !empty(errored)
-    call neobundle#installer#update_log(
+    call neobundle#installer#echomsg(
           \ "Error installing bundles:\n".join(
-          \ map(copy(errored), 'v:val.name')), "\n")
-    call neobundle#installer#update_log(
+          \ map(copy(errored), 'v:val.name'), "\n"))
+    call neobundle#installer#echomsg(
           \ 'Please read the error message log with the :message command.')
   endif
 
-  call neobundle#installer#error(
+  call neobundle#installer#echomsg(
         \ 'Update done: ' . strftime('(%Y/%m/%d %H:%M:%S)'))
 endfunction"}}}
 
@@ -107,7 +107,7 @@ function! neobundle#commands#helptags(bundles) "{{{
     try
       call s:update_tags()
       if !has('vim_starting')
-        call neobundle#installer#log(
+        call neobundle#installer#echomsg(
               \ 'Helptags: done. '
               \ .len(help_dirs).' bundles processed')
       endif
@@ -332,8 +332,8 @@ function! neobundle#commands#gc(bundle_names) "{{{
     endtry
 
     if status
-      call neobundle#installer#error(bundle.path, 0)
-      call neobundle#installer#error(result, 0)
+      call neobundle#installer#error(bundle.path)
+      call neobundle#installer#error(result)
     endif
   endfor
 endfunction"}}}
@@ -659,10 +659,10 @@ function! s:check_update_process(context, process, is_unite) "{{{
     let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#log(message, a:is_unite)
-    call neobundle#installer#error(bundle.path, a:is_unite)
+    call neobundle#installer#error(bundle.path)
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
-          \    split(a:process.output, '\n')), a:is_unite)
+          \    split(a:process.output, '\n')))
   elseif remote_rev != '' && remote_rev !=# rev
     call add(a:context.source__updated_bundles,
           \ bundle)

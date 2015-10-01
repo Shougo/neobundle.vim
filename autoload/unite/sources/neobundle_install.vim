@@ -173,7 +173,7 @@ function! s:init(context, bundle_names)
   if empty(a:context.source__bundles)
     let a:context.is_async = 0
     call neobundle#installer#error(
-          \ 'Target bundles not found. You may use wrong bundle name.', 1)
+          \ 'Target bundles not found. You may use wrong bundle name.')
   else
     call neobundle#installer#update_log(
           \ 'Update started: ' . strftime('(%Y/%m/%d %H:%M:%S)'))
