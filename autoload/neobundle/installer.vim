@@ -196,10 +196,10 @@ function! neobundle#installer#get_updated_bundles_message(bundles)
   if !empty(updated_bundles)
     let msg .= "Updated bundles:\n".
         \ join(map(copy(updated_bundles),
-        \ "v:val.name . (v:val.uri =~ '/github.com/' ? \"\\n\"
+        \ "v:val.name . (v:val.uri =~ '^^\\h\\w*://github.com/' ? \"\\n\"
         \    . printf('%s/compare/%s...%s',
         \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
-        \          '^\\h\\w\\+:', 'https:', ''),
+        \          '^\\h\\w*:', 'https:', ''),
         \        v:val.old_rev, v:val.new_rev) : '')")
         \ , "\n")
   endif
