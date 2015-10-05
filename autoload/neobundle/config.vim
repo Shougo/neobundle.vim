@@ -570,7 +570,7 @@ function! s:add_depends(bundle) "{{{
       " Add reference count
       let s:neobundles[depend.name].refcnt += 1
 
-      if !depend.lazy
+      if !s:neobundles[depend.name].sourced
         " Load automatically.
         call neobundle#config#source(depend.name, depend.force)
       endif
