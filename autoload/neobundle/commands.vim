@@ -470,9 +470,10 @@ function! neobundle#commands#save_cache() "{{{
         \ neobundle#config#get_autoload_bundles())
 
   let bundles = deepcopy(neobundle#config#get_neobundles())
-  " Clear hooks.  Because, VimL cannot save functions in JSON.
   for bundle in bundles
+    " Clear hooks.  Because, VimL cannot save functions in JSON.
     let bundle.hooks = {}
+    let bundle.sourced = 0
   endfor
 
   let current_vim = neobundle#util#redir('version')
