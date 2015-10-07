@@ -53,6 +53,9 @@ function! s:source_install.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__NeoBundleInstall_Source /|.\{-}|/
         \ contained containedin=uniteSource__NeoBundleInstall_Progress
   highlight default link uniteSource__NeoBundleInstall_Source Type
+  syntax match uniteSource__NeoBundleInstall_URI /-> diff URI/
+        \ contained containedin=uniteSource__NeoBundleInstall
+  highlight default link uniteSource__NeoBundleInstall_URI Underlined
 endfunction"}}}
 
 function! s:source_install.hooks.on_close(args, context) "{{{
@@ -114,7 +117,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   endif
 
   return map(neobundle#installer#get_updates_log()[len(old_msgs) :], "{
-        \ 'word' : v:val,
+        \ 'word' : (v:val =~ '^\\h\\w*://' ? ' -> diff URI' : v:val),
         \ 'is_multiline' : 1,
         \ 'kind' : (v:val =~ '^\\h\\w*://' ? 'uri' : 'word'),
         \ 'action__uri' : v:val,
