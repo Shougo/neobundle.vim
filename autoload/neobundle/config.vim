@@ -174,8 +174,8 @@ function! neobundle#config#source(names, ...) "{{{
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let bundles = filter(bundles, "!v:val.disabled
-        \ && (!v:val.sourced || (v:val.rtp != ''
-        \                        && index(rtps, v:val.rtp) < 0))")
+        \ && (!v:val.sourced
+        \     || (v:val.rtp != '' && index(rtps, v:val.rtp) < 0))")
   if empty(bundles)
     return
   endif
@@ -464,7 +464,7 @@ function! neobundle#config#add(bundle, ...) "{{{
   let prev_bundle = get(s:neobundles, bundle.name, {})
 
   if !empty(prev_bundle)
-    if prev_bundle.sourced && !bundle.local
+    if prev_bundle.sourced
       return
     endif
 
