@@ -393,12 +393,11 @@ function! neobundle#installer#sync(bundle, context, is_unite)
           \ 'start_time' : localtime(),
           \ }
 
-    if isdirectory(a:bundle.path)
-          \ && !a:bundle.local
-          \ && (a:bundle.rev != '' || !a:context.source__bang)
+    if isdirectory(a:bundle.path) && !a:bundle.local
       let rev_save = a:bundle.rev
       try
-        " Checkout HEAD revision.
+        " Force checkout HEAD revision.
+        " The repository may be checked out.
         let a:bundle.rev = ''
 
         call neobundle#installer#lock_revision(
@@ -482,7 +481,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let bundle = a:process.bundle
 
   if bundle.rev != '' || !a:context.source__bang
-    " Lock revision.
+    " Restore revision.
     let rev_save = bundle.rev
     try
       if !a:context.source__bang && bundle.rev == ''
