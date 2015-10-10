@@ -264,7 +264,7 @@ function! neobundle#commands#clean(bang, ...) "{{{
     endif
 
     for dir in x_dirs
-      call neobundle#config#rm(dir)
+      call neobundle#config#rmdir(dir)
     endfor
 
     try

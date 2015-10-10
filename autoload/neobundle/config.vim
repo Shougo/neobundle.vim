@@ -270,7 +270,11 @@ function! neobundle#config#is_installed(name) "{{{
   return isdirectory(get(neobundle#config#get(a:name), 'path', ''))
 endfunction"}}}
 
-function! neobundle#config#rm(path) "{{{
+function! neobundle#config#rm(bundle) "{{{
+  call neobundle#config#rtp_rm(a:bundle)
+  call remove(s:neobundles, a:bundle.name)
+endfunction"}}}
+function! neobundle#config#rmdir(path) "{{{
   for bundle in filter(neobundle#config#get_neobundles(),
         \ 'v:val.path ==# a:path')
     call neobundle#config#rtp_rm(bundle)
@@ -316,6 +320,9 @@ function! neobundle#config#rtp_rm(bundle) "{{{
   if isdirectory(a:bundle.rtp.'/after')
     execute 'set rtp-='.s:get_rtp_after(a:bundle)
   endif
+
+  " Remove from lazy runtimepath
+  call filter(s:lazy_rtp_bundles, "v:val.name !=# a:bundle.name")
 endfunction"}}}
 
 function! neobundle#config#rtp_add(bundle) abort "{{{

@@ -364,6 +364,10 @@ function! s:_compare(a, b)
   return eval(s:expr)
 endfunction
 
+function! neobundle#util#print_bundles(bundles) "{{{
+  echomsg string(map(copy(a:bundles), 'v:val.name'))
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

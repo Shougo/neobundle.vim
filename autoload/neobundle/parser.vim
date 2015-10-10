@@ -183,6 +183,7 @@ function! neobundle#parser#local(localdir, options, includes) "{{{
           \ substitute(neobundle#util#substitute_path_separator(
           \   fnamemodify(v:val, ':p')), '/$', '', '')")
   endfor
+
   for dir in neobundle#util#uniq(directories)
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let name = fnamemodify(dir, ':t')
@@ -193,9 +194,7 @@ function! neobundle#parser#local(localdir, options, includes) "{{{
         let options.lazy = 1
       endif
 
-      " Remove from lazy runtimepath
-      call filter(neobundle#config#get_lazy_rtp_bundles(),
-            \ "fnamemodify(v:val.rtp, ':h:t') != name")
+      call neobundle#config#rm(bundle)
     endif
 
     call neobundle#parser#bundle([dir, options])
