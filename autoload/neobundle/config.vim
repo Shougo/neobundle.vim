@@ -277,8 +277,7 @@ endfunction"}}}
 function! neobundle#config#rmdir(path) "{{{
   for bundle in filter(neobundle#config#get_neobundles(),
         \ 'v:val.path ==# a:path')
-    call neobundle#config#rtp_rm(bundle)
-    call remove(s:neobundles, bundle.name)
+    call neobundle#config#rm(bundle)
   endfor
 endfunction"}}}
 
