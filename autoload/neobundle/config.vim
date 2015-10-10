@@ -173,9 +173,7 @@ function! neobundle#config#source(names, ...) "{{{
         \ neobundle#util#convert2list(a:names))
 
   let rtps = neobundle#util#split_rtp(&runtimepath)
-  let bundles = filter(bundles, "!v:val.disabled
-        \ && (!v:val.sourced
-        \     || (v:val.rtp != '' && index(rtps, v:val.rtp) < 0))")
+  let bundles = filter(bundles, "!v:val.disabled && !v:val.sourced")
   if empty(bundles)
     return
   endif
