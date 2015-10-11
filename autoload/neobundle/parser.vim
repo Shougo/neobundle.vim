@@ -188,7 +188,7 @@ function! neobundle#parser#local(localdir, options, includes) "{{{
     let options = extend({ 'local' : 1, 'base' : base }, a:options)
     let name = fnamemodify(dir, ':t')
     let bundle = neobundle#get(name)
-    if !empty(bundle)
+    if !empty(bundle) && !bundle.sourced
       call extend(options, copy(bundle.orig_opts))
       if bundle.lazy
         let options.lazy = 1
