@@ -542,7 +542,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
     if a:process.rev != ''
       let message = neobundle#installer#get_updated_log_message(
             \ bundle, rev, a:process.rev)
-      call neobundle#installer#update_log(
+      call neobundle#installer#log(
             \ map(split(message, '\n'),
             \ "printf('|%s| ' .
             \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
