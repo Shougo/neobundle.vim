@@ -96,7 +96,17 @@ function! neobundle#installer#build(bundle)
       call neobundle#util#cd(a:bundle.path)
     endif
 
-    let result = neobundle#util#system(cmd)
+    if !neobundle#util#has_vimproc()
+      let result = neobundle#util#system(cmd)
+
+      if neobundle#util#get_last_status()
+        call neobundle#installer#error(result)
+      else
+        call neobundle#installer#log(result)
+      endif
+    else
+      call s:async_system(cmd)
+    endif
   catch
     " Build error from vimproc.
     let message = (v:exception !~# '^Vim:')?
@@ -109,12 +119,6 @@ function! neobundle#installer#build(bundle)
       call neobundle#util#cd(cwd)
     endif
   endtry
-
-  if neobundle#util#get_last_status()
-    call neobundle#installer#error(result)
-  else
-    call neobundle#installer#log(result)
-  endif
 
   return neobundle#util#get_last_status()
 endfunction
@@ -843,6 +847,29 @@ function! s:job_handler(job_id, data, event) abort "{{{
   endif
 
   let candidates += map(lines, "iconv(v:val, 'char', &encoding)")
+endfunction"}}}
+
+function! s:async_system(cmd) abort "{{{
+  let proc = vimproc#pgroup_open(a:cmd)
+
+  " Close handles.
+  call proc.stdin.close()
+
+  while !proc.stdout.eof
+    if !proc.stderr.eof
+      " Print error.
+      call neobundle#installer#error(proc.stderr.read_lines(-1, 100))
+    endif
+
+    call neobundle#util#redraw_echo(proc.stdout.read_lines(-1, 100))
+  endwhile
+
+  if !proc.stderr.eof
+    " Print error.
+    call neobundle#installer#error(proc.stderr.read_lines(-1, 100))
+  endif
+
+  call proc.waitpid()
 endfunction"}}}
 
 let &cpo = s:save_cpo
