@@ -193,18 +193,6 @@ function! neobundle#config#source(names, ...) "{{{
 
     call neobundle#config#rtp_add(bundle)
 
-    if exists('g:loaded_neobundle') || is_force
-      try
-        call s:on_source(bundle)
-      catch
-        call neobundle#util#print_error(
-              \ 'Uncaught error while sourcing "' . bundle.name .
-              \ '": '.v:exception . ' in ' . v:throwpoint)
-      endtry
-    endif
-
-    call neobundle#autoload#source(bundle.name)
-
     if !reset_ftplugin
       let reset_ftplugin = s:is_reset_ftplugin(&filetype, bundle.rtp)
     endif
@@ -227,6 +215,23 @@ function! neobundle#config#source(names, ...) "{{{
     endif
     execute 'doautocmd FileType' &filetype
   endif
+
+  " Lazy source
+  " Because, syntax/filetype sources reload may be needed for plugin directory
+  " files.
+  for bundle in bundles
+    if exists('g:loaded_neobundle') || is_force
+      try
+        call s:on_source(bundle)
+      catch
+        call neobundle#util#print_error(
+              \ 'Uncaught error while sourcing "' . bundle.name .
+              \ '": '.v:exception . ' in ' . v:throwpoint)
+      endtry
+    endif
+
+    call neobundle#autoload#source(bundle.name)
+  endfor
 
   if exists('g:loaded_neobundle')
     call neobundle#call_hook('on_post_source', bundles)
