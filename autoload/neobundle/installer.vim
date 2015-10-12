@@ -539,13 +539,15 @@ function! neobundle#installer#check_output(context, process, is_unite)
     call neobundle#installer#update_log(
           \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), a:is_unite)
-    let message = neobundle#installer#get_updated_log_message(
-          \ bundle, rev, a:process.rev)
-    call neobundle#installer#update_log(
-          \ map(split(message, '\n'),
-          \ "printf('|%s| ' .
-          \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
-          \ a:is_unite)
+    if a:process.rev != ''
+      let message = neobundle#installer#get_updated_log_message(
+            \ bundle, rev, a:process.rev)
+      call neobundle#installer#update_log(
+            \ map(split(message, '\n'),
+            \ "printf('|%s| ' .
+            \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
+            \ a:is_unite)
+    endif
 
     if updated_time == 0
       let updated_time = bundle.checked_time
