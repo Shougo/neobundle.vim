@@ -448,14 +448,22 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let job = s:job_info[a:process.proc]
 
     if !job.eof && !is_timeout
-      let a:process.output .= join(job.candidates[: -2], "\n")
+      let output = join(job.candidates[: -2], "\n")
+      if output != ''
+        let a:process.output .= output
+        call neobundle#util#redraw_echo(output)
+      endif
       let job.candidates = job.candidates[-1:]
       return
     else
       if is_timeout
         call jobstop(a:process.proc)
       endif
-      let a:process.output .= join(job.candidates, "\n")
+      let output = join(job.candidates, "\n")
+      if output != ''
+        let a:process.output .= output
+        call neobundle#util#redraw_echo(output)
+      endif
       let job.candidates = []
     endif
 
@@ -463,8 +471,12 @@ function! neobundle#installer#check_output(context, process, is_unite)
   elseif neobundle#util#has_vimproc() && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= a:process.bundle.install_process_timeout
-    let a:process.output .= vimproc#util#iconv(
+    let output = vimproc#util#iconv(
           \ a:process.proc.stdout.read(-1, 300), 'char', &encoding)
+    if output != ''
+      let a:process.output .= output
+      call neobundle#util#redraw_echo(output)
+    endif
     if !a:process.proc.stdout.eof && !is_timeout
       return
     endif
