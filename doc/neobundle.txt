@@ -1171,15 +1171,15 @@ OPTIONS 					*neobundle-options*
 			Otherwise, neobundle will |:NeoBundleSource| if the
 			buffer name is matched the string pattern.
 			Note: It is useful for explorer behavior plugins.
-			Ex: vimfiler, metarw, committia.vim, ...
+			Ex: vimfiler, metarw, ...
 			Note: To autoload vimfiler, you must disable netrw in
 			.vimrc. >
 			" Disable netrw.vim
 			let g:loaded_netrwPlugin = 1
 <
 			For example: >
-			NeoBundleLazy 'rhysd/committia.vim', {
-			\ 'autoload' : { 'explorer' : 'COMMIT_EDITMSG' },
+			NeoBundleLazy 'kana/vim-meta', {
+			\ 'autoload' : { 'explorer' : '\h\w*:' },
 			\ }
 <
 			on_source	(List) or (String)
