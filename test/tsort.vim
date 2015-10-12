@@ -105,13 +105,13 @@ function! s:suite.bundled_no_depends()
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
   " [a, b, c] => [a, b, c]
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
-        \ neobundle_test_data)
+  call s:assert.equals(s:map(neobundle#config#tsort(neobundle_test_data)),
+        \ s:map(neobundle_test_data))
 
   " [c, b, a] => [c, b, a]
   call reverse(neobundle_test_data)
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
-        \ neobundle_test_data)
+  call s:assert.equals(s:map(neobundle#config#tsort(neobundle_test_data)),
+        \ s:map(neobundle_test_data))
 endfunction
 
 function! s:suite.bundled_normal()
@@ -125,12 +125,12 @@ function! s:suite.bundled_normal()
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
   " [a, b, c] => [a, b, c]
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
-        \ neobundle_test_data)
+  call s:assert.equals(s:map(neobundle#config#tsort(neobundle_test_data)),
+        \ s:map(neobundle_test_data))
 
   " [c, b, a] => [a, b, c]
-  call s:assert.equals(neobundle#config#tsort(
-        \ reverse(copy(neobundle_test_data))), neobundle_test_data)
+  call s:assert.equals(s:map(neobundle#config#tsort(
+        \ reverse(copy(neobundle_test_data)))), s:map(neobundle_test_data))
 endfunction
 
 function! s:suite.bundled_normal2()
@@ -142,15 +142,17 @@ function! s:suite.bundled_normal2()
 
   let neobundle_test_data = sort(filter(neobundle#config#get_neobundles(),
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
-  let neobundle_test_rotated = s:rotate_bundle(neobundle_test_data)
+  let neobundle_test_rotated = s:map(s:rotate_bundle(neobundle_test_data))
 
   " [a, b, c] => [b, c, a]
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
+  call s:assert.equals(s:map(neobundle#config#tsort(
+        \ neobundle_test_data)),
         \ neobundle_test_rotated)
 
   " [c, b, a] => [b, c, a]
-  call s:assert.equals(neobundle#config#tsort(
-        \ reverse(copy(neobundle_test_data))), neobundle_test_rotated)
+  call s:assert.equals(s:map(neobundle#config#tsort(
+        \ reverse(copy(neobundle_test_data)))),
+        \ neobundle_test_rotated)
 endfunction
 
 function! s:suite.bundled_circular_reference()
@@ -164,13 +166,17 @@ function! s:suite.bundled_circular_reference()
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
   " [a, b, c] => [c, b, a]
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
-        \ reverse(copy(neobundle_test_data)))
+  call s:assert.equals(s:map(neobundle#config#tsort(neobundle_test_data)),
+        \ s:map(reverse(copy(neobundle_test_data))))
 
   " [c, b, a] => [b, a, c]
   call reverse(neobundle_test_data)
   let neobundle_test_rotated = s:rotate_bundle(neobundle_test_data)
-  call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
-        \ neobundle_test_rotated)
+  call s:assert.equals(s:map(neobundle#config#tsort(neobundle_test_data)),
+        \ s:map(neobundle_test_rotated))
+endfunction
+
+function! s:map(list) abort
+  return map(copy(a:list), 'v:val.name')
 endfunction
 
