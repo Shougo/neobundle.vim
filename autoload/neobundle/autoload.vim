@@ -192,13 +192,10 @@ function! neobundle#autoload#explorer(path, event)
   endif
 
   let path = neobundle#util#expand(path)
-  if !(isdirectory(path)
-        \ || (!filereadable(path) && path =~ '^\h\w\+://'))
-    return
-  endif
-
   let bundles = filter(neobundle#config#get_autoload_bundles(),
-        \ "get(v:val.autoload, 'explorer', 0)")
+        \ "has_key(v:val.autoload, 'explorer') &&
+        \  (v:val.autoload.explorer == 1
+        \   || path =~? v:val.autoload.explorer)")
   if empty(bundles)
     augroup neobundle-explorer
       autocmd!
