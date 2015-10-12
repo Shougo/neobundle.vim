@@ -12,11 +12,9 @@ function! s:rotate_bundle(bundles)
 endfunction
 
 function! s:suite.before_each()
-  call neobundle#begin(g:path)
 endfunction
 
 function! s:suite.after_each()
-  call neobundle#end()
 endfunction
 
 function! s:suite.no_depends()
@@ -97,9 +95,12 @@ function! s:suite.tsort_circular_reference()
 endfunction
 
 function! s:suite.bundled_no_depends()
+  call neobundle#begin(g:path)
   NeoBundleLazy 'a/a'
   NeoBundleLazy 'b/b'
   NeoBundleLazy 'c/c'
+  call neobundle#end()
+
   let neobundle_test_data = sort(filter(neobundle#config#get_neobundles(),
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
@@ -114,9 +115,12 @@ function! s:suite.bundled_no_depends()
 endfunction
 
 function! s:suite.bundled_normal()
+  call neobundle#begin(g:path)
   NeoBundleLazy 'a/a'
   NeoBundleLazy 'b/b', {'depends' : 'a/a'}
   NeoBundleLazy 'c/c', {'depends' : 'b/b'}
+  call neobundle#end()
+
   let neobundle_test_data = sort(filter(neobundle#config#get_neobundles(),
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
@@ -130,9 +134,12 @@ function! s:suite.bundled_normal()
 endfunction
 
 function! s:suite.bundled_normal2()
+  call neobundle#begin(g:path)
   NeoBundleLazy 'a/a', {'depends' : ['c/c', 'b/b']}
   NeoBundleLazy 'b/b'
   NeoBundleLazy 'c/c', {'depends' : 'b/b'}
+  call neobundle#end()
+
   let neobundle_test_data = sort(filter(neobundle#config#get_neobundles(),
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
   let neobundle_test_rotated = s:rotate_bundle(neobundle_test_data)
@@ -147,9 +154,12 @@ function! s:suite.bundled_normal2()
 endfunction
 
 function! s:suite.bundled_circular_reference()
+  call neobundle#begin(g:path)
   NeoBundleLazy 'a/a', {'depends' : 'b/b'}
   NeoBundleLazy 'b/b', {'depends' : 'c/c'}
   NeoBundleLazy 'c/c', {'depends' : 'a/a'}
+  call neobundle#end()
+
   let neobundle_test_data = sort(filter(neobundle#config#get_neobundles(),
         \ "v:val.name =~# '^[abc]$'"), "s:comp_bundle")
 
