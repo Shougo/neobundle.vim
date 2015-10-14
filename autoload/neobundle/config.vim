@@ -570,10 +570,11 @@ function! s:add_depends(bundle) "{{{
     if !has_key(s:neobundles, depend.name)
       call neobundle#config#add(depend)
     else
+      let depend_bundle = s:neobundles[depend.name]
       " Add reference count
-      let s:neobundles[depend.name].refcnt += 1
+      let depend_bundle.refcnt += 1
 
-      if !s:neobundles[depend.name].sourced
+      if a:bundle.sourced && !depend_bundle.sourced
         " Load automatically.
         call neobundle#config#source(depend.name, depend.force)
       endif
