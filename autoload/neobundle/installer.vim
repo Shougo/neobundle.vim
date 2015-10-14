@@ -522,21 +522,11 @@ function! neobundle#installer#check_output(context, process, is_unite)
         \     && (bundle.type !=# 'git'
         \         || a:process.output !~# 'up-to-date\|up to date'))
 
-  let build_failed = is_failed ? 0 : neobundle#installer#build(bundle)
-
-  if is_failed || build_failed
+  if is_failed
     let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#update_log(message, a:is_unite)
     call neobundle#installer#error(bundle.path)
-
-    if build_failed
-      if confirm('Build failed. Uninstall "'
-            \ .bundle.name.'" now?', "yes\nNo", 2) == 1
-        " Remove.
-        call neobundle#commands#clean(1, bundle.name)
-      endif
-    endif
 
     call neobundle#installer#error(
           \ (is_timeout ? 'Process timeout.' :
@@ -574,7 +564,14 @@ function! neobundle#installer#check_output(context, process, is_unite)
     let bundle.old_rev = a:process.rev
     let bundle.new_rev = rev
 
-    call add(a:context.source__synced_bundles, bundle)
+    if neobundle#installer#build(bundle)
+          \ && confirm('Build failed. Uninstall "'
+          \   .bundle.name.'" now?', "yes\nNo", 2) == 1
+      " Remove.
+      call neobundle#commands#clean(1, bundle.name)
+    else
+      call add(a:context.source__synced_bundles, bundle)
+    endif
   endif
 
   let a:process.eof = 1
