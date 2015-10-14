@@ -698,8 +698,10 @@ function! s:on_source(bundle) "{{{
     endfor
   endfor
 
-  if !has('vim_starting') && exists('#'.a:bundle.augroup.'#VimEnter')
-    execute 'doautocmd' a:bundle.augroup 'VimEnter'
+  if !has('vim_starting')
+    if exists('#'.a:bundle.augroup.'#VimEnter')
+      execute 'doautocmd' a:bundle.augroup 'VimEnter'
+    endif
 
     if has('gui_running') && &term ==# 'builtin_gui'
           \ && exists('#'.a:bundle.augroup.'#GUIEnter')

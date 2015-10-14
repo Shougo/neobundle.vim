@@ -167,7 +167,7 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
 
   if !has_key(bundle, 'augroup')
-    let bundle.augroup = bundle.name
+    let bundle.augroup = bundle.normalized_name
   endif
 
   " Parse depends.
