@@ -203,8 +203,9 @@ function! neobundle#installer#get_updated_bundles_message(bundles)
   if !empty(updated_bundles)
     let msg .= "\nUpdated bundles:\n".
         \ join(map(updated_bundles,
-        \ "'  ' . v:val.name .
-        \    (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
+        \ "'  ' . v:val.name . (v:val.commit_count == 0 ? ''
+        \                     : printf('(%d commits)', v:val.commit_count))
+        \    . (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
         \      . printf('    %s/compare/%s...%s',
         \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
         \          '^\\h\\w*:', 'https:', ''),
@@ -337,7 +338,9 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev)
           \ type.get_log_command(a:bundle, a:new_rev, a:old_rev) : ''
     let log = (log_command != '' ?
           \ neobundle#util#system(log_command) : '')
-    return log != '' ? log : printf('%s -> %s', a:old_rev, a:new_rev)
+    return log != '' ? log :
+          \            (a:old_rev  == a:new_rev) ? ''
+          \            : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
     if isdirectory(cwd)
       call neobundle#util#cd(cwd)
@@ -559,13 +562,18 @@ function! neobundle#installer#check_output(context, process, is_unite)
           \ printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Updated'), a:is_unite)
     if a:process.rev != ''
-      let message = neobundle#installer#get_updated_log_message(
-            \ bundle, rev, a:process.rev)
-      call neobundle#installer#log(
-            \ map(split(message, '\n'),
-            \ "printf('|%s| ' .
+      let log_messages = split(
+            \ neobundle#installer#get_updated_log_message(
+            \   bundle, rev, a:process.rev), '\n')
+      let bundle.commit_count = len(log_messages)
+      call call((a:is_unite ? 'neobundle#installer#update_log'
+            \               : 'neobundle#installer#log'), [
+            \  map(log_messages, "printf('|%s| ' .
             \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
-            \ a:is_unite)
+            \  a:is_unite
+            \ ])
+    else
+      let bundle.commit_count = 0
     endif
 
     if updated_time == 0
