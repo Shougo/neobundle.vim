@@ -533,12 +533,7 @@ function! neobundle#installer#check_output(context, process, is_unite)
   let updated_time = s:get_commit_date(bundle)
   let bundle.checked_time = localtime()
 
-  let is_failed = is_timeout
-        \ || (status && a:process.rev ==# rev
-        \     && (bundle.type !=# 'git'
-        \         || a:process.output !~# 'up-to-date\|up to date'))
-
-  if is_failed
+  if is_timeout || status
     let message = printf('(%'.len(max).'d/%d): |%s| %s',
           \ num, max, bundle.name, 'Error')
     call neobundle#installer#update_log(message, a:is_unite)
