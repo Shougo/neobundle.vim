@@ -193,24 +193,37 @@ function! neobundle#installer#get_updated_bundles_message(bundles)
   let installed_bundles = filter(copy(a:bundles),
         \ "v:val.old_rev == ''")
   if !empty(installed_bundles)
-    let msg .= "Installed bundles:\n".
-        \ join(map(copy(installed_bundles), 'v:val.name'), "\n")
-    let msg .= "\n"
+    let msg .= "\nInstalled bundles:\n".
+        \ join(map(copy(installed_bundles),
+        \   "'  ' .  v:val.name"), "\n")
   endif
 
   let updated_bundles = filter(copy(a:bundles),
         \ "v:val.old_rev != ''")
   if !empty(updated_bundles)
-    let msg .= "Updated bundles:\n".
-        \ join(map(copy(updated_bundles),
-        \ "v:val.name . (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
-        \    . printf('%s/compare/%s...%s',
+    let msg .= "\nUpdated bundles:\n".
+        \ join(map(updated_bundles,
+        \ "'  ' . v:val.name .
+        \    (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
+        \      . printf('    %s/compare/%s...%s',
         \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
         \          '^\\h\\w*:', 'https:', ''),
         \        v:val.old_rev, v:val.new_rev) : '')")
         \ , "\n")
-    let msg .= "\n"
   endif
+
+  return msg
+endfunction
+
+function! neobundle#installer#get_errored_bundles_message(bundles)
+  if empty(a:bundles)
+    return ''
+  endif
+
+  let msg = "\nError installing bundles:\n".join(
+        \ map(copy(a:bundles), "'  ' . v:val.name"), "\n")
+  let msg .= "\n"
+  let msg .= "Please read the error message log with the :message command.\n"
 
   return msg
 endfunction

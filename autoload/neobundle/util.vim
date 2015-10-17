@@ -210,7 +210,9 @@ endfunction"}}}
 
 function! neobundle#util#convert2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr :
-        \ type(a:expr) ==# type('') ? split(a:expr, '\r\?\n') : [a:expr]
+        \ type(a:expr) ==# type('') ?
+        \   (a:expr == '' ? [] : split(a:expr, '\r\?\n', 1))
+        \ : [a:expr]
 endfunction"}}}
 
 function! neobundle#util#print_error(expr) "{{{

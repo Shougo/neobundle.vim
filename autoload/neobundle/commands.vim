@@ -82,13 +82,8 @@ function! neobundle#commands#install(bang, bundle_names) "{{{
   call neobundle#installer#echomsg(
         \ neobundle#installer#get_updated_bundles_message(installed))
 
-  if !empty(errored)
-    call neobundle#installer#echomsg(
-          \ "Error installing bundles:\n".join(
-          \ map(copy(errored), 'v:val.name'), "\n"))
-    call neobundle#installer#echomsg(
-          \ 'Please read the error message log with the :message command.')
-  endif
+  call neobundle#installer#echomsg(
+        \ neobundle#installer#get_errored_bundles_message(errored))
 
   call neobundle#installer#echomsg(
         \ 'Update done: ' . strftime('(%Y/%m/%d %H:%M:%S)'))

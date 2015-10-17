@@ -95,18 +95,12 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
     " Filter eof processes.
     call filter(a:context.source__processes, '!v:val.eof')
   else
-    let messages = split(neobundle#installer#get_updated_bundles_message(
-          \ a:context.source__synced_bundles), '\n')
-
-    if !empty(a:context.source__errored_bundles)
-      let messages += ['Errored bundles:']
-            \ + map(copy(a:context.source__errored_bundles),
-            \        'v:val.name')
-      call neobundle#installer#error(
-            \ 'Please read error message log by :message command.')
-    endif
-
-    call neobundle#installer#update_log(messages, 1)
+    call neobundle#installer#update_log(
+          \ neobundle#installer#get_updated_bundles_message(
+          \ a:context.source__synced_bundles), 1)
+    call neobundle#installer#update_log(
+          \ neobundle#installer#get_errored_bundles_message(
+          \ a:context.source__errored_bundles), 1)
     call neobundle#installer#update(
           \ a:context.source__synced_bundles)
 
@@ -117,9 +111,9 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
   endif
 
   return map(neobundle#installer#get_updates_log()[len(old_msgs) :], "{
-        \ 'word' : (v:val =~ '^\\h\\w*://' ? ' -> diff URI' : v:val),
+        \ 'word' : (v:val =~ '^\\s*\\h\\w*://' ? ' -> diff URI' : v:val),
         \ 'is_multiline' : 1,
-        \ 'kind' : (v:val =~ '^\\h\\w*://' ? 'uri' : 'word'),
+        \ 'kind' : (v:val =~ '^\\s*\\h\\w*://' ? 'uri' : 'word'),
         \ 'action__uri' : v:val,
         \}")
 endfunction"}}}
