@@ -230,6 +230,9 @@ endfunction"}}}
 function! s:echo(expr, mode) "{{{
   let msg = map(neobundle#util#convert2list(a:expr),
         \ "'[neobundle] ' .  v:val")
+  if empty(msg)
+    return
+  endif
 
   if has('vim_starting')
     let m = join(msg, "\n")
@@ -246,6 +249,7 @@ function! s:echo(expr, mode) "{{{
     set noruler
 
     let height = max([1, &cmdheight])
+    echo ''
     for i in range(0, len(msg)-1, height)
       redraw
 
