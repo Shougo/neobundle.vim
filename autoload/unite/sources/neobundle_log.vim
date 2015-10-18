@@ -56,7 +56,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return map(copy(neobundle#installer#get_log()), "{
         \ 'word' : (v:val =~ '^\\s*\\h\\w*://' ? ' -> diff URI' : v:val),
         \ 'kind' : (v:val =~ '^\\s*\\h\\w*://' ? 'uri' : 'word'),
-        \ 'action__uri' : v:val,
+        \ 'action__uri' : substitute(v:val, '^\\s\\+', '', ''),
         \ }")
 endfunction"}}}
 
