@@ -204,7 +204,9 @@ function! neobundle#installer#get_updated_bundles_message(bundles)
     let msg .= "\nUpdated bundles:\n".
         \ join(map(updated_bundles,
         \ "'  ' . v:val.name . (v:val.commit_count == 0 ? ''
-        \                     : printf('(%d commits)', v:val.commit_count))
+        \                     : printf('(%d change%s)',
+        \                              v:val.commit_count,
+        \                              (v:val.commit_count == 1 ? '' : 's')))
         \    . (v:val.uri =~ '^\\h\\w*://github.com/' ? \"\\n\"
         \      . printf('    %s/compare/%s...%s',
         \        substitute(substitute(v:val.uri, '\\.git$', '', ''),
