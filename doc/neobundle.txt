@@ -474,6 +474,9 @@ COMMANDS 					*neobundle-commands*
 :NeoBundleLazy {repository} [[,{revision}] [,{options}]]
 :NeoBundleLazy {repository} ,{revision}, {default} [,{options}]]
 		Registers a bundle, but doesn't add it to 'runtimepath'.
+		Note: If you want to know slow loading plugins, you should use
+		the external tool or |--startuptime|.
+		https://github.com/hyiltiz/vim-plugins-profile
 >
 		NeoBundleLazy 'The-NERD-tree', {'augroup' : 'NERDTree'}
 		NeoBundleSource The-NERD-tree
