@@ -563,8 +563,8 @@ function! neobundle#installer#check_output(context, process, is_unite)
             \ neobundle#installer#get_updated_log_message(
             \   bundle, rev, a:process.rev), '\n')
       let bundle.commit_count = len(log_messages)
-      call call((a:is_unite ? 'neobundle#installer#update_log'
-            \               : 'neobundle#installer#log'), [
+      call call((!has('vim_starting') ? 'neobundle#installer#update_log'
+            \                         : 'neobundle#installer#log'), [
             \  map(log_messages, "printf('|%s| ' .
             \   substitute(v:val, '%', '%%', 'g'), bundle.name)"),
             \  a:is_unite
