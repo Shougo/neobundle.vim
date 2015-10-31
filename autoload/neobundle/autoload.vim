@@ -62,7 +62,7 @@ function! neobundle#autoload#init()
     autocmd CursorHold * if s:active_auto_source
           \ | call s:source_focus()
           \ | endif
-    autocmd FocusLost * let s:active_auto_source = 1 | call feedkeys("g\<ESC>", 'n')
+    autocmd FocusLost * let s:active_auto_source = 1 | call s:source_focus()
     autocmd FocusGained * let s:active_auto_source = 0
   augroup END
 
