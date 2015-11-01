@@ -145,8 +145,11 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 		Initializes neobundle.vim and start neobundle bundles
 		configuration block.
 		{base-path} is where your downloaded plugins will be placed.
-		If {base-path} is omitted, neobundle looks for a "bundle"
-		directory in the default 'runtimepath'.
+
+		If {base-path} is omitted, neobundle looks for "~/.vim/bundle"
+		or "~/.config/nvim/bundle" directory.
+		Note: But recommend you to specify the {base-path}.
+
 		Note: You must not call the function inside a
 		"has('vim_starting')" block.
 		Note: You can use |neobundle#begin()| / |neobundle#end()| block
