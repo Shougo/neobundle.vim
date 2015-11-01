@@ -1,4 +1,7 @@
 language: viml
+
+sudo: false
+
 before_script:
     - vim --version
     - git clone https://github.com/syngan/vim-vimlint /tmp/vim-vimlint
