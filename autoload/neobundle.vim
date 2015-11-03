@@ -169,13 +169,29 @@ function! neobundle#rc(...) "{{{
         \ 'neobundle#rc() is removed function.')
   call neobundle#util#print_error(
         \ 'Please use neobundle#begin()/neobundle#end() instead.')
+  return 1
 endfunction"}}}
 
 function! neobundle#begin(...) "{{{
-  let path = (a:0 > 0) ? a:1 :
-        \ get(filter(split(globpath(&runtimepath, 'bundle', 1), '\n'),
-        \ 'isdirectory(v:val)'), 0,
-        \ (has('nvim') ? '~/.config/nvim/bundle' : '~/.vim/bundle'))
+  if a:0 > 0
+    let path = a:1
+  else
+    " Use default path
+    let paths = filter(split(globpath(&runtimepath,
+          \            'bundle', 1), '\n'), 'isdirectory(v:val)')
+    if empty(paths)
+      let rtps = neobundle#util#split_rtp(&runtimepath)
+      if empty(rtps)
+        call neobundle#util#print_error('Your runtimepath is invalid.')
+        return 1
+      endif
+
+      let paths = [rtps[0].'/bundle']
+    endif
+
+    let path = paths[0]
+  endif
+
   return neobundle#init#_rc(path)
 endfunction"}}}
 function! neobundle#append() "{{{
