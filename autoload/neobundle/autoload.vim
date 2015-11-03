@@ -28,6 +28,7 @@ set cpo&vim
 
 function! neobundle#autoload#init()
   let s:active_auto_source = 0
+  let s:loaded_explorer = 0
 
   augroup neobundle
     autocmd FileType *
@@ -203,6 +204,13 @@ function! neobundle#autoload#explorer(path, event)
   else
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
+
+    if !s:loaded_explorer && has('vim_starting')
+          \ && neobundle#util#redir('filetype') =~# 'detection:ON'
+      " Force enable auto detection if explorer bundles are loaded
+      autocmd neobundle VimEnter * filetype detect
+    endif
+    let s:loaded_explorer = 1
   endif
 endfunction
 
