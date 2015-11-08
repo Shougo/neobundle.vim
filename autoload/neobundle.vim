@@ -164,6 +164,9 @@ command! -nargs=1 -bar
 command! -nargs=+ NeoBundleLock
       \ call neobundle#commands#lock(<f-args>)
 
+command! -bar NeoBundleRemotePlugins
+      \ call neobundle#commands#remote_plugins()
+
 function! neobundle#rc(...) "{{{
   call neobundle#util#print_error(
         \ 'neobundle#rc() is removed function.')

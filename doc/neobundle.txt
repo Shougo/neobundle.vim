@@ -584,6 +584,14 @@ COMMANDS 					*neobundle-commands*
 		|:NeoBundleUpdate| command.  If you want to update it, you
 		must reinstall the plugin by |:NeoBundleReinstall| command.
 
+						*:NeoBundleRemotePlugins*
+:NeoBundleRemotePlugins
+		Load not loaded neovim |:remote-plugin| and execute
+		|:UpdateRemotePlugins| command.
+		It is better than |:UpdateRemotePlugins| for neobundle
+		autoloading feature.
+		Note: It is valid in neovim.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*neobundle-variables*
 
@@ -1081,6 +1089,10 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-verbose*
 		verbose		(Number)
 		If set to 1, neobundle will print message when it is sourced.
+
+						*neobundle-options-neovim*
+		neovim		(Number)
+		If set to 1, it is neovim |:remote-plugin|.
 
 				*neobundle-options-install_process_timeout*
 		install_process_timeout (Number)

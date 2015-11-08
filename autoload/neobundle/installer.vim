@@ -52,10 +52,8 @@ function! neobundle#installer#update(bundles)
   call neobundle#util#copy_bundle_files(
         \ lazy_bundles, 'after/ftdetect')
 
-  if has('nvim')
-    " For neovim remote plugins
-    UpdateRemotePlugins
-  endif
+  " For neovim remote plugins
+  NeoBundleRemotePlugins
 endfunction
 
 function! neobundle#installer#build(bundle)

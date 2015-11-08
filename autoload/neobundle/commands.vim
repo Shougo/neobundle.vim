@@ -408,6 +408,19 @@ function! neobundle#commands#lock(name, rev) "{{{
   let bundle.install_rev = a:rev
 endfunction"}}}
 
+function! neobundle#commands#remote_plugins() "{{{
+  if !has('nvim')
+    return
+  endif
+
+  " Load not loaded neovim remote plugins
+  call neobundle#config#source(map(filter(
+        \ neobundle#config#get_autoload_bundles(),
+        \ 'v:val.neovim'), 'v:val.name'))
+
+  UpdateRemotePlugins
+endfunction"}}}
+
 function! neobundle#commands#source(names, ...) "{{{
   let is_force = get(a:000, 0, 1)
 
@@ -702,7 +715,7 @@ function! s:cmp_vimproc(a, b) "{{{
 endfunction"}}}
 
 function! s:get_cache_version()"{{{
-  return str2nr(printf('%02d%02d', 2, 2))
+  return str2nr(printf('%02d%02d', 2, 3))
 endfunction "}}}
 
 let &cpo = s:save_cpo
