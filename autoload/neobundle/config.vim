@@ -467,7 +467,7 @@ function! neobundle#config#add(bundle, ...) "{{{
   let prev_bundle = get(s:neobundles, bundle.name, {})
 
   if !empty(prev_bundle)
-    if prev_bundle.sourced
+    if prev_bundle.sourced && !is_force
       return
     endif
 
