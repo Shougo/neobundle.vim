@@ -450,18 +450,12 @@ function! neobundle#config#set(name, dict) "{{{
         \ neobundle#init#_bundle(extend(bundle, a:dict)))
 endfunction"}}}
 
-function! neobundle#config#add(bundle, ...) "{{{
+function! neobundle#config#add(bundle) "{{{
   if empty(a:bundle)
     return
   endif
 
   let bundle = a:bundle
-  let is_force = get(a:000, 0, bundle.local)
-
-  if !is_force && !bundle.overwrite &&
-        \     has_key(s:neobundles, bundle.name)
-    return
-  endif
 
   if !empty(bundle.depends)
     call s:add_depends(bundle)
