@@ -436,15 +436,12 @@ function! neobundle#config#set(name, dict) "{{{
           \ 'Plugin name "' . a:name . '" is not defined.')
     return
   endif
-
-  let bundle = neobundle#init#_bundle(extend(bundle, a:dict))
-  if bundle.lazy && bundle.sourced
-    " Remove from runtimepath.
-    call neobundle#config#rtp_rm(bundle)
-    let bundle.sourced = 0
+  if bundle.sourced
+    return
   endif
 
-  call neobundle#config#add(bundle, 1)
+  call neobundle#config#add(
+        \ neobundle#init#_bundle(extend(bundle, a:dict)))
 endfunction"}}}
 
 function! neobundle#config#add(bundle, ...) "{{{
