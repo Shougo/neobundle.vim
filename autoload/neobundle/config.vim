@@ -439,6 +439,12 @@ function! neobundle#config#set(name, dict) "{{{
   if bundle.sourced
     return
   endif
+  if !neobundle#config#within_block()
+    call neobundle#util#print_error(
+          \ 'You must call neobundle#config() '
+          \ .'within neobundle#begin()/neobundle#end() block.')
+    return
+  endif
 
   call neobundle#config#add(
         \ neobundle#init#_bundle(extend(bundle, a:dict)))

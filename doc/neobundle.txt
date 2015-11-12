@@ -315,14 +315,18 @@ neobundle#bundle({repository}, [{options}])	 *neobundle#bundle()*
 neobundle#config({bundle-name}, {options})	 *neobundle#config()*
 neobundle#config({options})
 		Change bundle options for {bundle-name}.
-		Note: To lazy-load a plugin, you can set the "lazy" flag after
-		calling |:NeoBundle| or |:NeoBundleLocal|.
 		It you omit {bundle-name}, it uses |neobundle#tapped|
 		variable.
 		If {bundle-name} is list, you can change options in multiple
 		bundles.
 		If {bundle-name} is not configured, it will print error
 		messages.
+		If {bundle-name} is already loaded, it will ignore.
+
+		Note: To lazy-load a plugin, you can set the "lazy" flag after
+		calling |:NeoBundle| or |:NeoBundleLocal|.
+		Note: You must call it within
+		|neobundle#begin()|/|neobundle#end()| block.
 >
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {
