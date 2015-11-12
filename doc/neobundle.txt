@@ -1039,11 +1039,6 @@ OPTIONS 					*neobundle-options*
 		Note: It is useful for using Bundle within bundle.
 		https://github.com/Shougo/neobundle.vim/issues/199
 
-						*neobundle-options-overwrite*
-		overwrite		(Number)
-		If set to 1, neobundle doesn't overwrite the path to user
-		runtimepath.
-
 						*neobundle-options-gui*
 		gui			(Number)
 		If set 1, neobundle will only load the plugin in GUI Vim.

@@ -82,7 +82,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'force' : 0,
           \ 'gui' : 0,
           \ 'terminal' : 0,
-          \ 'overwrite' : 1,
           \ 'stay_same' : 0,
           \ 'autoload' : {},
           \ 'hooks' : {},
@@ -203,7 +202,6 @@ function! s:init_depends(bundle) "{{{
     let depend_bundle = type(depend) == type({}) ?
           \ depend : neobundle#parser#bundle(depend, 1)
     let depend_bundle.lazy = bundle.lazy
-    let depend_bundle.overwrite = 0
     call add(_, depend_bundle)
 
     unlet depend
