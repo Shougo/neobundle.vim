@@ -96,7 +96,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'local' : 0,
           \ 'focus' : 0,
           \ 'verbose' : 0,
-          \ 'neovim' : 0,
           \ 'orig_name' : '',
           \ 'vim_version' : '',
           \ 'orig_opts' : {},

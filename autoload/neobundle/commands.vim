@@ -416,7 +416,7 @@ function! neobundle#commands#remote_plugins() "{{{
   " Load not loaded neovim remote plugins
   call neobundle#config#source(map(filter(
         \ neobundle#config#get_autoload_bundles(),
-        \ 'v:val.neovim'), 'v:val.name'))
+        \ "isdirectory(v:val.rtp . '/rplugin')"), 'v:val.name'))
 
   UpdateRemotePlugins
 endfunction"}}}
@@ -715,7 +715,7 @@ function! s:cmp_vimproc(a, b) "{{{
 endfunction"}}}
 
 function! s:get_cache_version()"{{{
-  return str2nr(printf('%02d%02d', 2, 4))
+  return str2nr(printf('%02d%02d', 2, 5))
 endfunction "}}}
 
 let &cpo = s:save_cpo
