@@ -220,7 +220,7 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
     let uri =  (a:protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
           \ a:protocol . '://gist.github.com/'. split(name, '/')[-1]
-  elseif a:path =~# '\<\%(git@\|git://\)\S\+'
+  elseif a:path =~# '\<git@\S\+'
         \ || a:path =~# '\.git\s*$'
         \ || get(a:opts, 'type', '') ==# 'git'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'

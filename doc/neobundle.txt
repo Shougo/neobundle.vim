@@ -104,7 +104,7 @@ First of all, git clone the repository.
 Note: You need to have git installed.
 >
 	$ mkdir -p ~/.vim/bundle
-	$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+	$ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 <
 And set up a path to the repository directory.
 >
@@ -168,7 +168,7 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 
-	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+	NeoBundle 'https://github.com/Shougo/neocomplcache.git'
 	...
 
 	call neobundle#end()
@@ -738,13 +738,13 @@ OPTIONS 					*neobundle-options*
 		overwriting an existing bundle setting.
 		Example:
 >
-		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		NeoBundle 'https://github.com/Shougo/unite.vim.git',
 		   \ {'name' : 'unite'}
-		NeoBundle 'git://github.com/foo/foo.git',
+		NeoBundle 'https://github.com/foo/foo.git',
 		   \ {'name' : 'foo-foo'}
-		NeoBundle 'git://github.com/bar/foo.git',
+		NeoBundle 'https://github.com/bar/foo.git',
 		   \ {'name' : 'bar-foo'}
-		NeoBundle 'git://git.code.sf.net/p/atp-vim/code',
+		NeoBundle 'https://git.code.sf.net/p/atp-vim/code',
 		   \ {'name': 'atp-vim'}
 <
 					*neobundle-options-regular_name*
@@ -784,7 +784,7 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		NeoBundle 'https://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
 <
 						*neobundle-options-recipe*
@@ -818,7 +818,7 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+		NeoBundle 'https://host/path/repo.git', {'type': 'hg'}
 		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
 					*neobundle-options-script_type*
@@ -1353,7 +1353,7 @@ OPTIONS 					*neobundle-options*
 <
 		Note: To use hg commands for git repository, please use this.
 >
-		NeoBundle 'git://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
+		NeoBundle 'https://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
 <
 					*neobundle-options-type__depth*
 		type__depth		(Number)
@@ -1594,7 +1594,7 @@ The recipe files are in JSON format, like this:
 		The repository URI.
 		Note: You can abbreviate long complete path, such as
 		"Shougo/neobundle.vim" instead of
-		"git://github.com/Shougo/neobundle.vim.git"
+		"https://github.com/Shougo/neobundle.vim.git"
 
 		description		(String)	(Optional)
 		Plugin description to show in neobundle/search.

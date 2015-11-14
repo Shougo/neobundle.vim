@@ -48,7 +48,6 @@ NeoBundle 'github:mattn/gist-vim.git'
 NeoBundle 'vim-scripts/RubySinatra'
 
 " With options.
-NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 NeoBundle 'Shougo/vimshell', '3787e5'
 
 " Nosync repos.
