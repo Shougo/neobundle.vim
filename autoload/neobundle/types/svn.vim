@@ -52,7 +52,7 @@ function! s:type.detect(path, opts) "{{{
         \ && a:path =~? '[/.]svn[/.]'
     let uri = a:path
     let type = 'svn'
-  elseif a:path =~# '\<\%(gh\|github\):\S\+\|://github.com/'
+  elseif a:path =~# '\<\%(gh\|github\):\S\+\|https://github.com/'
     let name = substitute(split(a:path, ':')[-1],
           \   '^//github.com/', '', '')
     let uri =  'https://github.com/'. name

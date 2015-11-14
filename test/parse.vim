@@ -55,13 +55,16 @@ function! s:suite.github_git_repos()
         \ 'git@github.com:Shougo/neocomplcache.git',
         \  'name' : 'neocomplcache'})
   call s:assert.equals(neobundle#parser#path(
-        \ 'git://git.wincent.com/command-t.git'),
-        \ {})
-  call s:assert.equals(neobundle#parser#path(
         \ 'https://github.com/Shougo/neocomplcache/'),
         \ {'type' : 'git', 'uri' :
         \ 'https://github.com/Shougo/neocomplcache.git',
         \  'name' : 'neocomplcache'})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'git://git.wincent.com/command-t.git'),
+        \ {})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'http://github.com/Shougo/neocomplcache/'),
+        \ {})
 endfunction
 
 function! s:suite.svn_repos()
