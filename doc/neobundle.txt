@@ -1,6 +1,6 @@
 *neobundle.txt*	Next generation Vim package manager
 
-Version: 3.2
+Version: 4.0
 Author:  Shougo <Shougo.Matsu at gmail.com>
          Copyright (C) 2010 http://github.com/gmarik
 License: MIT license  {{{
