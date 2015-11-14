@@ -1,7 +1,7 @@
 let s:suite = themis#suite('parser')
 let s:assert = themis#helper('assert')
 
-let g:neobundle#types#git#default_protocol = 'git'
+let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#types#hg#default_protocol = 'https'
 let g:neobundle#enable_name_conversion = 0
 
@@ -22,11 +22,6 @@ function! s:suite.github_git_repos()
         \ g:neobundle#types#git#default_protocol .
         \ '://github.com/vim-scripts/rails.vim.git',
         \  'name' : 'rails.vim'})
-  call s:assert.equals(neobundle#parser#path(
-        \ 'git://git.wincent.com/command-t.git'),
-        \ {'type' : 'git', 'uri' :
-        \  'git://git.wincent.com/command-t.git',
-        \  'name' : 'command-t'})
   call s:assert.equals(neobundle#parser#path('vim-scripts/ragtag.vim'),
         \ {'type' : 'git', 'uri' :
         \ g:neobundle#types#git#default_protocol .
@@ -61,9 +56,7 @@ function! s:suite.github_git_repos()
         \  'name' : 'neocomplcache'})
   call s:assert.equals(neobundle#parser#path(
         \ 'git://git.wincent.com/command-t.git'),
-        \ {'type' : 'git', 'uri' :
-        \  'git://git.wincent.com/command-t.git',
-        \  'name' : 'command-t'})
+        \ {})
   call s:assert.equals(neobundle#parser#path(
         \ 'https://github.com/Shougo/neocomplcache/'),
         \ {'type' : 'git', 'uri' :
@@ -74,8 +67,11 @@ endfunction
 function! s:suite.svn_repos()
   call s:assert.equals(neobundle#parser#path(
         \ 'http://svn.macports.org/repository/macports/contrib/mpvim/'),
+        \ {})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'https://svn.macports.org/repository/macports/contrib/mpvim/'),
         \ {'type' : 'svn', 'uri' :
-        \  'http://svn.macports.org/repository/macports/contrib/mpvim',
+        \  'https://svn.macports.org/repository/macports/contrib/mpvim',
         \  'name' : 'mpvim'})
   call s:assert.equals(neobundle#parser#path(
         \ 'thinca/vim-localrc', {'type' : 'svn'}),
@@ -110,11 +106,12 @@ function! s:suite.hg_repos()
         \  'name' : 'vim-fuzzyfinder'})
 
   let bundle = neobundle#parser#_init_bundle(
-        \ 'git://github.com/Shougo/neobundle.vim.git',
+        \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'type' : 'hg'}])
   call s:assert.equals(bundle.name, 'neobundle.vim')
   call s:assert.equals(bundle.type, 'hg')
-  call s:assert.equals(bundle.uri,  'git://github.com/Shougo/neobundle.vim.git')
+  call s:assert.equals(bundle.uri,
+        \ 'https://github.com/Shougo/neobundle.vim.git')
 endfunction
 
 function! s:suite.gitbucket_git_repos()
@@ -122,11 +119,6 @@ function! s:suite.gitbucket_git_repos()
         \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'),
         \ {'type' : 'git', 'uri' :
         \  'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
-        \  'name' : 'vim-qt-syntax'})
-  call s:assert.equals(neobundle#parser#path(
-        \ 'git://bitbucket.org/kh3phr3n/vim-qt-syntax.git'),
-        \ {'type' : 'git', 'uri' :
-        \  'git://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
         \  'name' : 'vim-qt-syntax'})
   call s:assert.equals(neobundle#parser#path(
         \ 'bitbucket:kh3phr3n/vim-qt-syntax.git'),
@@ -203,7 +195,7 @@ function! s:suite.name_conversion()
   let g:neobundle#enable_name_conversion = 1
 
   let bundle = neobundle#parser#_init_bundle(
-        \ 'git://github.com/Shougo/neobundle.vim.git',
+        \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'type' : 'hg'}])
   call s:assert.equals(bundle.name, 'neobundle')
 
