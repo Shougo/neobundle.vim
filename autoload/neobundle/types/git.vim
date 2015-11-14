@@ -67,6 +67,13 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#git#default_protocol)
   endif
 
+  if protocol !=# 'https' && protocol !=# 'ssh'
+    call neobundle#util#print_error(
+          \ 'The protocol "' . protocol .
+          \ '"is invalid.  Please use https or ssh instead.')
+    return {}
+  endif
+
   if a:path !~ '/'
     " www.vim.org Vim scripts.
     let name = split(a:path, ':')[-1]

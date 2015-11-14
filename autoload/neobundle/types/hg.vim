@@ -58,6 +58,13 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#hg#default_protocol)
   endif
 
+  if protocol !=# 'https' && protocol !=# 'ssh'
+    call neobundle#util#print_error(
+          \ 'The protocol "' . protocol .
+          \ '"is invalid.  Please use https or ssh instead.')
+    return {}
+  endif
+
   if a:path =~# '\<\%(bb\|bitbucket\):'
     let name = substitute(split(a:path, ':')[-1],
           \   '^//bitbucket.org/', '', '')
@@ -65,8 +72,7 @@ function! s:type.detect(path, opts) "{{{
           \ 'ssh://hg@bitbucket.org/' . name :
           \ protocol . '://bitbucket.org/' . name
   elseif a:path =~? '[/.]hg[/.@]'
-          \ || (a:path =~# '\<https\?://bitbucket\.org/'
-          \ || a:path =~# '\<https://code\.google\.com/'
+          \ || (a:path =~# '\<https://bitbucket\.org/'
           \ || get(a:opts, 'type', '') ==# 'hg')
     let uri = a:path
   else
