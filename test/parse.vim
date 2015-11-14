@@ -132,6 +132,12 @@ function! s:suite.gitbucket_git_repos()
 endfunction
 
 function! s:suite.raw_repos()
+  call s:assert.equals(neobundle#parser#path(
+        \ 'http://raw.github.com/m2ym/rsense/master/etc/rsense.vim'),
+        \ {})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'http://www.vim.org/scripts/download_script.php?src_id=19237'),
+        \ {})
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim',
         \ [{ 'script_type' : 'plugin'}])
@@ -139,6 +145,18 @@ function! s:suite.raw_repos()
   call s:assert.equals(bundle.type, 'raw')
   call s:assert.equals(bundle.uri,
         \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim')
+endfunction
+
+function! s:suite.vba_repos()
+  call s:assert.equals(neobundle#parser#path(
+        \ 'https://foo/bar.vba'),
+        \ { 'name' : 'bar', 'uri' : 'https://foo/bar.vba', 'type' : 'vba' })
+  call s:assert.equals(neobundle#parser#path(
+        \ 'https://foo/bar.vba.gz'),
+        \ { 'name' : 'bar', 'uri' : 'https://foo/bar.vba.gz', 'type' : 'vba' })
+  call s:assert.equals(neobundle#parser#path(
+        \ 'http://foo/bar.vba.gz'),
+        \ {})
 endfunction
 
 function! s:suite.default_options()
