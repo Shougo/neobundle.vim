@@ -1322,16 +1322,11 @@ OPTIONS 					*neobundle-options*
 		It is useful for downloading vim.org scripts.
 		Note: This attribute is available in raw type only.
 
-		Examples:
->
-		NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
-		\ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
-<
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
-		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
+		NeoBundle 'https://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
 		    \ [ 'Shougo/neosnippet.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
@@ -1340,9 +1335,6 @@ OPTIONS 					*neobundle-options*
 
 		" Pushable github repository.
 		NeoBundle 'git@github.com:Shougo/neocomplcache.git'
-
-		" For bitbucket svn repository.
-		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 
 		" For bitbucket hg repository.
 		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
@@ -1363,11 +1355,6 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'gist:355360', {
 		      \ 'name': 'ambicmd.vim',
 		      \ 'script_type': 'plugin'}
-<
-		" For vba repository.
-		NeoBundle 'http://www.drchip.org/astronaut/vim/vbafiles/Decho.vba.gz', {
-		      \ 'name': 'Decho',
-		      \ 'type': 'vba'}
 <
 		Neobundle supports revision (or branch) lock.
 		Note: The revision (or branch) is checked out in
@@ -1489,7 +1476,7 @@ neobundle
 		Note:
 		If argument is bang(!), print plugins status.
 
-		http://github.com/Shougo/vimproc.vim
+		https://github.com/Shougo/vimproc.vim
 
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
@@ -1548,12 +1535,10 @@ neobundle/search
 		source names.
 
 		Following source names are available:
-		"vim-script.org":
-			Search plugins settings from "http://vim-scripts.org/".
 		"neobundle-vim-recipes":
 			Search plugins settings from the |neobundle-recipe|.
 		"github":
-			Search plugins settings from "http://github.org/".
+			Search plugins settings from "https://github.org/".
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
@@ -1797,15 +1782,6 @@ https://github.com/Shougo/neobundle.vim/issues/136
 
 A: You can use "nosync" type. >
 	NeoBundle '/absolute/path/to/plugin', { 'type' : 'nosync' }
-
-Q: For example, I would like to register the IR_Black colorscheme from it's
-original URL, without cloning one of the many mirror repo.
-https://github.com/Shougo/neobundle.vim/issues/140
-
-A: This feature is already implemented. >
-	NeoBundle 'http://blog.toddwerth.com/entry_files/8/ir_black.vim', {
-	\ 'name': 'ir_black.vim',
-	\ 'script_type': 'colors'}
 
 Q: Problem with lazy loading of matchit plugin.
 https://github.com/Shougo/neobundle.vim/issues/153
