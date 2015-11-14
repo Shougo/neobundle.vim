@@ -413,8 +413,8 @@ COMMANDS 					*neobundle-commands*
 		revision will be used. {default} is a "default options
 		name" (See |g:neobundle#default_options|).
 		Note: Don't set neobundle setting in .gvimrc!
-		Note: If you omit the protocol (ex: git or https) for a git
-		repo, |g:neobundle_default_git_protocol| is used.
+		Note: If you omit the protocol (ex: https) for a git
+		repo, |g:neobundle#types#git#default_protocol| is used.
 
 		Note: If you manage bundle by neobundle, it may be error
 		occurred when update bundles.
@@ -1286,7 +1286,7 @@ OPTIONS 					*neobundle-options*
 					*neobundle-options-type__protocol*
 		type__protocol		(String)
 		The protocol used for types.
-		"https" and "git" and "ssh" are available for git type.
+		"https" and "ssh" are available for git type.
 		"https" is available for hg type.
 		If omitted, |g:neobundle#types#git#default_protocol|
 		or |g:neobundle#types#hg#default_protocol| is used.
@@ -1361,8 +1361,8 @@ OPTIONS 					*neobundle-options*
 		If omitted, |g:neobundle#types#git#clone_depth| is used.
 		If it is than 0, neobundle clones the repository by shallow
 		clone. Shallow clone feature saves your repository clone time.
-		But it have problems in some repository. You should use "git"
-		protocol if it is available.
+		But it have problems in some repository.
+
 		See below issues:
 		https://github.com/Shougo/neobundle.vim/issues/81
 		https://github.com/Homebrew/homebrew/issues/12024
@@ -1381,9 +1381,6 @@ EXAMPLES					*neobundle-examples*
 	  endif
 	  set runtimepath+={path to neobundle directory}
 	endif
-
-	" Use git protocol.
-	" let g:neobundle#types#git#default_protocol = 'git'
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 
@@ -1663,13 +1660,6 @@ Note: neocomplcache-rsense depends |neocomplcache| plugin.
 
 https://github.com/Shougo/neocomplcache-rsense
 
-Q: I want to use "https" protocol instead of "git" (over proxy).
-
-A: Change |g:neobundle#types#git#default_protocol|.
->
-	let g:neobundle#types#git#default_protocol = 'https'
-<
-
 Q: Vim freezes when a NeoBundle command is run with a typo in the repo name.
 
 A: It's a git feature. Git awaits user input when the repo name is
@@ -1740,23 +1730,6 @@ A:
 >
 		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
-Q: Why change git default protocol to "https" from "git"?
-After update, neobundle asks me to update all of my plugins.  It's a kind of
-nightmare.
-
-A: Because, github changed default protocol "git" to "https".
-https://help.github.com/articles/which-remote-url-should-i-use
-
-In above page, git protocol description is not found.
-
-I think git protocol is default protocol for git and it is fast.
-But in proxy or firewall environment, git protocol cannot be used.
-I responded the firewall problem recently.
-
-If you don't want to change default protocol, you can set
-|g:neobundle#types#git#default_protocol| manually.  I don't change the default
-value.
-
 Q: I want to add absolute path in 'runtimepath' with |:NeoBundle| and
 |:NeoBundleLazy|.
 https://github.com/Shougo/neobundle.vim/issues/136
@@ -1847,6 +1820,10 @@ Q: I setup gVim-only colorscheme but neobundle doesn't load it.
 
 A: neobundle can't load colorschemes automatically.  So you can't use
 |:NeoBundleLazy| for colorschemes.
+
+Q: I want to use "git" or "http" protocol instead of "https".
+
+A: No, you cannot.
 
 Q: Why neobundle only accepts "https" or "ssh"?
 
