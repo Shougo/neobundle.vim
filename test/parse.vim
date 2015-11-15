@@ -72,10 +72,18 @@ function! s:suite.svn_repos()
         \ 'http://svn.macports.org/repository/macports/contrib/mpvim/'),
         \ {})
   call s:assert.equals(neobundle#parser#path(
+        \ 'svn://user@host/repos/bar'),
+        \ {})
+  call s:assert.equals(neobundle#parser#path(
         \ 'https://svn.macports.org/repository/macports/contrib/mpvim/'),
         \ {'type' : 'svn', 'uri' :
         \  'https://svn.macports.org/repository/macports/contrib/mpvim',
         \  'name' : 'mpvim'})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'svn+ssh://user@host/repos/bar'),
+        \ {'type' : 'svn', 'uri' :
+        \  'svn+ssh://user@host/repos/bar',
+        \  'name' : 'bar'})
   call s:assert.equals(neobundle#parser#path(
         \ 'thinca/vim-localrc', {'type' : 'svn'}),
         \ {'type' : 'svn', 'uri' :
