@@ -67,6 +67,13 @@ function! s:type.detect(path, opts) "{{{
           \ g:neobundle#types#git#default_protocol)
   endif
 
+  if protocol !=# 'https' && protocol !=# 'ssh'
+    call neobundle#util#print_error(
+          \ 'The protocol "' . protocol .
+          \ '"is invalid.  Please use https or ssh instead.')
+    return {}
+  endif
+
   if a:path !~ '/'
     " www.vim.org Vim scripts.
     let name = split(a:path, ':')[-1]
@@ -213,7 +220,7 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
     let uri =  (a:protocol ==# 'ssh') ?
           \ 'git@gist.github.com:' . split(name, '/')[-1] :
           \ a:protocol . '://gist.github.com/'. split(name, '/')[-1]
-  elseif a:path =~# '\<\%(git@\|git://\)\S\+'
+  elseif a:path =~# '\<git@\S\+'
         \ || a:path =~# '\.git\s*$'
         \ || get(a:opts, 'type', '') ==# 'git'
     if a:path =~# '\<\%(bb\|bitbucket\):\S\+'

@@ -1,6 +1,6 @@
 *neobundle.txt*	Next generation Vim package manager
 
-Version: 3.2
+Version: 4.0
 Author:  Shougo <Shougo.Matsu at gmail.com>
          Copyright (C) 2010 http://github.com/gmarik
 License: MIT license  {{{
@@ -104,7 +104,7 @@ First of all, git clone the repository.
 Note: You need to have git installed.
 >
 	$ mkdir -p ~/.vim/bundle
-	$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+	$ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 <
 And set up a path to the repository directory.
 >
@@ -168,7 +168,7 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 
-	NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+	NeoBundle 'https://github.com/Shougo/neocomplcache.git'
 	...
 
 	call neobundle#end()
@@ -413,8 +413,8 @@ COMMANDS 					*neobundle-commands*
 		revision will be used. {default} is a "default options
 		name" (See |g:neobundle#default_options|).
 		Note: Don't set neobundle setting in .gvimrc!
-		Note: If you omit the protocol (ex: git or https) for a git
-		repo, |g:neobundle_default_git_protocol| is used.
+		Note: If you omit the protocol (ex: https) for a git
+		repo, |g:neobundle#types#git#default_protocol| is used.
 
 		Note: If you manage bundle by neobundle, it may be error
 		occurred when update bundles.
@@ -616,16 +616,10 @@ neobundle#hooks					*neobundle#hooks*
 g:neobundle#default_site			*g:neobundle#default_site*
 		The default repository site if "site" option is omitted.
 
-						*g:neobundle_default_site*
-		Note: |g:neobundle_default_site| is obsolete.
-
 		Defaults to "github".
 
 g:neobundle#log_filename			*g:neobundle#log_filename*
 		The log filename. Set it to "" to disable logging.
-
-						*g:neobundle_log_filename*
-		Note: |g:neobundle_log_filename| is obsolete.
 
 		Defaults to "".
 
@@ -638,9 +632,6 @@ g:neobundle#enable_name_conversion
 g:neobundle#rm_command				*g:neobundle#rm_command*
 		The command used to remove files for |:NeoBundleClean|.
 
-						*g:neobundle_rm_command*
-		Note: |g:neobundle_rm_command| is obsolete.
-
 		Defaults to "rmdir /S /Q" on Windows or "rm -rf" in
 		others.
 
@@ -648,10 +639,6 @@ g:neobundle#rm_command				*g:neobundle#rm_command*
 g:neobundle#install_max_processes
 		The max number of processes used for neobundle/install source
 		asynchronous update.
-
-			*g:unite_source_neobundle_install_max_processes*
-		Note: |g:unite_source_neobundle_install_max_processes| is
-		obsolete.
 
 		Defaults to "4".
 
@@ -690,11 +677,7 @@ g:neobundle#types#git#command_path
 				*g:neobundle#types#git#default_protocol*
 g:neobundle#types#git#default_protocol
 		The default protocol used for git (github).
-		Note: If you need to use neobundle in proxy or firewall, you
-		must use it in "https".
-
-					*g:neobundle_default_git_protocol*
-		Note: |g:neobundle_default_git_protocol| is obsolete.
+		Note: It is accepted in "https" or "ssh".
 
 		Defaults to "https".
 
@@ -729,17 +712,15 @@ g:neobundle#types#hg#command_path
 				*g:neobundle#types#hg#default_protocol*
 g:neobundle#types#hg#default_protocol
 		The default protocol used for hg (bitbucket).
+		Note: It is accepted in "https" or "ssh".
+
+		Defaults to "https".
 
 				*g:neobundle#types#svn#command_path*
 g:neobundle#types#svn#command_path
 		The "svn" command path used for svn type.
 
 		Defaults to "svn".
-
-					*g:neobundle_default_hg_protocol*
-		Note: |g:neobundle_default_git_protocol| is obsolete.
-
-		Defaults to "https".
 
 ------------------------------------------------------------------------------
 OPTIONS 					*neobundle-options*
@@ -757,13 +738,13 @@ OPTIONS 					*neobundle-options*
 		overwriting an existing bundle setting.
 		Example:
 >
-		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		NeoBundle 'https://github.com/Shougo/unite.vim.git',
 		   \ {'name' : 'unite'}
-		NeoBundle 'git://github.com/foo/foo.git',
+		NeoBundle 'https://github.com/foo/foo.git',
 		   \ {'name' : 'foo-foo'}
-		NeoBundle 'git://github.com/bar/foo.git',
+		NeoBundle 'https://github.com/bar/foo.git',
 		   \ {'name' : 'bar-foo'}
-		NeoBundle 'git://git.code.sf.net/p/atp-vim/code',
+		NeoBundle 'https://git.code.sf.net/p/atp-vim/code',
 		   \ {'name': 'atp-vim'}
 <
 					*neobundle-options-regular_name*
@@ -803,7 +784,7 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-		NeoBundle 'git://github.com/Shougo/unite.vim.git',
+		NeoBundle 'https://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
 <
 						*neobundle-options-recipe*
@@ -837,7 +818,7 @@ OPTIONS 					*neobundle-options*
 
 		Example:
 >
-		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+		NeoBundle 'https://host/path/repo.git', {'type': 'hg'}
 		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
 					*neobundle-options-script_type*
@@ -1305,7 +1286,7 @@ OPTIONS 					*neobundle-options*
 					*neobundle-options-type__protocol*
 		type__protocol		(String)
 		The protocol used for types.
-		"https" and "git" and "ssh" are available for git type.
+		"https" and "ssh" are available for git type.
 		"https" is available for hg type.
 		If omitted, |g:neobundle#types#git#default_protocol|
 		or |g:neobundle#types#hg#default_protocol| is used.
@@ -1322,16 +1303,11 @@ OPTIONS 					*neobundle-options*
 		It is useful for downloading vim.org scripts.
 		Note: This attribute is available in raw type only.
 
-		Examples:
->
-		NeoBundle 'http://www.vim.org/scripts/download_script.php?src_id=19619',
-		\ { 'type__filename' : 'python.vim', 'script_type' : 'syntax' }
-<
 		Examples:			|:NeoBundle-examples|
 >
 		NeoBundle 'git_repository_uri'
 		NeoBundle 'script_name'
-		NeoBundle 'http://github.com/tpope/vim-fugitive.git'
+		NeoBundle 'https://github.com/tpope/vim-fugitive.git'
 		NeoBundle 'Shougo/neocomplcache', {'depends' :
 		    \ [ 'Shougo/neosnippet.git',
 		    \   ['rstacruz/sparkup', {'rtp': 'vim'}],
@@ -1340,9 +1316,6 @@ OPTIONS 					*neobundle-options*
 
 		" Pushable github repository.
 		NeoBundle 'git@github.com:Shougo/neocomplcache.git'
-
-		" For bitbucket svn repository.
-		NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 
 		" For bitbucket hg repository.
 		NeoBundle 'bitbucket:ns9tks/vim-fuzzyfinder'
@@ -1364,11 +1337,6 @@ OPTIONS 					*neobundle-options*
 		      \ 'name': 'ambicmd.vim',
 		      \ 'script_type': 'plugin'}
 <
-		" For vba repository.
-		NeoBundle 'http://www.drchip.org/astronaut/vim/vbafiles/Decho.vba.gz', {
-		      \ 'name': 'Decho',
-		      \ 'type': 'vba'}
-<
 		Neobundle supports revision (or branch) lock.
 		Note: The revision (or branch) is checked out in
 		install/update.
@@ -1385,7 +1353,7 @@ OPTIONS 					*neobundle-options*
 <
 		Note: To use hg commands for git repository, please use this.
 >
-		NeoBundle 'git://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
+		NeoBundle 'https://github.com/Shougo/neobundle.vim.git', {'type': 'hg'}
 <
 					*neobundle-options-type__depth*
 		type__depth		(Number)
@@ -1393,8 +1361,8 @@ OPTIONS 					*neobundle-options*
 		If omitted, |g:neobundle#types#git#clone_depth| is used.
 		If it is than 0, neobundle clones the repository by shallow
 		clone. Shallow clone feature saves your repository clone time.
-		But it have problems in some repository. You should use "git"
-		protocol if it is available.
+		But it have problems in some repository.
+
 		See below issues:
 		https://github.com/Shougo/neobundle.vim/issues/81
 		https://github.com/Homebrew/homebrew/issues/12024
@@ -1413,9 +1381,6 @@ EXAMPLES					*neobundle-examples*
 	  endif
 	  set runtimepath+={path to neobundle directory}
 	endif
-
-	" Use git protocol.
-	" let g:neobundle#types#git#default_protocol = 'git'
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 
@@ -1489,7 +1454,7 @@ neobundle
 		Note:
 		If argument is bang(!), print plugins status.
 
-		http://github.com/Shougo/vimproc.vim
+		https://github.com/Shougo/vimproc.vim
 
 				*neobundle-unite-source-neobundle-install*
 neobundle/install
@@ -1548,12 +1513,10 @@ neobundle/search
 		source names.
 
 		Following source names are available:
-		"vim-script.org":
-			Search plugins settings from "http://vim-scripts.org/".
 		"neobundle-vim-recipes":
 			Search plugins settings from the |neobundle-recipe|.
 		"github":
-			Search plugins settings from "http://github.org/".
+			Search plugins settings from "https://github.org/".
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
@@ -1628,7 +1591,7 @@ The recipe files are in JSON format, like this:
 		The repository URI.
 		Note: You can abbreviate long complete path, such as
 		"Shougo/neobundle.vim" instead of
-		"git://github.com/Shougo/neobundle.vim.git"
+		"https://github.com/Shougo/neobundle.vim.git"
 
 		description		(String)	(Optional)
 		Plugin description to show in neobundle/search.
@@ -1696,13 +1659,6 @@ neocomplcache-rsense docs.
 Note: neocomplcache-rsense depends |neocomplcache| plugin.
 
 https://github.com/Shougo/neocomplcache-rsense
-
-Q: I want to use "https" protocol instead of "git" (over proxy).
-
-A: Change |g:neobundle#types#git#default_protocol|.
->
-	let g:neobundle#types#git#default_protocol = 'https'
-<
 
 Q: Vim freezes when a NeoBundle command is run with a typo in the repo name.
 
@@ -1774,38 +1730,12 @@ A:
 >
 		NeoBundle 'thinca/vim-localrc', {'type' : 'svn'}
 <
-Q: Why change git default protocol to "https" from "git"?
-After update, neobundle asks me to update all of my plugins.  It's a kind of
-nightmare.
-
-A: Because, github changed default protocol "git" to "https".
-https://help.github.com/articles/which-remote-url-should-i-use
-
-In above page, git protocol description is not found.
-
-I think git protocol is default protocol for git and it is fast.
-But in proxy or firewall environment, git protocol cannot be used.
-I responded the firewall problem recently.
-
-If you don't want to change default protocol, you can set
-|g:neobundle#types#git#default_protocol| manually.  I don't change the default
-value.
-
 Q: I want to add absolute path in 'runtimepath' with |:NeoBundle| and
 |:NeoBundleLazy|.
 https://github.com/Shougo/neobundle.vim/issues/136
 
 A: You can use "nosync" type. >
 	NeoBundle '/absolute/path/to/plugin', { 'type' : 'nosync' }
-
-Q: For example, I would like to register the IR_Black colorscheme from it's
-original URL, without cloning one of the many mirror repo.
-https://github.com/Shougo/neobundle.vim/issues/140
-
-A: This feature is already implemented. >
-	NeoBundle 'http://blog.toddwerth.com/entry_files/8/ir_black.vim', {
-	\ 'name': 'ir_black.vim',
-	\ 'script_type': 'colors'}
 
 Q: Problem with lazy loading of matchit plugin.
 https://github.com/Shougo/neobundle.vim/issues/153
@@ -1890,6 +1820,14 @@ Q: I setup gVim-only colorscheme but neobundle doesn't load it.
 
 A: neobundle can't load colorschemes automatically.  So you can't use
 |:NeoBundleLazy| for colorschemes.
+
+Q: I want to use "git" or "http" protocol instead of "https".
+
+A: No, you cannot.
+
+Q: Why neobundle only accepts "https" or "ssh"?
+
+A: https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

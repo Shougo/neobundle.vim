@@ -46,10 +46,11 @@ function! s:type.detect(path, opts) "{{{
   let type = ''
   let name = ''
 
-  if a:path =~# '^https\?:.*\.vba\(\.gz\)\?$'
-    " HTTP / HTTPS
+  if a:path =~# '^https:.*\.vba\(\.gz\)\?$'
+    " HTTPS
     " .*.vba / .*.vba.gz
-    let name = fnamemodify(split(a:path, ':')[-1], ':s?/$??:t:s?\c\.vba\(\.gz\)*\s*$??')
+    let name = fnamemodify(split(a:path, ':')[-1],
+          \ ':s?/$??:t:s?\c\.vba\(\.gz\)*\s*$??')
     let type = 'vba'
   endif
 

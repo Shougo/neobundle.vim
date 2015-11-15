@@ -47,11 +47,7 @@ NeoBundle 'github:mattn/gist-vim.git'
 " Camel case.
 NeoBundle 'vim-scripts/RubySinatra'
 
-" Non-git repos.
-NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-
 " With options.
-NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 NeoBundle 'Shougo/vimshell', '3787e5'
 
 " Nosync repos.
