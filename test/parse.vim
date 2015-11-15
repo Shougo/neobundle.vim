@@ -107,6 +107,11 @@ function! s:suite.hg_repos()
         \  g:neobundle#types#hg#default_protocol.
         \  '://bitbucket.org/ns9tks/vim-fuzzyfinder',
         \  'name' : 'vim-fuzzyfinder'})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'ssh://hg@bitbucket.org/ns9tks/vim-fuzzyfinder'),
+        \ {'type' : 'hg', 'uri' :
+        \  'ssh://hg@bitbucket.org/ns9tks/vim-fuzzyfinder',
+        \  'name' : 'vim-fuzzyfinder'})
 
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://github.com/Shougo/neobundle.vim.git',
@@ -129,6 +134,16 @@ function! s:suite.gitbucket_git_repos()
         \  g:neobundle#types#git#default_protocol.
         \  '://bitbucket.org/kh3phr3n/vim-qt-syntax.git',
         \  'name' : 'vim-qt-syntax'})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'git@bitbucket.com:accountname/reponame.git'),
+        \ {'type' : 'git', 'uri' :
+        \ 'git@bitbucket.com:accountname/reponame.git',
+        \  'name' : 'reponame'})
+  call s:assert.equals(neobundle#parser#path(
+        \ 'ssh://git@bitbucket.com:foo/bar.git'),
+        \ {'type' : 'git', 'uri' :
+        \ 'ssh://git@bitbucket.com:foo/bar.git',
+        \  'name' : 'bar'})
 endfunction
 
 function! s:suite.raw_repos()
