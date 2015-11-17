@@ -84,11 +84,6 @@ function! s:suite.svn_repos()
         \ {'type' : 'svn', 'uri' :
         \  'svn+ssh://user@host/repos/bar',
         \  'name' : 'bar'})
-  call s:assert.equals(neobundle#parser#path(
-        \ 'thinca/vim-localrc', {'type' : 'svn'}),
-        \ {'type' : 'svn', 'uri' :
-        \  'https://github.com/thinca/vim-localrc/trunk',
-        \  'name' : 'vim-localrc'})
 endfunction
 
 function! s:suite.hg_repos()

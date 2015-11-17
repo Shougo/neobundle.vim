@@ -53,13 +53,6 @@ function! s:type.detect(path, opts) "{{{
         \ || a:path =~# '\<svn+ssh://'
     let uri = a:path
     let type = 'svn'
-  elseif a:path =~# '\<\%(gh\|github\):\S\+\|https://github.com/'
-    let name = substitute(split(a:path, ':')[-1],
-          \   '^//github.com/', '', '')
-    let uri =  'https://github.com/'. name
-    let uri .= '/trunk'
-
-    let type = 'svn'
   endif
 
   return type == '' ?  {} : { 'uri': uri, 'type' : type }
