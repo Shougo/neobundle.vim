@@ -640,7 +640,7 @@ g:neobundle#install_max_processes
 		The max number of processes used for neobundle/install source
 		asynchronous update.
 
-		Defaults to "4".
+		Defaults to "8".
 
 					*g:neobundle#install_process_timeout*
 g:neobundle#install_process_timeout
