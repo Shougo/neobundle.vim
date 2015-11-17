@@ -8,8 +8,7 @@ if isdirectory(path)
   call system(printf('%s "%s"', rm_command, path))
 endif
 
-let neobundle#types#git#default_protocol =
-      \ exists('$http_proxy') ? 'https' : 'git'
+let neobundle#types#git#default_protocol = 'https'
 
 call neobundle#begin(path)
 
