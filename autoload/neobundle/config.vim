@@ -760,6 +760,9 @@ function! s:reset_ftplugin() "{{{
 
   " Reload filetype plugins.
   let &l:filetype = &l:filetype
+
+  " Recall FileType autocmd
+  execute 'doautocmd FileType' &filetype
 endfunction"}}}
 
 function! s:filetype_off() "{{{
