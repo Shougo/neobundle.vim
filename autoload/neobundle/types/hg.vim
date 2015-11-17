@@ -60,8 +60,8 @@ function! s:type.detect(path, opts) "{{{
 
   if protocol !=# 'https' && protocol !=# 'ssh'
     call neobundle#util#print_error(
-          \ 'The protocol "' . protocol .
-          \ '"is invalid.  Please use https or ssh instead.')
+          \ 'Path: ' . a:path . ' The protocol "' . protocol .
+          \ '" is unsecure and invalid.')
     return {}
   endif
 
