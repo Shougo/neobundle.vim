@@ -334,7 +334,6 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
     return
   endif
 
-  let a:bundle.sourced = 1
   let rtp = a:bundle.rtp
   if isdirectory(rtp)
     " Join to the tail in runtimepath.
@@ -346,6 +345,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.s:get_rtp_after(a:bundle)
   endif
+  let a:bundle.sourced = 1
 
   call neobundle#call_hook('on_source', a:bundle)
 endfunction"}}}
