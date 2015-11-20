@@ -125,6 +125,16 @@ function! neobundle#installer#reinstall(bundles)
   let bundles = neobundle#util#uniq(a:bundles)
 
   for bundle in bundles
+    if bundle.type == 'nosync'
+          \ || bundle.local
+          \ || bundle.normalized_name ==# 'neobundle'
+          \ || (bundle.sourced &&
+          \     index(['vimproc', 'unite'], bundle.normalized_name) >= 0)
+      call neobundle#installer#error(
+            \ printf('|%s| Cannot reinstall the plugin!', bundle.name))
+      continue
+    endif
+
     " Reinstall.
     call neobundle#installer#log(
           \ printf('|%s| Reinstalling...', bundle.name))
@@ -152,12 +162,10 @@ function! neobundle#installer#get_reinstall_bundles(bundles)
 
   let reinstall_bundles = filter(copy(a:bundles),
         \ "neobundle#config#is_installed(v:val.name)
-        \  && v:val.normalized_name !=# 'neobundle' &&
-        \     v:val.normalized_name !=# 'unite'
         \  && v:val.type !=# 'nosync'
-        \  && !v:val.local &&
-        \     v:val.path ==# v:val.installed_path &&
-        \     v:val.uri !=# v:val.installed_uri")
+        \  && !v:val.local
+        \  && v:val.path ==# v:val.installed_path
+        \  && v:val.uri !=# v:val.installed_uri")
   if !empty(reinstall_bundles)
     call neobundle#util#print_error(
           \ 'Reinstall bundles are detected!')
