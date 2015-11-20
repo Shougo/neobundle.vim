@@ -457,6 +457,10 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleReinstall [{name}...]		 	*:NeoBundleReinstall*
 		Reinstalls the bundles specified by {name}.
+		If the bundles are "nosync" type or local plugins, they are
+		ignored.
+		Note: It removes the bundles and installs them.  It is the
+		dangerous command.
 
 :NeoBundleList 					*:NeoBundleList*
 		Prints a list of configured bundles.
