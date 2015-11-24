@@ -351,20 +351,20 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
 endfunction"}}}
 
 function! neobundle#config#search(bundle_names, ...) "{{{
-  if empty(a:bundle_names)
-    return []
-  endif
-
   " For infinite loop.
   let self = get(a:000, 0, [])
 
+  let bundle_names = filter(a:bundle_names, 'index(self, v:val) < 0')
+  if empty(bundle_names)
+    return []
+  endif
+
   let _ = []
-  let bundles = len(a:bundle_names) != 1 ?
+  let bundles = len(bundle_names) != 1 ?
         \ filter(neobundle#config#get_neobundles(),
-        \ 'index(a:bundle_names, v:val.name) >= 0 &&
-        \  (empty(self) || index(self, v:val.name) < 0)') :
-        \ has_key(s:neobundles, a:bundle_names[0]) ?
-        \     [s:neobundles[a:bundle_names[0]]] : []
+        \ 'index(a:bundle_names, v:val.name) >= 0') :
+        \ has_key(s:neobundles, bundle_names[0]) ?
+        \     [s:neobundles[bundle_names[0]]] : []
   for bundle in bundles
     call add(self, bundle.name)
 
