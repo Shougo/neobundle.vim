@@ -289,7 +289,7 @@ endfunction"}}}
 
 function! neobundle#util#cd(path) "{{{
   if isdirectory(a:path)
-    execute 'lcd' fnameescape(a:path)
+    execute (haslocaldir() ? 'lcd' : 'cd') fnameescape(a:path)
   endif
 endfunction"}}}
 
