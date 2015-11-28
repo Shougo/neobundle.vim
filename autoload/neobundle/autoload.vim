@@ -50,7 +50,6 @@ function! neobundle#autoload#init()
     autocmd!
   augroup END
   for event in [
-        \ 'BufReadCmd', 'FileReadCmd',
         \ 'BufRead', 'BufCreate', 'BufEnter',
         \ 'BufWinEnter', 'BufNew', 'VimEnter'
         \ ]
@@ -204,6 +203,8 @@ function! neobundle#autoload#explorer(path, event)
     augroup END
   else
     call neobundle#config#source_bundles(bundles)
+    silent! doautocmd BufReadCmd
+    silent! doautocmd FileReadCmd
     execute 'doautocmd' a:event
 
     if !s:loaded_explorer && has('vim_starting')
