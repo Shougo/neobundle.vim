@@ -184,7 +184,7 @@ function! neobundle#init#_bundle(bundle) "{{{
     " Set lazy flag automatically
     let bundle.lazy = bundle.on_i
           \ || !empty(filter(['on_ft', 'on_path', 'on_cmd',
-          \                  'on_func', 'on_map', 'on_unite'],
+          \                  'on_func', 'on_map'],
           \                 '!empty(bundle[v:val])'))
   endif
 

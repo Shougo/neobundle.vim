@@ -93,7 +93,3 @@ function! s:suite.pattern_d()
   call s:assert.equals(neobundle#is_sourced('vinarise'), 0)
 endfunction
 
-function! s:suite.autoload()
-  call s:assert.equals(neobundle#get('unite.vim').autoload.commands, ['Unite'])
-endfunction
-
