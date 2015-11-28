@@ -77,7 +77,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'rev' : '',
           \ 'rtp' : '',
           \ 'depends' : [],
-          \ 'lazy' : 0,
           \ 'fetch' : 0,
           \ 'force' : 0,
           \ 'gui' : 0,
@@ -180,6 +179,14 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
 
   call s:init_lazy(bundle)
+
+  if !has_key(bundle, 'lazy')
+    " Set lazy flag automatically
+    let bundle.lazy = bundle.on_i
+          \ || !empty(filter(['on_ft', 'on_path', 'on_cmd',
+          \                  'on_func', 'on_map', 'on_unite'],
+          \                 '!empty(bundle[v:val])'))
+  endif
 
   " Parse depends.
   if !empty(bundle.depends)
