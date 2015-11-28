@@ -105,7 +105,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'install_process_timeout'
           \    : g:neobundle#install_process_timeout,
           \ 'refcnt' : 1,
-          \ 'on_insert' : 0,
+          \ 'on_i' : 0,
           \ 'on_ft' : [],
           \ 'on_cmd' : [],
           \ 'on_func' : [],
@@ -223,7 +223,7 @@ function! s:init_lazy(bundle) "{{{
         \ 'functions' : 'on_func',
         \ 'mappings' : 'on_map',
         \ 'unite_sources' : 'on_unite',
-        \ 'insert' : 'on_insert',
+        \ 'insert' : 'on_i',
         \ 'explorer' : 'on_path',
         \ 'on_source' : 'on_source',
         \ 'command_prefix' : 'pre_cmd',

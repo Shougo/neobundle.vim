@@ -77,7 +77,7 @@ endfunction
 
 function! neobundle#autoload#insert()
   let bundles = filter(neobundle#config#get_autoload_bundles(),
-        \ "v:val.on_insert")
+        \ "v:val.on_i")
   if !empty(bundles)
     call neobundle#config#source_bundles(bundles)
     doautocmd InsertEnter
