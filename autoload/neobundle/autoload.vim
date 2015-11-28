@@ -28,7 +28,7 @@ set cpo&vim
 
 function! neobundle#autoload#init() "{{{
   let s:active_auto_source = 0
-  let s:loaded_explorer = 0
+  let s:loaded_path = 0
 
   augroup neobundle
     autocmd FileType *
@@ -44,14 +44,14 @@ function! neobundle#autoload#init() "{{{
           \ call s:on_command_prefix()
   endif
 
-  augroup neobundle-explorer
+  augroup neobundle-path
     autocmd!
   augroup END
   for event in [
         \ 'BufRead', 'BufCreate', 'BufEnter',
         \ 'BufWinEnter', 'BufNew', 'VimEnter'
         \ ]
-    execute 'autocmd neobundle-explorer' event
+    execute 'autocmd neobundle-path' event
           \ "* call s:on_path(expand('<afile>'), ".string(event) . ")"
   endfor
 
@@ -228,19 +228,19 @@ function! s:on_path(path, event) "{{{
         \ "len(filter(copy(v:val.on_path),
           \  'path =~? v:val')) > 0")")
   if empty(bundles)
-    augroup neobundle-explorer
+    augroup neobundle-path
       autocmd!
     augroup END
   else
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
 
-    if !s:loaded_explorer && has('vim_starting')
+    if !s:loaded_path && has('vim_starting')
           \ && neobundle#util#redir('filetype') =~# 'detection:ON'
-      " Force enable auto detection if explorer bundles are loaded
+      " Force enable auto detection if path bundles are loaded
       autocmd neobundle VimEnter * filetype detect
     endif
-    let s:loaded_explorer = 1
+    let s:loaded_path = 1
   endif
 endfunction"}}}
 
