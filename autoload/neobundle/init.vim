@@ -208,8 +208,8 @@ function! s:init_lazy(bundle) "{{{
   for key in filter([
         \ 'filetypes', 'filename_patterns',
         \ 'commands', 'functions', 'mappings', 'unite_sources',
-        \ 'insert', 'explorer', 'on_source',
-        \ 'command_prefix',
+        \ 'insert', 'explorer',
+        \ 'command_prefix', 'function_prefixes',
         \ ], 'has_key(bundle, v:val)')
     let bundle.autoload[key] = bundle[key]
     call remove(bundle, key)

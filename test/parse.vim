@@ -256,4 +256,61 @@ function! s:suite.name_conversion()
   let g:neobundle#enable_name_conversion = 0
 endfunction
 
+function! s:suite.autoload()
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'filetypes' : 'foo_ft' }])
+  call s:assert.equals(bundle.on_ft, ['foo_ft'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'filename_patterns' : 'foo_filename' }])
+  call s:assert.equals(bundle.on_path, ['foo_filename'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'explorer' : 1 }])
+  call s:assert.equals(bundle.on_path, ['.*'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'commands' : 'Foo' }])
+  call s:assert.equals(bundle.on_cmd, ['Foo'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'functions' : 'foo#bar' }])
+  call s:assert.equals(bundle.on_func, ['foo#bar'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'mappings' : '<Plug>' }])
+  call s:assert.equals(bundle.on_map, ['<Plug>'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'unite_sources' : 'unite-foo' }])
+  call s:assert.equals(bundle.on_unite, ['unite-foo'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'insert' : 1 }])
+  call s:assert.equals(bundle.on_insert, 1)
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'on_source' : 'plug_foo' }])
+  call s:assert.equals(bundle.on_source, ['plug_foo'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'command_prefix' : 'PreFoo' }])
+  call s:assert.equals(bundle.pre_cmd, ['PreFoo'])
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'function_prefixes' : 'foo#' }])
+  call s:assert.equals(bundle.pre_func, ['foo#'])
+endfunction
+
 " vim:foldmethod=marker:fen:
