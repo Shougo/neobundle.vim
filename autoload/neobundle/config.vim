@@ -203,7 +203,7 @@ function! neobundle#config#source(names, ...) "{{{
       endtry
     endif
 
-    call neobundle#autoload#source(bundle.name)
+    call neobundle#autoload#_source(bundle.name)
 
     if !reset_ftplugin
       let reset_ftplugin = s:is_reset_ftplugin(&filetype, bundle.rtp)
@@ -598,7 +598,7 @@ function! s:add_dummy_commands(bundle) "{{{
       silent! execute 'command ' . (get(command, 'complete', '') != '' ?
             \ ('-complete=' . command.complete) : '')
             \ . ' -bang -range -nargs=*' name printf(
-            \ "call neobundle#autoload#command(%s, %s, <q-args>,
+            \ "call neobundle#autoload#_command(%s, %s, <q-args>,
             \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
             \   string(name), string(a:bundle.name))
 
@@ -630,7 +630,7 @@ function! s:add_dummy_mappings(bundle) "{{{
         silent! execute mode.'noremap <unique><silent>' mapping printf(
               \ (mode ==# 'c' ? "\<C-r>=" :
               \  (mode ==# 'i' ? "\<C-o>:" : ":\<C-u>")."call ").
-              \   "neobundle#autoload#mapping(%s, %s, %s)<CR>",
+              \   "neobundle#autoload#_mapping(%s, %s, %s)<CR>",
               \   string(mapping_str), string(a:bundle.name), string(mode))
 
         call add(a:bundle.dummy_mappings, [mode, mapping])
