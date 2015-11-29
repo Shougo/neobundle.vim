@@ -180,14 +180,6 @@ function! neobundle#init#_bundle(bundle) "{{{
 
   call s:init_lazy(bundle)
 
-  if !has_key(bundle, 'lazy')
-    " Set lazy flag automatically
-    let bundle.lazy = bundle.on_i
-          \ || !empty(filter(['on_ft', 'on_path', 'on_cmd',
-          \                  'on_func', 'on_map', 'on_unite'],
-          \                 '!empty(bundle[v:val])'))
-  endif
-
   " Parse depends.
   if !empty(bundle.depends)
     call s:init_depends(bundle)
@@ -263,6 +255,14 @@ function! s:init_lazy(bundle) "{{{
         \")
     let bundle[key] = [bundle[key]]
   endfor
+
+  if !has_key(bundle, 'lazy')
+    " Set lazy flag automatically
+    let bundle.lazy = bundle.on_i
+          \ || !empty(filter(['on_ft', 'on_path', 'on_cmd',
+          \                  'on_func', 'on_map', 'on_unite'],
+          \                 '!empty(bundle[v:val])'))
+  endif
 endfunction"}}}
 
 function! s:init_depends(bundle) "{{{
