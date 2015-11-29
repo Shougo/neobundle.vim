@@ -1084,7 +1084,7 @@ OPTIONS 					*neobundle-options*
 		Specify autoload conditions.
 		If you set it, neobundle will execute |:NeoBundleSource|
 		automatically when the conditions are met.
-		Note: This directory is deprecated.
+		Note: This dictionary is deprecated.
 
 						*neobundle-options-on_ft*
 		on_ft	(List) or (String)
