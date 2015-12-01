@@ -800,12 +800,12 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'Shougo/unite.vim', {'recipe' : 'unite'}
 <
-						*neobundle-options-base_path*
+						*neobundle-options-base*
 		base			(String)
 		Directory base path to use. If omitted, the path specified
 		with |neobundle#begin()| will be used. It is useful for
 		loading scripts from a different path.
-		Example:
+
 						*neobundle-options-type*
 		type			(String)
 		Specify the repository type. If omitted, a guess is made
