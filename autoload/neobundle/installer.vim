@@ -633,6 +633,20 @@ function! neobundle#installer#lock_revision(process, context, is_unite) "{{{
   endif
 endfunction"}}}
 
+function! neobundle#installer#get_release_revision(bundle, command) "{{{
+  let cwd = getcwd()
+  let rev = ''
+  try
+    call neobundle#util#cd(a:bundle.path)
+    let rev = get(neobundle#util#sort_human(
+          \ split(neobundle#util#system(a:command), '\n')), -1, '')
+  finally
+    call neobundle#util#cd(cwd)
+  endtry
+
+  return rev
+endfunction"}}}
+
 function! s:save_install_info(bundles) "{{{
   let s:install_info = {}
   for bundle in filter(copy(a:bundles),

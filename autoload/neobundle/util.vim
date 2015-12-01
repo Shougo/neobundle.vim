@@ -374,6 +374,37 @@ function! neobundle#util#print_bundles(bundles) "{{{
   echomsg string(map(copy(a:bundles), 'v:val.name'))
 endfunction"}}}
 
+function! neobundle#util#sort_human(filenames) "{{{
+  return sort(a:filenames, 's:compare_filename')
+endfunction"}}}
+
+" Compare filename by human order. "{{{
+function! s:compare_filename(i1, i2)
+  let words_1 = s:get_words(a:i1)
+  let words_2 = s:get_words(a:i2)
+  let words_1_len = len(words_1)
+  let words_2_len = len(words_2)
+
+  for i in range(0, min([words_1_len, words_2_len])-1)
+    if words_1[i] >? words_2[i]
+      return 1
+    elseif words_1[i] <? words_2[i]
+      return -1
+    endif
+  endfor
+
+  return words_1_len - words_2_len
+endfunction"}}}
+
+function! s:get_words(filename) abort "{{{
+  let words = []
+  for split in split(a:filename, '\d\+\zs\ze')
+    let words += split(split, '\D\zs\ze\d\+')
+  endfor
+
+  return map(words, "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

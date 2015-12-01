@@ -184,16 +184,10 @@ function! s:type.get_revision_lock_command(bundle) "{{{
   endif
 
   let rev = a:bundle.rev
-  if rev ==# 'release' && isdirectory(a:bundle.path)
+  if rev ==# 'release'
     " Use latest released tag
-    let cwd = getcwd()
-    try
-      call neobundle#util#cd(a:bundle.path)
-      let rev = get(split(neobundle#util#system(
-            \ g:neobundle#types#git#command_path . ' tag'), '\n'), -1, '')
-    finally
-      call neobundle#util#cd(cwd)
-    endtry
+    let rev = neobundle#installer#get_release_revision(a:bundle,
+          \ g:neobundle#types#git#command_path . ' tag')
   endif
   if rev == ''
     " Fix detach HEAD.
