@@ -278,9 +278,9 @@ neobundle#get({bundle-name})			 *neobundle#get()*
 		Useful for setting hooks.
 		Example:
 >
-	NeoBundleLazy 'tyru/open-browser.vim', '', 'same', { 'autoload' : {
-	      \ 'mappings' : '<Plug>',
-	      \ }}
+	NeoBundleLazy 'tyru/open-browser.vim', '', 'same', {
+	      \ 'on_map' : '<Plug>',
+	      \ }
 	nmap gs <Plug>(open-browser-wwwsearch)
 
 	let bundle = neobundle#get('open-browser.vim')
@@ -331,9 +331,8 @@ neobundle#config({options})
 	NeoBundle 'Shougo/neocomplcache'
 	call neobundle#config('neocomplcache', {
 	\ 'lazy' : 1,
-	\ 'autoload' : {
-	\   'insert' : 1,
-	\ }})
+	\ 'on_i' : 1,
+	\ })
 <
 neobundle#tap({bundle-name})			 *neobundle#tap()*
 		Initialize |neobundle#tapped| and |neobundle#hooks| variable
@@ -415,6 +414,7 @@ COMMANDS 					*neobundle-commands*
 		Note: Don't set neobundle setting in .gvimrc!
 		Note: If you omit the protocol (ex: https) for a git
 		repo, |g:neobundle#types#git#default_protocol| is used.
+		Note: |neobundle-options-lazy| is set automatically.
 
 		Note: If you manage bundle by neobundle, it may be error
 		occurred when update bundles.
@@ -768,6 +768,8 @@ OPTIONS 					*neobundle-options*
 
 		rev			(String)
 		Specify a revision number or branch/tag name.
+		If it is "release" in "git" type, neobundle will use latest
+		released tag.
 		Note: If the type is "raw", rev is hash number.
 
 		Example:
@@ -800,12 +802,12 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'Shougo/unite.vim', {'recipe' : 'unite'}
 <
-						*neobundle-options-base_path*
+						*neobundle-options-base*
 		base			(String)
 		Directory base path to use. If omitted, the path specified
 		with |neobundle#begin()| will be used. It is useful for
 		loading scripts from a different path.
-		Example:
+
 						*neobundle-options-type*
 		type			(String)
 		Specify the repository type. If omitted, a guess is made
@@ -1031,9 +1033,8 @@ OPTIONS 					*neobundle-options*
 		Example: >
 	NeoBundleLazy 'tyru/restart.vim', '', 'same', {
 	      \ 'gui' : 1,
-	      \ 'autoload' : {
-	      \  'commands' : 'Restart'
-	      \ }}
+	      \ 'on_cmd' : 'Restart'
+	      \ }
 <
 						*neobundle-options-terminal*
 		terminal		(Number)
@@ -1074,10 +1075,6 @@ OPTIONS 					*neobundle-options*
 		verbose		(Number)
 		If set to 1, neobundle will print message when it is sourced.
 
-						*neobundle-options-neovim*
-		neovim		(Number)
-		If set to 1, it is neovim |:remote-plugin|.
-
 				*neobundle-options-install_process_timeout*
 		install_process_timeout (Number)
 		The time of timeout seconds when updating/installing bundles.
@@ -1089,184 +1086,198 @@ OPTIONS 					*neobundle-options*
 		Specify autoload conditions.
 		If you set it, neobundle will execute |:NeoBundleSource|
 		automatically when the conditions are met.
-		Note: You can omit "autoload" dictionary. It is useful for
-		|:NeoBundleLazy| command.
+		Note: This dictionary is deprecated.
 
-		This dictionary accepts the following keys:
+						*neobundle-options-on_ft*
+		on_ft	(List) or (String)
+		Filetype list.  If the filetype is "all", it means all
+		filetypes.
+		Note: Using this will usually cause Neobundle to
+		either reset the ftplugin state, or explicitly call
+		the FileType autocommand another time (after adding
+		the lazy-loaded bundle), which results in the
+		autocommand to be processed twice for all other
+		plugins.  Therefore, using "all" does not make sense
+		usually.
 
-			filetypes	(List) or (String)
-			Filetype list.  If the filetype is "all", it means all
-			filetypes.
-			Note: Using this will usually cause Neobundle to
-			either reset the ftplugin state, or explicitly call
-			the FileType autocommand another time (after adding
-			the lazy-loaded bundle), which results in the
-			autocommand to be processed twice for all other
-			plugins.  Therefore, using "all" does not make sense
-			usually.
+						*neobundle-options-filetypes*
+		It is deprecated key.
 
-			filename_patterns	(List) or (String)
-			Filename regex pattern list.
+						*neobundle-options-on_cmd*
+		on_cmd		(List) or (String)
+		Command list. The item can be following dictionary.
+			name		(String) or (List)
+			Command name or the list of command names.
 
-			commands	(List) or (String)
-			Command list. The item can be following dictionary.
-				name		(String) or (List)
-				Command name or the list of command names.
+			complete	(String)
+			The type of completion supported for the
+			input.  Refer to |:command-completion| for
+			information.
 
-				complete	(String)
-				The type of completion supported for the
-				input.  Refer to |:command-completion| for
-				information.
-
-				Example: >
-			NeoBundleLazy 'Shougo/vimfiler.vim', {
-			      \ 'depends' : 'Shougo/unite.vim',
-			      \ 'commands' : [
-			      \ {'name' : ['VimFiler', 'Edit', 'Write'],
-			      \  'complete' : 'customlist,vimfiler#complete'},
-			      \ 'Read', 'Source'],
-			      \ 'mappings' : '<Plug>',
-			      \ 'explorer' : 1,
-			      \ }
+			Example: >
+		NeoBundleLazy 'Shougo/vimfiler.vim', {
+		      \ 'depends' : 'Shougo/unite.vim',
+		      \ 'commands' : [
+		      \ {'name' : ['VimFiler', 'Edit', 'Write'],
+		      \  'complete' : 'customlist,vimfiler#complete'},
+		      \ 'Read', 'Source'],
+		      \ 'mappings' : '<Plug>',
+		      \ 'explorer' : 1,
+		      \ }
 <
-			functions	(List) or (String)
-			Functions list.
+						*neobundle-options-commands*
+		It is deprecated key.
 
-			mappings	(List) or (String)
-			Mappings list. The items are {mapping} or
-			[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
-			omitted, "nxo" is used.
-			Note: You can use plugin prefix mappings.
-			For example, you can use "<Plug>(ref-" instead of
-			"<Plug>(ref-back)" and so on.
+						*neobundle-options-on_func*
+		on_func		(List) or (String)
+		Functions list.
 
-			Note: You can use "<Plug>" keyword as {mapping}. If
-			{mapping} is "<Plug>", "<Plug>(normalized_name" is
-			used.
-			For example: >
-			" It is same as "'mappings' : '<Plug>(anzu'
-			NeoBundleLazy 'osyo-manga/vim-anzu', {
-			  \'autoload': {'mappings': '<Plug>'}}
+						*neobundle-options-functions*
+		It is deprecated key.
+
+						*neobundle-options-on_map*
+		mappings	(List) or (String)
+		Mappings list. The items are {mapping} or
+		[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
+		omitted, "nxo" is used.
+		Note: You can use plugin prefix mappings.
+		For example, you can use "<Plug>(ref-" instead of
+		"<Plug>(ref-back)" and so on.
+
+		Note: You can use "<Plug>" keyword as {mapping}. If
+		{mapping} is "<Plug>", "<Plug>(normalized_name" is
+		used.
+		For example: >
+		" It is same as "'mappings' : '<Plug>(anzu'
+		NeoBundleLazy 'osyo-manga/vim-anzu', {
+		  \'on_map': '<Plug>'}
 <
-			Note: You cannot use lazy <Plug> mappings twice.
-			For example: >
-			NeoBundleLazy 'osyo-manga/vim-anzu', {
-			  \'autoload': {'mappings': '<Plug>(anzu-'}}
-			" Not working!!
-			nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
-			nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
+		Note: You cannot use lazy <Plug> mappings twice.
+		For example: >
+		NeoBundleLazy 'osyo-manga/vim-anzu', {
+		  \ 'on_map': '<Plug>(anzu-'}
+		" Not working!!
+		nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
+		nmap N <Plug>(anzu-jump-N)<Plug>(anzu-echo-search-status)zv
 <
-			unite_sources	(List) or (String)
-			Unite source name list.
-			Note: To use this feature, you must install latest
-			|unite.vim|.
-			Note: If bundle name starts "unite-", this option is
-			set automatically.
+						*neobundle-options-mappings*
+		It is deprecated key.
 
-			insert		(Number)
-			If set to non-zero, neobundle will |:NeoBundleSource|
-			on |InsertEnter| autocmd.
+						*neobundle-options-on_unite*
+		on_unite	(List) or (String)
+		Unite source name list.
+		Note: To use this feature, you must install latest
+		|unite.vim|.
+		Note: If bundle name starts "unite-", this option is
+		set automatically.
 
-			explorer	(Number or String)
-			If set to 1, neobundle will |:NeoBundleSource|
-			on editing all files.
-			Otherwise, neobundle will |:NeoBundleSource| if the
-			buffer name is matched the string pattern.
-			Note: It is useful for explorer behavior plugins.
-			Ex: vimfiler, metarw, ...
-			Note: To autoload vimfiler, you must disable netrw in
-			.vimrc. >
-			" Disable netrw.vim
-			let g:loaded_netrwPlugin = 1
+					*neobundle-options-unite_sources*
+		It is deprecated key.
+
+						*neobundle-options-on_i*
+		on_i		(Number)
+		If set to non-zero, neobundle will |:NeoBundleSource|
+		on |InsertEnter| autocmd.
+
+						*neobundle-options-insert*
+		It is deprecated key.
+
+						*neobundle-options-on_path*
+		on_path		(String) or (List)
+		If set to ".*", neobundle will |:NeoBundleSource|
+		on editing all files.
+		Otherwise, neobundle will |:NeoBundleSource| if the
+		buffer name is matched the string pattern.
+		Note: It is useful for explorer behavior plugins.
+		Ex: vimfiler, metarw, vim-gnupg ...
+		Note: To autoload vimfiler, you must disable netrw in
+		.vimrc. >
+		" Disable netrw.vim
+		let g:loaded_netrwPlugin = 1
 <
-			For example: >
-			NeoBundleLazy 'kana/vim-meta', {
-			\ 'autoload' : { 'explorer' : '\h\w*:' },
-			\ }
+		For example: >
+		NeoBundleLazy 'kana/vim-meta', {
+		\ 'on_path' : '\h\w*:',
+		\ }
 <
-			on_source	(List) or (String)
-			Load the bundle when the list bundles are loaded.
-			Note: If they are not autoload bundles, "on_source"
-			hooks are called when |VimEnter| auto command.
-			You can call them manually by |neobundle#call_hook()|.
+					*neobundle-options-explorer*
+					*neobundle-options-filename_patterns*
+		It is deprecated key.
 
-			For example: >
-			if neobundle#tap('plugin-B.vim')
-			  call neobundle#config({
-			        \   'autoload' : {
-			        \     'on_source' : [ 'plugin-A.vim' ]
-			        \   }
-			        \ })
-			  call neobundle#untap()
-			endif
+						*neobundle-options-on_source*
+		on_source	(List) or (String)
+		Load the bundle when the list bundles are loaded.
+		Note: If they are not autoload bundles, "on_source"
+		hooks are called when |VimEnter| auto command.
+		You can call them manually by |neobundle#call_hook()|.
+
+		For example: >
+		if neobundle#tap('plugin-B.vim')
+		  call neobundle#config({
+		        \  'on_source' : [ 'plugin-A.vim' ]
+		        \ })
+		  call neobundle#untap()
+		endif
 <
-			plugin-B is loaded before plugin-A is loaded.
+		plugin-B is loaded before plugin-A is loaded.
 
-			command_prefix	(String)
-			Autoload command prefix in commands.
-			If the prefix is set, commands were loaded
-			automatically.
-			If omitted it, automatically generated prefix is used.
-			Example: If you use "unite.vim", "Unite" command
-			prefix is used.
-			Note: It requires Vim 7.4.414 or above.
+						*neobundle-options-pre_cmd*
+		pre_cmd		(List) or (String)
+		Autoload command prefix in commands.
+		If the prefix is set, commands were loaded
+		automatically.
+		If omitted it, automatically generated prefix is used.
+		Example: If you use "unite.vim", "Unite" command
+		prefix is used.
+		Note: It requires Vim 7.4.414 or above.
 
-		Examples:
+					*neobundle-options-command_prefix*
+		It is deprecated key.
+
+		Autoload examples:
 >
 	NeoBundleLazy 'Rip-Rip/clang_complete', {
-	      \ 'autoload' : {
-	      \     'filetypes' : ['c', 'cpp'],
-	      \    },
+	      \  'on_ft' : ['c', 'cpp'],
 	      \ }
 	NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 	      \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
-	      \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
-	NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
-	      \ 'mappings' : [
+	      \  'on_cmd' : 'TweetVimHomeTimeline' }
+	NeoBundleLazy 'kana/vim-smartword', {
+	      \ 'on_map' : [
 	      \   '<Plug>(smartword-'']
-	      \ }}
-	NeoBundleLazy 'Shougo/vim-vcs', {
-	      \ 'depends' : 'thinca/vim-openbuf',
-	      \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
-	      \   }
+	      \ }
 	NeoBundleLazy 'Shougo/vimshell',{
 	      \ 'depends' : 'Shougo/vimproc.vim',
-	      \ 'autoload' : {
-	      \   'commands' : [{ 'name' : 'VimShell',
-	      \                   'complete' : 'customlist,vimshell#complete'},
-	      \                 'VimShellExecute', 'VimShellInteractive',
-	      \                 'VimShellTerminal', 'VimShellPop'],
-	      \   'mappings' : '<Plug>'
-	      \ }})
+	      \ 'on_cmd' : [{ 'name' : 'VimShell',
+	      \                 'complete' : 'customlist,vimshell#complete'},
+	      \               'VimShellExecute', 'VimShellInteractive',
+	      \               'VimShellTerminal', 'VimShellPop'],
+	      \ 'on_map' : '<Plug>'
+	      \ })
 	NeoBundleLazy 'Shougo/vimfiler', {
 	      \ 'depends' : 'Shougo/unite.vim',
-	      \ 'autoload' : {
-	      \    'commands' : [{ 'name' : 'VimFiler',
-	      \                    'complete' : 'customlist,vimfiler#complete' },
-	      \                  'VimFilerExplorer',
-	      \                  'Edit', 'Read', 'Source', 'Write'],
-	      \    'mappings' : '<Plug>',
-	      \    'explorer' : 1,
-	      \ }
+	      \ 'on_cmd' : [{ 'name' : 'VimFiler',
+	      \                 'complete' : 'customlist,vimfiler#complete' },
+	      \               'VimFilerExplorer',
+	      \               'Edit', 'Read', 'Source', 'Write'],
+	      \ 'on_map' : '<Plug>',
+	      \ 'on_path' : '.*',
 	      \ }
 	NeoBundleLazy 'Shougo/junkfile.vim', {
-	      \ 'autoload' : {
-	      \   'commands' : 'JunkfileOpen',
-	      \   'unite_sources' : ['junkfile', 'junkfile/new'],
-	      \ }}
-	NeoBundleLazy 'tyru/winmove.vim', { 'autoload' : {
-	      \ 'mappings' : [
+	      \   'on_cmd' : 'JunkfileOpen',
+	      \   'on_unite' : ['junkfile', 'junkfile/new'],
+	      \ }
+	NeoBundleLazy 'tyru/winmove.vim', {
+	      \ 'on_map' : [
 	      \   ['n', '<Plug>']],
-	      \ },
 	      \ 'gui' : 1,
 	      \ 'augroup' : 'winmove',
 	      \ }
-	NeoBundleLazy 'sophacles/vim-processing', { 'autoload' : {
-	      \'filename_patterns': '\.pde$'
-	      \}}
-	" Omit autoload dictionary.
+	NeoBundleLazy 'sophacles/vim-processing', {
+	      \'on_path': '\.pde$'
+	      \}
 	NeoBundleLazy 'LeafCage/cmdlineplus.vim', {
-	      \ 'mappings': [['c', '<Plug>']]}
+	      \ 'on_map': [['c', '<Plug>']]}
 <
 						*neobundle-options-hooks*
 		hooks			(Dictionary)
@@ -1620,9 +1631,6 @@ The recipe files are in JSON format, like this:
 		vim plugins in a subdirectory, whose name is usually
 		"vim".
 
-		autoload		(Dictionary)	(Optional)
-		Autoload rules. See |neobundle-options-autoload|.
-
 		depends		(List or String)	(Optional)
 		Dependency plugins list.
 
@@ -1746,9 +1754,9 @@ https://github.com/Shougo/neobundle.vim/issues/153
 
 A:
 >
-	NeoBundleLazy 'matchit.zip', { 'autoload' : {
-	      \ 'mappings' : ['%', 'g%']
-	      \ }}
+	NeoBundleLazy 'matchit.zip', {
+	      \ 'on_map' : ['%', 'g%']
+	      \ }
 	let bundle = neobundle#get('matchit.zip')
 	function! bundle.hooks.on_post_source(bundle)
 	  silent! execute 'doautocmd Filetype' &filetype
@@ -1832,6 +1840,15 @@ A: No, you cannot.
 Q: Why neobundle only accepts "https" or "ssh"?
 
 A: https://glyph.twistedmatrix.com/2015/11/editor-malware.html
+
+Q: I want to autoload vim-gnupg
+
+A: vim-gnupg uses |BufReadCmd| and |FileReadCmd| autocmd.  You must specify
+the autocmd. >
+	autocmd BufReadCmd,FileReadCmd *.gpg,*.asc,*.pgp
+	\ NeoBundleSource vim-gnupg | doautocmd BufReadCmd
+	autocmd FileReadCmd *.gpg,*.asc,*.pgp
+	\ NeoBundleSource vim-gnupg | doautocmd FileReadCmd
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

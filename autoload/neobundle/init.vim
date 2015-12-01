@@ -77,7 +77,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'rev' : '',
           \ 'rtp' : '',
           \ 'depends' : [],
-          \ 'lazy' : 0,
           \ 'fetch' : 0,
           \ 'force' : 0,
           \ 'gui' : 0,
@@ -105,6 +104,16 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'install_process_timeout'
           \    : g:neobundle#install_process_timeout,
           \ 'refcnt' : 1,
+          \ 'on_i' : 0,
+          \ 'on_ft' : [],
+          \ 'on_cmd' : [],
+          \ 'on_func' : [],
+          \ 'on_map' : [],
+          \ 'on_unite' : [],
+          \ 'on_path' : [],
+          \ 'on_source' : [],
+          \ 'pre_cmd' : [],
+          \ 'pre_func' : [],
           \ }
   call extend(bundle, a:bundle)
 
@@ -169,6 +178,8 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.augroup = bundle.normalized_name
   endif
 
+  call s:init_lazy(bundle)
+
   " Parse depends.
   if !empty(bundle.depends)
     call s:init_depends(bundle)
@@ -187,6 +198,71 @@ function! neobundle#init#_bundle(bundle) "{{{
         \     && neobundle#config#check_commands(bundle.external_commands))
 
   return bundle
+endfunction"}}}
+
+function! s:init_lazy(bundle) "{{{
+  let bundle = a:bundle
+
+  " Auto set autoload keys.
+  for key in filter([
+        \ 'filetypes', 'filename_patterns',
+        \ 'commands', 'functions', 'mappings', 'unite_sources',
+        \ 'insert', 'explorer',
+        \ 'command_prefix', 'function_prefixes',
+        \ ], 'has_key(bundle, v:val)')
+    let bundle.autoload[key] = bundle[key]
+    call remove(bundle, key)
+  endfor
+
+  " Auto set on keys.
+  for [key, value] in items(filter({
+        \ 'filetypes' : 'on_ft',
+        \ 'filename_patterns' : 'on_path',
+        \ 'commands' : 'on_cmd',
+        \ 'functions' : 'on_func',
+        \ 'mappings' : 'on_map',
+        \ 'unite_sources' : 'on_unite',
+        \ 'insert' : 'on_i',
+        \ 'explorer' : 'on_path',
+        \ 'on_source' : 'on_source',
+        \ 'command_prefix' : 'pre_cmd',
+        \ 'function_prefixes' : 'pre_func',
+        \ }, 'has_key(bundle.autoload, v:key)'))
+
+    let bundle[value] = (key ==# 'explorer'
+          \ && type(bundle.autoload[key]) == type(0)
+          \ && bundle.autoload[key] == 1) ? '.*' : bundle.autoload[key]
+  endfor
+
+  if empty(bundle.pre_cmd)
+    let bundle.pre_cmd = substitute(bundle.normalized_name, '[_-]', '', 'g')
+  endif
+
+  if empty(bundle.on_unite)
+        \ && bundle.name =~# '^\%(vim-\)\?unite-'
+    let unite_source = matchstr(bundle.name, '^\%(vim-\)\?unite-\zs.*')
+    if unite_source != ''
+      let bundle.on_unite = [unite_source]
+    endif
+  endif
+
+  " Auto convert2list.
+  for key in filter([
+        \ 'on_ft', 'on_path', 'on_cmd',
+        \ 'on_func', 'on_map', 'on_unite',
+        \ 'on_source', 'pre_cmd', 'pre_func',
+        \ ], "type(bundle[v:val]) != type([])
+        \")
+    let bundle[key] = [bundle[key]]
+  endfor
+
+  if !has_key(bundle, 'lazy')
+    " Set lazy flag automatically
+    let bundle.lazy = bundle.on_i
+          \ || !empty(filter(['on_ft', 'on_path', 'on_cmd',
+          \                  'on_func', 'on_map', 'on_unite'],
+          \                 '!empty(bundle[v:val])'))
+  endif
 endfunction"}}}
 
 function! s:init_depends(bundle) "{{{
