@@ -587,8 +587,6 @@ function! neobundle#installer#check_output(context, process, is_unite) "{{{
     let bundle.revisions[updated_time] = rev
     let bundle.old_rev = a:process.rev
     let bundle.new_rev = rev
-    let bundle.install_rev = rev
-
     if neobundle#installer#build(bundle)
           \ && confirm('Build failed. Uninstall "'
           \   .bundle.name.'" now?', "yes\nNo", 2) == 1
@@ -598,6 +596,8 @@ function! neobundle#installer#check_output(context, process, is_unite) "{{{
       call add(a:context.source__synced_bundles, bundle)
     endif
   endif
+
+  let bundle.install_rev = rev
 
   let a:process.eof = 1
 endfunction"}}}
