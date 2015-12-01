@@ -768,6 +768,8 @@ OPTIONS 					*neobundle-options*
 
 		rev			(String)
 		Specify a revision number or branch/tag name.
+		If it is "release" in "git" type, neobundle will use latest
+		released tag.
 		Note: If the type is "raw", rev is hash number.
 
 		Example:

@@ -184,6 +184,11 @@ function! s:type.get_revision_lock_command(bundle) "{{{
   endif
 
   let rev = a:bundle.rev
+  if rev ==# 'release'
+    " Use latest released tag
+    let rev = get(split(neobundle#util#system(
+          \ g:neobundle#types#git#command_path . ' tag'), '\n'), -1, '')
+  endif
   if rev == ''
     " Fix detach HEAD.
     let rev = 'master'
