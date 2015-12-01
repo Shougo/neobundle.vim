@@ -307,10 +307,8 @@ function! neobundle#commands#gc(bundle_names) "{{{
 
     let cwd = getcwd()
     try
-      if isdirectory(bundle.path)
-        " Cd to bundle path.
-        call neobundle#util#cd(bundle.path)
-      endif
+      " Cd to bundle path.
+      call neobundle#util#cd(bundle.path)
 
       redraw
       call neobundle#util#redraw_echo(
@@ -321,9 +319,7 @@ function! neobundle#commands#gc(bundle_names) "{{{
       call neobundle#util#redraw_echo(result)
       let status = neobundle#util#get_last_status()
     finally
-      if isdirectory(cwd)
-        call neobundle#util#cd(cwd)
-      endif
+      call neobundle#util#cd(cwd)
     endtry
 
     if status
@@ -384,9 +380,7 @@ function! neobundle#commands#rollback(bundle_name) "{{{
     call neobundle#util#cd(bundle.path)
     call neobundle#util#system(cmd)
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
     let bundle.rev = revision_save
   endtry
 endfunction"}}}
@@ -626,9 +620,7 @@ function! s:check_update_init(bundle, context, is_unite) "{{{
       let process.status = neobundle#util#get_last_status()
     endif
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 
   call add(a:context.source__processes, process)

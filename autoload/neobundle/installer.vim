@@ -90,9 +90,7 @@ function! neobundle#installer#build(bundle) "{{{
 
   let cwd = getcwd()
   try
-    if isdirectory(a:bundle.path)
-      call neobundle#util#cd(a:bundle.path)
-    endif
+    call neobundle#util#cd(a:bundle.path)
 
     if !neobundle#util#has_vimproc()
       let result = neobundle#util#system(cmd)
@@ -113,9 +111,7 @@ function! neobundle#installer#build(bundle) "{{{
 
     return 1
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 
   return neobundle#util#get_last_status()
@@ -306,9 +302,7 @@ function! neobundle#installer#get_revision_number(bundle) "{{{
       return (rev !~ '\s') ? rev : ''
     endif
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 endfunction"}}}
 
@@ -327,9 +321,7 @@ function! s:get_commit_date(bundle) "{{{
     return neobundle#util#system(
           \ type.get_commit_date_command(a:bundle))
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 endfunction"}}}
 
@@ -338,9 +330,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev) 
   try
     let type = neobundle#config#get_types(a:bundle.type)
 
-    if isdirectory(a:bundle.path)
-      call neobundle#util#cd(a:bundle.path)
-    endif
+    call neobundle#util#cd(a:bundle.path)
 
     let log_command = has_key(type, 'get_log_command') ?
           \ type.get_log_command(a:bundle, a:new_rev, a:old_rev) : ''
@@ -350,9 +340,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev) 
           \            (a:old_rev  == a:new_rev) ? ''
           \            : printf('%s -> %s', a:old_rev, a:new_rev)
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 endfunction"}}}
 
@@ -404,10 +392,8 @@ function! neobundle#installer#sync(bundle, context, is_unite) "{{{
     let lang_save = $LANG
     let $LANG = 'C'
 
-    if isdirectory(a:bundle.path)
-      " Cd to bundle path.
-      call neobundle#util#cd(a:bundle.path)
-    endif
+    " Cd to bundle path.
+    call neobundle#util#cd(a:bundle.path)
 
     let rev = neobundle#installer#get_revision_number(a:bundle)
 
@@ -456,9 +442,7 @@ function! neobundle#installer#sync(bundle, context, is_unite) "{{{
     endif
   finally
     let $LANG = lang_save
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 
   call add(a:context.source__processes, process)
@@ -633,17 +617,13 @@ function! neobundle#installer#lock_revision(process, context, is_unite) "{{{
 
   let cwd = getcwd()
   try
-    if isdirectory(bundle.path)
-      " Cd to bundle path.
-      call neobundle#util#cd(bundle.path)
-    endif
+    " Cd to bundle path.
+    call neobundle#util#cd(bundle.path)
 
     let result = neobundle#util#system(cmd)
     let status = neobundle#util#get_last_status()
   finally
-    if isdirectory(cwd)
-      call neobundle#util#cd(cwd)
-    endif
+    call neobundle#util#cd(cwd)
   endtry
 
   if status
