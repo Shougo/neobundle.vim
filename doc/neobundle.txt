@@ -278,7 +278,7 @@ neobundle#get({bundle-name})			 *neobundle#get()*
 		Useful for setting hooks.
 		Example:
 >
-	NeoBundleLazy 'tyru/open-browser.vim', '', 'same', {
+	NeoBundle 'tyru/open-browser.vim', '', 'same', {
 	      \ 'on_map' : '<Plug>',
 	      \ }
 	nmap gs <Plug>(open-browser-wwwsearch)
@@ -1031,7 +1031,7 @@ OPTIONS 					*neobundle-options*
 		If set 1, neobundle will only load the plugin in GUI Vim.
 
 		Example: >
-	NeoBundleLazy 'tyru/restart.vim', '', 'same', {
+	NeoBundle 'tyru/restart.vim', '', 'same', {
 	      \ 'gui' : 1,
 	      \ 'on_cmd' : 'Restart'
 	      \ }
@@ -1115,9 +1115,9 @@ OPTIONS 					*neobundle-options*
 			information.
 
 			Example: >
-		NeoBundleLazy 'Shougo/vimfiler.vim', {
+		NeoBundle 'Shougo/vimfiler.vim', {
 		      \ 'depends' : 'Shougo/unite.vim',
-		      \ 'commands' : [
+		      \ 'on_cmd' : [
 		      \ {'name' : ['VimFiler', 'Edit', 'Write'],
 		      \  'complete' : 'customlist,vimfiler#complete'},
 		      \ 'Read', 'Source'],
@@ -1149,12 +1149,12 @@ OPTIONS 					*neobundle-options*
 		used.
 		For example: >
 		" It is same as "'mappings' : '<Plug>(anzu'
-		NeoBundleLazy 'osyo-manga/vim-anzu', {
+		NeoBundle 'osyo-manga/vim-anzu', {
 		  \'on_map': '<Plug>'}
 <
 		Note: You cannot use lazy <Plug> mappings twice.
 		For example: >
-		NeoBundleLazy 'osyo-manga/vim-anzu', {
+		NeoBundle 'osyo-manga/vim-anzu', {
 		  \ 'on_map': '<Plug>(anzu-'}
 		" Not working!!
 		nmap n <Plug>(anzu-jump-n)<Plug>(anzu-echo-search-status)zv
@@ -1196,7 +1196,7 @@ OPTIONS 					*neobundle-options*
 		let g:loaded_netrwPlugin = 1
 <
 		For example: >
-		NeoBundleLazy 'kana/vim-meta', {
+		NeoBundle 'kana/vim-meta', {
 		\ 'on_path' : '\h\w*:',
 		\ }
 <
@@ -1236,17 +1236,17 @@ OPTIONS 					*neobundle-options*
 
 		Autoload examples:
 >
-	NeoBundleLazy 'Rip-Rip/clang_complete', {
+	NeoBundle 'Rip-Rip/clang_complete', {
 	      \  'on_ft' : ['c', 'cpp'],
 	      \ }
-	NeoBundleLazy 'basyura/TweetVim', { 'depends' :
+	NeoBundle 'basyura/TweetVim', { 'depends' :
 	      \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
 	      \  'on_cmd' : 'TweetVimHomeTimeline' }
-	NeoBundleLazy 'kana/vim-smartword', {
+	NeoBundle 'kana/vim-smartword', {
 	      \ 'on_map' : [
 	      \   '<Plug>(smartword-'']
 	      \ }
-	NeoBundleLazy 'Shougo/vimshell',{
+	NeoBundle 'Shougo/vimshell',{
 	      \ 'depends' : 'Shougo/vimproc.vim',
 	      \ 'on_cmd' : [{ 'name' : 'VimShell',
 	      \                 'complete' : 'customlist,vimshell#complete'},
@@ -1254,7 +1254,7 @@ OPTIONS 					*neobundle-options*
 	      \               'VimShellTerminal', 'VimShellPop'],
 	      \ 'on_map' : '<Plug>'
 	      \ })
-	NeoBundleLazy 'Shougo/vimfiler', {
+	NeoBundle 'Shougo/vimfiler', {
 	      \ 'depends' : 'Shougo/unite.vim',
 	      \ 'on_cmd' : [{ 'name' : 'VimFiler',
 	      \                 'complete' : 'customlist,vimfiler#complete' },
@@ -1263,20 +1263,20 @@ OPTIONS 					*neobundle-options*
 	      \ 'on_map' : '<Plug>',
 	      \ 'on_path' : '.*',
 	      \ }
-	NeoBundleLazy 'Shougo/junkfile.vim', {
+	NeoBundle 'Shougo/junkfile.vim', {
 	      \   'on_cmd' : 'JunkfileOpen',
 	      \   'on_unite' : ['junkfile', 'junkfile/new'],
 	      \ }
-	NeoBundleLazy 'tyru/winmove.vim', {
+	NeoBundle 'tyru/winmove.vim', {
 	      \ 'on_map' : [
 	      \   ['n', '<Plug>']],
 	      \ 'gui' : 1,
 	      \ 'augroup' : 'winmove',
 	      \ }
-	NeoBundleLazy 'sophacles/vim-processing', {
+	NeoBundle 'sophacles/vim-processing', {
 	      \'on_path': '\.pde$'
 	      \}
-	NeoBundleLazy 'LeafCage/cmdlineplus.vim', {
+	NeoBundle 'LeafCage/cmdlineplus.vim', {
 	      \ 'on_map': [['c', '<Plug>']]}
 <
 						*neobundle-options-hooks*
@@ -1754,7 +1754,7 @@ https://github.com/Shougo/neobundle.vim/issues/153
 
 A:
 >
-	NeoBundleLazy 'matchit.zip', {
+	NeoBundle 'matchit.zip', {
 	      \ 'on_map' : ['%', 'g%']
 	      \ }
 	let bundle = neobundle#get('matchit.zip')
