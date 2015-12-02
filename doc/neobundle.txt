@@ -1136,7 +1136,7 @@ OPTIONS 					*neobundle-options*
 		It is deprecated key.
 
 						*neobundle-options-on_map*
-		mappings	(List) or (String)
+		on_map		(List) or (String)
 		Mappings list. The items are {mapping} or
 		[{mode}, {mapping1}, [{mapping2}, ...]].  If {mode} is
 		omitted, "nxo" is used.
