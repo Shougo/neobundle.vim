@@ -937,7 +937,7 @@ OPTIONS 					*neobundle-options*
 		\      'sh -c "cd ruby/command-t && ruby extconf.rb && make"'
 		\   }
 		\ }
-
+<
 						*neobundle-options-augroup*
 		augroup		(String)
 		Specify an augroup name that the plugin uses for |VimEnter| or
