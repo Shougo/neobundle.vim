@@ -481,7 +481,7 @@ function! neobundle#commands#save_cache() "{{{
 
   let current_vim = neobundle#util#redir('version')
 
-  call writefile( [s:get_cache_version(),
+  call writefile( [neobundle#get_cache_version(),
         \ v:progname, current_vim, string(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache(...) "{{{
@@ -500,7 +500,7 @@ function! neobundle#commands#load_cache(...) "{{{
     let vim = get(list, 2, '')
 
     if len(list) != 4
-          \ || ver !=# s:get_cache_version()
+          \ || ver !=# neobundle#get_cache_version()
           \ || v:progname !=# prog
           \ || current_vim !=# vim
       call neobundle#commands#clear_cache()
@@ -706,10 +706,6 @@ endfunction"}}}
 function! s:cmp_vimproc(a, b) "{{{
   return !(a:a.name ==# 'vimproc' || a:a.name ==# 'vimproc.vim')
 endfunction"}}}
-
-function! s:get_cache_version()"{{{
-  return str2nr(printf('%02d%02d', 3, 1))
-endfunction "}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

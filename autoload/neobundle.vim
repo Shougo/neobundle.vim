@@ -413,5 +413,9 @@ function! neobundle#get_unite_sources()
   return neobundle#autoload#get_unite_sources()
 endfunction
 
+function! neobundle#get_cache_version() "{{{
+  return str2nr(printf('%02d%02d', 3, 1))
+endfunction "}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
