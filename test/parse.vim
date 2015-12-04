@@ -309,7 +309,7 @@ function! s:suite.autoload()
         \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'on_source' : 'plug_foo' }])
   call s:assert.equals(bundle.on_source, ['plug_foo'])
-  call s:assert.equals(bundle.lazy, 0)
+  call s:assert.equals(bundle.lazy, 1)
 
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://github.com/Shougo/neobundle.vim.git',
