@@ -329,6 +329,11 @@ function! s:suite.deprecated()
         \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'stay_same' : '1' }])
   call s:assert.equals(bundle.frozen, 1)
+
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'type' : 'nosync' }])
+  call s:assert.equals(bundle.type, 'none')
 endfunction
 
 " vim:foldmethod=marker:fen:

@@ -284,8 +284,8 @@ function! neobundle#parser#path(path, ...) "{{{
   endfor
 
   if empty(detect) && isdirectory(path)
-    " Detect nosync type.
-    return { 'uri' : path, 'type' : 'nosync' }
+    " Detect none type.
+    return { 'uri' : path, 'type' : 'none' }
   endif
 
   if !empty(detect) && !has_key(detect, 'name')

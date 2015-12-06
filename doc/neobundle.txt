@@ -457,7 +457,7 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleReinstall [{name}...]		 	*:NeoBundleReinstall*
 		Reinstalls the bundles specified by {name}.
-		If the bundles are "nosync" type or local plugins, they are
+		If the bundles are "none" type or local plugins, they are
 		ignored.
 		Note: It removes the bundles and installs them.  It is the
 		dangerous command.
@@ -814,7 +814,7 @@ OPTIONS 					*neobundle-options*
 		based on {repository}.
 
 		Available types:
-		"nosync"    : No synchronous
+		"none"      : None repository
 		"raw"       : Raw plugin file ("script_type" attribute is
 		              needed)
 		"git"       : Git
@@ -1361,10 +1361,10 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'Shougo/vimshell', '3787e5'
 		NeoBundle 'Shougo/vimshell', 'master'
 <
-		If type is "nosync", neobundle does not update
+		If type is "none", neobundle does not update
 		automatically (like pathogen.vim). See also |NeoBundleLocal|.
 >
-		NeoBundle 'muttator', {'type' : 'nosync', 'base' : '~/.vim/bundle'}
+		NeoBundle 'muttator', {'type' : 'none', 'base' : '~/.vim/bundle'}
 <
 		Note: To use hg commands for git repository, please use this.
 >
@@ -1746,8 +1746,8 @@ Q: I want to add absolute path in 'runtimepath' with |:NeoBundle| and
 |:NeoBundleLazy|.
 https://github.com/Shougo/neobundle.vim/issues/136
 
-A: You can use "nosync" type. >
-	NeoBundle '/absolute/path/to/plugin', { 'type' : 'nosync' }
+A: You can use "none" type. >
+	NeoBundle '/absolute/path/to/plugin', { 'type' : 'none' }
 
 Q: Problem with lazy loading of matchit plugin.
 https://github.com/Shougo/neobundle.vim/issues/153

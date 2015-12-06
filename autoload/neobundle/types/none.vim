@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: nosync.vim
+" FILE: none.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -26,12 +26,12 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#types#nosync#define() "{{{
+function! neobundle#types#none#define() "{{{
   return s:type
 endfunction"}}}
 
 let s:type = {
-      \ 'name' : 'nosync',
+      \ 'name' : 'none',
       \ }
 
 function! s:type.detect(path, opts) "{{{

@@ -60,9 +60,10 @@ function! neobundle#init#_rc(path) "{{{
 endfunction"}}}
 
 function! neobundle#init#_bundle(bundle) "{{{
-  if !has_key(a:bundle, 'type') && get(a:bundle, 'local', 0)
+  if (!has_key(a:bundle, 'type') && get(a:bundle, 'local', 0))
+        \ || get(a:bundle, 'type', '') ==# 'nosync'
     " Default type.
-    let a:bundle.type = 'nosync'
+    let a:bundle.type = 'none'
   endif
   if !has_key(a:bundle, 'type')
     call neobundle#installer#error(
