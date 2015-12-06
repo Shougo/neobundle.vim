@@ -438,7 +438,7 @@ COMMANDS 					*neobundle-commands*
 		Installs and updates plugins specified by {name}. {name} is
 		fuzzy-searched.  If {name} is omitted, all configured plugins
 		are installed and updated, except if they are outdated or have
-		the "stay_same" option set.
+		the "frozen" option set.
 		Note: {name}s are plugin names like "neobundle.vim", not
 		"Shougo/neobundle.vim".
 		Note: neobundle cannot use neovim async jobs feature in the
@@ -447,7 +447,7 @@ COMMANDS 					*neobundle-commands*
 
 :NeoBundleUpdate! [{name}...]			*:NeoBundleUpdate!*
 		Same as |:NeoBundleUpdate|, except that it disregards the
-		"stay_same" option.
+		"frozen" option.
 
 :NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
 		Removes non-configured bundles that still exist in the bundle
@@ -1000,14 +1000,14 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'Valloric/YouCompleteMe', { 'build_commands' : 'cmake' }
 <
 
-						*neobundle-options-stay_same*
-		stay_same		(Number)
+						*neobundle-options-frozen*
+		frozen		(Number)
 		If set to 1, neobundle doesn't update it automatically when
 		|:NeoBundleUpdate| or ":Unite neobundle/update" is called with
 		no arguments. It is useful for outdated plugins that can no
 		longer be updated.
 >
-		NeoBundle 'Shougo/neobundle', { 'stay_same' : 1 }
+		NeoBundle 'Shougo/neobundle', { 'frozen' : 1 }
 <
 						*neobundle-options-lazy*
 		lazy			(Number)
@@ -1503,7 +1503,7 @@ neobundle/log
 				*neobundle-unite-source-neobundle-update*
 neobundle/update
 		Install and update configured plugins asynchronously, except
-		for outdated ones or those with the "stay_same" option.
+		for outdated ones or those with the "frozen" option.
 		It supports neovim async jobs feature.
 		Note: This source is the same as "neobundle/install:!".
 		Note: Installing the |vimproc| plugin or using neovim is

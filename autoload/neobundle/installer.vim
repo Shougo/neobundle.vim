@@ -354,8 +354,8 @@ function! neobundle#installer#sync(bundle, context, is_unite) "{{{
   let before_one_week = localtime() - 60 * 60 * 24 * 7
 
   if a:context.source__bang == 1 &&
-        \ a:bundle.stay_same
-    let [cmd, message] = ['', 'has "stay_same" attribute.']
+        \ a:bundle.frozen
+    let [cmd, message] = ['', 'is frozen.']
   elseif a:context.source__bang == 1 &&
         \ a:bundle.uri ==# a:bundle.installed_uri &&
         \ a:bundle.updated_time < before_one_week

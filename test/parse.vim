@@ -324,4 +324,11 @@ function! s:suite.autoload()
   call s:assert.equals(bundle.lazy, 0)
 endfunction
 
+function! s:suite.deprecated()
+  let bundle = neobundle#parser#_init_bundle(
+        \ 'https://github.com/Shougo/neobundle.vim.git',
+        \ [{ 'stay_same' : '1' }])
+  call s:assert.equals(bundle.frozen, 1)
+endfunction
+
 " vim:foldmethod=marker:fen:

@@ -81,7 +81,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'force' : 0,
           \ 'gui' : 0,
           \ 'terminal' : 0,
-          \ 'stay_same' : 0,
           \ 'autoload' : {},
           \ 'hooks' : {},
           \ 'called_hooks' : {},
@@ -104,6 +103,7 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'install_process_timeout'
           \    : g:neobundle#install_process_timeout,
           \ 'refcnt' : 1,
+          \ 'frozen' : 0,
           \ 'on_i' : 0,
           \ 'on_ft' : [],
           \ 'on_cmd' : [],
@@ -178,6 +178,10 @@ function! neobundle#init#_bundle(bundle) "{{{
     let bundle.augroup = bundle.normalized_name
   endif
 
+  " Convert old name
+  if has_key(bundle, 'stay_same')
+    let bundle.frozen = bundle.stay_same
+  endif
   call s:init_lazy(bundle)
 
   " Parse depends.
