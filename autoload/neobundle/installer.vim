@@ -47,9 +47,9 @@ function! neobundle#installer#update(bundles) "{{{
   call s:save_install_info(all_bundles)
 
   let lazy_bundles = filter(copy(all_bundles), 'v:val.lazy')
-  call neobundle#util#copy_bundle_files(
+  call neobundle#util#merge_bundle_files(
         \ lazy_bundles, 'ftdetect')
-  call neobundle#util#copy_bundle_files(
+  call neobundle#util#merge_bundle_files(
         \ lazy_bundles, 'after/ftdetect')
 
   " For neovim remote plugins
