@@ -42,15 +42,6 @@ function! neobundle#config#init() "{{{
     return
   endif
 
-  for bundle in values(s:neobundles)
-    if !(bundle.lazy && bundle.sourced)
-      " Reset.
-      call neobundle#config#rtp_rm(bundle)
-
-      call remove(s:neobundles, bundle.name)
-    endif
-  endfor
-
   augroup neobundle
     autocmd VimEnter * call s:on_vim_enter()
   augroup END
