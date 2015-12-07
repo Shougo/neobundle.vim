@@ -413,8 +413,10 @@ function! neobundle#get_unite_sources() "{{{
   return neobundle#autoload#get_unite_sources()
 endfunction"}}}
 
+let s:init_vim_path = fnamemodify(expand('<sfile>'), ':h')
+      \ . '/neobundle/init.vim'
 function! neobundle#get_cache_version() "{{{
-  return str2nr(printf('%02d%02d', 3, 2))
+  return getftime(s:init_vim_path)
 endfunction "}}}
 
 let &cpo = s:save_cpo
