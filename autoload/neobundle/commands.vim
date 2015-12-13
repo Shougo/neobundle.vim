@@ -485,10 +485,16 @@ function! neobundle#commands#save_cache() "{{{
         \ v:progname, current_vim, string(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache(...) "{{{
-  let vimrc = get(a:000, 0, $MYVIMRC)
   let cache = neobundle#commands#get_cache_file()
-  if !filereadable(cache) || getftime(cache) < getftime(vimrc)
-    return 1
+  if !filereadable(cache) | return 1 | endif
+
+  let vimrc = get(a:000, 0, $MYVIMRC)
+  if type(vimrc) == 1
+    if getftime(cache) < getftime(vimrc) | return 1 | endif
+  else
+    for elem in vimrc
+      if getftime(cache) < getftime(elem) | return 1 | endif
+    endfor
   endif
 
   let current_vim = neobundle#util#redir('version')
