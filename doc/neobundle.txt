@@ -364,7 +364,7 @@ neobundle#tap({bundle-name})			 *neobundle#tap()*
 		  " Define plugin mappings, commands, ...
 		  map f <Plug>(foo)
 		  command! FOO call foo#foo()
-		
+
 		  call neobundle#untap()
 		endif
 <
@@ -383,10 +383,11 @@ neobundle#has_fresh_cache()	 *neobundle#has_fresh_cache()*
 		Note: It is deprecated.  You should use
 		|neobundle#load_cache()| instead of it.
 
-neobundle#load_cache([{vimrc}])			 *neobundle#load_cache()*
+neobundle#load_cache([{vimrcs}])		 *neobundle#load_cache()*
 		Load plugin configuration from the cache file,
 		which is located in `neobundle#get_rtp_dir() . '/cache'`.
-		{vimrc} is compared .vimrc file.  The default is |$MYVIMRC|.
+		{vimrcs} is a list of compared .vimrc and/or other configuration
+		files. The default is |$MYVIMRC|.
 
 		It returns 1, if the cache file is old or invalid or not
 		found.
@@ -396,6 +397,14 @@ neobundle#load_cache([{vimrc}])			 *neobundle#load_cache()*
 >
 	if neobundle#load_cache()
 	  " My Bundles here:
+	  " ...
+	  NeoBundleSaveCache
+	endif
+<
+		If you use multiple configuration files,
+>
+	if neobundle#load_cache($MYVIMRC, 'plugin.vim', 'plugin.toml')
+	  " My Bundles here or other files spcified as arguments
 	  " ...
 	  NeoBundleSaveCache
 	endif

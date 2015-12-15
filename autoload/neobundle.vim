@@ -152,7 +152,7 @@ command! -bar NeoBundleLoadCache
       \ 'It will be removed in the next version.') |
       \ call neobundle#util#print_error(
       \ 'Please use neobundle#load_cache() instead.') |
-      \ call neobundle#commands#load_cache()
+      \ call neobundle#commands#load_cache([$MYVIMRC])
 command! -bar NeoBundleClearCache
       \ call neobundle#commands#clear_cache()
 
@@ -285,8 +285,8 @@ function! neobundle#has_cache() "{{{
 endfunction"}}}
 
 function! neobundle#load_cache(...) "{{{
-  let vimrc = get(a:000, 0, $MYVIMRC)
-  return neobundle#commands#load_cache(vimrc)
+  let vimrcs = len(a:000) == 0 ? [$MYVIMRC] : a:000
+  return neobundle#commands#load_cache(vimrcs)
 endfunction"}}}
 
 function! neobundle#has_fresh_cache(...) "{{{
