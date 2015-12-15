@@ -484,18 +484,13 @@ function! neobundle#commands#save_cache() "{{{
   call writefile( [neobundle#get_cache_version(),
         \ v:progname, current_vim, string(bundles)], cache)
 endfunction"}}}
-function! neobundle#commands#load_cache(...) "{{{
+function! neobundle#commands#load_cache(vimrcs) "{{{
   let cache = neobundle#commands#get_cache_file()
   if !filereadable(cache) | return 1 | endif
 
-  let vimrc = get(a:000, 0, $MYVIMRC)
-  if type(vimrc) == 1
+  for vimrc in a:vimrcs
     if getftime(cache) < getftime(vimrc) | return 1 | endif
-  else
-    for elem in vimrc
-      if getftime(cache) < getftime(elem) | return 1 | endif
-    endfor
-  endif
+  endfor
 
   let current_vim = neobundle#util#redir('version')
 
