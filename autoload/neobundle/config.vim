@@ -588,7 +588,7 @@ function! s:add_dummy_commands(bundle) "{{{
       " Define dummy commands.
       silent! execute 'command ' . (get(command, 'complete', '') != '' ?
             \ ('-complete=' . command.complete) : '')
-            \ . ' -bang -range -nargs=*' name printf(
+            \ . ' -bang -bar -range -nargs=*' name printf(
             \ "call neobundle#autoload#_command(%s, %s, <q-args>,
             \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
             \   string(name), string(a:bundle.name))

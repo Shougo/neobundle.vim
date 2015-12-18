@@ -59,11 +59,13 @@ let s:neobundle_dir = ''
 let s:neobundle_runtime_dir = neobundle#util#substitute_path_separator(
       \ fnamemodify(expand('<sfile>'), ':p:h:h'))
 
-command! -nargs=+ NeoBundle
+command! -nargs=+
+      \ NeoBundle
       \ call neobundle#parser#bundle(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -bar NeoBundleCheck
+command! -bar
+      \ NeoBundleCheck
       \ call neobundle#commands#check()
 
 command! -nargs=? -bar
@@ -71,22 +73,27 @@ command! -nargs=? -bar
       \ NeoBundleCheckUpdate
       \ call neobundle#commands#check_update(<q-args>)
 
-command! -nargs=+ NeoBundleLazy
+command! -nargs=+
+      \ NeoBundleLazy
       \ call neobundle#parser#lazy(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+ NeoBundleFetch
+command! -nargs=+ -bar
+      \ NeoBundleFetch
       \ call neobundle#parser#fetch(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+ NeoBundleRecipe
+command! -nargs=+ -bar
+      \ NeoBundleRecipe
       \ call neobundle#parser#recipe(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=1 -complete=dir NeoBundleLocal
+command! -nargs=1 -complete=dir -bar
+      \ NeoBundleLocal
       \ call neobundle#local(<q-args>, {})
 
-command! -nargs=+ NeoBundleDirectInstall
+command! -nargs=+ -bar
+      \ NeoBundleDirectInstall
       \ call neobundle#parser#direct(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
@@ -103,11 +110,13 @@ command! -nargs=+ -bar
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#commands#complete_bundles
       \ NeoBundleInstall
-      \ call neobundle#commands#install('!' == '<bang>', <q-args>)
+      \ call neobundle#commands#install(
+      \   '!' == '<bang>', <q-args>)
 command! -nargs=? -bang -bar
       \ -complete=customlist,neobundle#commands#complete_bundles
       \ NeoBundleUpdate
-      \ call neobundle#commands#install(('!' == '<bang>' ? 2 : 1), <q-args>)
+      \ call neobundle#commands#install(
+      \  ('!' == '<bang>' ? 2 : 1), <q-args>)
 
 command! -nargs=* -bang -bar
       \ -complete=customlist,neobundle#commands#complete_deleted_bundles
@@ -128,24 +137,33 @@ command! -nargs=? -bang -bar
       \ NeoBundleList
       \ call neobundle#commands#list()
 
-command! -bar NeoBundleDocs
-      \ call neobundle#commands#helptags(neobundle#config#get_enabled_bundles())
+command! -bar
+      \ NeoBundleDocs
+      \ call neobundle#commands#helptags(
+      \   neobundle#config#get_enabled_bundles())
 
-command! -bar NeoBundleLog
+command! -bar
+      \ NeoBundleLog
       \ echo join(neobundle#installer#get_log(), "\n")
 
-command! -bar NeoBundleUpdatesLog
+command! -bar
+      \ NeoBundleUpdatesLog
       \ echo join(neobundle#installer#get_updates_log(), "\n")
 
-command! -bar NeoBundleExtraEdit
-      \ execute 'edit' fnameescape(neobundle#get_neobundle_dir()).'/extra_bundles.vim'
+command! -bar
+      \ NeoBundleExtraEdit
+      \ execute 'edit' fnameescape(
+      \   neobundle#get_neobundle_dir()).'/extra_bundles.vim'
 
-command! -bar NeoBundleCount
+command! -bar
+      \ NeoBundleCount
       \ echo len(neobundle#config#get_neobundles())
 
-command! -bar NeoBundleSaveCache
+command! -bar
+      \ NeoBundleSaveCache
       \ call neobundle#commands#save_cache()
-command! -bar NeoBundleLoadCache
+command! -bar
+      \ NeoBundleLoadCache
       \ call neobundle#util#print_error(
       \ 'NeoBundleLoadCache is deprecated command.') |
       \ call neobundle#util#print_error(
@@ -153,7 +171,8 @@ command! -bar NeoBundleLoadCache
       \ call neobundle#util#print_error(
       \ 'Please use neobundle#load_cache() instead.') |
       \ call neobundle#commands#load_cache([$MYVIMRC])
-command! -bar NeoBundleClearCache
+command! -bar
+      \ NeoBundleClearCache
       \ call neobundle#commands#clear_cache()
 
 command! -nargs=1 -bar
@@ -161,10 +180,12 @@ command! -nargs=1 -bar
       \ NeoBundleRollback
       \ call neobundle#commands#rollback(<f-args>)
 
-command! -nargs=+ NeoBundleLock
+command! -nargs=+ -bar
+      \ NeoBundleLock
       \ call neobundle#commands#lock(<f-args>)
 
-command! -bar NeoBundleRemotePlugins
+command! -bar
+      \ NeoBundleRemotePlugins
       \ call neobundle#commands#remote_plugins()
 
 function! neobundle#rc(...) "{{{
