@@ -78,7 +78,7 @@ command! -nargs=+
       \ call neobundle#parser#lazy(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+ -bar
+command! -nargs=+
       \ NeoBundleFetch
       \ call neobundle#parser#fetch(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
