@@ -376,13 +376,6 @@ neobundle#has_cache()			 *neobundle#has_cache()*
 		Note: It is deprecated.  You should use
 		|neobundle#load_cache()| instead of it.
 
-neobundle#has_fresh_cache()	 *neobundle#has_fresh_cache()*
-		Similar to |neobundle#has_cache|, but compares the
-		modification time of the cache file to your configuration file
-		({vimrc} or |$MYVIMRC|).
-		Note: It is deprecated.  You should use
-		|neobundle#load_cache()| instead of it.
-
 neobundle#load_cache([{vimrcs}])		 *neobundle#load_cache()*
 		Load plugin configuration from the cache file,
 		which is located in `neobundle#get_rtp_dir() . '/cache'`.

@@ -310,22 +310,6 @@ function! neobundle#load_cache(...) "{{{
   return neobundle#commands#load_cache(vimrcs)
 endfunction"}}}
 
-function! neobundle#has_fresh_cache(...) "{{{
-  call neobundle#util#print_error(
-        \ 'neobundle#has_fresh_cache() is deprecated function.')
-  call neobundle#util#print_error(
-        \ 'It will be removed in the next version.')
-  call neobundle#util#print_error(
-        \ 'Please use neobundle#load_cache() instead.')
-
-  " Check if the cache file is newer than the vimrc file.
-  let vimrc = get(a:000, 0, $MYVIMRC)
-  let cache = neobundle#commands#get_cache_file()
-  return filereadable(cache)
-        \ && (!filereadable(vimrc)
-        \    || getftime(cache) >= getftime(vimrc))
-endfunction"}}}
-
 function! neobundle#get_not_installed_bundle_names() "{{{
   return map(neobundle#get_not_installed_bundles([]), 'v:val.name')
 endfunction"}}}
