@@ -490,7 +490,8 @@ function! neobundle#commands#load_cache(vimrcs) "{{{
   if !filereadable(cache) | return 1 | endif
 
   for vimrc in a:vimrcs
-    if getftime(cache) < getftime(vimrc) | return 1 | endif
+    let vimrc_ftime = getftime(vimrc)
+    if vimrc_ftime != -1 && getftime(cache) < vimrc_ftime | return 1 | endif
   endfor
 
   let current_vim = neobundle#util#redir('version')
