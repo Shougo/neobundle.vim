@@ -40,9 +40,11 @@ function! s:source.hooks.on_init(args, context) "{{{
   let bundle_names = filter(copy(a:args), 'v:val != "!"')
   let a:context.source__bang =
         \ index(a:args, '!') >= 0
-  let a:context.source__bundles = empty(bundle_names) ?
-        \ neobundle#config#get_neobundles() :
-        \ neobundle#config#search(bundle_names)
+  let a:context.source__bundles = neobundle#util#sort_by(
+        \  (empty(bundle_names) ?
+        \   neobundle#config#get_neobundles() :
+        \   neobundle#config#search(bundle_names)),
+        \ 'tolower(v:val.orig_name)')
 endfunction"}}}
 
 " Filters "{{{

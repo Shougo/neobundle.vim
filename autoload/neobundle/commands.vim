@@ -387,7 +387,8 @@ endfunction"}}}
 
 function! neobundle#commands#list() "{{{
   call neobundle#util#redraw_echo('#: not sourced, X: not installed')
-  for bundle in neobundle#config#get_neobundles()
+  for bundle in neobundle#util#sort_by(
+        \ neobundle#config#get_neobundles(), 'tolower(v:val.name)')
     echo (bundle.sourced ? ' ' :
           \ neobundle#is_installed(bundle.name) ? '#' : 'X')
           \ . ' ' . bundle.name
