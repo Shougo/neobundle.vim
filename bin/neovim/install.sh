@@ -4,7 +4,7 @@
 # https://github.com/shoma2da/neobundle_installer
 
 # Installation directory
-BUNDLE_DIR=~/.cache/nvim
+BUNDLE_DIR=~/.cache/nvim/bundle
 INSTALL_DIR="$BUNDLE_DIR/neobundle.vim"
 echo "$INSTALL_DIR"
 if [ -e "$INSTALL_DIR" ]; then
