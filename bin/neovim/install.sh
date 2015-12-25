@@ -4,7 +4,7 @@
 # https://github.com/shoma2da/neobundle_installer
 
 # Installation directory
-BUNDLE_DIR=~/.nvim/bundle
+BUNDLE_DIR=~/.cache/nvim
 INSTALL_DIR="$BUNDLE_DIR/neobundle.vim"
 echo "$INSTALL_DIR"
 if [ -e "$INSTALL_DIR" ]; then
@@ -27,7 +27,7 @@ git clone https://github.com/Shougo/neobundle.vim "$INSTALL_DIR"
 echo "Done."
 
 # write initial setting for ~/.config/nvim/init.vim
-echo "Please add the following settings for NeoBundle to the top of your .vimrc file:"
+echo "Please add the following settings for NeoBundle to the top of your init.vim file:"
 {
     echo ""
     echo ""
