@@ -11,7 +11,8 @@ if [ -e "$INSTALL_DIR" ]; then
   echo "$INSTALL_DIR already exists!"
 fi
 
-NVIM_BUNDLE_DIR=~/.cache/nvim/bundle
+NVIM_DIR=~/.cache/nvim
+NVIM_BUNDLE_DIR="$NVIM_DIR/bundle"
 NVIM_INSTALL_DIR="$NVIM_BUNDLE_DIR/neobundle.vim"
 echo "$NVIM_INSTALL_DIR"
 if [ -e "$NVIM_INSTALL_DIR" ]; then
@@ -37,7 +38,7 @@ if ! [ -e "$INSTALL_DIR" ]; then
   git clone https://github.com/Shougo/neobundle.vim "$INSTALL_DIR"
 fi
 
-if ! [ -e "$NVIM_INSTALL_DIR" ]; then
+if type nvim > /dev/null 2>&1 && ! [ -e "$NVIM_INSTALL_DIR" ]; then
   mkdir -p "$NVIM_BUNDLE_DIR"
   git clone https://github.com/Shougo/neobundle.vim "$NVIM_INSTALL_DIR"
 fi
@@ -91,8 +92,9 @@ echo "Please add the following settings for NeoBundle to the top of your .vimrc 
 }
 
 # write initial setting for ~/.config/nvim/init.vim
-echo "Please add the following settings for NeoBundle to the top of your init.vim file:"
-{
+if type nvim > /dev/null 2>&1; then
+  echo "Please add the following settings for NeoBundle to the top of your init.vim file:"
+  {
     echo ""
     echo ""
     echo "\"NeoBundle Scripts-----------------------------"
@@ -130,7 +132,8 @@ echo "Please add the following settings for NeoBundle to the top of your init.vi
     echo "\"End NeoBundle Scripts-------------------------"
     echo ""
     echo ""
-}
+  }
+fi
 echo "Done."
 
 echo "Complete setup NeoBundle!"
