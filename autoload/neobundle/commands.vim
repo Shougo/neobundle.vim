@@ -473,7 +473,8 @@ function! neobundle#commands#save_cache() "{{{
   call neobundle#autoload#_set_function_prefixes(
         \ neobundle#config#get_autoload_bundles())
 
-  let bundles = deepcopy(neobundle#config#get_neobundles())
+  let bundles = neobundle#config#tsort(
+        \ deepcopy(neobundle#config#get_neobundles()))
   for bundle in bundles
     " Clear hooks.  Because, VimL cannot save functions in JSON.
     let bundle.hooks = {}
