@@ -11,7 +11,7 @@ if [ -e "$INSTALL_DIR" ]; then
   echo "$INSTALL_DIR already exists!"
 fi
 
-NVIM_DIR=~/.cache/nvim
+NVIM_DIR=~/.config/nvim
 NVIM_BUNDLE_DIR="$NVIM_DIR/bundle"
 NVIM_INSTALL_DIR="$NVIM_BUNDLE_DIR/neobundle.vim"
 echo "$NVIM_INSTALL_DIR"
