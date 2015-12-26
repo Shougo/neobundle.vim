@@ -32,6 +32,8 @@ call neobundle#util#set_default(
       \ (neobundle#util#is_windows() ? 'rmdir /S /Q' : 'rm -rf'),
       \ 'g:neobundle_rm_command')
 
+let s:vimrcs = []
+
 function! neobundle#commands#install(bang, bundle_names) "{{{
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
@@ -483,10 +485,12 @@ function! neobundle#commands#save_cache() "{{{
 
   let current_vim = neobundle#util#redir('version')
 
-  call writefile( [neobundle#get_cache_version(),
-        \ v:progname, current_vim, string(bundles)], cache)
+  call writefile([neobundle#get_cache_version(),
+        \ v:progname, current_vim, string(s:vimrcs), string(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache(vimrcs) "{{{
+  let s:vimrcs = a:vimrcs
+
   let cache = neobundle#commands#get_cache_file()
   if !filereadable(cache) | return 1 | endif
 
@@ -502,16 +506,18 @@ function! neobundle#commands#load_cache(vimrcs) "{{{
     let ver = list[0]
     let prog = get(list, 1, '')
     let vim = get(list, 2, '')
+    let vimrcs = get(list, 3, '')
 
-    if len(list) != 4
+    if len(list) != 5
           \ || ver !=# neobundle#get_cache_version()
           \ || v:progname !=# prog
           \ || current_vim !=# vim
+          \ || string(a:vimrcs) !=# vimrcs
       call neobundle#commands#clear_cache()
       return 1
     endif
 
-    sandbox let bundles = eval(list[3])
+    sandbox let bundles = eval(list[4])
 
     if type(bundles) != type([])
       call neobundle#commands#clear_cache()
@@ -523,7 +529,7 @@ function! neobundle#commands#load_cache(vimrcs) "{{{
     endfor
   catch
     call neobundle#util#print_error(
-          \ 'Error occurred while loading cache : ' . v:errmsg)
+          \ 'Error occurred while loading cache : ' . v:exception)
     call neobundle#commands#clear_cache()
     return 1
   endtry
