@@ -225,6 +225,19 @@ function! neobundle#end() "{{{
   call neobundle#config#final()
 endfunction"}}}
 
+function! neobundle#add(repository, options) "{{{
+  let bundle = neobundle#parser#_init_bundle(
+        \ a:repository, [a:options])
+  if empty(bundle)
+    return {}
+  endif
+
+  let bundle.orig_arg = [a:repository, a:options]
+  call neobundle#config#add(bundle)
+
+  return bundle
+endfunction"}}}
+
 function! neobundle#set_neobundle_dir(path) "{{{
   let s:neobundle_dir = a:path
 endfunction"}}}
