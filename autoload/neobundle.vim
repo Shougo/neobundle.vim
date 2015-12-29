@@ -47,7 +47,7 @@ call neobundle#util#set_default(
 call neobundle#util#set_default(
       \ 'g:neobundle#default_options', {})
 call neobundle#util#set_default(
-      \ 'g:neobundle#install_max_processes', 4,
+      \ 'g:neobundle#install_max_processes', 8,
       \ 'g:unite_source_neobundle_install_max_processes')
 call neobundle#util#set_default(
       \ 'g:neobundle#install_process_timeout', 120)
