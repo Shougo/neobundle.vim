@@ -136,7 +136,7 @@ function! s:source_update.hooks.on_init(args, context) "{{{
   call s:init(a:context, bundle_names)
 endfunction"}}}
 
-function! s:init(context, bundle_names)
+function! s:init(context, bundle_names) "{{{
   let a:context.source__synced_bundles = []
   let a:context.source__errored_bundles = []
 
@@ -175,7 +175,7 @@ function! s:init(context, bundle_names)
     call neobundle#installer#update_log(
           \ 'Update started: ' . strftime('(%Y/%m/%d %H:%M:%S)'))
   endif
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
