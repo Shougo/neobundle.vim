@@ -162,31 +162,37 @@ function! neobundle#commands#check_update(bundle_names) "{{{
 
   let context.source__max_bundles =
         \ len(context.source__bundles)
-  while 1
-    while context.source__number < context.source__max_bundles
-          \ && len(context.source__processes) <
-          \      g:neobundle#install_max_processes
+  let statusline_save = &l:statusline
+  try
+    while 1
+      while context.source__number < context.source__max_bundles
+            \ && len(context.source__processes) <
+            \      g:neobundle#install_max_processes
 
-      let bundle = context.source__bundles[context.source__number]
-      call s:check_update_init(bundle, context, 0)
-      call neobundle#util#redraw_echo(
-            \ neobundle#installer#get_progress_message(bundle,
-            \ context.source__number,
-            \ context.source__max_bundles))
+        let bundle = context.source__bundles[context.source__number]
+        call s:check_update_init(bundle, context, 0)
+        let &l:statusline =
+              \ neobundle#installer#get_progress_message(bundle,
+              \ context.source__number,
+              \ context.source__max_bundles)
+        redrawstatus
+      endwhile
+
+      for process in context.source__processes
+        call s:check_update_process(context, process, 0)
+      endfor
+
+      " Filter eof processes.
+      call filter(context.source__processes, '!v:val.eof')
+
+      if empty(context.source__processes)
+            \ && context.source__number == context.source__max_bundles
+        break
+      endif
     endwhile
-
-    for process in context.source__processes
-      call s:check_update_process(context, process, 0)
-    endfor
-
-    " Filter eof processes.
-    call filter(context.source__processes, '!v:val.eof')
-
-    if empty(context.source__processes)
-          \ && context.source__number == context.source__max_bundles
-      break
-    endif
-  endwhile
+  finally
+    let &l:statusline = statusline_save
+  endtry
 
   let bundles = map(context.source__updated_bundles, 'v:val.name')
   redraw!
@@ -555,33 +561,40 @@ function! s:install(bang, bundles) "{{{
   let context.source__max_bundles =
         \ len(context.source__bundles)
 
-  while 1
-    while context.source__number < context.source__max_bundles
-          \ && len(context.source__processes) <
-          \      g:neobundle#install_max_processes
+  let statusline_save = &l:statusline
+  try
 
-      let bundle = context.source__bundles[context.source__number]
-      call neobundle#installer#sync(
-            \ context.source__bundles[context.source__number],
-            \ context, 0)
-      call neobundle#util#redraw_echo(
-            \ neobundle#installer#get_progress_message(bundle,
-            \ context.source__number,
-            \ context.source__max_bundles))
+    while 1
+      while context.source__number < context.source__max_bundles
+            \ && len(context.source__processes) <
+            \      g:neobundle#install_max_processes
+
+        let bundle = context.source__bundles[context.source__number]
+        call neobundle#installer#sync(
+              \ context.source__bundles[context.source__number],
+              \ context, 0)
+        let &l:statusline =
+              \ neobundle#installer#get_progress_message(bundle,
+              \ context.source__number,
+              \ context.source__max_bundles)
+        redrawstatus
+      endwhile
+
+      for process in context.source__processes
+        call neobundle#installer#check_output(context, process, 0)
+      endfor
+
+      " Filter eof processes.
+      call filter(context.source__processes, '!v:val.eof')
+
+      if empty(context.source__processes)
+            \ && context.source__number == context.source__max_bundles
+        break
+      endif
     endwhile
-
-    for process in context.source__processes
-      call neobundle#installer#check_output(context, process, 0)
-    endfor
-
-    " Filter eof processes.
-    call filter(context.source__processes, '!v:val.eof')
-
-    if empty(context.source__processes)
-          \ && context.source__number == context.source__max_bundles
-      break
-    endif
-  endwhile
+  finally
+    let &l:statusline = statusline_save
+  endtry
 
   return [context.source__synced_bundles,
         \ context.source__errored_bundles]
