@@ -71,6 +71,11 @@ function! s:source_install.hooks.on_close(args, context) "{{{
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context) "{{{
+  if empty(filter(range(1, winnr('$')),
+        \ "getwinvar(v:val, '&l:filetype') ==# 'unite'"))
+    return []
+  endif
+
   let old_msgs = copy(neobundle#installer#get_updates_log())
 
   if a:context.source__number < a:context.source__max_bundles
@@ -80,10 +85,12 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
       let bundle = a:context.source__bundles[a:context.source__number]
       call neobundle#installer#sync(bundle, a:context, 1)
 
-      call neobundle#util#redraw_echo(
+      call unite#clear_message()
+      call unite#print_source_message(
             \ neobundle#installer#get_progress_message(bundle,
             \ a:context.source__number,
-            \ a:context.source__max_bundles))
+            \ a:context.source__max_bundles), self.name)
+      redrawstatus
     endwhile
   endif
 
