@@ -249,11 +249,11 @@ neobundle#load_toml({filename}, [{options}])
 		# TOML sample
 		[[plugins]]
 		# repository name is required.
-		repository = 'kana/vim-niceblock'
+		repo = 'kana/vim-niceblock'
 		mappings = '<Plug>'
 
 		[[plugins]]
-		repository = 'Shougo/neosnippet.vim'
+		repo = 'Shougo/neosnippet.vim'
 		depends = ['Shougo/neosnippet-snippets',
 		  'Shougo/context_filetype.vim']
 		insert = 1
@@ -266,11 +266,11 @@ neobundle#load_toml({filename}, [{options}])
 		  name = 'honza-snippet'
 
 		[[plugins]]
-		repository = 'Shougo/neobundle.vim'
+		repo = 'Shougo/neobundle.vim'
 		fetch = 1
 
 		[[plugins]]
-		repository = 'Shougo/vimproc.vim'
+		repo = 'Shougo/vimproc.vim'
 
 		  [plugins.build]
 		  windows = 'tools\\update-dll-mingw'
