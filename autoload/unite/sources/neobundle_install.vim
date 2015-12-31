@@ -71,7 +71,7 @@ function! s:source_install.hooks.on_close(args, context) "{{{
 endfunction"}}}
 
 function! s:source_install.async_gather_candidates(args, context) "{{{
-  if empty(filter(range(1, winnr('$')),
+  if !a:context.sync && empty(filter(range(1, winnr('$')),
         \ "getwinvar(v:val, '&l:filetype') ==# 'unite'"))
     return []
   endif
