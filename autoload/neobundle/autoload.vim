@@ -112,6 +112,20 @@ function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "
   endtry
 endfunction"}}}
 
+function! neobundle#autoload#_command_dummy_complete(arglead, cmdline, cursorpos) "{{{
+  " Load plugins
+  let command = tolower(matchstr(a:cmdline, '\a\S*'))
+
+  let bundles = filter(neobundle#config#get_autoload_bundles(),
+        \ "!empty(filter(map(copy(v:val.pre_cmd), 'tolower(v:val)'),
+        \   'stridx(command, v:val) == 0'))")
+  call neobundle#config#source_bundles(bundles)
+
+  " Print the candidates
+  call feedkeys("\<C-d>", 'n')
+  return ['']
+endfunction"}}}
+
 function! neobundle#autoload#_mapping(mapping, name, mode) "{{{
   let cnt = v:count > 0 ? v:count : ''
 
