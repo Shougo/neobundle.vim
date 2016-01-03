@@ -210,10 +210,13 @@ function! neobundle#commands#check_update(bundle_names) "{{{
 
         let type = neobundle#config#get_types(bundle.type)
         let rev = neobundle#installer#get_revision_number(bundle)
+        let fetch_command = has_key(type, 'get_fetch_remote_command') ?
+              \ type.get_fetch_remote_command(bundle) : ''
         let log_command = has_key(type, 'get_log_command') ?
-              \ type.get_log_command(bundle, rev, bundle.remote_rev) : ''
+              \ type.get_log_command(bundle, bundle.remote_rev, rev) : ''
         if log_command != ''
           echomsg bundle.name
+          call neobundle#util#system(fetch_command)
           for output in split(neobundle#util#system(log_command), '\n')
             echomsg output
           endfor

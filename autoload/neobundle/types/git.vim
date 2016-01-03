@@ -216,6 +216,14 @@ function! s:type.get_revision_remote_command(bundle) "{{{
   return g:neobundle#types#git#command_path
         \ .' ls-remote origin ' . rev
 endfunction"}}}
+function! s:type.get_fetch_remote_command(bundle) "{{{
+  if !executable(g:neobundle#types#git#command_path)
+    return ''
+  endif
+
+  return g:neobundle#types#git#command_path
+        \ .' fetch origin '
+endfunction"}}}
 
 function! s:parse_other_pattern(protocol, path, opts) "{{{
   let uri = ''
