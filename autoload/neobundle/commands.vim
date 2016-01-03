@@ -142,7 +142,8 @@ function! neobundle#commands#check() "{{{
     echomsg 'Not installed bundles: '
           \ string(neobundle#get_not_installed_bundle_names())
     if confirm('Install bundles now?', "yes\nNo", 2) == 1
-      call neobundle#commands#install(0, '')
+      call neobundle#commands#install(0,
+            \ join(neobundle#get_not_installed_bundle_names()))
     endif
     echo ''
   endif
@@ -194,15 +195,38 @@ function! neobundle#commands#check_update(bundle_names) "{{{
     let &l:statusline = statusline_save
   endtry
 
-  let bundles = map(context.source__updated_bundles, 'v:val.name')
+  let bundles = context.source__updated_bundles
   redraw!
 
   if !empty(bundles)
     echomsg 'Updates available bundles: '
-          \ string(bundles)
+          \ string(map(copy(bundles), 'v:val.name'))
+    echomsg ' '
+
+    for bundle in bundles
+      let cwd = getcwd()
+      try
+        call neobundle#util#cd(bundle.path)
+
+        let type = neobundle#config#get_types(bundle.type)
+        let rev = neobundle#installer#get_revision_number(bundle)
+        let log_command = has_key(type, 'get_log_command') ?
+              \ type.get_log_command(bundle, rev, bundle.remote_rev) : ''
+        if log_command != ''
+          echomsg bundle.name
+          for output in split(neobundle#util#system(log_command), '\n')
+            echomsg output
+          endfor
+          echomsg ' '
+        endif
+      finally
+        call neobundle#util#cd(cwd)
+      endtry
+    endfor
 
     if confirm('Update bundles now?', "yes\nNo", 2) == 1
-      call neobundle#commands#install(1, join(bundles))
+      call neobundle#commands#install(1,
+            \ join(map(copy(bundles), 'v:val.name')))
     endif
   endif
 endfunction"}}}
@@ -678,6 +702,7 @@ function! s:check_update_process(context, process, is_unite) "{{{
     let rev = neobundle#installer#get_revision_number(bundle)
   finally
     let bundle.rev = revision_save
+    let bundle.remote_rev = remote_rev
   endtry
 
   if is_timeout || status
