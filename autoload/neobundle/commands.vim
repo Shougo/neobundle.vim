@@ -172,11 +172,10 @@ function! neobundle#commands#check_update(bundle_names) "{{{
 
         let bundle = context.source__bundles[context.source__number]
         call s:check_update_init(bundle, context, 0)
-        let &l:statusline =
+        call s:print_message(
               \ neobundle#installer#get_progress_message(bundle,
-              \ context.source__number,
-              \ context.source__max_bundles)
-        redrawstatus
+              \   context.source__number,
+              \   context.source__max_bundles))
       endwhile
 
       for process in context.source__processes
@@ -576,6 +575,15 @@ function! neobundle#commands#clear_cache() "{{{
   call delete(cache)
 endfunction"}}}
 
+function! s:print_message(msg) abort "{{{
+  if !has('vim_starting')
+    let &l:statusline = a:msg
+    redrawstatus
+  else
+    call neobundle#util#redraw_echo(a:msg)
+  endif
+endfunction"}}}
+
 function! s:install(bang, bundles) "{{{
   " Set context.
   let context = {}
@@ -600,11 +608,10 @@ function! s:install(bang, bundles) "{{{
         call neobundle#installer#sync(
               \ context.source__bundles[context.source__number],
               \ context, 0)
-        let &l:statusline =
+        call s:print_message(
               \ neobundle#installer#get_progress_message(bundle,
-              \ context.source__number,
-              \ context.source__max_bundles)
-        redrawstatus
+              \   context.source__number,
+              \   context.source__max_bundles))
       endwhile
 
       for process in context.source__processes
