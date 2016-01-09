@@ -421,6 +421,16 @@ function! s:get_words(filename) abort "{{{
   return map(words, "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
 endfunction"}}}
 
+function! neobundle#util#wget(uri, outpath) "{{{
+  if executable('curl')
+    return printf('curl --fail -s -o "%s" "%s"', a:outpath, a:uri)
+  elseif executable('wget')
+    return printf('wget -q -O "%s" "%s"', a:outpath, a:uri)
+  else
+    return 'E: curl or wget command is not available!'
+  endif
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

@@ -78,13 +78,7 @@ function! s:type.get_sync_command(bundle) "{{{
         \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
   let a:bundle.type__filepath = filename
 
-  if executable('curl')
-    let cmd = printf('curl --fail -s -o "%s" "%s"', filename, a:bundle.uri)
-  elseif executable('wget')
-    let cmd = printf('wget -q -O "%s" "%s"', filename, a:bundle.uri)
-  else
-    return 'E: curl or wget command is not available!'
-  endif
+  let cmd = neobundle#util#wget(filename, a:bundle.uri)
 
   return cmd
 endfunction"}}}

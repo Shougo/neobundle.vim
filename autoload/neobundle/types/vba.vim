@@ -69,23 +69,19 @@ function! s:type.get_sync_command(bundle) "{{{
         \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
   let a:bundle.type__filepath = filename
 
-  if executable('curl')
-    let cmd = printf('curl --fail -s -o "%s" "%s" && ', filename, a:bundle.uri)
-  elseif executable('wget')
-    let cmd = printf('wget -q -O "%s" "%s" && ', filename, a:bundle.uri)
-  else
-    return 'E: curl or wget command is not available!'
+  let cmd = neobundle#util#wget(filename, a:bundle.uri)
+  if cmd !~# '^E:'
+    let cmd .= printf(' %s -u NONE' .
+          \ ' -c "set nocompatible"' .
+          \ ' -c "filetype plugin on"' .
+          \ ' -c "runtime plugin/gzip.vim"' .
+          \ ' -c "runtime plugin/vimballPlugin.vim"' .
+          \ ' -c "edit %s"' .
+          \ ' -c "UseVimball %s"' .
+          \ ' -c "q"', v:progpath, filename, path)
+    " let cmd .= printf(' rm %s &&', filename)
+    " let cmd .= printf(' rm %s/.VimballRecord', path)
   endif
-  let cmd .= printf(' %s -u NONE' .
-        \ ' -c "set nocompatible"' .
-        \ ' -c "filetype plugin on"' .
-        \ ' -c "runtime plugin/gzip.vim"' .
-        \ ' -c "runtime plugin/vimballPlugin.vim"' .
-        \ ' -c "edit %s"' .
-        \ ' -c "UseVimball %s"' .
-        \ ' -c "q"', v:progpath, filename, path)
-  " let cmd .= printf(' rm %s &&', filename)
-  " let cmd .= printf(' rm %s/.VimballRecord', path)
 
   return cmd
 endfunction"}}}
