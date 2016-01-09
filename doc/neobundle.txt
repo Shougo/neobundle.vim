@@ -250,19 +250,19 @@ neobundle#load_toml({filename}, [{options}])
 		[[plugins]]
 		# repository name is required.
 		repo = 'kana/vim-niceblock'
-		mappings = '<Plug>'
+		on_map = '<Plug>'
 
 		[[plugins]]
 		repo = 'Shougo/neosnippet.vim'
 		depends = ['Shougo/neosnippet-snippets',
 		  'Shougo/context_filetype.vim']
-		insert = 1
-		filetypes = 'snippet'
-		unite_sources = [ 'neosnippet',
+		on_i = 1
+		on_ft = 'snippet'
+		on_unite = [ 'neosnippet',
 		  'neosnippet/user', 'neosnippet/runtime']
 
 		  [[plugins.depends]]
-		  repository = 'honza/vim-snippet'
+		  repo = 'honza/vim-snippet'
 		  name = 'honza-snippet'
 
 		[[plugins]]
@@ -1124,12 +1124,10 @@ OPTIONS 					*neobundle-options*
 			Example: >
 		NeoBundle 'Shougo/vimfiler.vim', {
 		      \ 'depends' : 'Shougo/unite.vim',
-		      \ 'on_cmd' : [
-		      \ {'name' : ['VimFiler', 'Edit', 'Write'],
-		      \  'complete' : 'customlist,vimfiler#complete'},
-		      \ 'Read', 'Source'],
-		      \ 'mappings' : '<Plug>',
-		      \ 'explorer' : 1,
+		      \ 'on_cmd' : ['VimFiler', 'Edit',
+		      \             'Write','Read', 'Source'],
+		      \ 'on_map' : '<Plug>',
+		      \ 'on_path' : '.*',
 		      \ }
 <
 						*neobundle-options-commands*
