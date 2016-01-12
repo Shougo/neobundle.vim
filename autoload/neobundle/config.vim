@@ -345,7 +345,7 @@ function! neobundle#config#search(bundle_names, ...) "{{{
   " For infinite loop.
   let self = get(a:000, 0, [])
 
-  let bundle_names = filter(a:bundle_names, 'index(self, v:val) < 0')
+  let bundle_names = filter(copy(a:bundle_names), 'index(self, v:val) < 0')
   if empty(bundle_names)
     return []
   endif
