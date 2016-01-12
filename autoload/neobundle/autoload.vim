@@ -140,7 +140,7 @@ function! neobundle#autoload#_mapping(mapping, name, mode) "{{{
     " v:prevcount?
     " Cancel waiting operator mode.
     " call feedkeys("\<C-\\>\<C-n>", 'n')
-    call feedkeys("\<Esc>", 'n')
+    " call feedkeys("\<Esc>", 'n')
     call feedkeys(v:operator, 'm')
   endif
 
