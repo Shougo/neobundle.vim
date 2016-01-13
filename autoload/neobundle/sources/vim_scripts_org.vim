@@ -40,7 +40,9 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context) "{{{
-  let repository = 'http://vim-scripts.org/api/scripts_recent.json'
+  let repository =
+        \ 'https://raw.githubusercontent.com/vim-scraper/'
+        \ .'vim-scraper.github.com/master/api/scripts.json'
 
   call unite#print_message(
         \ '[neobundle/search:vim-scripts.org] repository: ' . repository)
