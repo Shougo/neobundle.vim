@@ -42,7 +42,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let repository =
         \ 'https://raw.githubusercontent.com/vim-scraper/'
-        \ .'vim-scraper.github.com/master/api/scripts.json'
+        \ .'vim-scraper.github.com/master/api/scripts_recent.json'
 
   call unite#print_message(
         \ '[neobundle/search:vim-scripts.org] repository: ' . repository)
@@ -81,7 +81,8 @@ function! s:get_repository_plugins(context, path) "{{{
     let cache_path = s:Cache.getfilename(cache_dir, a:path)
 
     call unite#print_message(
-          \ '[neobundle/search:vim-scripts.org] Reloading cache from ' . a:path)
+          \ '[neobundle/search:vim-scripts.org] '
+          \ .'Reloading cache from ' . a:path)
     redraw
 
     if s:Cache.filereadable(cache_dir, a:path)
@@ -90,11 +91,8 @@ function! s:get_repository_plugins(context, path) "{{{
 
     let temp = unite#util#substitute_path_separator(tempname())
 
-    if executable('curl')
-      let cmd = 'curl --fail -s -o "' . temp . '" '. a:path
-    elseif executable('wget')
-      let cmd = 'wget -q -O "' . temp . '" ' . a:path
-    else
+    let cmd = neobundle#util#wget(a:path, temp)
+    if cmd =~# '^E:'
       call unite#print_error(
             \ '[neobundle/search:vim-scripts.org] '.
             \ 'curl or wget command is not available!')
@@ -104,9 +102,12 @@ function! s:get_repository_plugins(context, path) "{{{
     let result = unite#util#system(cmd)
 
     if unite#util#get_last_status()
-      call unite#print_message('[neobundle/search:vim-scripts.org] ' . cmd)
-      call unite#print_error('[neobundle/search:vim-scripts.org] Error occurred!')
-      call unite#print_error(result)
+      call unite#print_message(
+            \ '[neobundle/search:vim-scripts.org] ' . cmd)
+      call unite#print_message(
+            \ '[neobundle/search:vim-scripts.org] ' . result)
+      call unite#print_error(
+            \ '[neobundle/search:vim-scripts.org] Error occurred!')
       return []
     elseif !filereadable(temp)
       call unite#print_error('[neobundle/search:vim-scripts.org] '.
