@@ -88,6 +88,13 @@ function! neobundle#config#final() "{{{
   " Join to the tail in runtimepath.
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let index = index(rtps, neobundle#get_rtp_dir())
+  if index < 0
+    call neobundle#util#print_error(
+          \ 'Invalid runtimepath is detected.')
+    call neobundle#util#print_error(
+          \ 'Please check your .vimrc.')
+    return
+  endif
   for bundle in filter(s:lazy_rtp_bundles,
         \ 'isdirectory(v:val.rtp) && !v:val.disabled')
     let bundle.sourced = 1

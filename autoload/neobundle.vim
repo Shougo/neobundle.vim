@@ -206,7 +206,10 @@ function! neobundle#begin(...) "{{{
     if empty(paths)
       let rtps = neobundle#util#split_rtp(&runtimepath)
       if empty(rtps)
-        call neobundle#util#print_error('Your runtimepath is invalid.')
+        call neobundle#util#print_error(
+              \ 'Invalid runtimepath is detected.')
+        call neobundle#util#print_error(
+              \ 'Please check your .vimrc.')
         return 1
       endif
 

@@ -48,6 +48,13 @@ function! neobundle#init#_rc(path) "{{{
   execute 'set rtp-='.fnameescape(rtp)
   let rtps = neobundle#util#split_rtp(&runtimepath)
   let n = index(rtps, $VIMRUNTIME)
+  if n < 0
+    call neobundle#util#print_error(
+          \ 'Invalid runtimepath is detected.')
+    call neobundle#util#print_error(
+          \ 'Please check your .vimrc.')
+    return
+  endif
   let &runtimepath = neobundle#util#join_rtp(
         \ insert(rtps, rtp, n-1), &runtimepath, rtp)
 
