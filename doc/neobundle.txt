@@ -1533,10 +1533,13 @@ neobundle/search
 		source names.
 
 		Following source names are available:
-		"neobundle-vim-recipes":
-			Search plugins settings from the |neobundle-recipe|.
+		"vim_scripts_org":
+			Search plugins settings from "http://vim-scripts.org".
 		"github":
 			Search plugins settings from "https://github.org/".
+		"metadata":
+			Search plugins settings from converted metadata in
+			"https://bitbucket.org/vimcommunity/vim-pi/".
 
 				*neobundle-unite-source-neobundle-lazy*
 neobundle/lazy
