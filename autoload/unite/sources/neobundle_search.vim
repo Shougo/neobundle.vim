@@ -222,7 +222,8 @@ function! s:_compare(a, b)
 endfunction
 
 function! s:get_neobundle_args(candidate)
-  return string(a:candidate.source__path)
+  return string(substitute(a:candidate.source__path,
+        \       '^https://github.com/', '', ''))
           \  . (empty(a:candidate.source__options) ?
           \    '' : ', ' . string(a:candidate.source__options))
           \  . (a:candidate.source__description == '' ? '' :
