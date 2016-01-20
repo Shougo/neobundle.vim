@@ -456,11 +456,14 @@ function! neobundle#config#add(bundle) "{{{
 
   let bundle = a:bundle
 
+  let prev_bundle = get(s:neobundles, bundle.name, {})
+  if !empty(prev_bundle) && prev_bundle.lazy != bundle.lazy
+    let bundle.lazy = 0
+  endif
+
   if !empty(bundle.depends)
     call s:add_depends(bundle)
   endif
-
-  let prev_bundle = get(s:neobundles, bundle.name, {})
 
   if !empty(prev_bundle)
     if prev_bundle.sourced
@@ -569,6 +572,8 @@ endfunction"}}}
 function! s:add_depends(bundle) "{{{
   " Add depends.
   for depend in a:bundle.depends
+    let depend.lazy = a:bundle.lazy
+
     if !has_key(s:neobundles, depend.name)
       call neobundle#config#add(depend)
     else
@@ -576,7 +581,7 @@ function! s:add_depends(bundle) "{{{
       " Add reference count
       let depend_bundle.refcnt += 1
 
-      if a:bundle.sourced && !depend_bundle.sourced
+      if (a:bundle.sourced && !depend_bundle.sourced) || !a:bundle.lazy
         " Load automatically.
         call neobundle#config#source(depend.name, depend.force)
       endif
