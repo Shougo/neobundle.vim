@@ -234,7 +234,7 @@ function! s:echo(expr, mode) "{{{
     return
   endif
 
-  if has('vim_starting')
+  if has('vim_starting') || a:mode ==# 'error'
     let m = join(msg, "\n")
     call s:echo_mode(m, a:mode)
     return
