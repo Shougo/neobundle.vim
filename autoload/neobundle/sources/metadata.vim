@@ -26,8 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Cache = vital#of('unite').import('System.Cache')
-
 let s:repository_cache = []
 
 function! neobundle#sources#metadata#define() "{{{
@@ -40,15 +38,7 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context) "{{{
-  let repository =
-        \ 'https://gist.githubusercontent.com/Shougo/'
-        \ . '028d6ae320cc8f354f88/raw/'
-        \ . '3b62ad42d39a4d3d4f236a45e00eb6b03ca23352/vim-pi.json'
-
-  call unite#print_message(
-        \ '[neobundle/search:metadata] repository: ' . repository)
-
-  let plugins = s:get_repository_plugins(a:context, repository)
+  let plugins = s:get_repository_plugins(a:context)
 
   try
     return map(copy(plugins), "{
@@ -74,75 +64,28 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction"}}}
 
 " Misc.
-function! s:get_repository_plugins(context, path) "{{{
-  let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
-
-  if a:context.is_redraw || !s:Cache.filereadable(cache_dir, a:path)
+function! s:get_repository_plugins(context) "{{{
+  if a:context.is_redraw
     " Reload cache.
-    let cache_path = s:Cache.getfilename(cache_dir, a:path)
-
     call unite#print_message(
           \ '[neobundle/search:metadata] '
-          \ .'Reloading cache from ' . a:path)
+          \ .'Reloading cache from metadata repository')
     redraw
 
-    if s:Cache.filereadable(cache_dir, a:path)
-      call delete(cache_path)
-    endif
-
-    let temp = unite#util#substitute_path_separator(tempname())
-
-    let cmd = neobundle#util#wget(a:path, temp)
-    if cmd =~# '^E:'
-      call unite#print_error(
-            \ '[neobundle/search:metadata] '.
-            \ 'curl or wget command is not available!')
-      return []
-    endif
-
-    let result = unite#util#system(cmd)
-
-    if unite#util#get_last_status()
-      call unite#print_message(
-            \ '[neobundle/search:metadata] ' . cmd)
-      call unite#print_message(
-            \ '[neobundle/search:metadata] ' . result)
-      call unite#print_error(
-            \ '[neobundle/search:metadata] Error occurred!')
-      return []
-    elseif !filereadable(temp)
-      call unite#print_error('[neobundle/search:metadata] '.
-            \ 'Temporary file was not created!')
-      return []
-    else
-      call unite#print_message('[neobundle/search:metadata] Done!')
-    endif
-
-    sandbox let data = eval(get(readfile(temp), 0, '[]'))
-
-    " Convert cache data.
-    call s:Cache.writefile(cache_dir, a:path,
-          \ [string(values(s:convert_metadata(data)))])
-
-    call delete(temp)
+    call neobundle#metadata#update()
   endif
 
-  if empty(s:repository_cache)
-    sandbox let s:repository_cache =
-          \ eval(get(s:Cache.readfile(cache_dir, a:path), 0, '[]'))
-  endif
-
-  return s:repository_cache
+  return s:convert_metadata(neobundle#metadata#get())
 endfunction"}}}
 
 function! s:convert_metadata(data) "{{{
-  return map(copy(a:data), "{
+  return values(map(copy(a:data), "{
         \ 'name' : v:key,
         \ 'raw_type' : get(v:val, 'script-type', ''),
         \ 'repository' : substitute(v:val.url, '^git://', 'https://', ''),
         \ 'description' : '',
         \ 'uri' : get(v:val, 'homepage', ''),
-        \ }")
+        \ }"))
 endfunction"}}}
 
 function! s:convert2script_type(type) "{{{
