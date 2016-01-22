@@ -312,6 +312,24 @@ function! neobundle#util#cleandir(path) "{{{
   endfor
 endfunction"}}}
 
+function! neobundle#util#rmdir(path) "{{{
+  if has('patch-7.4.1120')
+    call delete(a:path, 'rf')
+  else
+    let cmdline = '"' . a:path . '"'
+    if neobundle#util#is_windows()
+      " Note: In rm command, must use "\" instead of "/".
+      let cmdline = substitute(cmdline, '/', '\\\\', 'g')
+    endif
+
+    " Use system instead of vimproc#system()
+    let result = system(g:neobundle#rm_command . ' ' . cmdline)
+    if v:shell_error
+      call neobundle#installer#error(result)
+    endif
+  endif
+endfunction"}}}
+
 function! neobundle#util#copy_bundle_files(bundles, directory) "{{{
   " Delete old files.
   call neobundle#util#cleandir(a:directory)

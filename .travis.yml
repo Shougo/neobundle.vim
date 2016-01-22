@@ -4,7 +4,7 @@ sudo: false
 
 before_script:
     - vim --version
-    - git clone https://github.com/syngan/vim-vimlint /tmp/vim-vimlint
+    - git clone -b builtin https://github.com/Shougo/vim-vimlint /tmp/vim-vimlint
     - git clone https://github.com/ynkdir/vim-vimlparser /tmp/vim-vimlparser
     - git clone https://github.com/thinca/vim-themis
 

@@ -280,19 +280,9 @@ function! neobundle#commands#clean(bang, ...) "{{{
     if !has('vim_starting')
       redraw
     endif
-    let cmdline = join(map(copy(x_dirs), '"\"" . v:val . "\""'), ' ')
-    if neobundle#util#is_windows()
-      " Note: In rm command, must use "\" instead of "/".
-      let cmdline = substitute(cmdline, '/', '\\\\', 'g')
-    endif
-
-    " Use system instead of vimproc#system()
-    let result = system(g:neobundle#rm_command . ' ' . cmdline)
-    if v:shell_error
-      call neobundle#installer#error(result)
-    endif
 
     for dir in x_dirs
+      call neobundle#util#rmdir(dir)
       call neobundle#config#rmdir(dir)
     endfor
 
