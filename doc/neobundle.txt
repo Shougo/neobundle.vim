@@ -1112,8 +1112,9 @@ OPTIONS 					*neobundle-options*
 			Example: >
 		NeoBundle 'Shougo/vimfiler.vim', {
 		      \ 'depends' : 'Shougo/unite.vim',
-		      \ 'on_cmd' : ['VimFiler', 'Edit',
-		      \             'Write','Read', 'Source'],
+		      \ 'on_cmd' : ['VimFiler', 'VimFilerEdit',
+		      \             'VimFilerWrite','VimFilerRead',
+		      \             'VimFilerSource'],
 		      \ 'on_map' : '<Plug>',
 		      \ 'on_path' : '.*',
 		      \ }
