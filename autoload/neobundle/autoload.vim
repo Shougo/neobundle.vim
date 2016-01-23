@@ -104,6 +104,12 @@ function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "
         \ (a:line1==line("'<") && a:line2==line("'>")) ?
         \ "'<,'>" : a:line1.",".a:line2
 
+  if !exists(':' . a:command)
+    call neobundle#util#print_error(
+          \ printf('command %s is not found.', a:command))
+    return
+  endif
+
   try
     execute range.a:command.a:bang a:args
   catch /^Vim\%((\a\+)\)\=:E481/
