@@ -189,10 +189,18 @@ neobundle#append()				*neobundle#append()*
 neobundle#end()					*neobundle#end()*
 		End neobundle bundles configuration block.
 
-neobundle#add({repository}, {options})		*neobundle#add()*
+neobundle#add({repository}[, {options}])		*neobundle#add()*
 		The function version of |:NeoBundle|.
 		Note: You must call it in |neobundle#begin()| or
 		|neobundle#append()| block.
+
+neobundle#add_meta({repository}[, {options}])		*neobundle#add_meta()*
+		Initialize a bundle from the metadata {name}.
+		Note: You must call it in |neobundle#begin()| or
+		|neobundle#append()| block. >
+
+		" It installs vimshell and vimproc
+		call neobundle#add_meta('vimshell')
 
 neobundle#source({bundle-names})		*neobundle#source()*
 		Same as |:NeoBundleSource|.

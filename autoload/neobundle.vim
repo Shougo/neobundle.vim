@@ -228,17 +228,38 @@ function! neobundle#end() "{{{
   call neobundle#config#final()
 endfunction"}}}
 
-function! neobundle#add(repository, options) "{{{
+function! neobundle#add(repository, ...) "{{{
+  let options = get(a:000, 0, {})
   let bundle = neobundle#parser#_init_bundle(
-        \ a:repository, [a:options])
+        \ a:repository, [options])
   if empty(bundle)
     return {}
   endif
 
-  let bundle.orig_arg = [a:repository, a:options]
+  let bundle.orig_arg = [a:repository, options]
   call neobundle#config#add(bundle)
 
   return bundle
+endfunction"}}}
+function! neobundle#add_meta(name, ...) "{{{
+  let metadata = neobundle#metadata#get(a:name)
+  if empty(metadata)
+    call neobundle#util#print_error(
+          \ 'Plugin name "' . a:name . '" is not found.')
+    return {}
+  endif
+
+  let repository = substitute(metadata.url, '^git://', 'https://', '')
+  let options = { 'name' : a:name }
+  if has_key(metadata, 'addon-info')
+        \ && has_key(metadata['addon-info'], 'dependencies')
+    let options.depends = map(keys(metadata['addon-info'].dependencies),
+          \ "substitute(neobundle#metadata#get(v:val).url,
+          \   '^git://', 'https://', '')")
+  endif
+  call extend(options, get(a:000, 0, {}))
+
+  return neobundle#add(repository, options)
 endfunction"}}}
 
 function! neobundle#set_neobundle_dir(path) "{{{

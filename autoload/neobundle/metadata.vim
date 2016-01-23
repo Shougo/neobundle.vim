@@ -26,8 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Cache = vital#of('unite').import('System.Cache')
-
 let s:metadata = {}
 let s:repository =
       \ 'https://gist.githubusercontent.com/Shougo/'
