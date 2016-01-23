@@ -36,7 +36,6 @@ Interface		|neobundle-interface|
 Configuration Examples	|neobundle-examples|
 Migrating from Pathogen |neobundle-migrate-from-pathogen|
 Unite sources		|neobundle-unite-sources|
-Recipe			|neobundle-recipe|
 FAQ			|neobundle-faq|
 
 ==============================================================================
@@ -562,16 +561,6 @@ COMMANDS 					*neobundle-commands*
 		available, it will execute |:NeoBundleUpdate| automatically.
 		Note: It is supported in git type only.
 
-						*:NeoBundleRecipe*
-:NeoBundleRecipe {recipe-name} [, {options}]
-		Registers a bundle from "recipes/{recipe-name}.vimrecipe" file
-		in 'runtimepath'.  This command is useful if you don't want to
-		set bundle options.
-		Note: You must install recipes (|neobundle-recipe|) before
-		executing it.
->
-		NeoBundleRecipe 'vimproc.vim'
-<
 						*:NeoBundleCount*
 :NeoBundleCount
 		Show bundles count.  You can know how many bundles you have.
@@ -807,15 +796,6 @@ OPTIONS 					*neobundle-options*
 >
 		NeoBundle 'https://github.com/Shougo/unite.vim.git',
 		   \ {'directory' : 'unite'}
-<
-						*neobundle-options-recipe*
-		recipe			(String)
-		Use default options from the "recipes/{recipe-name}.vimrecipe"
-		file in 'runtimepath'. (See |:NeoBundleRecipe|).
-
-		Example:
->
-		NeoBundle 'Shougo/unite.vim', {'recipe' : 'unite'}
 <
 						*neobundle-options-base*
 		base			(String)
@@ -1415,9 +1395,6 @@ EXAMPLES					*neobundle-examples*
 	" Let neobundle manage neobundle
 	NeoBundleFetch 'Shougo/neobundle.vim'
 
-	" Use neobundle standard recipes.
-	NeoBundle 'Shougo/neobundle-vim-recipes', {'force' : 1}
-
 	" My Bundles here:
 	" Refer to |:NeoBundle-examples|.
 	" Note: You don't set neobundle setting in .gvimrc!
@@ -1573,89 +1550,12 @@ neobundle/search			*unite-action-neobundle-search*
 			Note: The settings are saved in "extra_bundles.vim" in
 			|neobundle#begin()| directory.
 	start		Browse github plugin page.
-	open		Open the recipe file.
 
 	Note: If you use the install action, you cannot customize the bundle
 	settings.
 
 neobundle/lazy					*unite-action-neobundle-lazy*
 	source		Source plugin files (Default action)
-
-==============================================================================
-RECIPE						*neobundle-recipe*
-
-neobundle/search source loads recipes from "recipes/*.vimrecipe" files in
-'runtimepath'.
-
-The standard recipes are in "neobundle-vim-recipes".
-
-https://github.com/Shougo/neobundle-vim-recipes
-
-You can use the recipes with the following command in .vimrc.
-Note: You must use "force" option for "neobundle-vim-recipes".
->
-	NeoBundle 'Shougo/neobundle-vim-recipes', {'force' : 1}
-<
-
-The recipe files are in JSON format, like this:
-
->
-	# Vim recipe file for neobundle.
-	{
-	        'name' : 'neobundle',
-	        'path' : 'Shougo/neobundle',
-	        'description' : 'Ultimate Vim package manager',
-	        'author' : 'Shougo',
-	        'website' : 'https://github.com/Shougo/neobundle.vim'
-	}
-<
-		A recipe has the following keys. Most of keys are the same as
-		those used in the neobundle configuration
-		dictionary (|neobundle-options|).
-		"#" starts a comment string, but they must start at the
-		beginning of the line.
-
-		name			(String)	(Required)
-		Specify plugin name.
-
-		path			(String)	(Required)
-		The repository URI.
-		Note: You can abbreviate long complete path, such as
-		"Shougo/neobundle.vim" instead of
-		"https://github.com/Shougo/neobundle.vim.git"
-
-		description		(String)	(Optional)
-		Plugin description to show in neobundle/search.
-
-		author			(String)	(Optional)
-		The script author name to show in neobundle/search.
-
-		base			(String)	(Optional)
-		Directory base path.
-
-		type			(String)	(Optional)
-		Specify repository type.
-
-		script_type		(String)	(Optional)
-		Specify script type.
-
-		site			(String)	(Optional)
-		Repository site.
-
-		rtp			(String)	(Optional)
-		Runtime path. Some plugin repositories contain the
-		vim plugins in a subdirectory, whose name is usually
-		"vim".
-
-		depends		(List or String)	(Optional)
-		Dependency plugins list.
-
-		build			(Dictionary)	(Optional)
-		Build script. E.g. make
-
-		external_commands
-			(Dictionary or List or String)	(Optional)
-		Dependency external commands.
 
 ==============================================================================
 FAQ						*neobundle-faq*

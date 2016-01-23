@@ -105,7 +105,6 @@ function! neobundle#init#_bundle(bundle) "{{{
           \ 'orig_name' : '',
           \ 'vim_version' : '',
           \ 'orig_opts' : {},
-          \ 'recipe' : '',
           \ 'base' : neobundle#get_neobundle_dir(),
           \ 'install_rev' : '',
           \ 'install_process_timeout'

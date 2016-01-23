@@ -1,5 +1,5 @@
 test: vim-themis
-	vim-themis/bin/themis --reporter spec test/commands.vim test/parse.vim test/recipe.vim test/sample.vim test/tsort.vim test/toml.vim
+	vim-themis/bin/themis --reporter spec test/commands.vim test/parse.vim test/sample.vim test/tsort.vim test/toml.vim
 	vim-themis/bin/themis --reporter spec test/source.vim
 	vim-themis/bin/themis --reporter spec test/lock.vim
 

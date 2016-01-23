@@ -83,11 +83,6 @@ command! -nargs=+
       \ call neobundle#parser#fetch(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
-command! -nargs=+ -bar
-      \ NeoBundleRecipe
-      \ call neobundle#parser#recipe(
-      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
-
 command! -nargs=1 -complete=dir -bar
       \ NeoBundleLocal
       \ call neobundle#local(<q-args>, {})
