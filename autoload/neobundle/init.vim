@@ -249,14 +249,6 @@ function! s:init_lazy(bundle) "{{{
     let bundle.pre_cmd = substitute(bundle.normalized_name, '[_-]', '', 'g')
   endif
 
-  if empty(bundle.on_unite)
-        \ && bundle.name =~# '^\%(vim-\)\?unite-'
-    let unite_source = matchstr(bundle.name, '^\%(vim-\)\?unite-\zs.*')
-    if unite_source != ''
-      let bundle.on_unite = [unite_source]
-    endif
-  endif
-
   " Auto convert2list.
   for key in filter([
         \ 'on_ft', 'on_path', 'on_cmd',

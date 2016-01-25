@@ -1162,8 +1162,6 @@ OPTIONS 					*neobundle-options*
 		Unite source name list.
 		Note: To use this feature, you must install latest
 		|unite.vim|.
-		Note: If bundle name starts "unite-", this option is
-		set automatically.
 
 					*neobundle-options-unite_sources*
 		It is deprecated key.
