@@ -74,7 +74,7 @@ set wildignore+=.git/*
 set wildignore+=*/.git/*
 
 function! s:suite.pattern_a()
-  call s:assert.equals(neobundle#is_sourced('echodoc'), 0)
+  call s:assert.equals(neobundle#is_sourced('echodoc'), 1)
   call s:assert.equals(neobundle#is_sourced('unite-build'), 1)
 endfunction
 
