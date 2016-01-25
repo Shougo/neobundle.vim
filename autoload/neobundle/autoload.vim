@@ -95,20 +95,17 @@ function! neobundle#autoload#get_unite_sources() "{{{
 endfunction"}}}
 
 function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "{{{
-  " Delete dummy commands.
-  silent! execute 'delcommand' a:command
-
   call neobundle#config#source(a:name)
-
-  let range = (a:line1 == a:line2) ? '' :
-        \ (a:line1==line("'<") && a:line2==line("'>")) ?
-        \ "'<,'>" : a:line1.",".a:line2
 
   if !exists(':' . a:command)
     call neobundle#util#print_error(
           \ printf('command %s is not found.', a:command))
     return
   endif
+
+  let range = (a:line1 == a:line2) ? '' :
+        \ (a:line1==line("'<") && a:line2==line("'>")) ?
+        \ "'<,'>" : a:line1.",".a:line2
 
   try
     execute range.a:command.a:bang a:args

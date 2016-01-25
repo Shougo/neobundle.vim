@@ -182,6 +182,13 @@ function! neobundle#config#source(names, ...) "{{{
     let bundle.sourced = 1
     let bundle.disabled = 0
 
+    if !empty(bundle.dummy_commands)
+      for command in bundle.dummy_commands
+        silent! execute 'delcommand' command
+      endfor
+      let bundle.dummy_commands = []
+    endif
+
     if !empty(bundle.dummy_mappings)
       for [mode, mapping] in bundle.dummy_mappings
         silent! execute mode.'unmap' mapping
