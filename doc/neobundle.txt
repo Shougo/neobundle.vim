@@ -158,12 +158,10 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 		Note: You must execute |:NeoBundle| commands in
 		|neobundle#begin()| or |neobundle#append()| block.
 >
-	if has('vim_starting')
-	  if &compatible
-	    set nocompatible
-	  endif
-	  set runtimepath+={path to neobundle directory}
+	if &compatible
+	  set nocompatible
 	endif
+	set runtimepath^={path to neobundle directory}
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 
@@ -1601,7 +1599,6 @@ Note: You must not call |neobundle#begin()| inside a "has('vim_starting')"
 block.
 >
 	if has('vim_starting')
-	  set runtimepath+={path to neobundle directory}
 	  " This is wrong neobundle#begin().
 	  "call neobundle#begin(expand('~/.vim/bundle'))
 	endif
