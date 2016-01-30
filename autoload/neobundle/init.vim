@@ -197,7 +197,7 @@ function! neobundle#init#_bundle(bundle) "{{{
   endif
 
   if type(bundle.disabled) == type('')
-    sandbox let bundle.disabled = eval(bundle.disabled)
+    let bundle.disabled = eval(bundle.disabled)
   endif
 
   let bundle.disabled = bundle.disabled
