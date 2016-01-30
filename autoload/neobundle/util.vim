@@ -235,8 +235,7 @@ function! s:echo(expr, mode) "{{{
   endif
 
   if has('vim_starting') || a:mode ==# 'error'
-    let m = join(msg, "\n")
-    call s:echo_mode(m, a:mode)
+    call s:echo_mode(join(msg, "\n"), a:mode)
     return
   endif
 
@@ -253,8 +252,7 @@ function! s:echo(expr, mode) "{{{
     for i in range(0, len(msg)-1, height)
       redraw
 
-      let m = join(msg[i : i+height-1], "\n")
-      call s:echo_mode(m, a:mode)
+      call s:echo_mode(join(msg[i : i+height-1], "\n"), a:mode)
     endfor
   finally
     let &more = more_save
@@ -264,6 +262,11 @@ function! s:echo(expr, mode) "{{{
 endfunction"}}}
 function! s:echo_mode(m, mode) "{{{
   for m in split(a:m, '\r\?\n', 1)
+    if !has('vim_starting') && a:mode !=# 'error'
+      let m = neobundle#util#truncate_skipping(
+            \ m, &columns - 1, &columns/3, '...')
+    endif
+
     if a:mode ==# 'error'
       echohl WarningMsg | echomsg m | echohl None
     elseif a:mode ==# 'echomsg'
@@ -447,6 +450,50 @@ function! neobundle#util#wget(uri, outpath) "{{{
   else
     return 'E: curl or wget command is not available!'
   endif
+endfunction"}}}
+
+function! neobundle#util#truncate_skipping(str, max, footer_width, separator) abort "{{{
+  let width = s:wcswidth(a:str)
+  if width <= a:max
+    let ret = a:str
+  else
+    let header_width = a:max - s:wcswidth(a:separator) - a:footer_width
+    let ret = s:strwidthpart(a:str, header_width) . a:separator
+          \ . s:strwidthpart_reverse(a:str, a:footer_width)
+  endif
+
+  return ret
+endfunction"}}}
+function! s:strwidthpart(str, width) abort "{{{
+  if a:width <= 0
+    return ''
+  endif
+  let ret = a:str
+  let width = s:wcswidth(a:str)
+  while width > a:width
+    let char = matchstr(ret, '.$')
+    let ret = ret[: -1 - len(char)]
+    let width -= s:wcswidth(char)
+  endwhile
+
+  return ret
+endfunction"}}}
+function! s:strwidthpart_reverse(str, width) abort "{{{
+  if a:width <= 0
+    return ''
+  endif
+  let ret = a:str
+  let width = s:wcswidth(a:str)
+  while width > a:width
+    let char = matchstr(ret, '^.')
+    let ret = ret[len(char) :]
+    let width -= s:wcswidth(char)
+  endwhile
+
+  return ret
+endfunction"}}}
+function! s:wcswidth(str) abort "{{{
+  return v:version >= 704 ? strwidth(a:str) : strlen(a:str)
 endfunction"}}}
 
 let &cpo = s:save_cpo
