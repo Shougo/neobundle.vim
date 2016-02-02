@@ -494,7 +494,7 @@ function! neobundle#config#add(bundle) "{{{
       call neobundle#config#rtp_add(bundle)
 
       if bundle.force
-        runtime! plugin/**/*.vim
+        execute 'runtime!' bundle.rtp . '/plugin/**/*.vim'
       endif
     endif
   elseif bundle.lazy && !bundle.sourced
