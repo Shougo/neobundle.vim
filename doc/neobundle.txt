@@ -1100,11 +1100,6 @@ OPTIONS 					*neobundle-options*
 			name		(String) or (List)
 			Command name or the list of command names.
 
-			complete	(String)
-			The type of completion supported for the
-			input.  Refer to |:command-completion| for
-			information.
-
 			Example: >
 		NeoBundle 'Shougo/vimfiler.vim', {
 		      \ 'depends' : 'Shougo/unite.vim',

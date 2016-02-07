@@ -606,8 +606,7 @@ function! s:add_dummy_commands(bundle) "{{{
     for name in neobundle#util#convert2list(command.name)
       " Define dummy commands.
       silent! execute 'command '
-            \ . ('-complete=' . get(command, 'complete',
-            \    'customlist,neobundle#autoload#_command_dummy_complete'))
+            \ . '-complete=customlist,neobundle#autoload#_command_dummy_complete'
             \ . ' -bang -bar -range -nargs=*' name printf(
             \ "call neobundle#autoload#_command(%s, %s, <q-args>,
             \  expand('<bang>'), expand('<line1>'), expand('<line2>'))",
