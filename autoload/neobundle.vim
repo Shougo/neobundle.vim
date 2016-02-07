@@ -446,10 +446,6 @@ function! neobundle#load_toml(filename, ...) "{{{
   return neobundle#parser#load_toml(a:filename, opts)
 endfunction"}}}
 
-function! neobundle#get_unite_sources() "{{{
-  return neobundle#autoload#get_unite_sources()
-endfunction"}}}
-
 let s:init_vim_path = fnamemodify(expand('<sfile>'), ':h')
       \ . '/neobundle/init.vim'
 function! neobundle#get_cache_version() "{{{

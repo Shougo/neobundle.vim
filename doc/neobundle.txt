@@ -263,8 +263,6 @@ neobundle#load_toml({filename}, [{options}])
 		  'Shougo/context_filetype.vim']
 		on_i = 1
 		on_ft = 'snippet'
-		on_unite = [ 'neosnippet',
-		  'neosnippet/user', 'neosnippet/runtime']
 
 		  [[plugins.depends]]
 		  repo = 'honza/vim-snippet'
@@ -1155,15 +1153,6 @@ OPTIONS 					*neobundle-options*
 						*neobundle-options-mappings*
 		It is deprecated key.
 
-						*neobundle-options-on_unite*
-		on_unite	(List) or (String)
-		Unite source name list.
-		Note: To use this feature, you must install latest
-		|unite.vim|.
-
-					*neobundle-options-unite_sources*
-		It is deprecated key.
-
 						*neobundle-options-on_i*
 		on_i		(Number)
 		If set to non-zero, neobundle will |:NeoBundleSource|
@@ -1255,7 +1244,6 @@ OPTIONS 					*neobundle-options*
 	      \ }
 	NeoBundle 'Shougo/junkfile.vim', {
 	      \   'on_cmd' : 'JunkfileOpen',
-	      \   'on_unite' : ['junkfile', 'junkfile/new'],
 	      \ }
 	NeoBundle 'tyru/winmove.vim', {
 	      \ 'on_map' : [

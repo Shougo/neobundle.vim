@@ -295,12 +295,6 @@ function! s:suite.autoload()
 
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://github.com/Shougo/neobundle.vim.git',
-        \ [{ 'unite_sources' : 'unite-foo' }])
-  call s:assert.equals(bundle.on_unite, ['unite-foo'])
-  call s:assert.equals(bundle.lazy, 1)
-
-  let bundle = neobundle#parser#_init_bundle(
-        \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'insert' : 1 }])
   call s:assert.equals(bundle.on_i, 1)
   call s:assert.equals(bundle.lazy, 1)

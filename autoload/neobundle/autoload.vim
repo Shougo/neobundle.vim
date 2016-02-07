@@ -65,35 +65,6 @@ function! neobundle#autoload#init() "{{{
   augroup END
 endfunction"}}}
 
-function! neobundle#autoload#unite_sources(sources) "{{{
-  let bundles = []
-  let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
-          \ "!empty(v:val.on_unite)")
-  for source_name in a:sources
-    if source_name ==# 'source'
-      " In source source, load all sources.
-      let bundles += copy(sources_bundles)
-    else
-      let bundles += filter(copy(sources_bundles),
-            \ "!empty(filter(copy(v:val.on_unite),
-            \    'stridx(source_name, v:val) >= 0'))")
-    endif
-  endfor
-
-  call neobundle#config#source_bundles(neobundle#util#uniq(bundles))
-endfunction"}}}
-
-function! neobundle#autoload#get_unite_sources() "{{{
-  let _ = []
-  let sources_bundles = filter(neobundle#config#get_autoload_bundles(),
-          \ "!empty(v:val.on_unite)")
-  for bundle in sources_bundles
-    let _ += bundle.on_unite
-  endfor
-
-  return _
-endfunction"}}}
-
 function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "{{{
   call neobundle#config#source(a:name)
 
