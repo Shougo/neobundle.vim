@@ -31,7 +31,7 @@ let s:install_info_version = '3.0'
 let s:log = []
 let s:updates_log = []
 
-function! neobundle#installer#update(bundles) "{{{
+function! neobundle#installer#update(bundles) abort "{{{
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
           \ '"sudo vim" is detected. This feature is disabled.')
@@ -56,7 +56,7 @@ function! neobundle#installer#update(bundles) "{{{
   NeoBundleRemotePlugins
 endfunction"}}}
 
-function! neobundle#installer#build(bundle) "{{{
+function! neobundle#installer#build(bundle) abort "{{{
   if !empty(a:bundle.build_commands)
         \ && neobundle#config#check_commands(a:bundle.build_commands)
       call neobundle#installer#log(
@@ -117,7 +117,7 @@ function! neobundle#installer#build(bundle) "{{{
   return neobundle#util#get_last_status()
 endfunction"}}}
 
-function! neobundle#installer#reinstall(bundles) "{{{
+function! neobundle#installer#reinstall(bundles) abort "{{{
   let bundles = neobundle#util#uniq(a:bundles)
 
   for bundle in bundles
@@ -153,7 +153,7 @@ function! neobundle#installer#reinstall(bundles) "{{{
   call neobundle#installer#update(bundles)
 endfunction"}}}
 
-function! neobundle#installer#get_reinstall_bundles(bundles) "{{{
+function! neobundle#installer#get_reinstall_bundles(bundles) abort "{{{
   call neobundle#installer#_load_install_info(a:bundles)
 
   let reinstall_bundles = filter(copy(a:bundles),
@@ -189,7 +189,7 @@ function! neobundle#installer#get_reinstall_bundles(bundles) "{{{
   return reinstall_bundles
 endfunction"}}}
 
-function! neobundle#installer#get_updated_bundles_message(bundles) "{{{
+function! neobundle#installer#get_updated_bundles_message(bundles) abort "{{{
   let msg = ''
 
   let installed_bundles = filter(copy(a:bundles),
@@ -220,7 +220,7 @@ function! neobundle#installer#get_updated_bundles_message(bundles) "{{{
   return msg
 endfunction"}}}
 
-function! neobundle#installer#get_errored_bundles_message(bundles) "{{{
+function! neobundle#installer#get_errored_bundles_message(bundles) abort "{{{
   if empty(a:bundles)
     return ''
   endif
@@ -233,7 +233,7 @@ function! neobundle#installer#get_errored_bundles_message(bundles) "{{{
   return msg
 endfunction"}}}
 
-function! neobundle#installer#get_sync_command(bang, bundle, number, max) "{{{
+function! neobundle#installer#get_sync_command(bang, bundle, number, max) abort "{{{
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
     return ['E: Unknown Type', '']
@@ -257,7 +257,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max) "{{{
   return [cmd, message]
 endfunction"}}}
 
-function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max) "{{{
+function! neobundle#installer#get_revision_lock_command(bang, bundle, number, max) abort "{{{
   let type = neobundle#config#get_types(a:bundle.type)
   if empty(type)
     return ['E: Unknown Type', '']
@@ -272,7 +272,7 @@ function! neobundle#installer#get_revision_lock_command(bang, bundle, number, ma
   return [cmd, '']
 endfunction"}}}
 
-function! neobundle#installer#get_revision_number(bundle) "{{{
+function! neobundle#installer#get_revision_number(bundle) abort "{{{
   let cwd = getcwd()
   let type = neobundle#config#get_types(a:bundle.type)
 
@@ -306,7 +306,7 @@ function! neobundle#installer#get_revision_number(bundle) "{{{
   endtry
 endfunction"}}}
 
-function! s:get_commit_date(bundle) "{{{
+function! s:get_commit_date(bundle) abort "{{{
   let cwd = getcwd()
   try
     let type = neobundle#config#get_types(a:bundle.type)
@@ -325,7 +325,7 @@ function! s:get_commit_date(bundle) "{{{
   endtry
 endfunction"}}}
 
-function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev) "{{{
+function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev) abort "{{{
   let cwd = getcwd()
   try
     let type = neobundle#config#get_types(a:bundle.type)
@@ -344,7 +344,7 @@ function! neobundle#installer#get_updated_log_message(bundle, new_rev, old_rev) 
   endtry
 endfunction"}}}
 
-function! neobundle#installer#sync(bundle, context, is_unite) "{{{
+function! neobundle#installer#sync(bundle, context, is_unite) abort "{{{
   let a:context.source__number += 1
 
   let num = a:context.source__number
@@ -448,7 +448,7 @@ function! neobundle#installer#sync(bundle, context, is_unite) "{{{
   call add(a:context.source__processes, process)
 endfunction"}}}
 
-function! neobundle#installer#check_output(context, process, is_unite) "{{{
+function! neobundle#installer#check_output(context, process, is_unite) abort "{{{
   if has('nvim') && a:is_unite && has_key(a:process, 'proc')
     let is_timeout = (localtime() - a:process.start_time)
           \             >= a:process.bundle.install_process_timeout
@@ -586,7 +586,7 @@ function! neobundle#installer#check_output(context, process, is_unite) "{{{
   let a:process.eof = 1
 endfunction"}}}
 
-function! neobundle#installer#lock_revision(process, context, is_unite) "{{{
+function! neobundle#installer#lock_revision(process, context, is_unite) abort "{{{
   let num = a:process.number
   let max = a:context.source__max_bundles
   let bundle = a:process.bundle
@@ -633,7 +633,7 @@ function! neobundle#installer#lock_revision(process, context, is_unite) "{{{
   endif
 endfunction"}}}
 
-function! neobundle#installer#get_release_revision(bundle, command) "{{{
+function! neobundle#installer#get_release_revision(bundle, command) abort "{{{
   let cwd = getcwd()
   let rev = ''
   try
@@ -647,7 +647,7 @@ function! neobundle#installer#get_release_revision(bundle, command) "{{{
   return rev
 endfunction"}}}
 
-function! s:save_install_info(bundles) "{{{
+function! s:save_install_info(bundles) abort "{{{
   let s:install_info = {}
   for bundle in filter(copy(a:bundles),
         \ "!v:val.local && has_key(v:val, 'updated_time')")
@@ -668,7 +668,7 @@ function! s:save_install_info(bundles) "{{{
   call s:save_lockfile(a:bundles)
 endfunction"}}}
 
-function! neobundle#installer#_load_install_info(bundles) "{{{
+function! neobundle#installer#_load_install_info(bundles) abort "{{{
   let install_info_path =
         \ neobundle#get_neobundle_dir() . '/.neobundle/install_info'
   if !exists('s:install_info')
@@ -701,7 +701,7 @@ function! neobundle#installer#_load_install_info(bundles) "{{{
   return s:install_info
 endfunction"}}}
 
-function! s:get_skipped_message(number, max, bundle, prefix, message) "{{{
+function! s:get_skipped_message(number, max, bundle, prefix, message) abort "{{{
   let messages = [a:prefix . printf('(%'.len(a:max).'d/%d): |%s| %s',
           \ a:number, a:max, a:bundle.name, 'Skipped')]
   if a:message != ''
@@ -710,7 +710,7 @@ function! s:get_skipped_message(number, max, bundle, prefix, message) "{{{
   return messages
 endfunction"}}}
 
-function! neobundle#installer#log(msg, ...) "{{{
+function! neobundle#installer#log(msg, ...) abort "{{{
   let msg = neobundle#util#convert2list(a:msg)
   if empty(msg)
     return
@@ -720,7 +720,7 @@ function! neobundle#installer#log(msg, ...) "{{{
   call s:append_log_file(msg)
 endfunction"}}}
 
-function! neobundle#installer#update_log(msg, ...) "{{{
+function! neobundle#installer#update_log(msg, ...) abort "{{{
   let is_unite = get(a:000, 0, 0)
 
   if !(&filetype == 'unite' || is_unite)
@@ -732,7 +732,7 @@ function! neobundle#installer#update_log(msg, ...) "{{{
   let s:updates_log += neobundle#util#convert2list(a:msg)
 endfunction"}}}
 
-function! neobundle#installer#echomsg(msg) "{{{
+function! neobundle#installer#echomsg(msg) abort "{{{
   call neobundle#util#redraw_echomsg(a:msg)
 
   call neobundle#installer#log(a:msg)
@@ -740,7 +740,7 @@ function! neobundle#installer#echomsg(msg) "{{{
   let s:updates_log += neobundle#util#convert2list(a:msg)
 endfunction"}}}
 
-function! neobundle#installer#error(msg) "{{{
+function! neobundle#installer#error(msg) abort "{{{
   let msgs = neobundle#util#convert2list(a:msg)
   if empty(msgs)
     return
@@ -752,7 +752,7 @@ function! neobundle#installer#error(msg) "{{{
   call s:append_log_file(msgs)
 endfunction"}}}
 
-function! s:append_log_file(msg) "{{{
+function! s:append_log_file(msg) abort "{{{
   if g:neobundle#log_filename == ''
     return
   endif
@@ -770,26 +770,26 @@ function! s:append_log_file(msg) "{{{
   call writefile(msg, g:neobundle#log_filename)
 endfunction"}}}
 
-function! neobundle#installer#get_log() "{{{
+function! neobundle#installer#get_log() abort "{{{
   return s:log
 endfunction"}}}
 
-function! neobundle#installer#get_updates_log() "{{{
+function! neobundle#installer#get_updates_log() abort "{{{
   return s:updates_log
 endfunction"}}}
 
-function! neobundle#installer#clear_log() "{{{
+function! neobundle#installer#clear_log() abort "{{{
   let s:log = []
   let s:updates_log = []
 endfunction"}}}
 
-function! neobundle#installer#get_progress_message(bundle, number, max) "{{{
+function! neobundle#installer#get_progress_message(bundle, number, max) abort "{{{
   return printf('(%'.len(a:max).'d/%d) [%-20s] %s',
           \ a:number, a:max,
           \ repeat('=', (a:number*20/a:max)), a:bundle.name)
 endfunction"}}}
 
-function! neobundle#installer#get_tags_info() "{{{
+function! neobundle#installer#get_tags_info() abort "{{{
   let path = neobundle#get_neobundle_dir() . '/.neobundle/tags_info'
   if !filereadable(path)
     return []
@@ -798,7 +798,7 @@ function! neobundle#installer#get_tags_info() "{{{
   return readfile(path)
 endfunction"}}}
 
-function! s:save_lockfile(bundles) "{{{
+function! s:save_lockfile(bundles) abort "{{{
   let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
   let dir = fnamemodify(path, ':h')
   if !isdirectory(dir)
@@ -812,14 +812,14 @@ function! s:save_lockfile(bundles) "{{{
         \          escape(v:val[0], ' \'), v:val[1])")), path)
 endfunction"}}}
 
-function! s:source_lockfile() "{{{
+function! s:source_lockfile() abort "{{{
   let path = neobundle#get_neobundle_dir() . '/NeoBundle.lock'
   if filereadable(path)
     execute 'source' fnameescape(path)
   endif
 endfunction"}}}
 
-function! s:reload(bundles) "{{{
+function! s:reload(bundles) abort "{{{
   if empty(a:bundles)
     return
   endif

@@ -4,7 +4,7 @@ set cpo&vim
 "
 " public api
 "
-function! neobundle#TOML#parse(text)
+function! neobundle#TOML#parse(text) abort
   let input = {
   \   'text': a:text,
   \   'p': 0,
@@ -13,7 +13,7 @@ function! neobundle#TOML#parse(text)
   return s:_parse(input)
 endfunction
 
-function! neobundle#TOML#parse_file(filename)
+function! neobundle#TOML#parse_file(filename) abort
   if !filereadable(a:filename)
     throw printf("vital: Text.TOML: No such file `%s'.", a:filename)
   endif
@@ -31,13 +31,13 @@ let s:skip_pattern = '\C^\%(\_s\+\|' . "#[^\r\n]*" . '\)'
 let s:table_name_pattern = '\%([^ [:tab:]#.[\]=]\+\)'
 let s:table_key_pattern = s:table_name_pattern
 
-function! s:_skip(input)
+function! s:_skip(input) abort
   while s:_match(a:input, '\%(\_s\|#\)')
     let a:input.p = matchend(a:input.text, s:skip_pattern, a:input.p)
   endwhile
 endfunction
 
-function! s:_consume(input, pattern)
+function! s:_consume(input, pattern) abort
   call s:_skip(a:input)
   let end = matchend(a:input.text, '\C^' . a:pattern, a:input.p)
 
@@ -52,15 +52,15 @@ function! s:_consume(input, pattern)
   return matched
 endfunction
 
-function! s:_match(input, pattern)
+function! s:_match(input, pattern) abort
   return match(a:input.text, '\C^' . a:pattern, a:input.p) != -1
 endfunction
 
-function! s:_eof(input)
+function! s:_eof(input) abort
   return a:input.p >= a:input.length
 endfunction
 
-function! s:_error(input)
+function! s:_error(input) abort
   let buf = []
   let offset = 0
   while (a:input.p + offset) < a:input.length && a:input.text[a:input.p + offset] !~# "[\r\n]"
@@ -71,7 +71,7 @@ function! s:_error(input)
   throw printf("vital: Text.TOML: Illegal toml format at `%s'.", join(buf, ''))
 endfunction
 
-function! s:_parse(input)
+function! s:_parse(input) abort
   let data = {}
 
   call s:_skip(a:input)
@@ -105,17 +105,17 @@ function! s:_parse(input)
   return data
 endfunction
 
-function! s:_key(input)
+function! s:_key(input) abort
   let s = s:_consume(a:input, s:table_key_pattern)
   return s
 endfunction
 
-function! s:_equals(input)
+function! s:_equals(input) abort
   call s:_consume(a:input, '=')
   return '='
 endfunction
 
-function! s:_value(input)
+function! s:_value(input) abort
   call s:_skip(a:input)
 
   if s:_match(a:input, '"\{3}')
@@ -142,13 +142,13 @@ endfunction
 "
 " String
 "
-function! s:_basic_string(input)
+function! s:_basic_string(input) abort
   let s = s:_consume(a:input, '"\%(\\"\|[^"]\)*"')
   let s = s[1 : -2]
   return s:_unescape(s)
 endfunction
 
-function! s:_multiline_basic_string(input)
+function! s:_multiline_basic_string(input) abort
   let s = s:_consume(a:input, '"\{3}\_.\{-}"\{3}')
   let s = s[3 : -4]
   let s = substitute(s, "^\n", '', '')
@@ -156,12 +156,12 @@ function! s:_multiline_basic_string(input)
   return s:_unescape(s)
 endfunction
 
-function! s:_literal(input)
+function! s:_literal(input) abort
   let s = s:_consume(a:input, "'[^']*'")
   return s[1 : -2]
 endfunction
 
-function! s:_multiline_literal(input)
+function! s:_multiline_literal(input) abort
   let s = s:_consume(a:input, "'\\{3}.\\{-}'\\{3}")
   let s = s[3 : -4]
   let s = substitute(s, "^\n", '', '')
@@ -171,7 +171,7 @@ endfunction
 "
 " Integer
 "
-function! s:_integer(input)
+function! s:_integer(input) abort
   let s = s:_consume(a:input, '[+-]\?\d\+')
   return str2nr(s)
 endfunction
@@ -179,7 +179,7 @@ endfunction
 "
 " Float
 "
-function! s:_float(input)
+function! s:_float(input) abort
   if s:_match(a:input, '[+-]\?[0-9.]\+[eE][+-]\?\d\+')
     return s:_exponent(a:input)
   else
@@ -187,12 +187,12 @@ function! s:_float(input)
   endif
 endfunction
 
-function! s:_fractional(input)
+function! s:_fractional(input) abort
   let s = s:_consume(a:input, '[+-]\?[0-9.]\+')
   return str2float(s)
 endfunction
 
-function! s:_exponent(input)
+function! s:_exponent(input) abort
   let s = s:_consume(a:input, '[+-]\?[0-9.]\+[eE][+-]\?\d\+')
   return str2float(s)
 endfunction
@@ -200,7 +200,7 @@ endfunction
 "
 " Boolean
 "
-function! s:_boolean(input)
+function! s:_boolean(input) abort
   let s = s:_consume(a:input, '\%(true\|false\)')
   return (s ==# 'true') ? 1 : 0
 endfunction
@@ -208,7 +208,7 @@ endfunction
 "
 " Datetime
 "
-function! s:_datetime(input)
+function! s:_datetime(input) abort
   let s = s:_consume(a:input, '\d\{4}-\d\{2}-\d\{2}T\d\{2}:\d\{2}:\d\{2}\%(Z\|-\?\d\{2}:\d\{2}\|\.\d\+-\d\{2}:\d\{2}\)')
   return s
 endfunction
@@ -216,7 +216,7 @@ endfunction
 "
 " Array
 "
-function! s:_array(input)
+function! s:_array(input) abort
   let ary = []
   let _ = s:_consume(a:input, '\[')
   call s:_skip(a:input)
@@ -232,7 +232,7 @@ endfunction
 "
 " Table
 "
-function! s:_table(input)
+function! s:_table(input) abort
   let tbl = {}
   let name = s:_consume(a:input, '\[\s*' . s:table_name_pattern . '\%(\s*\.\s*' . s:table_name_pattern . '\)*\s*\]')
   let name = name[1 : -2]
@@ -254,7 +254,7 @@ endfunction
 "
 " Array of tables
 "
-function! s:_array_of_tables(input)
+function! s:_array_of_tables(input) abort
   let tbl = {}
   let name = s:_consume(a:input, '\[\[\s*' . s:table_name_pattern . '\%(\s*\.\s*' . s:table_name_pattern . '\)*\s*\]\]')
   let name = name[2 : -3]
@@ -273,7 +273,7 @@ function! s:_array_of_tables(input)
   return [name, [tbl]]
 endfunction
 
-function! s:_unescape(text)
+function! s:_unescape(text) abort
   let text = a:text
   let text = substitute(text, '\\"', '"', 'g')
   let text = substitute(text, '\\b', "\b", 'g')
@@ -288,11 +288,11 @@ function! s:_unescape(text)
   return text
 endfunction
 
-function! s:_nr2char(nr)
+function! s:_nr2char(nr) abort
   return iconv(nr2char(a:nr), &encoding, 'utf8')
 endfunction
 
-function! s:_put_dict(dict, key, value)
+function! s:_put_dict(dict, key, value) abort
   let keys = split(a:key, '\.')
 
   let ref = a:dict
@@ -310,7 +310,7 @@ function! s:_put_dict(dict, key, value)
   let ref[keys[-1]] = a:value
 endfunction
 
-function! s:_put_array(dict, key, value)
+function! s:_put_array(dict, key, value) abort
   let keys = split(a:key, '\.')
 
   let ref = a:dict

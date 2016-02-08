@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#parser#bundle(arg, ...) "{{{
+function! neobundle#parser#bundle(arg, ...) abort "{{{
   let bundle = s:parse_arg(a:arg)
   let is_parse_only = get(a:000, 0, 0)
   if !is_parse_only
@@ -44,7 +44,7 @@ function! neobundle#parser#bundle(arg, ...) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#lazy(arg) "{{{
+function! neobundle#parser#lazy(arg) abort "{{{
   let bundle = s:parse_arg(a:arg)
   if empty(bundle)
     return {}
@@ -62,7 +62,7 @@ function! neobundle#parser#lazy(arg) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#fetch(arg) "{{{
+function! neobundle#parser#fetch(arg) abort "{{{
   let bundle = s:parse_arg(a:arg)
   if empty(bundle)
     return {}
@@ -77,7 +77,7 @@ function! neobundle#parser#fetch(arg) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#direct(arg) "{{{
+function! neobundle#parser#direct(arg) abort "{{{
   let bundle = neobundle#parser#bundle(a:arg, 1)
 
   if empty(bundle)
@@ -100,7 +100,7 @@ function! neobundle#parser#direct(arg) "{{{
   return bundle
 endfunction"}}}
 
-function! s:parse_arg(arg) "{{{
+function! s:parse_arg(arg) abort "{{{
   let arg = type(a:arg) == type([]) ?
    \ string(a:arg) : '[' . a:arg . ']'
   sandbox let args = eval(arg)
@@ -119,7 +119,7 @@ function! s:parse_arg(arg) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#_init_bundle(name, opts) "{{{
+function! neobundle#parser#_init_bundle(name, opts) abort "{{{
   let path = substitute(a:name, "['".'"]\+', '', 'g')
   if path[0] == '~'
     let path = neobundle#util#expand(path)
@@ -138,7 +138,7 @@ function! neobundle#parser#_init_bundle(name, opts) "{{{
   return bundle
 endfunction"}}}
 
-function! neobundle#parser#local(localdir, options, includes) "{{{
+function! neobundle#parser#local(localdir, options, includes) abort "{{{
   let base = fnamemodify(neobundle#util#expand(a:localdir), ':p')
   let directories = []
   for glob in a:includes
@@ -165,7 +165,7 @@ function! neobundle#parser#local(localdir, options, includes) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#parser#load_toml(filename, default) "{{{
+function! neobundle#parser#load_toml(filename, default) abort "{{{
   try
     let toml = neobundle#TOML#parse_file(neobundle#util#expand(a:filename))
   catch /vital: Text.TOML:/
@@ -221,7 +221,7 @@ function! neobundle#parser#load_toml(filename, default) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#parser#path(path, ...) "{{{
+function! neobundle#parser#path(path, ...) abort "{{{
   let opts = get(a:000, 0, {})
   let site = get(opts, 'site', g:neobundle#default_site)
   let path = substitute(a:path, '/$', '', '')
@@ -264,7 +264,7 @@ function! neobundle#parser#path(path, ...) "{{{
   return detect
 endfunction"}}}
 
-function! s:parse_options(opts) "{{{
+function! s:parse_options(opts) abort "{{{
   if empty(a:opts)
     return has_key(g:neobundle#default_options, '_') ?
           \ copy(g:neobundle#default_options['_']) : {}

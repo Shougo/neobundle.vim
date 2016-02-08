@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#neobundle_log#define() "{{{
+function! unite#sources#neobundle_log#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__NeoBundleLog_Message /.*/
         \ contained containedin=uniteSource__NeoBundleLog
   highlight default link uniteSource__NeoBundleLog_Message Comment
@@ -52,7 +52,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__NeoBundleLog_URI Underlined
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   return map(copy(neobundle#installer#get_log()), "{
         \ 'word' : (v:val =~ '^\\s*\\h\\w*://' ? ' -> diff URI' : v:val),
         \ 'kind' : (v:val =~ '^\\s*\\h\\w*://' ? 'uri' : 'word'),

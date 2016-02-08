@@ -34,7 +34,7 @@ call neobundle#util#set_default(
       \ 'g:neobundle_default_hg_protocol')
 "}}}
 
-function! neobundle#types#hg#define() "{{{
+function! neobundle#types#hg#define() abort "{{{
   return s:type
 endfunction"}}}
 
@@ -42,7 +42,7 @@ let s:type = {
       \ 'name' : 'hg',
       \ }
 
-function! s:type.detect(path, opts) "{{{
+function! s:type.detect(path, opts) abort "{{{
   if isdirectory(a:path.'/.hg')
     " Local repository.
     return { 'uri' : a:path, 'type' : 'hg' }
@@ -81,7 +81,7 @@ function! s:type.detect(path, opts) "{{{
 
   return { 'uri' : uri, 'type' : 'hg' }
 endfunction"}}}
-function! s:type.get_sync_command(bundle) "{{{
+function! s:type.get_sync_command(bundle) abort "{{{
   if !executable(g:neobundle#types#hg#command_path)
     return 'E: "hg" command is not installed.'
   endif
@@ -95,7 +95,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
   return g:neobundle#types#hg#command_path . ' ' . cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle) "{{{
+function! s:type.get_revision_number_command(bundle) abort "{{{
   if !executable(g:neobundle#types#hg#command_path)
     return ''
   endif
@@ -103,7 +103,7 @@ function! s:type.get_revision_number_command(bundle) "{{{
   return g:neobundle#types#hg#command_path
         \ . ' heads --quiet --rev default'
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle) "{{{
+function! s:type.get_revision_lock_command(bundle) abort "{{{
   if !executable(g:neobundle#types#hg#command_path)
         \ || a:bundle.rev == ''
     return ''

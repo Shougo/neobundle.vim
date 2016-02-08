@@ -33,7 +33,7 @@ call neobundle#util#set_default(
       \ executable('md5sum') ? 'md5sum' : '')
 "}}}
 
-function! neobundle#types#raw#define() "{{{
+function! neobundle#types#raw#define() abort "{{{
   return s:type
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:type = {
       \ 'name' : 'raw',
       \ }
 
-function! s:type.detect(path, opts) "{{{
+function! s:type.detect(path, opts) abort "{{{
   " No auto detect.
   let type = ''
   let name = ''
@@ -62,7 +62,7 @@ function! s:type.detect(path, opts) "{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri' : a:path, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle) "{{{
+function! s:type.get_sync_command(bundle) abort "{{{
   if a:bundle.script_type == ''
     return 'E: script_type is not found.'
   endif
@@ -82,7 +82,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle) "{{{
+function! s:type.get_revision_number_command(bundle) abort "{{{
   if g:neobundle#types#raw#calc_hash_command == ''
     return ''
   endif
@@ -97,7 +97,7 @@ function! s:type.get_revision_number_command(bundle) "{{{
         \ g:neobundle#types#raw#calc_hash_command,
         \ a:bundle.type__filepath)
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle) "{{{
+function! s:type.get_revision_lock_command(bundle) abort "{{{
   let new_rev = matchstr(a:bundle.new_rev, '^\S\+')
   if a:bundle.rev != '' && new_rev != '' &&
         \ new_rev !=# a:bundle.rev

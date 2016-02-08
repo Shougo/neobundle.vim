@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#autoload#init() "{{{
+function! neobundle#autoload#init() abort "{{{
   let s:active_auto_source = 0
   let s:loaded_path = 0
 
@@ -65,7 +65,7 @@ function! neobundle#autoload#init() "{{{
   augroup END
 endfunction"}}}
 
-function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "{{{
+function! neobundle#autoload#_command(command, name, args, bang, line1, line2) abort "{{{
   call neobundle#config#source(a:name)
 
   if !exists(':' . a:command)
@@ -86,7 +86,7 @@ function! neobundle#autoload#_command(command, name, args, bang, line1, line2) "
   endtry
 endfunction"}}}
 
-function! neobundle#autoload#_command_dummy_complete(arglead, cmdline, cursorpos) "{{{
+function! neobundle#autoload#_command_dummy_complete(arglead, cmdline, cursorpos) abort "{{{
   " Load plugins
   let command = tolower(matchstr(a:cmdline, '\a\S*'))
 
@@ -100,7 +100,7 @@ function! neobundle#autoload#_command_dummy_complete(arglead, cmdline, cursorpos
   return ['']
 endfunction"}}}
 
-function! neobundle#autoload#_mapping(mapping, name, mode) "{{{
+function! neobundle#autoload#_mapping(mapping, name, mode) abort "{{{
   let cnt = v:count > 0 ? v:count : ''
 
   let input = s:get_input()
@@ -133,7 +133,7 @@ function! neobundle#autoload#_mapping(mapping, name, mode) "{{{
   return ''
 endfunction"}}}
 
-function! neobundle#autoload#_source(bundle_name) "{{{
+function! neobundle#autoload#_source(bundle_name) abort "{{{
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "index(v:val.on_source, a:bundle_name) >= 0")
   if !empty(bundles)
@@ -153,7 +153,7 @@ function! neobundle#autoload#_set_function_prefixes(bundles) abort "{{{
   endfor
 endfunction"}}}
 
-function! s:on_filetype() "{{{
+function! s:on_filetype() abort "{{{
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "!empty(v:val.on_ft)")
   for filetype in add(neobundle#util#get_filetypes(), 'all')
@@ -162,7 +162,7 @@ function! s:on_filetype() "{{{
   endfor
 endfunction"}}}
 
-function! s:on_insert() "{{{
+function! s:on_insert() abort "{{{
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "v:val.on_i")
   if !empty(bundles)
@@ -171,7 +171,7 @@ function! s:on_insert() "{{{
   endif
 endfunction"}}}
 
-function! s:on_function() "{{{
+function! s:on_function() abort "{{{
   let function = expand('<amatch>')
   let function_prefix = substitute(function, '[^#]*$', '', '')
   if function_prefix =~# '^neobundle#'
@@ -189,7 +189,7 @@ function! s:on_function() "{{{
   call neobundle#config#source_bundles(bundles)
 endfunction"}}}
 
-function! s:on_command_prefix() "{{{
+function! s:on_command_prefix() abort "{{{
   let command = tolower(expand('<afile>'))
 
   let bundles = filter(neobundle#config#get_autoload_bundles(),
@@ -198,7 +198,7 @@ function! s:on_command_prefix() "{{{
   call neobundle#config#source_bundles(bundles)
 endfunction"}}}
 
-function! s:on_path(path, event) "{{{
+function! s:on_path(path, event) abort "{{{
   if a:path == ''
     return
   endif
@@ -230,7 +230,7 @@ function! s:on_path(path, event) "{{{
   endif
 endfunction"}}}
 
-function! s:source_focus() "{{{
+function! s:source_focus() abort "{{{
   let bundles = neobundle#util#sort_by(filter(
         \ neobundle#config#get_autoload_bundles(),
         \ "v:val.focus > 0"), 'v:val.focus')
@@ -245,7 +245,7 @@ function! s:source_focus() "{{{
   call feedkeys("g\<ESC>", 'n')
 endfunction"}}}
 
-function! s:get_input() "{{{
+function! s:get_input() abort "{{{
   let input = ''
   let termstr = "<M-_>"
 
@@ -269,7 +269,7 @@ function! s:get_input() "{{{
   return input
 endfunction"}}}
 
-function! s:get_lazy_bundles() "{{{
+function! s:get_lazy_bundles() abort "{{{
   return filter(neobundle#config#get_neobundles(),
         \ "!v:val.sourced && v:val.rtp != '' && v:val.lazy")
 endfunction"}}}

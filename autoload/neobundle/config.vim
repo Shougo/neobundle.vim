@@ -33,7 +33,7 @@ if !exists('s:neobundles')
   let neobundle#tapped = {}
 endif
 
-function! neobundle#config#init() "{{{
+function! neobundle#config#init() abort "{{{
   if neobundle#config#within_block()
     call neobundle#util#print_error(
           \ 'neobundle#begin()/neobundle#end() usage is invalid.')
@@ -54,7 +54,7 @@ function! neobundle#config#init() "{{{
   " Load extra bundles configuration.
   call neobundle#config#load_extra_bundles()
 endfunction"}}}
-function! neobundle#config#append() "{{{
+function! neobundle#config#append() abort "{{{
   if neobundle#config#within_block()
     call neobundle#util#print_error(
           \ 'neobundle#begin()/neobundle#end() usage is invalid.')
@@ -76,7 +76,7 @@ function! neobundle#config#append() "{{{
   let s:within_block = 1
   let s:lazy_rtp_bundles = []
 endfunction"}}}
-function! neobundle#config#final() "{{{
+function! neobundle#config#final() abort "{{{
   if !neobundle#config#within_block()
     call neobundle#util#print_error(
           \ 'neobundle#begin()/neobundle#end() usage is invalid.')
@@ -112,36 +112,36 @@ function! neobundle#config#final() "{{{
   let s:within_block = 0
   let s:lazy_rtp_bundles = []
 endfunction"}}}
-function! neobundle#config#within_block() "{{{
+function! neobundle#config#within_block() abort "{{{
   return s:within_block
 endfunction"}}}
 
-function! neobundle#config#get(name) "{{{
+function! neobundle#config#get(name) abort "{{{
   return get(s:neobundles, a:name, {})
 endfunction"}}}
 
-function! neobundle#config#get_neobundles() "{{{
+function! neobundle#config#get_neobundles() abort "{{{
   return values(s:neobundles)
 endfunction"}}}
 
-function! neobundle#config#get_enabled_bundles() "{{{
+function! neobundle#config#get_enabled_bundles() abort "{{{
   return filter(values(s:neobundles),
         \ "!v:val.disabled")
 endfunction"}}}
 
-function! neobundle#config#get_autoload_bundles() "{{{
+function! neobundle#config#get_autoload_bundles() abort "{{{
   return filter(values(s:neobundles),
         \ "!v:val.sourced && v:val.lazy && !v:val.disabled")
 endfunction"}}}
 
-function! neobundle#config#source_bundles(bundles) "{{{
+function! neobundle#config#source_bundles(bundles) abort "{{{
   if !empty(a:bundles)
     call neobundle#config#source(map(copy(a:bundles),
           \ "type(v:val) == type({}) ? v:val.name : v:val"))
   endif
 endfunction"}}}
 
-function! neobundle#config#check_not_exists(names, ...) "{{{
+function! neobundle#config#check_not_exists(names, ...) abort "{{{
   " For infinite loop.
   let self = get(a:000, 0, [])
 
@@ -164,7 +164,7 @@ function! neobundle#config#check_not_exists(names, ...) "{{{
   return _
 endfunction"}}}
 
-function! neobundle#config#source(names, ...) "{{{
+function! neobundle#config#source(names, ...) abort "{{{
   let is_force = get(a:000, 0, 1)
 
   let bundles = neobundle#config#search(
@@ -238,7 +238,7 @@ function! neobundle#config#source(names, ...) "{{{
   endif
 endfunction"}}}
 
-function! neobundle#config#disable(...) "{{{
+function! neobundle#config#disable(...) abort "{{{
   let bundle_names = neobundle#config#search(a:000)
   if empty(bundle_names)
     call neobundle#util#print_error(
@@ -262,30 +262,30 @@ function! neobundle#config#disable(...) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#config#is_disabled(name) "{{{
+function! neobundle#config#is_disabled(name) abort "{{{
   return get(neobundle#config#get(a:name), 'disabled', 1)
 endfunction"}}}
 
-function! neobundle#config#is_sourced(name) "{{{
+function! neobundle#config#is_sourced(name) abort "{{{
   return get(neobundle#config#get(a:name), 'sourced', 0)
 endfunction"}}}
 
-function! neobundle#config#is_installed(name) "{{{
+function! neobundle#config#is_installed(name) abort "{{{
   return isdirectory(get(neobundle#config#get(a:name), 'path', ''))
 endfunction"}}}
 
-function! neobundle#config#rm(bundle) "{{{
+function! neobundle#config#rm(bundle) abort "{{{
   call neobundle#config#rtp_rm(a:bundle)
   call remove(s:neobundles, a:bundle.name)
 endfunction"}}}
-function! neobundle#config#rmdir(path) "{{{
+function! neobundle#config#rmdir(path) abort "{{{
   for bundle in filter(neobundle#config#get_neobundles(),
         \ 'v:val.path ==# a:path')
     call neobundle#config#rm(bundle)
   endfor
 endfunction"}}}
 
-function! neobundle#config#get_types(...) "{{{
+function! neobundle#config#get_types(...) abort "{{{
   let type = get(a:000, 0, '')
 
   if type ==# 'git'
@@ -314,11 +314,11 @@ function! neobundle#config#get_types(...) "{{{
         \ get(filter(copy(s:neobundle_types), 'v:val.name ==# type'), 0, {})
 endfunction"}}}
 
-function! neobundle#config#rtp_rm_all_bundles() "{{{
+function! neobundle#config#rtp_rm_all_bundles() abort "{{{
   call filter(values(s:neobundles), 'neobundle#config#rtp_rm(v:val)')
 endfunction"}}}
 
-function! neobundle#config#rtp_rm(bundle) "{{{
+function! neobundle#config#rtp_rm(bundle) abort "{{{
   execute 'set rtp-='.fnameescape(a:bundle.rtp)
   if isdirectory(a:bundle.rtp.'/after')
     execute 'set rtp-='.s:get_rtp_after(a:bundle)
@@ -355,7 +355,7 @@ function! neobundle#config#rtp_add(bundle) abort "{{{
   call neobundle#call_hook('on_source', a:bundle)
 endfunction"}}}
 
-function! neobundle#config#search(bundle_names, ...) "{{{
+function! neobundle#config#search(bundle_names, ...) abort "{{{
   " For infinite loop.
   let self = get(a:000, 0, [])
 
@@ -387,12 +387,12 @@ function! neobundle#config#search(bundle_names, ...) "{{{
   return _
 endfunction"}}}
 
-function! neobundle#config#search_simple(bundle_names) "{{{
+function! neobundle#config#search_simple(bundle_names) abort "{{{
   return filter(neobundle#config#get_neobundles(),
         \ 'index(a:bundle_names, v:val.name) >= 0')
 endfunction"}}}
 
-function! neobundle#config#fuzzy_search(bundle_names) "{{{
+function! neobundle#config#fuzzy_search(bundle_names) abort "{{{
   let bundles = []
   for name in a:bundle_names
     let bundles += filter(neobundle#config#get_neobundles(),
@@ -415,7 +415,7 @@ function! neobundle#config#fuzzy_search(bundle_names) "{{{
   return _
 endfunction"}}}
 
-function! neobundle#config#load_extra_bundles() "{{{
+function! neobundle#config#load_extra_bundles() abort "{{{
   let path = neobundle#get_neobundle_dir() . '/extra_bundles.vim'
 
   if filereadable(path)
@@ -423,7 +423,7 @@ function! neobundle#config#load_extra_bundles() "{{{
   endif
 endfunction"}}}
 
-function! neobundle#config#save_direct(arg) "{{{
+function! neobundle#config#save_direct(arg) abort "{{{
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
           \ '"sudo vim" is detected. This feature is disabled.')
@@ -435,7 +435,7 @@ function! neobundle#config#save_direct(arg) "{{{
   call writefile(add(bundles, 'NeoBundle ' . a:arg), path)
 endfunction"}}}
 
-function! neobundle#config#set(name, dict) "{{{
+function! neobundle#config#set(name, dict) abort "{{{
   let bundle = neobundle#config#get(a:name)
   if empty(bundle)
     call neobundle#util#print_error(
@@ -456,7 +456,7 @@ function! neobundle#config#set(name, dict) "{{{
         \ neobundle#init#_bundle(extend(bundle, a:dict)))
 endfunction"}}}
 
-function! neobundle#config#add(bundle) "{{{
+function! neobundle#config#add(bundle) abort "{{{
   if empty(a:bundle)
     return
   endif
@@ -508,7 +508,7 @@ function! neobundle#config#add(bundle) "{{{
   endif
 endfunction"}}}
 
-function! neobundle#config#tsort(bundles) "{{{
+function! neobundle#config#tsort(bundles) abort "{{{
   let sorted = []
   let mark = {}
   for target in a:bundles
@@ -518,11 +518,11 @@ function! neobundle#config#tsort(bundles) "{{{
   return sorted
 endfunction"}}}
 
-function! neobundle#config#get_lazy_rtp_bundles() "{{{
+function! neobundle#config#get_lazy_rtp_bundles() abort "{{{
   return s:lazy_rtp_bundles
 endfunction"}}}
 
-function! neobundle#config#check_commands(commands) "{{{
+function! neobundle#config#check_commands(commands) abort "{{{
   " Environment check.
   if type(a:commands) == type([])
         \ || type(a:commands) == type('')
@@ -549,7 +549,7 @@ function! neobundle#config#check_commands(commands) "{{{
   endfor
 endfunction"}}}
 
-function! s:tsort_impl(target, bundles, mark, sorted) "{{{
+function! s:tsort_impl(target, bundles, mark, sorted) abort "{{{
   if has_key(a:mark, a:target.name)
     return
   endif
@@ -563,7 +563,7 @@ function! s:tsort_impl(target, bundles, mark, sorted) "{{{
   call add(a:sorted, a:target)
 endfunction"}}}
 
-function! s:on_vim_enter() "{{{
+function! s:on_vim_enter() abort "{{{
   if !empty(s:lazy_rtp_bundles)
     call neobundle#util#print_error(
           \ 'neobundle#begin() was called without calling ' .
@@ -576,7 +576,7 @@ function! s:on_vim_enter() "{{{
   call neobundle#call_hook('on_post_source')
 endfunction"}}}
 
-function! s:add_depends(bundle) "{{{
+function! s:add_depends(bundle) abort "{{{
   " Add depends.
   for depend in a:bundle.depends
     let depend.lazy = a:bundle.lazy
@@ -596,7 +596,7 @@ function! s:add_depends(bundle) "{{{
   endfor
 endfunction"}}}
 
-function! s:add_dummy_commands(bundle) "{{{
+function! s:add_dummy_commands(bundle) abort "{{{
   let a:bundle.dummy_commands = []
   for command in map(copy(a:bundle.on_cmd), "
         \ type(v:val) == type('') ?
@@ -616,7 +616,7 @@ function! s:add_dummy_commands(bundle) "{{{
     endfor
   endfor
 endfunction"}}}
-function! s:add_dummy_mappings(bundle) "{{{
+function! s:add_dummy_mappings(bundle) abort "{{{
   let a:bundle.dummy_mappings = []
   for [modes, mappings] in map(copy(a:bundle.on_map), "
         \   type(v:val) == type([]) ?
@@ -649,7 +649,7 @@ function! s:add_dummy_mappings(bundle) "{{{
   endfor
 endfunction"}}}
 
-function! s:on_source(bundle) "{{{
+function! s:on_source(bundle) abort "{{{
   if a:bundle.verbose && a:bundle.lazy
     redraw
     echo 'source:' a:bundle.name
@@ -683,10 +683,10 @@ function! s:on_source(bundle) "{{{
   endif
 endfunction"}}}
 
-function! s:clear_dummy(bundle) "{{{
+function! s:clear_dummy(bundle) abort "{{{
 endfunction"}}}
 
-function! s:is_reset_ftplugin(filetype, rtp) "{{{
+function! s:is_reset_ftplugin(filetype, rtp) abort "{{{
   for filetype in split(a:filetype, '\.')
     for directory in ['ftplugin', 'indent', 'syntax',
           \ 'after/ftplugin', 'after/indent', 'after/syntax']
@@ -703,7 +703,7 @@ function! s:is_reset_ftplugin(filetype, rtp) "{{{
   return 0
 endfunction"}}}
 
-function! s:reset_ftplugin() "{{{
+function! s:reset_ftplugin() abort "{{{
   let filetype_out = s:filetype_off()
 
   if filetype_out =~# 'detection:ON'
@@ -735,7 +735,7 @@ function! s:reset_ftplugin() "{{{
   execute 'doautocmd FileType' &filetype
 endfunction"}}}
 
-function! s:filetype_off() "{{{
+function! s:filetype_off() abort "{{{
   let filetype_out = neobundle#util#redir('filetype')
 
   if filetype_out =~# 'plugin:ON'

@@ -30,7 +30,7 @@ let s:Cache = vital#of('unite').import('System.Cache')
 
 let s:repository_cache = []
 
-function! neobundle#sources#vim_scripts_org#define() "{{{
+function! neobundle#sources#vim_scripts_org#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -39,7 +39,7 @@ let s:source = {
       \ 'short_name' : 'vim.org',
       \ }
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let repository =
         \ 'https://raw.githubusercontent.com/vim-scraper/'
         \ .'vim-scraper.github.com/master/api/scripts_recent.json'
@@ -73,7 +73,7 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction"}}}
 
 " Misc.
-function! s:get_repository_plugins(context, path) "{{{
+function! s:get_repository_plugins(context, path) abort "{{{
   let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
 
   if a:context.is_redraw || !s:Cache.filereadable(cache_dir, a:path)
@@ -134,7 +134,7 @@ function! s:get_repository_plugins(context, path) "{{{
   return s:repository_cache
 endfunction"}}}
 
-function! s:convert_vim_scripts_data(data) "{{{
+function! s:convert_vim_scripts_data(data) abort "{{{
   return map(copy(a:data), "{
         \ 'name' : v:val.n,
         \ 'raw_type' : v:val.t,
@@ -144,7 +144,7 @@ function! s:convert_vim_scripts_data(data) "{{{
         \ }")
 endfunction"}}}
 
-function! s:convert2script_type(type) "{{{
+function! s:convert2script_type(type) abort "{{{
   if a:type ==# 'utility'
     return 'plugin'
   elseif a:type ==# 'color scheme'

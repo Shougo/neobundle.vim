@@ -32,14 +32,14 @@ let s:repository =
       \ . '028d6ae320cc8f354f88/raw/'
       \ . '3b62ad42d39a4d3d4f236a45e00eb6b03ca23352/vim-pi.json'
 
-function! neobundle#metadata#get(...) "{{{
+function! neobundle#metadata#get(...) abort "{{{
   if empty(s:metadata)
     call s:load()
   endif
   return (a:0 == 0) ? copy(s:metadata) : get(s:metadata, a:1, {})
 endfunction"}}}
 
-function! neobundle#metadata#update() "{{{
+function! neobundle#metadata#update() abort "{{{
   " Reload cache.
   let cache_path = neobundle#get_neobundle_dir() . '/.neobundle/metadata.json'
 
@@ -65,7 +65,7 @@ function! neobundle#metadata#update() "{{{
   endif
 endfunction"}}}
 
-function! s:load() "{{{
+function! s:load() abort "{{{
   " Reload cache.
   let cache_path = neobundle#get_neobundle_dir() . '/.neobundle/metadata.json'
 

@@ -43,7 +43,7 @@ call neobundle#util#set_default(
       \ 'g:neobundle#types#git#pull_command', 'pull --ff --ff-only')
 "}}}
 
-function! neobundle#types#git#define() "{{{
+function! neobundle#types#git#define() abort "{{{
   return s:type
 endfunction"}}}
 
@@ -51,7 +51,7 @@ let s:type = {
       \ 'name' : 'git',
       \ }
 
-function! s:type.detect(path, opts) "{{{
+function! s:type.detect(path, opts) abort "{{{
   if a:path =~ '^/\|^\a:/' && s:is_git_dir(a:path.'/.git')
     " Local repository.
     return { 'uri' : a:path, 'type' : 'git' }
@@ -104,7 +104,7 @@ function! s:type.detect(path, opts) "{{{
 
   return { 'uri': uri, 'type' : 'git' }
 endfunction"}}}
-function! s:type.get_sync_command(bundle) "{{{
+function! s:type.get_sync_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return 'E: "git" command is not installed.'
   endif
@@ -136,14 +136,14 @@ function! s:type.get_sync_command(bundle) "{{{
 
   return g:neobundle#types#git#command_path . ' ' . cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle) "{{{
+function! s:type.get_revision_number_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
   return g:neobundle#types#git#command_path .' rev-parse HEAD'
 endfunction"}}}
-function! s:type.get_revision_pretty_command(bundle) "{{{
+function! s:type.get_revision_pretty_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
@@ -151,7 +151,7 @@ function! s:type.get_revision_pretty_command(bundle) "{{{
   return g:neobundle#types#git#command_path .
         \ ' log -1 --pretty=format:"%h [%cr] %s"'
 endfunction"}}}
-function! s:type.get_commit_date_command(bundle) "{{{
+function! s:type.get_commit_date_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
@@ -159,7 +159,7 @@ function! s:type.get_commit_date_command(bundle) "{{{
   return g:neobundle#types#git#command_path .
         \ ' log -1 --pretty=format:"%ct"'
 endfunction"}}}
-function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
+function! s:type.get_log_command(bundle, new_rev, old_rev) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
         \ || a:new_rev == '' || a:old_rev == ''
     return ''
@@ -178,7 +178,7 @@ function! s:type.get_log_command(bundle, new_rev, old_rev) "{{{
   " return g:neobundle#types#git#command_path .
   "      \ ' log HEAD^^^^..HEAD --graph --pretty=format:"%h [%cr] %s"'
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle) "{{{
+function! s:type.get_revision_lock_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
@@ -196,14 +196,14 @@ function! s:type.get_revision_lock_command(bundle) "{{{
 
   return g:neobundle#types#git#command_path . ' checkout ' . rev
 endfunction"}}}
-function! s:type.get_gc_command(bundle) "{{{
+function! s:type.get_gc_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
 
   return g:neobundle#types#git#command_path .' gc'
 endfunction"}}}
-function! s:type.get_revision_remote_command(bundle) "{{{
+function! s:type.get_revision_remote_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
@@ -216,7 +216,7 @@ function! s:type.get_revision_remote_command(bundle) "{{{
   return g:neobundle#types#git#command_path
         \ .' ls-remote origin ' . rev
 endfunction"}}}
-function! s:type.get_fetch_remote_command(bundle) "{{{
+function! s:type.get_fetch_remote_command(bundle) abort "{{{
   if !executable(g:neobundle#types#git#command_path)
     return ''
   endif
@@ -225,7 +225,7 @@ function! s:type.get_fetch_remote_command(bundle) "{{{
         \ .' fetch origin '
 endfunction"}}}
 
-function! s:parse_other_pattern(protocol, path, opts) "{{{
+function! s:parse_other_pattern(protocol, path, opts) abort "{{{
   let uri = ''
 
   if a:path =~# '\<gist:\S\+\|://gist.github.com/'
@@ -250,7 +250,7 @@ function! s:parse_other_pattern(protocol, path, opts) "{{{
   return uri
 endfunction"}}}
 
-function! s:is_git_dir(path) "{{{
+function! s:is_git_dir(path) abort "{{{
   if isdirectory(a:path)
     let git_dir = a:path
   elseif filereadable(a:path)

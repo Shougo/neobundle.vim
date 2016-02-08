@@ -5,7 +5,7 @@ let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#types#hg#default_protocol = 'https'
 let g:neobundle#enable_name_conversion = 0
 
-function! s:suite.github_git_repos()
+function! s:suite.github_git_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'Shougo/neocomplcache-clang.git'),
         \ {'type' : 'git', 'uri' :
@@ -67,7 +67,7 @@ function! s:suite.github_git_repos()
         \ {})
 endfunction
 
-function! s:suite.svn_repos()
+function! s:suite.svn_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'http://svn.macports.org/repository/macports/contrib/mpvim/'),
         \ {})
@@ -86,7 +86,7 @@ function! s:suite.svn_repos()
         \  'name' : 'bar'})
 endfunction
 
-function! s:suite.hg_repos()
+function! s:suite.hg_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'),
         \ {'type' : 'hg', 'uri' :
@@ -125,7 +125,7 @@ function! s:suite.hg_repos()
         \ 'https://github.com/Shougo/neobundle.vim.git')
 endfunction
 
-function! s:suite.gitbucket_git_repos()
+function! s:suite.gitbucket_git_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'https://bitbucket.org/kh3phr3n/vim-qt-syntax.git'),
         \ {'type' : 'git', 'uri' :
@@ -149,7 +149,7 @@ function! s:suite.gitbucket_git_repos()
         \  'name' : 'bar'})
 endfunction
 
-function! s:suite.raw_repos()
+function! s:suite.raw_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'http://raw.github.com/m2ym/rsense/master/etc/rsense.vim'),
         \ {})
@@ -165,7 +165,7 @@ function! s:suite.raw_repos()
         \ 'https://raw.github.com/m2ym/rsense/master/etc/rsense.vim')
 endfunction
 
-function! s:suite.vba_repos()
+function! s:suite.vba_repos() abort
   call s:assert.equals(neobundle#parser#path(
         \ 'https://foo/bar.vba'),
         \ { 'name' : 'bar', 'uri' : 'https://foo/bar.vba', 'type' : 'vba' })
@@ -177,7 +177,7 @@ function! s:suite.vba_repos()
         \ {})
 endfunction
 
-function! s:suite.default_options()
+function! s:suite.default_options() abort
   let g:default_options_save = g:neobundle#default_options
   let g:neobundle#default_options =
         \ { 'rev' : {'type__update_style' : 'current'},
@@ -194,7 +194,7 @@ function! s:suite.default_options()
   let g:neobundle#default_options = g:default_options_save
 endfunction
 
-function! s:suite.ssh_protocol()
+function! s:suite.ssh_protocol() abort
   let bundle = neobundle#parser#_init_bundle(
         \ 'accountname/reponame', [{
         \ 'site' : 'github', 'type' : 'git', 'type__protocol' : 'ssh' }])
@@ -214,13 +214,13 @@ function! s:suite.ssh_protocol()
         \ 'git@bitbucket.org:accountname/reponame.git')
 endfunction
 
-function! s:suite.fetch_plugins()
+function! s:suite.fetch_plugins() abort
   let bundle = neobundle#parser#fetch(
         \ string('accountname/reponame.git'))
   call s:assert.equals(bundle.rtp, '')
 endfunction
 
-function! s:suite.parse_directory()
+function! s:suite.parse_directory() abort
   let bundle = neobundle#parser#_init_bundle(
         \ 'Shougo/neocomplcache', [])
   call s:assert.equals(bundle.directory, 'neocomplcache')
@@ -230,7 +230,7 @@ function! s:suite.parse_directory()
   call s:assert.equals(bundle.directory, 'neocomplcache_ver_3')
 endfunction
 
-function! s:suite.name_conversion()
+function! s:suite.name_conversion() abort
   let g:neobundle#enable_name_conversion = 1
 
   let bundle = neobundle#parser#_init_bundle(
@@ -256,7 +256,7 @@ function! s:suite.name_conversion()
   let g:neobundle#enable_name_conversion = 0
 endfunction
 
-function! s:suite.autoload()
+function! s:suite.autoload() abort
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'filetypes' : 'foo_ft' }])
@@ -318,7 +318,7 @@ function! s:suite.autoload()
   call s:assert.equals(bundle.lazy, 0)
 endfunction
 
-function! s:suite.deprecated()
+function! s:suite.deprecated() abort
   let bundle = neobundle#parser#_init_bundle(
         \ 'https://github.com/Shougo/neobundle.vim.git',
         \ [{ 'stay_same' : '1' }])

@@ -32,11 +32,11 @@ let s:is_mac = !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!isdirectory('/proc') && executable('sw_vers')))
 
-function! neobundle#util#substitute_path_separator(path) "{{{
+function! neobundle#util#substitute_path_separator(path) abort "{{{
   return (s:is_windows && a:path =~ '\\') ?
         \ tr(a:path, '\', '/') : a:path
 endfunction"}}}
-function! neobundle#util#expand(path) "{{{
+function! neobundle#util#expand(path) abort "{{{
   let path = (a:path =~ '^\~') ? fnamemodify(a:path, ':p') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
@@ -44,7 +44,7 @@ function! neobundle#util#expand(path) "{{{
   return (s:is_windows && path =~ '\\') ?
         \ neobundle#util#substitute_path_separator(path) : path
 endfunction"}}}
-function! neobundle#util#join_paths(path1, path2) "{{{
+function! neobundle#util#join_paths(path1, path2) abort "{{{
   " Joins two paths together, handling the case where the second path
   " is an absolute path.
   if s:is_absolute(a:path2)
@@ -62,34 +62,34 @@ function! neobundle#util#join_paths(path1, path2) "{{{
   endif
 endfunction "}}}
 if s:is_windows
-  function! s:is_absolute(path) "{{{
+  function! s:is_absolute(path) abort "{{{
     return a:path =~ '^[\\/]\|^\a:'
   endfunction "}}}
 else
-  function! s:is_absolute(path) "{{{
+  function! s:is_absolute(path) abort "{{{
     return a:path =~ "^/"
   endfunction "}}}
 endif
 
-function! neobundle#util#is_windows() "{{{
+function! neobundle#util#is_windows() abort "{{{
   return s:is_windows
 endfunction"}}}
-function! neobundle#util#is_mac() "{{{
+function! neobundle#util#is_mac() abort "{{{
   return s:is_mac
 endfunction"}}}
-function! neobundle#util#is_cygwin() "{{{
+function! neobundle#util#is_cygwin() abort "{{{
   return s:is_cygwin
 endfunction"}}}
 
 " Sudo check.
-function! neobundle#util#is_sudo() "{{{
+function! neobundle#util#is_sudo() abort "{{{
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
       \ && $HOME !=# expand('~'.$USER)
       \ && $HOME ==# expand('~'.$SUDO_USER)
 endfunction"}}}
 
 " Check vimproc. "{{{
-function! neobundle#util#has_vimproc() "{{{
+function! neobundle#util#has_vimproc() abort "{{{
   if !exists('*vimproc#version')
     try
       call vimproc#version()
@@ -101,14 +101,14 @@ function! neobundle#util#has_vimproc() "{{{
 endfunction"}}}
 "}}}
 " iconv() wrapper for safety.
-function! s:iconv(expr, from, to) "{{{
+function! s:iconv(expr, from, to) abort "{{{
   if a:from == '' || a:to == '' || a:from ==? a:to
     return a:expr
   endif
   let result = iconv(a:expr, a:from, a:to)
   return result != '' ? result : a:expr
 endfunction"}}}
-function! neobundle#util#system(str, ...) "{{{
+function! neobundle#util#system(str, ...) abort "{{{
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
   let command = s:iconv(command, &encoding, 'char')
@@ -130,13 +130,13 @@ function! neobundle#util#system(str, ...) "{{{
 
   return substitute(output, '\n$', '', '')
 endfunction"}}}
-function! neobundle#util#get_last_status() "{{{
+function! neobundle#util#get_last_status() abort "{{{
   return neobundle#util#has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
 endfunction"}}}
 
 " Split a comma separated string to a list.
-function! neobundle#util#split_rtp(runtimepath) "{{{
+function! neobundle#util#split_rtp(runtimepath) abort "{{{
   if stridx(a:runtimepath, '\,') < 0
     return split(a:runtimepath, ',')
   endif
@@ -145,12 +145,12 @@ function! neobundle#util#split_rtp(runtimepath) "{{{
   return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
 endfunction"}}}
 
-function! neobundle#util#join_rtp(list, runtimepath, rtp) "{{{
+function! neobundle#util#join_rtp(list, runtimepath, rtp) abort "{{{
   return (stridx(a:runtimepath, '\,') < 0 && stridx(a:rtp, ',') < 0) ?
         \ join(a:list, ',') : join(map(copy(a:list), 's:escape(v:val)'), ',')
 endfunction"}}}
 
-function! neobundle#util#split_envpath(path) "{{{
+function! neobundle#util#split_envpath(path) abort "{{{
   let delimiter = neobundle#util#is_windows() ? ';' : ':'
   if stridx(a:path, '\' . delimiter) < 0
     return split(a:path, delimiter)
@@ -161,7 +161,7 @@ function! neobundle#util#split_envpath(path) "{{{
         \ . delimiter . ']\)'', "\\1", "g")')
 endfunction"}}}
 
-function! neobundle#util#join_envpath(list, orig_path, add_path) "{{{
+function! neobundle#util#join_envpath(list, orig_path, add_path) abort "{{{
   let delimiter = neobundle#util#is_windows() ? ';' : ':'
   return (stridx(a:orig_path, '\' . delimiter) < 0
         \ && stridx(a:add_path, delimiter) < 0) ?
@@ -170,7 +170,7 @@ function! neobundle#util#join_envpath(list, orig_path, add_path) "{{{
 endfunction"}}}
 
 " Removes duplicates from a list.
-function! neobundle#util#uniq(list, ...) "{{{
+function! neobundle#util#uniq(list, ...) abort "{{{
   let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
   let i = 0
   let seen = {}
@@ -186,7 +186,7 @@ function! neobundle#util#uniq(list, ...) "{{{
   return a:0 ? map(list, 'v:val[0]') : list
 endfunction"}}}
 
-function! neobundle#util#set_default(var, val, ...)  "{{{
+function! neobundle#util#set_default(var, val, ...) abort  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     let alternate_var = get(a:000, 0, '')
 
@@ -194,7 +194,7 @@ function! neobundle#util#set_default(var, val, ...)  "{{{
           \ {alternate_var} : a:val
   endif
 endfunction"}}}
-function! neobundle#util#set_dictionary_helper(variable, keys, pattern) "{{{
+function! neobundle#util#set_dictionary_helper(variable, keys, pattern) abort "{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:pattern
@@ -202,32 +202,32 @@ function! neobundle#util#set_dictionary_helper(variable, keys, pattern) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#util#get_filetypes() "{{{
+function! neobundle#util#get_filetypes() abort "{{{
   let filetype = exists('b:neocomplcache.context_filetype') ?
         \ b:neocomplcache.context_filetype : &filetype
   return split(filetype, '\.')
 endfunction"}}}
 
-function! neobundle#util#convert2list(expr) "{{{
+function! neobundle#util#convert2list(expr) abort "{{{
   return type(a:expr) ==# type([]) ? a:expr :
         \ type(a:expr) ==# type('') ?
         \   (a:expr == '' ? [] : split(a:expr, '\r\?\n', 1))
         \ : [a:expr]
 endfunction"}}}
 
-function! neobundle#util#print_error(expr) "{{{
+function! neobundle#util#print_error(expr) abort "{{{
   return s:echo(a:expr, 'error')
 endfunction"}}}
 
-function! neobundle#util#redraw_echo(expr) "{{{
+function! neobundle#util#redraw_echo(expr) abort "{{{
   return s:echo(a:expr, 'echo')
 endfunction"}}}
 
-function! neobundle#util#redraw_echomsg(expr) "{{{
+function! neobundle#util#redraw_echomsg(expr) abort "{{{
   return s:echo(a:expr, 'echomsg')
 endfunction"}}}
 
-function! s:echo(expr, mode) "{{{
+function! s:echo(expr, mode) abort "{{{
   let msg = map(neobundle#util#convert2list(a:expr),
         \ "'[neobundle] ' .  v:val")
   if empty(msg)
@@ -260,7 +260,7 @@ function! s:echo(expr, mode) "{{{
     let &ruler = ruler_save
   endtry
 endfunction"}}}
-function! s:echo_mode(m, mode) "{{{
+function! s:echo_mode(m, mode) abort "{{{
   for m in split(a:m, '\r\?\n', 1)
     if !has('vim_starting') && a:mode !=# 'error'
       let m = neobundle#util#truncate_skipping(
@@ -277,26 +277,26 @@ function! s:echo_mode(m, mode) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#util#name_conversion(path) "{{{
+function! neobundle#util#name_conversion(path) abort "{{{
   return fnamemodify(split(a:path, ':')[-1], ':s?/$??:t:s?\c\.git\s*$??')
 endfunction"}}}
 
 " Escape a path for runtimepath.
-function! s:escape(path)"{{{
+function! s:escape(path) abort"{{{
   return substitute(a:path, ',\|\\,\@=', '\\\0', 'g')
 endfunction"}}}
 
-function! neobundle#util#unify_path(path) "{{{
+function! neobundle#util#unify_path(path) abort "{{{
   return fnamemodify(resolve(a:path), ':p:gs?\\\+?/?')
 endfunction"}}}
 
-function! neobundle#util#cd(path) "{{{
+function! neobundle#util#cd(path) abort "{{{
   if isdirectory(a:path)
     execute (haslocaldir() ? 'lcd' : 'cd') fnameescape(a:path)
   endif
 endfunction"}}}
 
-function! neobundle#util#writefile(path, list) "{{{
+function! neobundle#util#writefile(path, list) abort "{{{
   let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
   let dir = fnamemodify(path, ':h')
   if !isdirectory(dir)
@@ -306,7 +306,7 @@ function! neobundle#util#writefile(path, list) "{{{
   return writefile(a:list, path)
 endfunction"}}}
 
-function! neobundle#util#cleandir(path) "{{{
+function! neobundle#util#cleandir(path) abort "{{{
   let path = neobundle#get_neobundle_dir() . '/.neobundle/' . a:path
 
   for file in filter(split(globpath(path, '*', 1), '\n'),
@@ -315,7 +315,7 @@ function! neobundle#util#cleandir(path) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#util#rmdir(path) "{{{
+function! neobundle#util#rmdir(path) abort "{{{
   if has('patch-7.4.1120')
     call delete(a:path, 'rf')
   else
@@ -333,7 +333,7 @@ function! neobundle#util#rmdir(path) "{{{
   endif
 endfunction"}}}
 
-function! neobundle#util#copy_bundle_files(bundles, directory) "{{{
+function! neobundle#util#copy_bundle_files(bundles, directory) abort "{{{
   " Delete old files.
   call neobundle#util#cleandir(a:directory)
 
@@ -354,7 +354,7 @@ function! neobundle#util#copy_bundle_files(bundles, directory) "{{{
     call neobundle#util#writefile(a:directory . '/' . filename, list)
   endfor
 endfunction"}}}
-function! neobundle#util#merge_bundle_files(bundles, directory) "{{{
+function! neobundle#util#merge_bundle_files(bundles, directory) abort "{{{
   " Delete old files.
   call neobundle#util#cleandir(a:directory)
 
@@ -374,7 +374,7 @@ endfunction"}}}
 " Sorts a list using a set of keys generated by mapping the values in the list
 " through the given expr.
 " v:val is used in {expr}
-function! neobundle#util#sort_by(list, expr) "{{{
+function! neobundle#util#sort_by(list, expr) abort "{{{
   let pairs = map(a:list, printf('[v:val, %s]', a:expr))
   return map(s:sort(pairs,
   \      'a:a[1] ==# a:b[1] ? 0 : a:a[1] ># a:b[1] ? 1 : -1'), 'v:val[0]')
@@ -395,7 +395,7 @@ endfunction"}}}
 
 " Sorts a list with expression to compare each two values.
 " a:a and a:b can be used in {expr}.
-function! s:sort(list, expr) "{{{
+function! s:sort(list, expr) abort "{{{
   if type(a:expr) == type(function('function'))
     return sort(a:list, a:expr)
   endif
@@ -403,20 +403,20 @@ function! s:sort(list, expr) "{{{
   return sort(a:list, 's:_compare')
 endfunction"}}}
 
-function! s:_compare(a, b)
+function! s:_compare(a, b) abort
   return eval(s:expr)
 endfunction
 
-function! neobundle#util#print_bundles(bundles) "{{{
+function! neobundle#util#print_bundles(bundles) abort "{{{
   echomsg string(map(copy(a:bundles), 'v:val.name'))
 endfunction"}}}
 
-function! neobundle#util#sort_human(filenames) "{{{
+function! neobundle#util#sort_human(filenames) abort "{{{
   return sort(a:filenames, 's:compare_filename')
 endfunction"}}}
 
 " Compare filename by human order. "{{{
-function! s:compare_filename(i1, i2)
+function! s:compare_filename(i1, i2) abort
   let words_1 = s:get_words(a:i1)
   let words_2 = s:get_words(a:i2)
   let words_1_len = len(words_1)
@@ -442,7 +442,7 @@ function! s:get_words(filename) abort "{{{
   return map(words, "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
 endfunction"}}}
 
-function! neobundle#util#wget(uri, outpath) "{{{
+function! neobundle#util#wget(uri, outpath) abort "{{{
   if executable('curl')
     return printf('curl --fail -s -o "%s" "%s"', a:outpath, a:uri)
   elseif executable('wget')

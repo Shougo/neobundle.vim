@@ -3,32 +3,32 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#cache#getfilename(cache_dir, filename)
+function! neobundle#cache#getfilename(cache_dir, filename) abort
   return s:_encode_name(a:cache_dir, a:filename)
 endfunction
 
-function! neobundle#cache#filereadable(cache_dir, filename)
+function! neobundle#cache#filereadable(cache_dir, filename) abort
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
   return filereadable(cache_name)
 endfunction
 
-function! neobundle#cache#readfile(cache_dir, filename)
+function! neobundle#cache#readfile(cache_dir, filename) abort
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
   return filereadable(cache_name) ? readfile(cache_name) : []
 endfunction
 
-function! neobundle#cache#writefile(cache_dir, filename, list)
+function! neobundle#cache#writefile(cache_dir, filename, list) abort
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
 
   call writefile(a:list, cache_name)
 endfunction
 
-function! neobundle#cache#deletefile(cache_dir, filename)
+function! neobundle#cache#deletefile(cache_dir, filename) abort
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
   return delete(cache_name)
 endfunction
 
-function! s:_encode_name(cache_dir, filename)
+function! s:_encode_name(cache_dir, filename) abort
   " Check cache directory.
   if !isdirectory(a:cache_dir)
     call mkdir(a:cache_dir, 'p')
@@ -41,7 +41,7 @@ function! s:_encode_name(cache_dir, filename)
   return cache_dir . s:_create_hash(cache_dir, a:filename)
 endfunction
 
-function! neobundle#cache#check_old_cache(cache_dir, filename)
+function! neobundle#cache#check_old_cache(cache_dir, filename) abort
   " Check old cache file.
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
   let ret = getftime(cache_name) == -1
@@ -54,7 +54,7 @@ function! neobundle#cache#check_old_cache(cache_dir, filename)
   return ret
 endfunction
 
-function! s:_create_hash(dir, str)
+function! s:_create_hash(dir, str) abort
   if len(a:dir) + len(a:str) < 150
     let hash = substitute(substitute(
           \ a:str, ':', '=-', 'g'), '[/\\]', '=+', 'g')

@@ -183,7 +183,7 @@ command! -bar
       \ NeoBundleRemotePlugins
       \ call neobundle#commands#remote_plugins()
 
-function! neobundle#rc(...) "{{{
+function! neobundle#rc(...) abort "{{{
   call neobundle#util#print_error(
         \ 'neobundle#rc() is removed function.')
   call neobundle#util#print_error(
@@ -191,7 +191,7 @@ function! neobundle#rc(...) "{{{
   return 1
 endfunction"}}}
 
-function! neobundle#begin(...) "{{{
+function! neobundle#begin(...) abort "{{{
   if a:0 > 0
     let path = a:1
   else
@@ -216,14 +216,14 @@ function! neobundle#begin(...) "{{{
 
   return neobundle#init#_rc(path)
 endfunction"}}}
-function! neobundle#append() "{{{
+function! neobundle#append() abort "{{{
   call neobundle#config#append()
 endfunction"}}}
-function! neobundle#end() "{{{
+function! neobundle#end() abort "{{{
   call neobundle#config#final()
 endfunction"}}}
 
-function! neobundle#add(repository, ...) "{{{
+function! neobundle#add(repository, ...) abort "{{{
   let options = get(a:000, 0, {})
   let bundle = neobundle#parser#_init_bundle(
         \ a:repository, [options])
@@ -236,7 +236,7 @@ function! neobundle#add(repository, ...) "{{{
 
   return bundle
 endfunction"}}}
-function! neobundle#add_meta(name, ...) "{{{
+function! neobundle#add_meta(name, ...) abort "{{{
   let metadata = neobundle#metadata#get(a:name)
   if empty(metadata)
     call neobundle#util#print_error(
@@ -257,11 +257,11 @@ function! neobundle#add_meta(name, ...) "{{{
   return neobundle#add(repository, options)
 endfunction"}}}
 
-function! neobundle#set_neobundle_dir(path) "{{{
+function! neobundle#set_neobundle_dir(path) abort "{{{
   let s:neobundle_dir = a:path
 endfunction"}}}
 
-function! neobundle#get_neobundle_dir() "{{{
+function! neobundle#get_neobundle_dir() abort "{{{
   if s:neobundle_dir == ''
     call neobundle#util#print_error(
           \ 'neobundle directory is empty.')
@@ -275,11 +275,11 @@ function! neobundle#get_neobundle_dir() "{{{
   return dir
 endfunction"}}}
 
-function! neobundle#get_runtime_dir() "{{{
+function! neobundle#get_runtime_dir() abort "{{{
   return s:neobundle_runtime_dir
 endfunction"}}}
 
-function! neobundle#get_tags_dir() "{{{
+function! neobundle#get_tags_dir() abort "{{{
   if s:neobundle_dir == ''
     return ''
   endif
@@ -291,7 +291,7 @@ function! neobundle#get_tags_dir() "{{{
   return dir
 endfunction"}}}
 
-function! neobundle#get_rtp_dir() "{{{
+function! neobundle#get_rtp_dir() abort "{{{
   if s:neobundle_dir == ''
     return ''
   endif
@@ -303,30 +303,30 @@ function! neobundle#get_rtp_dir() "{{{
   return dir
 endfunction"}}}
 
-function! neobundle#source(bundle_names) "{{{
+function! neobundle#source(bundle_names) abort "{{{
   return neobundle#config#source(a:bundle_names)
 endfunction"}}}
 
-function! neobundle#local(localdir, ...) "{{{
+function! neobundle#local(localdir, ...) abort "{{{
   return neobundle#parser#local(
         \ a:localdir, get(a:000, 0, {}), get(a:000, 1, ['*']))
 endfunction"}}}
 
-function! neobundle#exists_not_installed_bundles() "{{{
+function! neobundle#exists_not_installed_bundles() abort "{{{
   return !empty(neobundle#get_not_installed_bundles([]))
 endfunction"}}}
 
-function! neobundle#is_installed(...) "{{{
+function! neobundle#is_installed(...) abort "{{{
   return type(get(a:000, 0, [])) == type([]) ?
         \ !empty(neobundle#_get_installed_bundles(get(a:000, 0, []))) :
         \ neobundle#config#is_installed(a:1)
 endfunction"}}}
 
-function! neobundle#is_sourced(name) "{{{
+function! neobundle#is_sourced(name) abort "{{{
   return neobundle#config#is_sourced(a:name)
 endfunction"}}}
 
-function! neobundle#has_cache() "{{{
+function! neobundle#has_cache() abort "{{{
   call neobundle#util#print_error(
         \ 'neobundle#has_cache() is deprecated function.')
   call neobundle#util#print_error(
@@ -337,16 +337,16 @@ function! neobundle#has_cache() "{{{
   return filereadable(neobundle#commands#get_cache_file())
 endfunction"}}}
 
-function! neobundle#load_cache(...) "{{{
+function! neobundle#load_cache(...) abort "{{{
   let vimrcs = len(a:000) == 0 ? [$MYVIMRC] : a:000
   return neobundle#commands#load_cache(vimrcs)
 endfunction"}}}
 
-function! neobundle#get_not_installed_bundle_names() "{{{
+function! neobundle#get_not_installed_bundle_names() abort "{{{
   return map(neobundle#get_not_installed_bundles([]), 'v:val.name')
 endfunction"}}}
 
-function! neobundle#get_not_installed_bundles(bundle_names) "{{{
+function! neobundle#get_not_installed_bundles(bundle_names) abort "{{{
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(a:bundle_names)
@@ -359,7 +359,7 @@ function! neobundle#get_not_installed_bundles(bundle_names) "{{{
         \")
 endfunction"}}}
 
-function! neobundle#get_force_not_installed_bundles(bundle_names) "{{{
+function! neobundle#get_force_not_installed_bundles(bundle_names) abort "{{{
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#fuzzy_search(a:bundle_names)
@@ -374,31 +374,31 @@ function! neobundle#get_force_not_installed_bundles(bundle_names) "{{{
         \")
 endfunction"}}}
 
-function! neobundle#get(name) "{{{
+function! neobundle#get(name) abort "{{{
   return neobundle#config#get(a:name)
 endfunction"}}}
-function! neobundle#get_hooks(name) "{{{
+function! neobundle#get_hooks(name) abort "{{{
   return get(neobundle#config#get(a:name), 'hooks', {})
 endfunction"}}}
 
-function! neobundle#tap(name) "{{{
+function! neobundle#tap(name) abort "{{{
   let g:neobundle#tapped = neobundle#get(a:name)
   let g:neobundle#hooks = get(neobundle#get(a:name), 'hooks', {})
   return !empty(g:neobundle#tapped) && !g:neobundle#tapped.disabled
 endfunction"}}}
-function! neobundle#untap() "{{{
+function! neobundle#untap() abort "{{{
   let g:neobundle#tapped = {}
   let g:neobundle#hooks = {}
 endfunction"}}}
 
-function! neobundle#bundle(arg, ...) "{{{
+function! neobundle#bundle(arg, ...) abort "{{{
   let opts = get(a:000, 0, {})
   call map(neobundle#util#convert2list(a:arg),
         \ "neobundle#config#add(neobundle#parser#_init_bundle(
         \     v:val, [deepcopy(opts)]))")
 endfunction"}}}
 
-function! neobundle#config(arg, ...) "{{{
+function! neobundle#config(arg, ...) abort "{{{
   " Use neobundle#tapped or name.
   return type(a:arg) == type({}) ?
         \   neobundle#config#set(g:neobundle#tapped.name, a:arg) :
@@ -407,7 +407,7 @@ function! neobundle#config(arg, ...) "{{{
         \   map(copy(a:arg), "neobundle#config#set(v:val, deepcopy(a:1))")
 endfunction"}}}
 
-function! neobundle#call_hook(hook_name, ...) "{{{
+function! neobundle#call_hook(hook_name, ...) abort "{{{
   let bundles = neobundle#util#convert2list(
         \ (empty(a:000) ? neobundle#config#get_neobundles() : a:1))
   let bundles = filter(copy(bundles),
@@ -432,7 +432,7 @@ function! neobundle#call_hook(hook_name, ...) "{{{
   endfor
 endfunction"}}}
 
-function! neobundle#_get_installed_bundles(bundle_names) "{{{
+function! neobundle#_get_installed_bundles(bundle_names) abort "{{{
   let bundles = empty(a:bundle_names) ?
         \ neobundle#config#get_neobundles() :
         \ neobundle#config#search(a:bundle_names)
@@ -441,14 +441,14 @@ function! neobundle#_get_installed_bundles(bundle_names) "{{{
         \ 'neobundle#config#is_installed(v:val.name)')
 endfunction"}}}
 
-function! neobundle#load_toml(filename, ...) "{{{
+function! neobundle#load_toml(filename, ...) abort "{{{
   let opts = get(a:000, 0, {})
   return neobundle#parser#load_toml(a:filename, opts)
 endfunction"}}}
 
 let s:init_vim_path = fnamemodify(expand('<sfile>'), ':h')
       \ . '/neobundle/init.vim'
-function! neobundle#get_cache_version() "{{{
+function! neobundle#get_cache_version() abort "{{{
   return getftime(s:init_vim_path)
 endfunction "}}}
 

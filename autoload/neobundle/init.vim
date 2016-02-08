@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neobundle#init#_rc(path) "{{{
+function! neobundle#init#_rc(path) abort "{{{
   let path =
         \ neobundle#util#substitute_path_separator(
         \ neobundle#util#expand(a:path))
@@ -66,7 +66,7 @@ function! neobundle#init#_rc(path) "{{{
   call neobundle#autoload#init()
 endfunction"}}}
 
-function! neobundle#init#_bundle(bundle) "{{{
+function! neobundle#init#_bundle(bundle) abort "{{{
   if (!has_key(a:bundle, 'type') && get(a:bundle, 'local', 0))
         \ || get(a:bundle, 'type', '') ==# 'nosync'
     " Default type.
@@ -210,7 +210,7 @@ function! neobundle#init#_bundle(bundle) "{{{
   return bundle
 endfunction"}}}
 
-function! s:init_lazy(bundle) "{{{
+function! s:init_lazy(bundle) abort "{{{
   let bundle = a:bundle
 
   " Auto set autoload keys.
@@ -266,7 +266,7 @@ function! s:init_lazy(bundle) "{{{
   endif
 endfunction"}}}
 
-function! s:init_depends(bundle) "{{{
+function! s:init_depends(bundle) abort "{{{
   let bundle = a:bundle
   let _ = []
 
@@ -286,7 +286,7 @@ function! s:init_depends(bundle) "{{{
   let bundle.depends = _
 endfunction"}}}
 
-function! s:check_version(min_version) "{{{
+function! s:check_version(min_version) abort "{{{
   let versions = split(a:min_version, '\.')
   let major = get(versions, 0, 0)
   let minor = get(versions, 1, 0)

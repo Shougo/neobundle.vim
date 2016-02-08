@@ -28,7 +28,7 @@ set cpo&vim
 
 let s:Cache = vital#of('unite').import('System.Cache')
 
-function! unite#sources#neobundle_search#define() "{{{
+function! unite#sources#neobundle_search#define() abort "{{{
   " Init sources.
   if !exists('s:neobundle_sources')
     let s:neobundle_sources = {}
@@ -61,7 +61,7 @@ let s:source = {
       \ 'parents' : ['uri'],
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let a:context.source__sources = copy(s:neobundle_sources)
   if !empty(a:args)
     let a:context.source__sources = filter(
@@ -76,7 +76,7 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'customlist,unite#sources#neobundle_search#complete_plugin_names')
   endif
 endfunction"}}}
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if neobundle#util#is_sudo()
     call neobundle#util#print_error(
           \ '"sudo vim" is detected. This feature is disabled.')
@@ -116,13 +116,13 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'stridx(v:val.word, a:context.source__input) >= 0')
 endfunction"}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   let arglead = get(a:args, -1, '')
   return filter(keys(s:neobundle_sources),
         \ "stridx(v:val, arglead) == 0")
 endfunction"}}}
 
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__NeoBundleSearch_DescriptionLine
         \ / -- .*$/
         \ contained containedin=uniteSource__NeoBundleSearch
@@ -145,7 +145,7 @@ let s:source.action_table.yank = {
       \ 'description' : 'yank plugin settings',
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.yank.func(candidates) "{{{
+function! s:source.action_table.yank.func(candidates) abort "{{{
   let @" = join(map(a:candidates,
         \ "'NeoBundle ' . s:get_neobundle_args(v:val)"), "\n")
   if has('clipboard')
@@ -160,7 +160,7 @@ let s:source.action_table.install = {
       \ 'is_selectable' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.install.func(candidates) "{{{
+function! s:source.action_table.install.func(candidates) abort "{{{
   for candidate in a:candidates
     execute 'NeoBundleDirectInstall' s:get_neobundle_args(candidate)
   endfor
@@ -168,10 +168,10 @@ endfunction"}}}
 "}}}
 
 " Filters "{{{
-function! s:source.source__sorter(candidates, context) "{{{
+function! s:source.source__sorter(candidates, context) abort "{{{
   return s:sort_by(a:candidates, 'v:val.source__name')
 endfunction"}}}
-function! s:source.source__converter(candidates, context) "{{{
+function! s:source.source__converter(candidates, context) abort "{{{
   let max_plugin_name = max(map(copy(a:candidates),
         \ 'len(v:val.source__name)'))
   let max_script_type = max(map(copy(a:candidates),
@@ -201,7 +201,7 @@ let s:source.converters = s:source.source__converter
 "}}}
 
 " Misc. "{{{
-function! s:sort_by(list, expr)
+function! s:sort_by(list, expr) abort
   let pairs = map(a:list, printf('[v:val, %s]', a:expr))
   return map(s:sort(pairs,
         \      'a:a[1] == a:b[1] ? 0 : a:a[1] > a:b[1] ? 1 : -1'), 'v:val[0]')
@@ -209,7 +209,7 @@ endfunction
 
 " Sorts a list with expression to compare each two values.
 " a:a and a:b can be used in {expr}.
-function! s:sort(list, expr)
+function! s:sort(list, expr) abort
   if type(a:expr) == type(function('function'))
     return sort(a:list, a:expr)
   endif
@@ -217,11 +217,11 @@ function! s:sort(list, expr)
   return sort(a:list, 's:_compare')
 endfunction
 
-function! s:_compare(a, b)
+function! s:_compare(a, b) abort
   return eval(s:expr)
 endfunction
 
-function! s:get_neobundle_args(candidate)
+function! s:get_neobundle_args(candidate) abort
   return string(substitute(a:candidate.source__path,
         \       '^https://github.com/', '', ''))
           \  . (empty(a:candidate.source__options) ?
@@ -230,11 +230,11 @@ function! s:get_neobundle_args(candidate)
           \      ' " ' . a:candidate.source__description)
 endfunction
 
-function! unite#sources#neobundle_search#complete_plugin_names(arglead, cmdline, cursorpos) "{{{
+function! unite#sources#neobundle_search#complete_plugin_names(arglead, cmdline, cursorpos) abort "{{{
   return filter(s:get_plugin_names(), "stridx(v:val, a:arglead) == 0")
 endfunction"}}}
 
-function! s:initialize_plugin_names(context) "{{{
+function! s:initialize_plugin_names(context) abort "{{{
   let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
   let path = 'plugin_names'
 
@@ -246,7 +246,7 @@ function! s:initialize_plugin_names(context) "{{{
   return s:get_plugin_names()
 endfunction"}}}
 
-function! s:get_plugin_names() "{{{
+function! s:get_plugin_names() abort "{{{
   let cache_dir = neobundle#get_neobundle_dir() . '/.neobundle'
   let path = 'plugin_names'
 

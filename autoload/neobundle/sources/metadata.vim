@@ -28,7 +28,7 @@ set cpo&vim
 
 let s:repository_cache = []
 
-function! neobundle#sources#metadata#define() "{{{
+function! neobundle#sources#metadata#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:source = {
       \ 'short_name' : 'meta',
       \ }
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let plugins = s:get_repository_plugins(a:context)
 
   try
@@ -64,7 +64,7 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction"}}}
 
 " Misc.
-function! s:get_repository_plugins(context) "{{{
+function! s:get_repository_plugins(context) abort "{{{
   if a:context.is_redraw
     " Reload cache.
     call unite#print_message(
@@ -78,7 +78,7 @@ function! s:get_repository_plugins(context) "{{{
   return s:convert_metadata(neobundle#metadata#get())
 endfunction"}}}
 
-function! s:convert_metadata(data) "{{{
+function! s:convert_metadata(data) abort "{{{
   return values(map(copy(a:data), "{
         \ 'name' : v:key,
         \ 'raw_type' : get(v:val, 'script-type', ''),
@@ -88,7 +88,7 @@ function! s:convert_metadata(data) "{{{
         \ }"))
 endfunction"}}}
 
-function! s:convert2script_type(type) "{{{
+function! s:convert2script_type(type) abort "{{{
   if a:type ==# 'utility'
     return 'plugin'
   elseif a:type ==# 'color scheme'

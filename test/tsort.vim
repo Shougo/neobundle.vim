@@ -3,28 +3,28 @@ let s:assert = themis#helper('assert')
 
 let g:path = expand('~/test-bundle/'.fnamemodify(expand('<sfile>'), ':t:r'))
 
-function! s:comp_bundle(bundle1, bundle2)
+function! s:comp_bundle(bundle1, bundle2) abort
   return a:bundle1.name > a:bundle2.name
 endfunction
 
-function! s:rotate_bundle(bundles)
+function! s:rotate_bundle(bundles) abort
   return a:bundles[1:-1]+a:bundles[0:0]
 endfunction
 
-function! s:suite.before_each()
+function! s:suite.before_each() abort
 endfunction
 
-function! s:suite.after_each()
+function! s:suite.after_each() abort
 endfunction
 
-function! s:suite.no_depends()
+function! s:suite.no_depends() abort
   " [a, b, c] => [a, b, c]
   let neobundle_test_data = [{'name' : 'a'}, {'name' : 'b'}, {'name' : 'c'},]
   call s:assert.equals(neobundle#config#tsort(neobundle_test_data),
         \ neobundle_test_data)
 endfunction
 
-function! s:suite.normal()
+function! s:suite.normal() abort
     " a -> b -> c
     " b -> d
     " c
@@ -70,7 +70,7 @@ function! s:suite.normal()
         \ ])
 endfunction
 
-function! s:suite.tsort_circular_reference()
+function! s:suite.tsort_circular_reference() abort
   " a -> b -> c -> a
   " b
   " c
@@ -94,7 +94,7 @@ function! s:suite.tsort_circular_reference()
         \ ])
 endfunction
 
-function! s:suite.bundled_no_depends()
+function! s:suite.bundled_no_depends() abort
   call neobundle#begin(g:path)
   NeoBundleLazy 'a/a'
   NeoBundleLazy 'b/b'
@@ -114,7 +114,7 @@ function! s:suite.bundled_no_depends()
         \ s:map(neobundle_test_data))
 endfunction
 
-function! s:suite.bundled_normal()
+function! s:suite.bundled_normal() abort
   call neobundle#begin(g:path)
   NeoBundleLazy 'a/a'
   NeoBundleLazy 'b/b', {'depends' : 'a/a'}
@@ -133,7 +133,7 @@ function! s:suite.bundled_normal()
         \ reverse(copy(neobundle_test_data)))), s:map(neobundle_test_data))
 endfunction
 
-function! s:suite.bundled_normal2()
+function! s:suite.bundled_normal2() abort
   call neobundle#begin(g:path)
   NeoBundleLazy 'a/a', {'depends' : ['c/c', 'b/b']}
   NeoBundleLazy 'b/b'
@@ -155,7 +155,7 @@ function! s:suite.bundled_normal2()
         \ neobundle_test_rotated)
 endfunction
 
-function! s:suite.bundled_circular_reference()
+function! s:suite.bundled_circular_reference() abort
   call neobundle#begin(g:path)
   NeoBundleLazy 'a/a', {'depends' : 'b/b'}
   NeoBundleLazy 'b/b', {'depends' : 'c/c'}

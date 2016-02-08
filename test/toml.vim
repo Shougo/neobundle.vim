@@ -3,29 +3,29 @@ let s:assert = themis#helper('assert')
 
 let g:path = expand('~/test-bundle/'.fnamemodify(expand('<sfile>'), ':t:r'))
 
-function! s:suite.before_each()
+function! s:suite.before_each() abort
   let g:temp = tempname()
   call neobundle#begin(g:path)
 endfunction
 
-function! s:suite.after_each()
+function! s:suite.after_each() abort
   call neobundle#end()
   call delete(g:temp)
 endfunction
 
-function! s:suite.no_toml()
+function! s:suite.no_toml() abort
   call writefile([
         \ 'foobar'
         \ ], g:temp)
   call s:assert.equals(neobundle#parser#load_toml(g:temp, {}), 1)
 endfunction
 
-function! s:suite.no_plugins()
+function! s:suite.no_plugins() abort
   call writefile([], g:temp)
   call s:assert.equals(neobundle#parser#load_toml(g:temp, {}), 1)
 endfunction
 
-function! s:suite.no_repository()
+function! s:suite.no_repository() abort
   call writefile([
         \ "[[plugins]]",
         \ "filetypes = 'all'",
@@ -35,7 +35,7 @@ function! s:suite.no_repository()
   call s:assert.equals(neobundle#parser#load_toml(g:temp, {}), 1)
 endfunction
 
-function! s:suite.normal()
+function! s:suite.normal() abort
   call writefile([
         \ "[[plugins]]",
         \ "repository = 'Shougo/tabpagebuffer.vim'",

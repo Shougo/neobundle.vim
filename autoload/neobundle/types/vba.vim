@@ -33,7 +33,7 @@ call neobundle#util#set_default(
       \ executable('md5sum') ? 'md5sum' : '')
 "}}}
 
-function! neobundle#types#vba#define() "{{{
+function! neobundle#types#vba#define() abort "{{{
   return s:type
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:type = {
       \ 'name' : 'vba',
       \ }
 
-function! s:type.detect(path, opts) "{{{
+function! s:type.detect(path, opts) abort "{{{
   " No auto detect.
   let type = ''
   let name = ''
@@ -57,7 +57,7 @@ function! s:type.detect(path, opts) "{{{
   return type == '' ?  {} :
         \ { 'name': name, 'uri' : a:path, 'type' : type }
 endfunction"}}}
-function! s:type.get_sync_command(bundle) "{{{
+function! s:type.get_sync_command(bundle) abort "{{{
   let path = a:bundle.path
 
   if !isdirectory(path)
@@ -85,7 +85,7 @@ function! s:type.get_sync_command(bundle) "{{{
 
   return cmd
 endfunction"}}}
-function! s:type.get_revision_number_command(bundle) "{{{
+function! s:type.get_revision_number_command(bundle) abort "{{{
   if g:neobundle#types#vba#calc_hash_command == ''
     return ''
   endif
@@ -100,7 +100,7 @@ function! s:type.get_revision_number_command(bundle) "{{{
         \ g:neobundle#types#vba#calc_hash_command,
         \ a:bundle.type__filepath)
 endfunction"}}}
-function! s:type.get_revision_lock_command(bundle) "{{{
+function! s:type.get_revision_lock_command(bundle) abort "{{{
   let new_rev = matchstr(a:bundle.new_rev, '^\S\+')
   if a:bundle.rev != '' && new_rev != '' &&
         \ new_rev !=# a:bundle.rev

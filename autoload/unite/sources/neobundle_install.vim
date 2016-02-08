@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#neobundle_install#define() "{{{
+function! unite#sources#neobundle_install#define() abort "{{{
   return [s:source_install, s:source_update]
 endfunction"}}}
 
@@ -38,7 +38,7 @@ let s:source_install = {
       \ 'syntax' : 'uniteSource__NeoBundleInstall',
       \ }
 
-function! s:source_install.hooks.on_init(args, context) "{{{
+function! s:source_install.hooks.on_init(args, context) abort "{{{
   let bundle_names = filter(copy(a:args), "v:val != '!'")
   let a:context.source__bang =
         \ index(a:args, '!') >= 0 || !empty(bundle_names)
@@ -46,7 +46,7 @@ function! s:source_install.hooks.on_init(args, context) "{{{
   call s:init(a:context, bundle_names)
 endfunction"}}}
 
-function! s:source_install.hooks.on_syntax(args, context) "{{{
+function! s:source_install.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__NeoBundleInstall_Progress /(.\{-}):\s*.*/
         \ contained containedin=uniteSource__NeoBundleInstall
   highlight default link uniteSource__NeoBundleInstall_Progress String
@@ -58,7 +58,7 @@ function! s:source_install.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__NeoBundleInstall_URI Underlined
 endfunction"}}}
 
-function! s:source_install.hooks.on_close(args, context) "{{{
+function! s:source_install.hooks.on_close(args, context) abort "{{{
   if !empty(a:context.source__processes)
     for process in a:context.source__processes
       if has('nvim')
@@ -70,7 +70,7 @@ function! s:source_install.hooks.on_close(args, context) "{{{
   endif
 endfunction"}}}
 
-function! s:source_install.async_gather_candidates(args, context) "{{{
+function! s:source_install.async_gather_candidates(args, context) abort "{{{
   if !a:context.sync && empty(filter(range(1, winnr('$')),
         \ "getwinvar(v:val, '&l:filetype') ==# 'unite'"))
     return []
@@ -125,7 +125,7 @@ function! s:source_install.async_gather_candidates(args, context) "{{{
         \}")
 endfunction"}}}
 
-function! s:source_install.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source_install.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return ['!'] +
         \ neobundle#commands#complete_bundles(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
@@ -134,7 +134,7 @@ let s:source_update = deepcopy(s:source_install)
 let s:source_update.name = 'neobundle/update'
 let s:source_update.description = 'update bundles'
 
-function! s:source_update.hooks.on_init(args, context) "{{{
+function! s:source_update.hooks.on_init(args, context) abort "{{{
   let a:context.source__bang =
         \ index(a:args, 'all') >= 0 ? 2 : 1
   let a:context.source__not_fuzzy = index(a:args, '!') >= 0
@@ -143,7 +143,7 @@ function! s:source_update.hooks.on_init(args, context) "{{{
   call s:init(a:context, bundle_names)
 endfunction"}}}
 
-function! s:init(context, bundle_names) "{{{
+function! s:init(context, bundle_names) abort "{{{
   let a:context.source__synced_bundles = []
   let a:context.source__errored_bundles = []
 

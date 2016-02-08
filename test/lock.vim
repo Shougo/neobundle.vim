@@ -28,7 +28,7 @@ NeoBundleInstall
 let s:suite = themis#suite('lock')
 let s:assert = themis#helper('assert')
 
-function! s:suite.revision_check()
+function! s:suite.revision_check() abort
   let bundle = neobundle#get('neocomplete.vim')
   call s:assert.equals(neobundle#installer#get_revision_number(bundle),
         \ '8200dfd83ba829f77f028ea26e81eebbe95e6a89')
