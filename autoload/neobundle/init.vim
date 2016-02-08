@@ -91,7 +91,6 @@ function! neobundle#init#_bundle(bundle) abort "{{{
           \ 'terminal' : 0,
           \ 'autoload' : {},
           \ 'hooks' : {},
-          \ 'called_hooks' : {},
           \ 'external_commands' : {},
           \ 'build_commands': {},
           \ 'description' : '',
