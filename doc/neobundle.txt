@@ -459,12 +459,6 @@ COMMANDS 					*neobundle-commands*
 		Same as |:NeoBundleUpdate|, except that it disregards the
 		"frozen" option.
 
-:NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
-		Removes non-configured bundles that still exist in the bundle
-		path from the filesystem. If {bang} is added, force remove
-		them. If {name}s are added, remove bundles specified by
-		{name}s.
-
 :NeoBundleReinstall [{name}...]		 	*:NeoBundleReinstall*
 		Reinstalls the bundles specified by {name}.
 		If the bundles are "none" type or local plugins, they are
@@ -529,10 +523,9 @@ COMMANDS 					*neobundle-commands*
 		Registers a bundle, and installs it directly.
 		Note: The settings are saved in "extra_bundles.vim" in
 		|neobundle#begin()| directory.
-		Note: To uninstall direct installed bundles, you must delete
+		Note: To remove direct installed bundles, you must delete
 		plugin settings manually in "extra_bundles.vim" in
-		|neobundle#begin()| directory and execute |:NeoBundleClean|
-		command.
+		|neobundle#begin()| directory.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
@@ -634,7 +627,7 @@ g:neobundle#enable_name_conversion
 		It is useful for absorbing difference of repository name.
 
 g:neobundle#rm_command				*g:neobundle#rm_command*
-		The command used to remove files for |:NeoBundleClean|.
+		The command used to remove files to uninstall.
 
 		Defaults to "rmdir /S /Q" on Windows or "rm -rf" in
 		others.

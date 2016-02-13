@@ -44,7 +44,6 @@ repositories, simply call `NeoBundleUpdate`.
 A few other useful commands:
 - `:NeoBundleList`          - list configured bundles
 - `:NeoBundleInstall(!)`    - install (update) bundles
-- `:NeoBundleClean(!)`      - confirm (or auto-approve) removal of unused bundles
 
 Refer to `:help neobundle` for more examples and for a full list of commands.
 
