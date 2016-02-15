@@ -78,7 +78,7 @@ function! s:type.get_sync_command(bundle) abort "{{{
         \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
   let a:bundle.type__filepath = filename
 
-  let cmd = neobundle#util#wget(filename, a:bundle.uri)
+  let cmd = neobundle#util#wget(a:bundle.uri, filename)
 
   return cmd
 endfunction"}}}
