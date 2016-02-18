@@ -1177,6 +1177,7 @@ OPTIONS 					*neobundle-options*
 		Note: If they are not autoload bundles, "on_source"
 		hooks are called when |VimEnter| auto command.
 		You can call them manually by |neobundle#call_hook()|.
+		Note: The plugins must be lazy loaded plugins.
 
 		For example: >
 		if neobundle#tap('plugin-B.vim')
