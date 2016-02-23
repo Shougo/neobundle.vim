@@ -1,5 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/Shougo/neobundle.vim.png)](https://waffle.io/Shougo/neobundle.vim)
 
+Note: Current neobundle development status is just bug fix only.
+
 ## About
 
 NeoBundle is a next generation Vim plugin manager. This plugin is based on
