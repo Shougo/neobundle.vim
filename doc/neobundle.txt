@@ -623,7 +623,7 @@ g:neobundle#log_filename			*g:neobundle#log_filename*
 	 				*g:neobundle#enable_name_conversion*
 g:neobundle#enable_name_conversion
 		If you set to 1 and omit bundle name,
-		|neobundle-options-regular_name| is used as bundle name.
+		|neobundle-options-normalized_name| is used as bundle name.
 		It is useful for absorbing difference of repository name.
 
 g:neobundle#rm_command				*g:neobundle#rm_command*
@@ -744,8 +744,8 @@ OPTIONS 					*neobundle-options*
 		NeoBundle 'https://git.code.sf.net/p/atp-vim/code',
 		   \ {'name': 'atp-vim'}
 <
-					*neobundle-options-regular_name*
-		regular_name			(String)
+					*neobundle-options-normalized_name*
+		normalized_name			(String)
 		Specify the normalized name of the bundle. This is used for
 		neobundle management to detect dependencies. If omitted,
 		neobundle will normalize the tail of the repository name.
