@@ -217,7 +217,7 @@ function! neobundle#config#source(names, ...) abort "{{{
 
   let filetype_after = neobundle#util#redir('autocmd FileType')
 
-  if reset_ftplugin
+  if reset_ftplugin && &filetype != ''
     if &verbose
       call neobundle#util#print_error(
             \ "Neobundle: resetting ftplugin, after loading bundles:"
@@ -688,8 +688,8 @@ endfunction"}}}
 
 function! s:is_reset_ftplugin(filetype, rtp) abort "{{{
   for filetype in split(a:filetype, '\.')
-    for directory in ['ftplugin', 'indent', 'syntax',
-          \ 'after/ftplugin', 'after/indent', 'after/syntax']
+    for directory in ['ftplugin', 'indent',
+          \ 'after/ftplugin', 'after/indent']
       let base = a:rtp . '/' . directory
       if filereadable(base.'/'.filetype.'.vim') ||
             \ (directory =~# 'ftplugin$' &&
