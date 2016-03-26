@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:Cache = vital#of('unite').import('System.Cache')
+let s:Cache = unite#util#get_vital_cache()
 
 let s:repository_cache = []
 
