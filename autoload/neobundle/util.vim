@@ -281,6 +281,13 @@ function! neobundle#util#name_conversion(path) abort "{{{
   return fnamemodify(split(a:path, ':')[-1], ':s?/$??:t:s?\c\.git\s*$??')
 endfunction"}}}
 
+function! neobundle#util#vim2json(expr) abort "{{{
+  return has('patch-7.4.1498') ? js_encode(a:expr) : string(a:expr)
+endfunction "}}}
+function! neobundle#util#json2vim(expr) abort "{{{
+  sandbox return has('patch-7.4.1498') ? js_decode(a:expr) : eval(a:expr)
+endfunction "}}}
+
 " Escape a path for runtimepath.
 function! s:escape(path) abort"{{{
   return substitute(a:path, ',\|\\,\@=', '\\\0', 'g')

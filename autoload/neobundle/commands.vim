@@ -508,7 +508,8 @@ function! neobundle#commands#save_cache() abort "{{{
   let current_vim = neobundle#util#redir('version')
 
   call writefile([neobundle#get_cache_version(),
-        \ v:progname, current_vim, string(s:vimrcs), string(bundles)], cache)
+        \ v:progname, current_vim, string(s:vimrcs),
+        \ neobundle#util#vim2json(bundles)], cache)
 endfunction"}}}
 function! neobundle#commands#load_cache(vimrcs) abort "{{{
   let s:vimrcs = a:vimrcs
@@ -539,7 +540,7 @@ function! neobundle#commands#load_cache(vimrcs) abort "{{{
       return 1
     endif
 
-    sandbox let bundles = eval(list[4])
+    let bundles = neobundle#util#json2vim(list[4])
 
     if type(bundles) != type([])
       call neobundle#commands#clear_cache()
