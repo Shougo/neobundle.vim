@@ -49,7 +49,7 @@ function! neobundle#autoload#init() abort "{{{
   augroup END
   for event in [
         \ 'BufRead', 'BufCreate', 'BufEnter',
-        \ 'BufWinEnter', 'BufNew', 'VimEnter'
+        \ 'BufWinEnter', 'BufNew', 'VimEnter', 'BufNewFile'
         \ ]
     execute 'autocmd neobundle-path' event
           \ "* call s:on_path(expand('<afile>'), ".string(event) . ")"
