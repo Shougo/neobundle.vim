@@ -70,7 +70,7 @@ Complete.
 1. Setup NeoBundle:
 
      ```
-     $ mkdir -p ~/.vim/bundle
+     $ mkdir ~/.vim/bundle
      $ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
      ```
 

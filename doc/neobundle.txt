@@ -102,7 +102,7 @@ First of all, git clone the repository.
 
 Note: You need to have git installed.
 >
-	$ mkdir -p ~/.vim/bundle
+	$ mkdir ~/.vim/bundle
 	$ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 <
 And set up a path to the repository directory.
