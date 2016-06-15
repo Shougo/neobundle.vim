@@ -213,11 +213,7 @@ function! s:on_path(path, event) abort "{{{
   let bundles = filter(neobundle#config#get_autoload_bundles(),
         \ "len(filter(copy(v:val.on_path),
           \  'path =~? v:val')) > 0")")
-  if empty(bundles)
-    augroup neobundle-path
-      autocmd!
-    augroup END
-  else
+  if !empty(bundles)
     call neobundle#config#source_bundles(bundles)
     execute 'doautocmd' a:event
 
