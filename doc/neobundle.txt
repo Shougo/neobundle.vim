@@ -161,7 +161,7 @@ neobundle#begin([{base-path}])			*neobundle#begin()*
 	if &compatible
 	  set nocompatible
 	endif
-	set runtimepath^={path to neobundle directory}
+	set runtimepath+={path to neobundle directory}
 
 	call neobundle#begin(expand('~/.vim/bundle'))
 

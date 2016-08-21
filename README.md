@@ -87,7 +87,7 @@ Complete.
      endif
 
      " Required:
-     set runtimepath^=~/.vim/bundle/neobundle.vim/
+     set runtimepath+=~/.vim/bundle/neobundle.vim/
 
      " Required:
      call neobundle#begin(expand('~/.vim/bundle/'))

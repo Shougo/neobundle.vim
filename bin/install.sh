@@ -56,7 +56,7 @@ echo "Please add the following settings for NeoBundle to the top of your .vimrc 
     echo "endif"
     echo ""
     echo "\" Required:"
-    echo "set runtimepath^=$BUNDLE_DIR/neobundle.vim/"
+    echo "set runtimepath+=$BUNDLE_DIR/neobundle.vim/"
     echo ""
     echo "\" Required:"
     echo "call neobundle#begin(expand('$BUNDLE_DIR'))"
