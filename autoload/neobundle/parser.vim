@@ -103,7 +103,7 @@ endfunction"}}}
 function! s:parse_arg(arg) abort "{{{
   let arg = type(a:arg) == type([]) ?
    \ string(a:arg) : '[' . a:arg . ']'
-  sandbox let args = eval(arg)
+  let args = eval(arg)
   if empty(args)
     return {}
   endif
