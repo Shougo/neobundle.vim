@@ -54,6 +54,14 @@ function! s:type.detect(path, opts) abort "{{{
     let type = 'vba'
   endif
 
+  if a:path =~# '^https:.*\.vmb$'
+    " HTTPS
+    " .*.vmb
+    let name = fnamemodify(split(a:path, ':')[-1],
+          \ ':s?/$??:t:s?\c\.vba\s*$??')
+    let type = 'vba'
+  endif
+
   return type == '' ?  {} :
         \ { 'name': name, 'uri' : a:path, 'type' : type }
 endfunction"}}}
@@ -71,7 +79,7 @@ function! s:type.get_sync_command(bundle) abort "{{{
 
   let cmd = neobundle#util#wget(a:bundle.uri, filename)
   if cmd !~# '^E:'
-    let cmd .= printf(' %s -u NONE' .
+    let cmd .= printf(' && %s -u NONE' .
           \ ' -c "set nocompatible"' .
           \ ' -c "filetype plugin on"' .
           \ ' -c "runtime plugin/gzip.vim"' .
