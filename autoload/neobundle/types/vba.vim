@@ -77,19 +77,27 @@ function! s:type.get_sync_command(bundle) abort "{{{
         \ 'type__filename', fnamemodify(a:bundle.uri, ':t'))
   let a:bundle.type__filepath = filename
 
-  let cmd = neobundle#util#wget(a:bundle.uri, filename)
-  if cmd !~# '^E:'
-    let cmd .= printf(' && %s -u NONE' .
-          \ ' -c "set nocompatible"' .
-          \ ' -c "filetype plugin on"' .
-          \ ' -c "runtime plugin/gzip.vim"' .
-          \ ' -c "runtime plugin/vimballPlugin.vim"' .
-          \ ' -c "edit %s"' .
-          \ ' -c "UseVimball %s"' .
-          \ ' -c "q"', v:progpath, filename, path)
-    " let cmd .= printf(' rm %s &&', filename)
-    " let cmd .= printf(' rm %s/.VimballRecord', path)
+  let cmd = ''
+  if filereadable(a:bundle.uri)
+    call writefile(readfile(a:bundle.uri, 'b'), filename, 'b')
+  else
+    let cmd = neobundle#util#wget(a:bundle.uri, filename)
+    if cmd =~# '^E:'
+      return cmd
+    endif
+    let cmd .= ' && '
   endif
+
+  let cmd .= printf('%s -u NONE' .
+        \ ' -c "set nocompatible"' .
+        \ ' -c "filetype plugin on"' .
+        \ ' -c "runtime plugin/gzip.vim"' .
+        \ ' -c "runtime plugin/vimballPlugin.vim"' .
+        \ ' -c "edit %s"' .
+        \ ' -c "UseVimball %s"' .
+        \ ' -c "q"', v:progpath, filename, path)
+  " let cmd .= printf(' rm %s &&', filename)
+  " let cmd .= printf(' rm %s/.VimballRecord', path)
 
   return cmd
 endfunction"}}}
@@ -98,7 +106,8 @@ function! s:type.get_revision_number_command(bundle) abort "{{{
     return ''
   endif
 
-  if !has_key(a:bundle, 'type__filepath') || !filereadable(a:bundle.type__filepath)
+  if !has_key(a:bundle, 'type__filepath')
+        \ || !filereadable(a:bundle.type__filepath)
     " Not Installed.
     return ''
   endif
