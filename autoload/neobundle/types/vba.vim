@@ -52,6 +52,11 @@ function! s:type.detect(path, opts) abort "{{{
     let name = fnamemodify(split(a:path, ':')[-1],
           \ ':s?/$??:t:s?\c\.vba\(\.gz\)*\s*$??')
     let type = 'vba'
+  elseif a:path =~# '\.vba\(\.gz\)\?$' && filereadable(a:path)
+    " local
+    " .*.vba
+    let name = fnamemodify(a:path, ':t:s?\c\.vba\(\.gz\)*\s*$??')
+    let type = 'vba'
   endif
 
   if a:path =~# '^https:.*\.vmb$'
@@ -59,6 +64,11 @@ function! s:type.detect(path, opts) abort "{{{
     " .*.vmb
     let name = fnamemodify(split(a:path, ':')[-1],
           \ ':s?/$??:t:s?\c\.vba\s*$??')
+    let type = 'vba'
+  elseif a:path =~# '\.vmb$' && filereadable(a:path)
+    " local
+    " .*.vmb
+    let name = fnamemodify(a:path, ':t:s?\c\.vba\s*$??')
     let type = 'vba'
   endif
 
