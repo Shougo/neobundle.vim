@@ -119,7 +119,7 @@ endfunction"}}}
 
 function! neobundle#commands#check() abort "{{{
   if neobundle#installer#get_tags_info() !=#
-        \ sort(map(neobundle#config#get_neobundles(), 'v:val.name'))
+        \ sort(map(neobundle#config#get_enabled_bundles(), 'v:val.name'))
     " Recache automatically.
     NeoBundleDocs
   endif
@@ -730,13 +730,10 @@ function! s:check_really_clean(dirs) abort "{{{
 endfunction"}}}
 
 function! s:update_tags() abort "{{{
-  let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}]
-        \ + neobundle#config#get_enabled_bundles()
+  let enabled = neobundle#config#get_enabled_bundles()
+  let bundles = [{ 'rtp' : neobundle#get_runtime_dir()}] + enabled
   call neobundle#util#copy_bundle_files(bundles, 'doc')
-
-  call neobundle#util#writefile('tags_info',
-        \ sort(map(neobundle#config#get_neobundles(), 'v:val.name')))
-
+  call neobundle#util#writefile('tags_info', sort(map(enabled, 'v:val.name')))
   silent execute 'helptags' fnameescape(neobundle#get_tags_dir())
 endfunction"}}}
 
