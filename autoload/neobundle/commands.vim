@@ -505,6 +505,8 @@ function! neobundle#commands#save_cache() abort "{{{
     let bundle.sourced = 0
   endfor
 
+  let bundles = sort(map(bundles, 'len(v:val.depends)'))
+
   let current_vim = neobundle#util#redir('version')
 
   call writefile([neobundle#get_cache_version(),
