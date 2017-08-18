@@ -47,7 +47,7 @@ features.  Because, Vundle's author does not want to add huge features in
 Vundle.
 
 Note: Neobundle is not a stable plugin manager.  If you want a stable plugin
-manager, you should use Vundle plugin.  It well works widely and it is more
+manager, you should use Vundle plugin.  It works well widely and it is more
 tested.  If you want to use extended features, you can use neobundle.
 
 Vundle features: Stable, simple, good for beginners
