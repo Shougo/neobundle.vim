@@ -31,7 +31,7 @@ Neobundle features: Early development (may break compatibility), very complex,
 good for plugin power users (for example, 50+ plugins and over 1000 lines
 .vimrc, ...)
 
-Note: Neobunle only accepts "https" or "ssh".
+Note: Neobundle only accepts "https" or "ssh".
 https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 
 ## How it works
